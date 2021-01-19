@@ -1,0 +1,11 @@
+.THIS .slds-modal__container{max-width: 70rem !important;width:30% !important;}
+.THIS .redTextClaro{color: #D52B1E;padding-left:10px;}
+.THIS span.sem-opcao-cor {margin-top: 33px;display: block;}
+.THIS .slds-grid.slds-wrap.cCEC_PME_SelectDeviceColors div:nth-child(2) {min-width: 280px !important;}
+@media (max-width:1023px) {
+.THIS span.sem-opcao-cor {margin-top: 10px;display: block;}
+}
+@media (max-width:640px) {
+.THIS textarea {width: 100%;border:solid 1px #b3b4b4;}
+.THIS .page-section.page-right {width: 100%;}
+}

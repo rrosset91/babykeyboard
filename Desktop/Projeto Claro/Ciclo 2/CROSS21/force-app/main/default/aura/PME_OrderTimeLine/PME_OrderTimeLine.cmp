@@ -1,0 +1,30 @@
+<aura:component controller="CEC_PME_TimeLine" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction">
+    <aura:attribute name="timeLine" type="CEC_PME_TimeLine.TimeLine[]"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:handler event="c:EvtPath" action="{!c.refresh}"/>
+    <div class="slds-page-header slds-page-header_record-home" style="background:white;">
+   		<div class="slds-path" role="application">
+        	<div class="slds-grid slds-path__track">
+          		<div class="slds-grid slds-path__scroller-container">
+            		<div class="slds-path__scroller" role="application">
+              			<div class="slds-path__scroller_inner">
+                			<ul class="slds-path__nav" role="tablist" aria-orientation="horizontal">
+								<aura:iteration items="{!v.timeLine}" var="item" indexVar="index">
+                                    <li class="{!item.option}" role="presentation" style="min-width:auto!important;">
+                                        <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" role="option" tabindex="{!index}">
+											<span class="slds-tabs_path__stage">
+                                    			<lightning:icon size="x-small" iconName="utility:check" />
+                                    		</span>
+                                            <span class="slds-path__title">{!item.DescricaoFase}</span>
+                                            
+                                        </a>
+                                    </li>
+                                </aura:iteration>
+                			</ul>
+              			</div>
+            		</div>
+          		</div>
+        	</div>
+      	</div>
+    </div>
+</aura:component>

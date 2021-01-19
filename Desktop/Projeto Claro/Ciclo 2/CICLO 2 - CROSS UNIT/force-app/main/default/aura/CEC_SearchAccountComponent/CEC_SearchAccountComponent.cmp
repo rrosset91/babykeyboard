@@ -1,0 +1,538 @@
+<!-- SearchAccount Component. 10/12 v.3.6 -->
+<!-- Autor: Danilo Fucuhara e Leticia Freitas - Deloitte -->
+<!-- Criação: 10/12/2018 -->
+<!-- Descrição: Componente de busca -->
+<!-- Nome do projeto/ID: CEC FASE - Time: SQUAD 360 -->
+<!-- Alterações: US15631(06/05/19) -->
+<!-- Alterações: Correção de erro de handleClick(28/05/19) - Danilo -->
+<!-- Alterações: Desenvolvimento US18860(18/07/19) - Danilo -->
+
+<aura:component controller="CEC_SearchAccount" implements="force:appHostable,lightning:isUrlAddressable">
+    <aura:attribute name="acctList" type="Object[]" />
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="showErrors" type="Boolean" default="false" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="doc" type="String" />
+    <aura:attribute name="tipo" type="String" />
+    <aura:attribute name="cepCTI" type="String" />
+    <aura:attribute name="contrato" type="String" />
+    <aura:attribute name="nome" type="String" />
+    <aura:attribute name="sobrenome" type="String" />
+    <aura:attribute name="numero" type="String" />
+    <aura:attribute name="cidade" type="String" />
+    <aura:attribute name="logradouro" type="String" />
+    <aura:attribute name="complemento" type="String" />
+    <aura:attribute name="uf" type="String" />
+    <aura:attribute name="msdn" type="String" />
+    <aura:attribute name="cep" type="String" />
+    <aura:attribute name="codOperadoraValue" type="String" />
+    <aura:attribute name="spinner" type="boolean" default="false" />
+    <aura:attribute name="isProspect" type="boolean" default="false" />
+    <aura:attribute name="isCom" type="boolean" default="false" />
+    <aura:attribute name="accountIntegration" type="boolean" default="false" />
+    <aura:attribute name="documentType" type="Boolean" default="false" />
+    <aura:attribute name="label" type="String" />
+    <aura:attribute name="nomeCidade" type="String" />
+    <aura:attribute name="tipoContrato" type="Boolean" default="false" />
+    <aura:attribute name="showModalPesquisa" type="Boolean" default="false" />
+    <aura:attribute name="isMovel" type="Boolean" default="true" />
+    <aura:attribute name="isResidencial" type="Boolean" />
+    <aura:attribute name="isDoc" type="Boolean" default="true" />
+    <aura:attribute name="isName" type="Boolean" />
+    <aura:attribute name="isContract" type="Boolean" />
+    <aura:attribute name="isMsisdn" type="Boolean" />
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}" />
+    <aura:attribute name="selectedLookUpRecord1" type="sObject" default="{}" />
+    <aura:attribute name="doc2" type="String" />
+    <aura:attribute name="searchType" type="String" />
+    <aura:attribute name="isProfileNBONBA" type="Boolean" default="false" />
+    <aura:attribute name="isProfileComercialUsers" type="Boolean" default="false" />
+    <aura:attribute name="isContractSearch" type="Boolean" default="false" />
+    <aura:attribute name="paginationList" type="Object[]" />
+    <aura:attribute name="pageSize" type="Integer" default="20" />
+    <aura:attribute name="totalSize" type="Integer" default="0" />
+    <aura:attribute name="start" type="Integer" default="0" />
+    <aura:attribute name="end" type="Integer" default="0" />
+    <aura:attribute name="showModalContractList" type="Boolean" default="false" />
+    <aura:attribute name="isProfileCanalCritico" type="Boolean" default="false" />
+    <aura:attribute name="showModalFluxo" type="Boolean" default="false" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="contractList" type="Object[]" />
+    <aura:attribute name="hasContract" type="Boolean" default="false" />
+    <aura:attribute name="inputValue" type="String" default="" />
+    <aura:attribute name="showPaginationList" type="Boolean" default="True"  />
+
+    <aura:attribute name="sortAsc" type="Boolean" default="true" />
+    <aura:attribute name="sortField" type="String" default="" />
+
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+    <aura:method name="callSearch" action="{!c.buscarHandler}" access="PUBLIC" />
+    <aura:method name="callClear" action="{!c.limparHandler}" access="PUBLIC" />
+
+    
+
+    <div class="slds-box" style="background-color: white">
+        
+        <c:CEC_360_SearchCustomer showPaginationList="{!v.showPaginationList}" inputValue="{!v.inputValue}" acctList="{!v.acctList}" errorMessage="{!v.errorMessage}" isCom="{!v.isCom}" 
+                                  pageSize="{!v.pageSize}" totalSize="{!v.totalSize}" start="{v.start}" end="{!v.end}" spinner="{!v.spinner}" 
+                                  paginationList="{!v.paginationList}" accountIntegration="{!v.accountIntegration}"
+                                  showModalPesquisa="{!v.showModalPesquisa}" codOperadoraValue="{!v.codOperadoraValue}" nomeCidade="{!v.nomeCidade}"
+                                  isProspect="{!v.isProspect}" isContractSearch="{!v.isContractSearch}" isProfileCanalCritico="{!v.isProfileCanalCritico}"
+                                  isProfileNBONBA="{!v.isProfileNBONBA}" isProfileComercialUsers="{!v.isProfileComercialUsers}" />
+        
+        
+        
+        
+        
+        
+        <aura:if isTrue="{!v.showPaginationList}">
+        <aura:if isTrue="{!v.isCom}">
+            <aura:if isTrue="{!v.isProspect}">
+                <div class="slds-p-top_medium">
+                    <table class="slds-table slds-table--bordered slds-table--striped" id="table">
+                        <thead>
+                            <tr>
+                                <!--<th scope="col"><span class="slds-truncate">Tipo de Documento</span></th>-->
+                                <th scope="col"><span class="slds-truncate">Documento</span></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.paginationList}" var="a">
+                                <tr>
+                                    <!--<td>{!a.DocumentType__c}</td>-->
+                                    <!--<td>{!a.DocumentNumber__c}</td>-->
+                                    <td>{!a.DocumentNumber__c}</td>
+                                    <div style="{!'display:'+ if(and(a.vlocity_cmt__Status__c == 'Prospect Grupo',v.accountIntegration), 'block', 'none')}">
+                                        <td><button data-status="{!a.vlocity_cmt__Status__c}" data-id="{!a.Id}" data-doc="{!a.DocumentNumber__c}" data-type="{!a.DocumentType__c}" onclick="{!c.openOs}" class="slds-button slds-button_brand">Iniciar</button></td>
+                                    </div>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-p-top_medium">
+                        <table class="slds-table slds-table--bordered slds-table--striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" onclick="{!c.sortByName}">Nome
+                                        <span>
+                                            <aura:if isTrue="{!or(v.sortField == 'name', v.sortField == '' )}" >
+                                                <aura:if isTrue="{! v.sortAsc}">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                        </span>
+                                    </th>
+                                    <!--<th scope="col"><span class="slds-truncate">Tipo de Documento</span></th>
+                                    <th scope="col"><span class="slds-truncate">Número de Documento</span></th>-->
+                                    <th scope="col" class="no-col-600" onclick="{!c.sortByDocument}" width="115">Documento
+                                        <span>
+                                            <aura:if isTrue="{!or(v.sortField == 'DocumentNumber', v.sortField == '' )}" >
+                                                <aura:if isTrue="{! v.sortAsc}">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                        </span>
+                                    </th>
+                                    <th scope="col"><span class="slds-truncate">CEP</span></th>
+                                    <th scope="col" onclick="{!c.sortByAddress}" class="no-col-600">Logradouro
+                                        <span>
+                                            <aura:if isTrue="{!or(v.sortField == 'StreetAddress', v.sortField == '' )}" >
+                                                <aura:if isTrue="{! v.sortAsc}">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                        </span>
+                                    </th>
+                                    <th scope="col" onclick="{!c.sortByNumber}" width="100">Números
+                                        <span>
+                                            <aura:if isTrue="{!or(v.sortField == 'FormattedNumberAddress', v.sortField == '' )}" >
+                                                <aura:if isTrue="{! v.sortAsc}">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                        </span>
+                                    </th>                                    
+                                    <th scope="col" onclick="{!c.sortByComplement}" class="no-col-600"  width="125">Complemento
+                                        <span>
+                                            <aura:if isTrue="{!or(v.sortField == 'UnformattedComplement', v.sortField == '' )}" >
+                                                <aura:if isTrue="{! v.sortAsc}">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                        </span>
+                                    </th>
+                                    <th scope="col"><span class="slds-truncate">Cidade</span></th>
+                                    <th scope="col"><span class="slds-truncate">UF</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                <aura:iteration items="{!v.paginationList}" var="a" indexVar="itemIndex">
+                                    <aura:if isTrue="{!v.isDoc}">
+                                        <tr>
+                                            <td><a data-id="{!a.Id}" onclick="{!c.openDetailPage}">{!a.Name}</a></td>
+                                            <!--<td>{!a.DocumentType__c}</td>-->
+                                            <td class="no-col-600" width="145">{!a.DocumentNumber__c}</td>
+                                            <td>{!a.vlocity_cmt__PremisesId__r.vlocity_cmt__PostalCode__c} </td>
+                                            <td>{!a.vlocity_cmt__PremisesId__r.vlocity_cmt__StreetAddress__c}</td>
+                                            <td width="100">{!a.vlocity_cmt__PremisesId__r.Number__c}</td>
+                                            <td class="no-col-900">{!a.vlocity_cmt__PremisesId__r.Complement__c}</td>
+                                            <td>{!a.vlocity_cmt__PremisesId__r.vlocity_cmt__City__c}</td>
+                                            <td>{!a.vlocity_cmt__PremisesId__r.vlocity_cmt__State__c}</td>
+                                            <div style="{!'display:'+ if(and(a.vlocity_cmt__Status__c == 'Prospect Grupo',v.accountIntegration), 'block', 'none')}">
+                                                <td><button data-id="{!a.Id}" onclick="{!c.openOs}" class="slds-button slds-button_brand">Iniciar</button></td>
+                                            </div>
+                                        </tr>
+                                        <aura:set attribute="else">
+                                            <tr>
+                                                <td><a data-id="{!a.Id}" onclick="{!c.openDetailPage}">{!a.name}</a></td>
+                                                <td class="no-col-600" width="145">{!a.DocumentType}</td>
+                                                <td class="no-col-600">{!a.DocumentNumber}</td>
+                                                <td>{!a.PostalCode} </td>
+                                                <td>{!a.StreetAddress}</td>
+                                                <td>{!a.numberAddress}</td>
+                                                <td class="no-col-900"  width="125">{!a.Complement}</td>
+                                                <td>{!a.City}</td>
+                                                <td>{!a.State}</td>
+                                                
+                                            </tr>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <div class="slds-p-top_medium">
+                    <table class="slds-table slds-table--bordered  lista-clientes-busca" id="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" onclick="{!c.sortByName}">Nome
+                                    <span>
+                                        <aura:if isTrue="{!or(v.sortField == 'name', v.sortField == '' )}" >
+                                            <aura:if isTrue="{! v.sortAsc}">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:set attribute="else">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                            </aura:set>
+                                        </aura:if>
+                                    </span>
+                                </th>
+                                <!--<th scope="col"><span class="slds-truncate"> Nome</span></th>-->
+                                <!--<th scope="col"><span class="slds-truncate">Tipo de Documento</span></th>-->
+                                <aura:if isTrue="{!v.isProfileNBONBA}">
+                                    <aura:if isTrue="{!v.isContractSearch}">
+                                        <!--<th scope="col"><span class="slds-truncate">Documento</span></th>-->
+                                        <th scope="col" class="no-col-600" onclick="{!c.sortByDocument}" width="145">Documento
+                                            <span>
+                                                <aura:if isTrue="{!or(v.sortField == 'DocumentNumber', v.sortField == '' )}" >
+                                                    <aura:if isTrue="{! v.sortAsc}">
+                                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                        <aura:set attribute="else">
+                                                            <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                        </th>
+                                        <th scope="col"><span class="slds-truncate"></span>Contrato</th>
+                                        <aura:set attribute="else">
+                                            <th scope="col" class="no-col-600" onclick="{!c.sortByDocument}" width="145">Documento
+                                                <span>
+                                                    <aura:if isTrue="{!or(v.sortField == 'DocumentNumber', v.sortField == '' )}" >
+                                                        <aura:if isTrue="{! v.sortAsc}">
+                                                            <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                            <aura:set attribute="else">
+                                                                <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                            </aura:set>
+                                                        </aura:if>
+                                                        <aura:set attribute="else">
+                                                            <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </span>
+                                            </th>
+                                            <th scope="col" class="no-col-600"><span class="slds-truncate"></span> Contratos</th>
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:set attribute="else">
+                                        <th scope="col" onclick="{!c.sortByDocument}" width="145" class="no-col-600">Documento
+                                            <span>
+                                                <aura:if isTrue="{!or(v.sortField == 'DocumentNumber', v.sortField == '' )}" >
+                                                    <aura:if isTrue="{! v.sortAsc}">
+                                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                        <aura:set attribute="else">
+                                                            <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                        </aura:set>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                    </aura:set>
+                                                </aura:if>
+                                            </span>
+                                        </th>
+                                    </aura:set>
+                                </aura:if>
+                                <th scope="col" onclick="{!c.sortByAddress}" class="no-col-600">Logradouro
+                                    <span>
+                                        <aura:if isTrue="{!or(v.sortField == 'StreetAddress', v.sortField == '' )}" >
+                                            <aura:if isTrue="{! v.sortAsc}">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:set attribute="else">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                            </aura:set>
+                                        </aura:if>
+                                    </span>
+                                </th>
+                                <th scope="col" onclick="{!c.sortByNumber}" width="115"  class="no-col-900">Número
+                                    <span>
+                                        <aura:if isTrue="{!or(v.sortField == 'FormattedNumberAddress', v.sortField == '' )}" >
+                                            <aura:if isTrue="{! v.sortAsc}">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:set attribute="else">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                            </aura:set>
+                                        </aura:if>
+                                    </span>
+                                </th>
+                                <th scope="col" onclick="{!c.sortByComplement}" class="no-col-900" width="125">Complemento
+                                    <span>
+                                        <aura:if isTrue="{!or(v.sortField == 'UnformattedComplement', v.sortField == '' )}" >
+                                            <aura:if isTrue="{! v.sortAsc}">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:set attribute="else">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                            </aura:set>
+                                        </aura:if>
+                                    </span>
+                                </th>
+                                <th scope="col" class="no-col-900"><span class="slds-truncate">Cidade</span></th>
+                                <th scope="col" class="no-col-900"><span class="slds-truncate">UF</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.paginationList}" var="a" indexVar="itemIndex">
+                                <tr>
+                                    <td><a data-id="{!a.Id}" onclick="{!c.openDetailPage}">{!a.name}</a>
+                                        <span class="no-desktop yes-mobile">
+                                            {!a.FormattedDocument}<br></br>
+                                            {!a.StreetAddress}, {!a.numberAddress} - {!a.Complement} - {!a.City} - {!a.State}
+                                        </span>
+                                    </td>
+                                    <aura:if isTrue="{!v.isProfileNBONBA}">
+                                        <aura:if isTrue="{!v.isContractSearch}">
+                                            <td class="no-col-900">
+                                                <aura:if isTrue="{!not(empty(a.FormattedDocument))}">{!a.FormattedDocument}
+                                                    <aura:set attribute="else">{!a.Site}</aura:set>
+                                                </aura:if>
+                                            </td>
+                                            <td><a data-contract-number="{!a.contractNumber}" onclick="{!c.openContractPage}">{!a.contractNumber}</a></td>
+                                            
+                                            <aura:set attribute="else">
+                                                <td class="no-col-900">
+                                                    <aura:if isTrue="{!not(empty(a.FormattedDocument))}">{!a.FormattedDocument}
+                                                        <aura:set attribute="else">{!a.Site}</aura:set>
+                                                    </aura:if>
+                                                </td>
+                                                <td  class="no-col-900">
+                                                    <a data-id="{!a.Id}">
+                                                        <lightning:buttonIcon value="{!itemIndex}" onclick="{!c.expandContract}" iconName="{!a.isExpandable?'utility:chevrondown':'utility:chevronright'}" />
+                                                    </a>
+                                                </td>
+                                            </aura:set>
+                                        </aura:if>
+                                        <aura:set attribute="else">
+                                            <!--<td>{!a.DocumentNumber}</td>-->
+                                            <td class="no-col-600">
+                                                <aura:if isTrue="{!not(empty(a.FormattedDocument))}">{!a.FormattedDocument}
+                                                    <aura:set attribute="else">{!a.Site}</aura:set>
+                                                </aura:if>
+                                            </td>
+                                        </aura:set>
+                                    </aura:if>
+                                    <!--<td>{!a.PostalCode} </td> -->
+                                    <td class="no-col-600">{!a.StreetAddress} <span class="no-desktop yes-ipad"> {!a.numberAddress}, {!a.Complement} - {!a.City} - {!a.State}</span></td>
+                                    <td class="no-col-900">{!a.numberAddress}</td>
+                                    <td class="no-col-900" width="125">{!a.Complement}</td>
+                                    <td class="no-col-900">{!a.City}</td>
+                                    <td class="no-col-900">{!a.State}</td>
+                                </tr>
+                                <aura:if isTrue="{!a.isExpandable}">
+                                    <tr>
+                                        <div class="slds-box">
+                                            <div class="slds-text-heading_small">Contratos</div>
+                                            <td>
+                                                <aura:if isTrue="{!v.hasContract}">
+                                                    <aura:iteration items="{!v.contractList}" var="cont" indexVar="itemIndex">
+                                                        <p><a data-contid="{!cont.Id}" onclick="{!c.navigateToContract}">
+                                                            {!cont.ContractNumber__c}</a></p>
+                                                    </aura:iteration>
+                                                    <aura:set attribute="else">
+                                                        <div class="slds-text-color_error">Não há contratos disponíveis.</div>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </td>
+                                        </div>
+                                    </tr>
+                                </aura:if>
+                                
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <div class="slds-align_absolute-center slds-m-around_small">
+                        <aura:if isTrue="{!v.isProfileCanalCritico}">
+                            <lightning:button variant="brand" label="{!$Label.c.btn_createAccount}" onclick="{!c.callflowCC}" />
+                            <aura:set attribute="else">
+                                <lightning:button iconName="utility:chevronleft" iconPosition="left" label="Anterior" disabled="{!v.start == 0}" onclick="{!c.anteriorHandler}" />
+                                <lightning:button iconName="utility:chevronright" iconPosition="right" label="Próximo" disabled="{!v.end >= v.totalSize}" onclick="{!c.proximoHandler}" />
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+       </aura:if>
+        
+        
+        
+        <aura:if isTrue="{!v.spinner}">
+            <div class="demo-only demo--inverse" style="height: 6rem;">
+                <div class="slds-spinner_container slds-is-fixed">
+                    <div role="status" class="slds-spinner slds-spinner_medium">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        
+    </div>
+    
+    
+    <!--Modal Fluxo de criação -->
+    <aura:if isTrue="{!v.showModalFluxo}">
+        <div style="height: 640px; position:absolute">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_x-small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close">		
+                            <lightning:icon iconName="utility:close" size="small" variant="inverse" onclick="{!c.closeFlow}" />		
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-scrollable_y" style="height:32rem">
+                            <lightning:flow aura:id="startFlowCC" onstatuschange="{!c.handleStatusChange}" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    
+    <!-- Modal Pesquisa Start -->
+    <aura:if isTrue="{!v.showModalPesquisa}">
+        <div style="height: 640px; position:absolute">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_x-small">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close">
+                            <lightning:icon iconName="utility:close" size="small" variant="inverse" onclick="{!c.closeModalPesquisa}" />
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_6-of-12">
+                                <div class="slds-p-left_xx-small">
+                                    <span class="slds-form-element__control">Código da operadora</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_6-of-12">
+                                <span class="slds-form-element__control">Cidade</span>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-gutters slds-m-top_small">
+                            <div class="slds-col slds-size_6-of-12">
+                                <c:customLookup parent="{!this}" aura:id="codOperadora" field="CodigoOperadora__c" objectAPIName="CEC_City_CarrierCode__mdt" IconName="standard:campaign" selectedRecord="{!v.selectedLookUpRecord1}" />
+                            </div>
+                            <div class="slds-col slds-size_6-of-12">
+                                <c:customLookup parent="{!this}" aura:id="cidade" field="MasterLabel" objectAPIName="CEC_City_CarrierCode__mdt" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" />
+                            </div>
+                        </div>
+                        <br></br>
+                        <div class=" slds-button slds-align_absolute-center">
+                            <span onkeypress="">
+                                <lightning:layoutItem>
+                                    <lightning:button variant="brand" label="Adicionar" onclick="{!c.adicionarHandler}"/>
+                                </lightning:layoutItem>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!-- Modal Pesquisa End -->
+    
+</aura:component>

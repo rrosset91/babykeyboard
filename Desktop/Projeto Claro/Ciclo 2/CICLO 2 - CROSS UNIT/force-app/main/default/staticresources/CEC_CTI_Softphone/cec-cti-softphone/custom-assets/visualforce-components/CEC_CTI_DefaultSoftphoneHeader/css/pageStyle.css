@@ -1,0 +1,142 @@
+/* ESTILO BLOCO DO HEADER DAS PÁGINAS */
+
+
+.header-page .customer-name{
+    color: #831911;
+}
+
+.customer-number{
+    color: #ABABAF;
+}
+
+.header-page{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #FAFAFB;
+}
+
+.header-page .section-ramal{
+    padding-left: 5px;
+}
+            
+.header-page .attendance-status-and-informations{
+    border: 1px solid #dbdada;
+    padding: 5px;
+    border-radius: 5px 5px 0px 0px;           
+}
+            
+.header-page .attendance-status-and-informations .status-attendance{
+    padding-top: 7px;
+    color: #DA291C;
+    font-size: 13px;         
+}
+
+.header-page .attendance-status-and-informations .pause-and-bell{
+    padding-top: 10px;            
+}
+.header-page .attendance-status-and-informations .pause-and-bell img{
+    width: 22px;            
+}
+
+.header-page .attendance-status-and-informations .ramal-info label{
+    color: #ABABAF;
+}
+.header-page .attendance-status-and-informations .ramal-info span{
+    color: #000;
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 600;
+}
+.header-page .attendance-status-and-informations .ramal-info img{
+    width: 33px;            
+}
+            
+.header-page .customer-awaiting {
+    padding: 5px;
+    border: 1px solid #dbdada;
+    border-top: 0px;
+}
+
+.customer-awaiting.conference {
+    border-radius: 0px 0px 5px 5px;
+}
+
+.header-page .customer-awaiting label,
+.header-page .customer-awaiting h1{
+    color: #ABABAF;
+}
+
+.header-page .customer-awaiting .delete-one img,
+.header-page .customer-awaiting .delete-all img{
+    padding-top: 7px;
+}
+.delete-number-actions div:nth-child(2) img {
+    float: right;
+    padding-right: 5px;
+}
+.header-page .customer-awaiting .delete-all img{
+    margin-left: 5px;
+}
+
+
+.header-page .customer-name-and-contract{
+    padding: 5px;
+    border: 1px solid #dbdada;
+    border-top: 0px;
+    border-radius: 0px 0px 5px 5px;    
+}
+
+#nameInputVisible{
+    padding-top: 6px;
+    color: #000 !important;
+}
+
+.header-page .customer-name.pessoa-fisica #nameInputVisible{
+    color: #000;
+    width: calc(100% - 10px);
+}
+
+.header-page .customer-name.pessoa-juridica #nameInputVisible{
+    color: #000 !important;
+}
+
+.header-page .customer-name-and-contract .contract-img{
+    margin-top: -2px;
+}
+        
+.header-page .customer-name-and-contract img{
+    margin-top: 2px;
+}
+
+.header-page .customer-number span{
+    color: #ABABAF;
+    font-size: 16px;
+}
+
+.header-page .customer-name-and-contract span{
+    padding-left: 4px;
+    position: absolute;
+    padding-top: 5px;
+    font-size: 14px;
+}
+
+
+
+
+.header-page .third-customer-number label,
+.header-page .third-customer-number h1{
+    color: #ABABAF;
+}
+
+.header-page .number-input{
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #DA291C;
+    font-size: 14px;
+    display: block;
+    height: 24px;
+    width: 100%;
+}
+    

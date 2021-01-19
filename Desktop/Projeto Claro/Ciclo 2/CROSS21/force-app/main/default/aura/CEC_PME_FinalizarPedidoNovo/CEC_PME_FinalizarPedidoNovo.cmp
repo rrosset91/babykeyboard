@@ -1,0 +1,132 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- <aura:handler name="change" value="{!v.iccid}" action="{!c.onFieldsChanged}" /> -->
+    <aura:attribute name="sessao" type="Object" />
+    <aura:attribute name="iccid" type="String" />
+    <aura:attribute name="imei" type="String" />
+    <aura:attribute name="desabilitaAdicionar" type="Boolean" default="true"/>
+    <aura:attribute name="afterPreload" type="Boolean" default="false"/>
+    <aura:attribute name="aparelhos" type="Object[]" />
+    <aura:attribute name="aparelhosEspelho" type="Object[]" />
+    <aura:attribute name="aparelhoSelecionado" type="Object" default="--"/>
+    <aura:attribute name="sectionPickList" type="Object[]"/>
+    <aura:attribute name="isDesktop" type="Boolean"/>
+    <aura:attribute name="idElementoAssociacao" type="String"/>
+    <!-- Mudar associação pendente -->
+    <aura:registerEvent name="AssociacaoPendente" type="c:CEC_PME_AssociacaoPendente"/>
+    <!-- adiciona aparelho a sessão -->
+    <aura:handler name="AdicionarAparelho" event="c:CEC_PME_AdicionarAparelho" action="{!c.addAparelhoEvento}"/>
+    <aura:handler name="AdicionarListaAparelhos" event="c:CEC_PME_AdicionarListaAparelhos" action="{!c.addDeviceList}" />
+    <aura:handler name="change" value="{!v.aparelhos}" action="{!c.changeAssocPendente}"/>
+    <!-- Content -->
+    <div class="slds-m-top_medium slds-m-bottom_small slds-border_bottom">
+        <p class="lightblue-text slds-m-left_medium">Serviços selecionados:
+            <aura:if isTrue="{! !v.isDesktop}">
+                <br/>
+            </aura:if>
+            <ui:outputText value="{!v.sessao.tipoNovo.servicosSelecionados}" class="gray-text"/>
+        </p> 
+    </div>
+    <!-- Colocar vertical quando for mobile -->
+    <div class="slds-grid slds-wrap">
+        <!-- Mudar para 'Local' para esse bloco-->
+        <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Local'}">
+            <div class="slds-m-left_medium slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_2-of-12" id="numero-iccid">
+                <lightning:input name="iccid"
+                                 type="text"
+                                 aura:id="iccid"
+                                 required="false" 
+                                 value="{!v.iccid}"
+                                 label="Número do ICCID do Simcard" 
+                                 maxlength="20" 
+                                 onchange="{!c.validateFields}"
+                                 class="gray-text"/>
+            </div>
+            <div class="slds-m-left_medium slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_2-of-12" id="imei">
+                <lightning:input name="imei"
+                                 type="text"
+                                 aura:id="imei"
+                                 required="false" 
+                                 value="{!v.imei}"
+                                 label="IMEI" 
+                                 maxlength="15" 
+                                 onchange="{!c.validateFields}"
+                                 class="gray-text"/>
+            </div>
+            <div class="slds-m-left_medium slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_3-of-12" id="aparelhos-novo-local">
+                <lightning:select value="{!v.aparelhoSelecionado}" label="Selecione o aparelho cadastrado" class="gray-text"
+                                  onchange="{!c.aparelhoChanged}">
+                    <option text="--Selecione--" value="--"/>
+                    <aura:iteration items="{!v.aparelhos}" var="aparelho">
+                        <option text="{!aparelho.label}" value="{!aparelho.value}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+            <div class="slds-m-top_large slds-m-left_medium slds-col slds-size_1-of-2 slds-medium-size_6-of-12 slds-large-size_4-of-12" id="novo-status">
+                <lightning:button label="Incluir" onclick="{!c.incluirAparelho}" disabled="{!v.desabilitaAdicionar}"/>
+                <span class="slds-m-left_small">Pendentes: {!v.aparelhos.length}</span>
+            </div>
+        </aura:if> 
+        <!-- else -->
+        <!-- Setar para 'Logistica' nesse bloco-->
+        <aura:if isTrue="{!and(v.sessao.tipoNovo.tipoEntrega == 'Logistica', v.afterPreload)}">
+            <div class="slds-box full-width">
+                <c:CEC_PME_SelectDeviceColors devices="{!v.aparelhos}" isDesktop="{!v.isDesktop}" tipoPlano="Novo" />
+            </div>
+        </aura:if>
+    </div>
+    <!-- Tabela -->
+    <div class="slds-m-top_large slds-m-bottom_medium">
+        <table class="all-table" id="table-novo">
+            <tr class="slds-box slds-box_x-small">
+                <th class="col-modelo">Modelo</th>
+                <!-- Exibir quando o tipo de entrega for 'Local' -->
+                <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Local'}">
+                    <th class="col-imei">IMEI</th>
+                    <th class="col-iccid">ICCID</th>
+                </aura:if>
+                <th  class="col-cor">Cor</th>
+                <!-- Exibir quando o tipo de entrega for 'Logistica' -->
+                <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Logistica'}">
+                    <th class="col-aceita">Aceita outra cor</th>
+                </aura:if>
+                <th></th>
+            </tr>
+            <aura:iteration items="{!v.sessao.tipoNovo.itensTipoNovo}" var="tipoNovo" indexVar="index">
+                <tr class="child-aparelho-gray-row slds-box slds-box_x-small  padding-right-15">
+                    <td class="col-modelo"><ui:outputText value="{!tipoNovo.modelo}"/>
+                        <div class="bloco-linhadois bloco-519-360">
+                            Cor: <ui:outputText value="{!tipoNovo.cor}"/>
+                            <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Logistica'}">
+                             - Aceita outra cor: <ui:outputText value="{!tipoNovo.outraCor}"/>
+                            </aura:if>
+                        </div>
+                        <div class="bloco-linhado bloco-730">
+                        <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Local'}">
+                            IME: <ui:outputText value="{!tipoNovo.imei}"/>
+                            <span style="display: -webkit-inline-box">- ICCID: <ui:outputText value="{!tipoNovo.iccid}"/></span>
+                        </aura:if>
+                        </div>
+                    </td>
+                    <!-- Exibir quando o tipo de entrega for 'Local' -->
+                    <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Local'}">
+                        <td class="col-imei"><ui:outputText value="{!tipoNovo.imei}"/></td>
+                        <td  class="col-iccid"><ui:outputText value="{!tipoNovo.iccid}"/></td>
+                    </aura:if>
+                    <td  class="col-cor"><ui:outputText value="{!tipoNovo.cor}"/></td>
+                    <!-- Exibir quando o tipo de entrega for 'Logística' -->
+                    <aura:if isTrue="{!v.sessao.tipoNovo.tipoEntrega == 'Logistica'}">
+                        <td class="outra-cor-lista col-aceita"><ui:outputText value="{!tipoNovo.outraCor}"/></td>
+                    </aura:if>
+                    <td style="width:34px;">
+                        <lightning:buttonIcon iconName="utility:delete" 
+                                              alternativeText="Remover"
+                                              onclick="{!c.removerAparelho}" 
+                                              value="{!index}"
+                                              variant="bare"/>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </table> 
+    </div>
+</aura:component>

@@ -1,0 +1,70 @@
+<aura:component controller="Solar_Cross_ProtocolCodificationFlow">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+    <aura:attribute name="input" type="Boolean" default="true"/> 
+    <aura:attribute name="contextCase" type="Object" />
+    <aura:attribute name="picklistOptions" type="Object[]" />
+    <aura:attribute name="loadingSave" type="Boolean" default="false"/> 
+    <aura:attribute name="viewSelected" type="String"/>
+    <aura:attribute name="resolutionValue" type="String"/>    
+    <aura:attribute name="enableUpdate" type="Boolean" default="true"/>      
+    <aura:handler name="init" value="{! this }" action="{! c.onInit }"/>
+
+    <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" class="slds-p-horizontal_small" onload="{!c.loaded}" onsubmit="{!c.submit}" onsuccess="{!c.sucess}" onerror="{!c.error}">
+        <lightning:messages />
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="ContractBusinessUnit__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Category__c" class="slds-border_bottom"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Product__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Modalidade__c" class="slds-border_bottom"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="EntryReason__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Description" class="slds-border_bottom"/>
+            </div>
+        </div> 
+
+        <aura:if isTrue="{!v.input}">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:outputField fieldName="LeavingReason__c" class="slds-border_bottom"/>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:outputField fieldName="Resolution__c" class="slds-border_bottom"/>
+                </div>
+            </div>
+            <aura:set attribute="else">    
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-2">
+                        <!-- <lightning:inputField fieldName="LeavingReason__c" disabled="false" required="true"/> -->
+                        <lightning:combobox name="progress" label="Motivo de saída" value="{!v.viewSelected}" options="{!v.picklistOptions}" placeholder="Escolha um motivo de saída" required="true" onchange="{!c.requiredValidation}"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning:inputField fieldName="Resolution__c" required="true" value="{!v.resolutionValue}" onchange="{!c.requiredValidation}"/>
+                    </div>
+                </div>
+                <div class="slds-grid slds-grid_align-end">
+                    <div class="slds-col">
+                        <lightning:button class="slds-m-top_small" variant="brand" label="Encerrar Caso" onclick="{!c.updateContextCase}" disabled="{!v.enableUpdate}"/>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+        <div class="{!v.loadingSave == true ? 'slds-show' : 'slds-hide'}">
+            <lightning:spinner alternativeText="Carregando..." size="medium" /> 
+        </div>         
+    </lightning:recordEditForm>
+</aura:component>

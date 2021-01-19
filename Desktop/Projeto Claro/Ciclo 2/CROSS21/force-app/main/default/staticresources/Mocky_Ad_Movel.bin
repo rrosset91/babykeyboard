@@ -1,0 +1,31 @@
+{
+  "apiVersion": "1;2017-11-16",
+  "transactionId": "Id-b1332e5c2804659cc6e22339",
+  "data (PF)": {
+    "subscribers": [
+      {
+        "name": "MARIA DA SILVA",
+        "serviceType": "MOVEL",
+        "type": "CLARO_CARTAO",
+        "subType": "CLARO_CARTAO",
+        "effectiveSinceDate": "2009-05-15T19:30:20-03:00",
+        "productStatus": "ATIVO",
+        "productStatusDate": "2009-05-15T19:30:20-03:00",
+        "msisdn": "1191000000",
+        "customer": {
+          "name": "JOAO DA SILVA",
+          "personType": "PF",
+          "documents": {
+            "cpf": "01234567890",
+            "rg": "22.333.444-55",
+            "passport": "123.456.789-X"
+          },
+          "faId": "123456",
+          "mobileBan": "123456",
+          "contractNumberNET": "052151651324",
+          "contractNumberEmbratel": "0123456789"
+        }
+      }
+    ]
+  }
+}

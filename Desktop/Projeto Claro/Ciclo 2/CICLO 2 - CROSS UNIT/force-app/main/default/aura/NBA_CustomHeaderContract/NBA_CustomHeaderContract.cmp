@@ -1,0 +1,134 @@
+<aura:component controller="NBA_AccordionCurrentProducts_CC" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                access="global">
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="contract" type="Object" />
+    
+    <div class="slds-page-header slds-page-header_record-home" style=" padding-bottom: 0px">
+        
+        <div class="slds-media__body">
+            <div class="slds-grid" >
+                <div class="slds-col slds-size_11-of-12">
+                    <div class="slds-page-header__name">
+                        <div class="slds-page-header__name-title">
+                            <h1>
+                                <lightning:icon iconName="standard:account" alternativeText="account" />
+                                <a onclick="{!c.handleClick}"><span style="font-size: 19px; margin-left:12px">{!
+                                    v.contract.nameAccount }</span> </a>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center ">
+                    <lightning:button  label="&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;&nbsp;&nbsp;&nbsp;" title="Brand action" onclick="{! c.editRecord }" />
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>CPF</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Data de Nascimento</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Forma de Pagamento</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Forma de Envio de Cobrança</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Segmento</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.documentNumber}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.dtNascimento}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.formadepagamento}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.formadeenvio}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.seguimento}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Status</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Número da Operadora</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 negrito">
+                    <span>Número do Contrato</span>
+                </div>
+                <div class="slds-col slds-size_2-of-5 negrito">
+                    <span>Endereço de Instalação</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.status}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.cityCode}</span>
+                </div>
+                <div class="slds-col slds-size_1-of-5 tam-font">
+                    <span>{! v.contract.contractNumber}</span>
+                </div>
+                <div class="slds-col slds-size_2-of-5 tam-font">
+                    <span>{! v.contract.endereco}</span>
+                </div>
+            </div>            
+            
+            <div class="demo-only inicio" style="display: flex; margin-top: 25px; margin-left: 30px; padding-bottom: 18px;">
+                
+                <h6 id="modal-heading-01" style="text-align:left; font-weight :bold  ">Produtos</h6>
+                <div class="slds-grid margin-name-product-left">
+                    <div class="slds-col slds-size_1-of-8 slds-align_absolute-center">
+                        <span>
+                            <!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +(v.contract.hasTV ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-tv.png" />-->
+							<!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +( v.contract.hasTV ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/NBA_TVColorido.png" />-->
+                            <img class="tam-img" src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_TVColorido.png' }" />
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8 margin-product slds-align_absolute-center">
+                        <span> {! v.contract.hasTV ? 'TV' : '-----' }</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8 slds-align_absolute-center">
+                        <span>
+                            <!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +( v.contract.hasVirtua ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-internet.png" />-->
+							<!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +( v.contract.hasVirtua ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/NBA_BandaLargaColorido.png" />-->
+                            <img class="tam-img" src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_BandaLargaColorido.png' }" />
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8 margin-product slds-align_absolute-center" >
+                        <span>{! v.contract.hasVirtua ? 'Virtua' : '-----' }</span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8  slds-align_absolute-center">
+                        <span>
+                            <!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +(v.contract.hasNetFone ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-telefone.png" />-->
+							<!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +( v.contract.hasNetFone ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/NBA_FoneColorido.png" />-->
+                            <img class="tam-img" src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_FoneColorido.png' }" />
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8 margin-product slds-align_absolute-center" style="padding-left: 1rem" >
+                        <div style="margin-left : 1rem">{! v.contract.hasNetFone ? 'Net Fone' : '-----' }</div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-8  slds-align_absolute-center">
+                        <span>
+                            <!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +( v.contract.hasMovel ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-celular.png" />-->
+							<!--<img class="{! 'slds-align_absolute-center ' + 'tam-img ' +( v.contract.hasMovel ? '' : 'grayscale') }" src="/resource/cec_identidade/images-upload/cec-produto/NBA_MovelColorido.png" />-->	
+                            <img class="tam-img" src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_MovelColorido.png' }" />
+                        </span>
+									
+                    </div>
+                    <div class="slds-col slds-size_1-of-8 margin-product slds-align_absolute-center">
+                        <span>{! v.contract.hasMovel ? 'Móvel' : '-----' }</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

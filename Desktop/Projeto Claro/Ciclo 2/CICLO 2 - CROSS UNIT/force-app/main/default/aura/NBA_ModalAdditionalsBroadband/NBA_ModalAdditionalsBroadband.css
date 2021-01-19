@@ -1,0 +1,66 @@
+.THIS .check{
+    display:inline-flex;
+}
+
+.THIS .custom-combobox{
+    width			: 13rem  !important;
+    float			: right;
+    margin-left		: 0rem   !important;
+    height			: 20px;
+    margin-bottom   : 1rem   !important;
+    margin-top      : 0.3rem !important;
+}
+
+.THIS .alim-icon-add{
+    display        : flex     !important;
+    justify-content: flex-end !important;
+    margin-right   : 3%       !important;
+}
+.THIS .slds-p-around_medium {
+    padding: 1rem 2rem 1rem 2rem !important;
+}
+
+.THIS .slds-checkbox_faux{
+    border:	1px solid rgb(0, 157, 227);
+}
+.THIS .alim-select{
+    display: grid !important;
+}
+/* .THIS .custom-combobox {
+    width       : 25%      !important;
+    float       : initial  !important;
+    margin-left : 0rem     !important;
+    margin-top  : 0.5rem   !important;
+    height      : 20px     !important;
+} */
+/* .THIS .slds-p-around_medium{
+    padding     : 3rem     !important;
+} */
+/* .THIS .slds-size_1-of-1{
+    padding-top : 1rem     !important;
+} */
+.THIS .slds-form-element__label {
+    overflow-wrap   : break-word;
+    word-wrap       : break-word;
+    -webkit-hyphens : auto;
+    -ms-hyphens     : auto;
+    hyphens         : auto;
+    display         : inline-block;
+    color           : rgb(62, 62, 60);
+    font-size       : 0.80rem   !important;
+    padding-right   : 0.2rem    !important;
+    padding-top     : 0rem      !important;
+    margin-bottom   : 0.125rem  !important;
+}
+/* .THIS .color-value{
+    color           : rgb(62, 62, 60) !important;
+    padding-top     : 0.0313rem         !important;
+} */
+.THIS .alim-select{
+    padding-top     : 0.5rem    !important;
+    padding-left    : 1.5rem    !important;
+}
+.THIS .disableSection {
+    background-color : #ecebea !important;
+    cursor :not-allowed !important;
+}

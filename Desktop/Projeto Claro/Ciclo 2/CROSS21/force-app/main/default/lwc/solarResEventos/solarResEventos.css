@@ -1,0 +1,24 @@
+.header-text {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.content label {
+	font-weight: bold;
+}
+
+.content .portion label {
+	padding-left: 50%;
+}
+
+.content .portion p {
+	padding-left: 50%;
+}
+
+.content .last-portion label {
+	padding-left: 30%;
+}
+
+.content .last-portion p {
+	padding-left: 30%;
+}

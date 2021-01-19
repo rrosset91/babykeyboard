@@ -1,0 +1,65 @@
+/* ESTILO BLOCO DO FOOTER DAS PÁGINAS */
+
+.footer-page {
+    position: absolute;
+    width: 100%;
+    /* bottom: 46px; */
+    bottom: 4px;
+}
+
+.footer-page .call-secondary-actions {
+    border-top: 2px solid #dbdada;
+}
+
+.footer-page .call-primary-actions .div-action {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-page .call-primary-actions .finish-call {
+    border-left: 1px solid #dbdada;
+    border-right: 1px solid #dbdada;
+}
+
+.footer-page .call-primary-actions .finish-call img {
+    padding-top: 2px;
+}
+
+.footer-page .call-logs {
+    border-bottom: 1px solid #dbdada;
+    background-color: #EEEEEF;
+    color: #ACB2CB;
+}
+
+.footer-page .call-logs .log-box {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer-page .call-logs .scheduled {
+    border-right: 1px solid #dbdada;
+}
+
+.footer-page .call-secondary-actions .div-action {
+    width: 20%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-page .call-secondary-actions .finish-call {
+    border-left: 1px solid #dbdada;
+    border-right: 1px solid #dbdada;
+}
+
+.footer-page .call-secondary-actions .transfer-call img {
+    padding-top: 2px;
+}
+
+.footer-page .call-logs .log-box {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-page .current-page img {
+    width: 29px;
+}

@@ -1,0 +1,35 @@
+<aura:component controller="Solar_CustomerSummaryController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:hasSObjectName"
+                access="global">
+    <!-- Attributes -->
+    <aura:attribute name="customerInfo" type="Object" default="{}"/>
+    <aura:attribute name="componentLabels" type="Object" default="{}"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="customerURL" type="String"/> 
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="documentIdLabel" type="String"/>
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- Content -->
+    <!--<div class="slds-box slds-box_small">-->
+    <aura:if isTrue="{!v.isLoading}">
+        <div class="slds-text-heading_medium">{!v.componentLabels.loadingText}</div>
+    </aura:if>
+    <aura:if isTrue="{! !v.isLoading}">
+        <lightning:card variant="Narrow" title="{!v.customerInfo.name}" iconName="action:user">
+            <p class="slds-text-heading_small slds-m-left_medium slds-m-bottom_medium">{!v.documentIdLabel} <strong>{!v.customerInfo.documentId}</strong></p>
+            <p class="slds-text-heading_small slds-m-left_medium slds-m-bottom_medium">{!v.componentLabels.mobilePhone} <strong>{!v.customerInfo.mobilePhone}</strong></p>
+            <p class="slds-text-heading_small slds-m-left_medium slds-m-bottom_medium">{!v.componentLabels.phone} <strong>{!v.customerInfo.phone}</strong></p>
+            <p class="slds-text-heading_small slds-m-left_medium slds-m-bottom_medium">{!v.componentLabels.email} <strong>{!v.customerInfo.email}</strong></p>
+            <p class="slds-text-heading_small slds-m-left_medium slds-m-bottom_medium">{!v.componentLabels.segment} <strong>{!v.customerInfo.segment}</strong></p>
+            <aura:if isTrue="{!v.sObjectName != 'Account'}">
+                <lightning:formattedUrl value="{!v.customerURL}"
+                                        label="{!v.componentLabels.formattedUrl}"
+                                        target="_self"
+                                        class="slds-m-left_medium slds-m-bottom_medium"/>
+            </aura:if>   
+        </lightning:card>
+    </aura:if>
+    <!--</div>-->
+</aura:component>

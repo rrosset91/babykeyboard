@@ -1,0 +1,102 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 13/09/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 11] + [Componente de nova chamada em conferência]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 16/09/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Habilitar contador de espera]: Contador de primeira ligação quando estiver ligando para terceiro
+-->
+<apex:component >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_ConferenceNewCall/css/pageStyle.css')}"/>
+	
+    <table class="conference-table">
+    <tr>
+        <td>
+            <div><img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-cliente-block.svg')}"/></div>
+            <div><h2>Espera<br/><label class="holdTime"></label></h2>
+            <h2 id="call-duration-count" class="call-duration-count text-center">00:00:00</h2>
+            </div>
+        </td>
+        <td>
+            <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-client-block.svg')}"/>
+        </td>
+        <td>
+            <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-inline.svg')}"/>
+        </td>
+        <td>
+            <div><img class="phone-icon-terceiro" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-block.svg')}"/></div>
+            <div>
+            <h2 class="chamar-terceiro">Chamar<br/> terceiro</h2>
+            </div>
+        </td>
+    </tr>
+</table>
+    
+    
+    <!--div class="call-new-person slds-grid slds-col slds-size_12-of-12">
+        
+        
+        <div class="slds-col slds-size_6-of-12 right-15">
+         <div class="main-call-hold conference-icon text-center">
+            <div><img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-cliente-block.svg')}"/></div>
+            <div><h2>espera<br/><label class="holdTime"></label></h2>
+			<h2 id="call-duration-count" class="call-duration-count text-center">00:00:00</h2>
+            </div>
+        </div>
+        <div class="conference-icon slds-col  slds-size_2-of-12 text-center">
+            <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-client-block.svg')}"/>
+        </div>
+        </div>
+        <div class="slds-col slds-size_6-of-12 left-15">
+          <div class="conference-icon slds-col slds-size_2-of-12">
+            <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-inline.svg')}"/>
+        </div>
+        <div class="main-call-hold conference-icon">
+            <div><img class="phone-icon-terceiro" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-block.svg')}"/></div>
+            <div>
+            <h2 class="chamar-terceiro">Chamar<br/> terceiro</h2>
+            </div>
+        </div>   
+        </div>
+    </div-->
+<script>
+    
+    	$('.footer-page').addClass('footer-disk-conference');
+    	$('.footer-page .call-primary-actions .div-action').addClass('padding-footer-conference');
+    
+    
+    
+		var onlyDriverHour = driverCallDuration.substring(11,13);
+        var onlyDriverMinutes = driverCallDuration.substring(14,16);
+        var onlyDriverSeconds = driverCallDuration.substring(17,19);
+    
+        var currentDate = new Date();
+        var currentHour = currentDate.getHours();
+        var currentMinutes = currentDate.getMinutes();
+        var currentSeconds = currentDate.getSeconds();
+    
+        var finalHour = currentHour - onlyDriverHour ;
+        var finalMinutes = currentMinutes - onlyDriverMinutes;
+        var finalSeconds = currentSeconds - onlyDriverSeconds;
+        
+        var timer = new easytimer.Timer();
+        timer.start({startValues: {hours: finalHour, minutes: finalMinutes, seconds: finalSeconds}});
+        
+        $('.finish-call img').click(function () {
+            timer.stop();
+        });
+        
+        timer.addEventListener('secondsUpdated', function (e) {
+            $('#call-duration-count').html(timer.getTimeValues().toString());
+        });
+        timer.addEventListener('started', function (e) {
+            $('#call-duration-count').html(timer.getTimeValues().toString());
+        });
+    
+    </script>
+    
+</apex:component>

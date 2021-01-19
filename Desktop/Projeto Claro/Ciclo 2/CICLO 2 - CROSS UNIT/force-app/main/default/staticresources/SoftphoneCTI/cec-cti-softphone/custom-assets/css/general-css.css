@@ -1,0 +1,396 @@
+        
+html body.sfdcBody{
+    background-color: #FAFAFB !important;
+    margin: 0px;
+}
+
+h1{
+    font-size: 16px;
+    color: #3e3e3c;
+}
+
+h2{
+    font-size: 14px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.text-left{
+    text-align: left;
+}
+
+
+.hover-active{
+    cursor: pointer;
+}
+
+.active-option{
+    background-color: #F7F8F7;
+}
+
+.cti-button-red{
+    background: #D52B1E;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px 20px 8px 20px;
+    border: none;
+    font-size: 14px;
+}
+
+.cti-button-red:hover{
+    background: #d52b1ecc;
+}
+
+
+.cti-button-blue{
+    background: #05496C;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px 20px 8px 20px;
+    border: none;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.cti-button-blue:hover{
+    background: #1F577B;
+}
+
+.cti-button-grey{
+    background: #ABABAF;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px 20px 8px 20px;
+    border: none;
+    margin-left: 45px;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.cti-button-grey:hover{
+    background: #ababafbf;
+}
+
+.display-none{
+    display: none;
+}
+
+
+/* DATEPICKER E TIMEPICKER */
+
+#ui-datepicker-div a {
+    color:#444;
+    text-decoration:none;
+}
+
+#ui-datepicker-div {
+    background:#fff;
+    box-shadow: 0 0 5px rgba(57,70,78,.2);
+    padding:10px;
+    display:none;
+}
+.ui-datepicker-header {
+    position:relative;
+}
+.ui-datepicker-header .ui-corner-all {
+    display:block;
+    width:50%;
+    position:absolute;
+    font-size:10px;
+    color:#ccc;
+    cursor:pointer;
+}
+
+.ui-datepicker-prev {
+    left:0;
+    text-align:left;
+}
+.ui-datepicker-next {
+    right:0;
+    text-align:right;
+}
+
+#ui-datepicker-div td,
+#ui-datepicker-div th {
+    width:35px;
+    height:35px;
+}
+
+.ui-datepicker-current-day{
+    background-color: #ecebea;
+    border-radius: 100px;
+}
+
+.ui-datepicker-calendar tbody tr td:hover{
+    background-color: #ecebea;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+
+#ui-datepicker-div table {
+    border-collapse: collapse;
+}
+
+#ui-datepicker-div td {
+    text-align: center;
+}
+
+.ui-state-disabled:hover{
+    border: none;
+}
+.ui-state-disabled {
+    background:#f8f8f8;
+    color:#e74c3c;
+    opacity:0.5;
+}
+
+.ui-datepicker-title {
+    text-align: center !important;
+}
+
+.ui-datepicker-calendar thead tr th{
+    text-align: center !important;
+}
+
+.ui-state-disabled {
+    background: transparent !important;
+    color: #dddbda !important;
+    opacity: 1 !important;
+}    
+
+.ui-timepicker-viewport{
+    padding: 3px !important;
+}
+
+.ui-timepicker-standard a{
+    padding: 0px !important;
+    padding-top: 2px;
+    margin-right: 16px;
+    font-size: 13px;
+}
+
+
+/* ESTILO BLOCO DO HEADER DAS PÁGINAS */
+
+.header-page{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #FAFAFB;
+}
+
+.header-page .attendance-status-and-bell .slds-select.availability{
+    background-color: #fafaf9;
+    padding-left: 12px;
+    color: #00A1E1;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-image: url(/resource/SoftphoneCTI/cec-cti-softphone/custom-assets/img/general/select-arrow-down.png);
+    /* background-size: 20% 70%; */
+    background-position: 100% center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+}
+
+.header-page .attendance-status-and-bell .input-attendance-status{
+    padding-right: 7px;
+    margin-right: -3px;
+    
+}
+
+.header-page .attendance-status-and-bell .img-bell{
+    margin-top: 4px;
+    max-width: none;
+    padding-left: 10px;
+}
+
+.header-page .customer-awaiting {
+    padding-top: 5px;
+}
+
+.header-page .customer-awaiting label,
+.header-page .customer-awaiting h1{
+    color: #706E6B;
+}
+
+.header-page .customer-awaiting .customer-arrow img{
+    padding-top: 13px;
+}
+
+.header-page .customer-awaiting .trash img{
+    padding-top: 13px;
+}
+
+.header-page .customer-awaiting .trash{
+    text-align: right;
+}
+
+.header-page .customer-name{
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top: 1px solid #DADADB;
+    border-bottom: 1px solid #DADADB;
+    height: 34px;
+    
+}
+
+.header-page .customer-name.pessoa-fisica{
+    color: #D52B1E;
+}
+
+.header-page .customer-name.pessoa-juridica{
+    color: #1F577B;
+}
+
+.header-page .customer-name img{
+    margin-top: 2px;
+}
+
+.header-page .customer-number span{
+    color: #ABABAF;
+    font-size: 16px;
+}
+
+.header-page .customer-name span{
+    padding-left: 4px;
+    position: absolute;
+    padding-top: 5px;
+    font-size: 14px;
+}
+
+
+
+
+.header-page .third-customer-number label,
+.header-page .third-customer-number h1{
+    color: #ABABAF;
+}
+
+.header-page .number-input{
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #ABABAF;
+    font-size: 16px;
+    display: block;
+    height: 24px;
+}
+
+.driver-datas{
+    margin-left: 15px;
+}
+
+/* ESTILO DO BLOCO "GENERAL CONTENT" DAS PÁGINAS*/
+
+.general-content{
+    padding-top: 10px;
+    background-color: #FAFAFB;
+    padding-left: 0px;
+    padding-right: 0px;
+    /*padding-left: 10px;
+    padding-right: 10px;*/
+
+}
+
+/* ESTILO BLOCO DO FOOTER DAS PÁGINAS */
+
+
+.footer-page{
+    position: absolute;
+    width: 100%;
+    /* bottom: 46px; */
+    bottom: 4px;
+
+}
+
+
+
+.footer-page .call-primary-actions{
+    border-top: 1px solid #DADADB;
+    border-bottom: 1px solid #DADADB;
+}
+
+.footer-page .call-primary-actions .div-action{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-page .call-primary-actions .finish-call{
+    border-left: 1px solid #DADADB;
+    border-right: 1px solid #DADADB;
+}
+
+.footer-page .call-primary-actions .finish-call img{
+    padding-top: 2px;
+}
+
+.footer-page .call-logs{
+    border-bottom: 1px solid #DADADB;
+    background-color: #EEEEEF;
+    color: #ACB2CB;
+}
+
+
+.footer-page .call-logs .log-box{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.footer-page .call-logs .scheduled{
+    border-right: 1px solid #DADADB;
+}
+
+
+.footer-page .call-secondary-actions{
+    background-color: #EEEEEF;
+}
+
+.footer-page .call-secondary-actions .div-action{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-page .call-secondary-actions .finish-call{
+    border-left: 1px solid #DADADB;
+    border-right: 1px solid #DADADB;
+}
+
+.footer-page .call-secondary-actions .transfer-call{
+    border-right: 1px solid #DADADB;
+    border-left: 1px solid #DADADB;
+}
+
+.footer-page .call-secondary-actions .transfer-call img{
+    padding-top: 2px;
+}
+    
+/* SCC SCROLLBAR */
+
+.css-scrollbar::-webkit-scrollbar-track {
+    background-color: #ddd;
+    border-radius: 6px;
+}
+
+.css-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 6px;
+}
+
+.css-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #666;
+    margin-right: 10px;
+    height: 54px;
+}

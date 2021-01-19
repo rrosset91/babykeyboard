@@ -1,0 +1,21 @@
+<!--
+  @description       :
+  @author            : Diego Almeida
+  @group             :
+  @last modified on  : 19-11-2020
+  @last modified by  : Diego Almeida
+  Modifications Log
+  Ver   Date         Author          Modification
+  1.0   16-11-2020   Diego Almeida   Initial Version
+-->
+<template>
+	<template if:true={hasData}>
+    <iframe src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="100%"></iframe>
+  </template>
+  <template if:true={hasError}>
+    <c-solar-exception-content show-error="true"></c-solar-exception-content>
+  </template>
+  <template if:false={hasData}>
+    <c-solar-exception-content show-empty="true"></c-solar-exception-content>
+  </template>
+</template>

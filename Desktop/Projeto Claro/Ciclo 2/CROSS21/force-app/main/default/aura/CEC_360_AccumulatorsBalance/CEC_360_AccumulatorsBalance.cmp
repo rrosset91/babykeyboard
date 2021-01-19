@@ -1,0 +1,47 @@
+<aura:component controller="CEC_360_BalanceController" implements="flexipage:availableForRecordHome,force:hasRecordId" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="dataAccumulators" type="CEC_RestObjects.Accumulators"/>
+    <aura:attribute name="showSpinner" type="Boolean"/>
+
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-text-align_center">
+            <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                <lightning:spinner alternativeText="Loading" size="medium" />
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-m-bottom_medium">
+                
+                    <table class="lista-saldo-acumulators slds-table slds-row-hover">
+                        <thead>
+                            <tr>
+                                <th>Descrição/Tipo</th>
+                                <th>Unidade</th>
+                                <th>Saldo</th>
+                                <th>Validade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <aura:iteration items="{!v.dataAccumulators}" var="Accumulators">
+                                <tr>
+                                    <td>{!Accumulators.accumulatorBusinessDescription}</td>
+                                    <td>{!Accumulators.accumulatorMeasurementUnit}</td>
+                                    <td>{!Accumulators.accumulatorBalance}</td>
+                                    <td>{!Accumulators.accumulatorDateAux}</td>
+                                </tr>
+                        </aura:iteration>
+                    	</tbody>
+                    </table>
+                    <aura:if isTrue="{!v.showSpinner}">
+                        <div class="slds-text-align_center">
+                            <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                                <lightning:spinner alternativeText="Loading" size="medium" />
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+            
+        </aura:set>
+    </aura:if>
+</aura:component>

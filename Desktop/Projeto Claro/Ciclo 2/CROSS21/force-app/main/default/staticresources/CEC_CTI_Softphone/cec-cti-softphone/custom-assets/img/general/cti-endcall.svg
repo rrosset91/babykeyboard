@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="42.999" height="33.753" viewBox="0 0 42.999 33.753">
+  <g id="chamada-desligar-on-34" transform="translate(-141.194 -321.247)">
+    <g id="Grupo_128" data-name="Grupo 128" transform="translate(153.152 336.797)">
+      <g id="Elipse_140" data-name="Elipse 140" transform="translate(18.203 18.203) rotate(180)" fill="#ababaf" stroke="#ababaf" stroke-width="1">
+        <ellipse cx="9.102" cy="9.102" rx="9.102" ry="9.102" stroke="none"/>
+        <ellipse cx="9.102" cy="9.102" rx="8.602" ry="8.602" fill="none"/>
+      </g>
+      <line id="Linha_34" data-name="Linha 34" x1="8.566" y2="8.566" transform="translate(5.086 5.086)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2"/>
+      <line id="Linha_66" data-name="Linha 66" x1="8.566" y1="8.566" transform="translate(5.086 5.086)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2"/>
+    </g>
+    <path id="Caminho_202" data-name="Caminho 202" d="M162.986,448.414c-5.245-3.772-25.306-6.762-36.718,1.407a.7.7,0,0,0-.115.1,5.64,5.64,0,0,0-.208,7.341.67.67,0,0,0,.689.236l8.829-2.082a.667.667,0,0,0,.461-.382l1.845-4.271a.662.662,0,0,1,.5-.39c1.617-.282,8.424-1.309,14.337.163a.666.666,0,0,1,.478.459l1.265,4.36a.665.665,0,0,0,.541.469l9.241,1.418a.674.674,0,0,0,.687-.323A6.1,6.1,0,0,0,162.986,448.414Z" transform="translate(17.488 -122.62)" fill="#fff" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  </g>
+</svg>

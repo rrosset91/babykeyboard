@@ -1,0 +1,1343 @@
+<aura:component extends="c:Utils" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" controller="EventsController">
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+    <!-- dataTables -->
+    <aura:attribute name="dataSolic" type="Object[]" />
+    <aura:attribute name="cancelData" type="Object[]" />
+    <aura:attribute name="comprasData" type="Object[]" />
+    <aura:attribute name="eventsData" type="Object[]" />
+	<aura:attribute name="historyData" type="Object[]" />
+	<aura:attribute name="newProductsData" type="Object[]" />
+	<aura:attribute name="occurrenceData" type="Object[]" />
+	<aura:attribute name="occurrenceDataAcompanhamento" type="Object[]" />
+	<aura:attribute name="occurrenceDataCancelamento" type="Object[]" />
+	<aura:attribute name="occurrenceDataFinanceira" type="Object[]" />
+	<aura:attribute name="occurrenceDataServico" type="Object[]" />
+	<aura:attribute name="occurrenceDataSolic" type="Object[]" />
+	<aura:attribute name="occurrenceDataOutros" type="Object[]" />
+	<aura:attribute name="feesData" type="Object[]" />
+	<aura:attribute name="ppvData" type="Object[]" />
+	<aura:attribute name="outageData" type="Object[]" />
+	<aura:attribute name="adjustmentData" type="Object[]" />
+
+	<!-- Attributes -->
+	<aura:attribute name="columns" type="List" />
+	<aura:attribute name="historyColumns" type="List" />
+	<aura:attribute name="feesColumns" type="List" />
+	<aura:attribute name="newProductsColumns" type="List" />
+	<aura:attribute name="occurrenceColumns" type="List" />
+	<aura:attribute name="ppvColumns" type="List" />
+	<aura:attribute name="outageColumns" type="List" />
+	<aura:attribute name="adjustmentColumns" type="List" />
+	<aura:attribute name="columnsDetail" type="List" />
+    <aura:attribute name="historyColumnsDetail" type="List" />
+    <aura:attribute name="selectedEvent" type="Object" /> 
+	<aura:attribute name="selectedHistory" type="Object" /> 
+	<aura:attribute name="selectedNewProduct" type="Object" /> 
+	<aura:attribute name="selectedAdjustment" type="Object" /> 
+	<aura:attribute name="selectedOccurrence" type="Object" /> 
+	<aura:attribute name="selectedRequestFee" type="Object" /> 
+	<aura:attribute name="selectedPpv" type="Object" /> 
+	<aura:attribute name="selectedOutage" type="Object" /> 
+    <aura:attribute name="eventDetails" type="Object" /> 
+    <aura:attribute name="maxRowSelection" type="Integer" default="1"/>
+ 	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="openedSection" type="Boolean" default="false"/>
+    <!-- Sorts -->
+    <aura:attribute name="sortedByCompras" type="String"/>
+    <aura:attribute name="sortedDirectionCompras" type="String"/>
+	<aura:attribute name="sortedByEvents" type="String"/>
+    <aura:attribute name="sortedDirectionEvents" type="String"/>
+    <aura:attribute name="sortedByHistory" type="String"/>
+    <aura:attribute name="sortedDirectionHistory" type="String"/>
+    <aura:attribute name="sortedByDetails" type="String"/>
+    <aura:attribute name="sortedDirectionDetails" type="String"/>
+    <aura:attribute name="sortedByCancelamento" type="String"/>
+	<aura:attribute name="sortedDirectionCancelamento" type="String"/>
+	
+	<aura:attribute name="sortedByNewProducts" type="String"/>
+	<aura:attribute name="sortedDirectionNewProducts" type="String"/>
+
+	<aura:attribute name="sortedByAdjustment" type="String"/>
+	<aura:attribute name="sortedDirectionAdjustment" type="String"/>
+
+	<aura:attribute name="sortedByOccurrenceAcompanhamento" type="String"/>
+	<aura:attribute name="sortedDirectionOccurrenceAcompanhamento" type="String"/>
+
+	<aura:attribute name="sortedByOccurrenceCancelamento" type="String"/>
+	<aura:attribute name="sortedDirectionOccurrenceCancelamento" type="String"/>
+
+	<aura:attribute name="sortedByOccurrenceFinanceira" type="String"/>
+	<aura:attribute name="sortedDirectionOccurrenceFinanceira" type="String"/>
+
+	<aura:attribute name="sortedByOccurrenceServico" type="String"/>
+	<aura:attribute name="sortedDirectionOccurrenceServico" type="String"/>
+
+	<aura:attribute name="sortedByOccurrenceSolic" type="String"/>
+	<aura:attribute name="sortedDirectionOccurrenceSolic" type="String"/>
+
+	<aura:attribute name="sortedByOccurrenceOutros" type="String"/>
+	<aura:attribute name="sortedDirectionOccurrenceOutros" type="String"/>
+
+	<aura:attribute name="sortedByFee" type="String"/>
+	<aura:attribute name="sortedDirectionFee" type="String"/>
+
+	<aura:attribute name="sortedByPpv" type="String"/>
+	<aura:attribute name="sortedDirectionPpv" type="String"/>
+
+	<aura:attribute name="sortedByOutage" type="String"/>
+	<aura:attribute name="sortedDirectionOutage" type="String"/>
+
+	<aura:attribute name="defaultSortDirection" type="String"/>
+	<!-- Filters -->
+	<aura:attribute name="PeriodoCustomizado" type="Boolean" default="false"/>
+	<aura:attribute name="status" type="String" default="all"/>
+	<aura:attribute name="period" type="String" default="6"/>
+	<aura:attribute name="FilterEndDate" type="Date" default=""/>
+	<aura:attribute name="FilterStartDate" type="Date" default=""/>
+	<aura:attribute name="statusFilters" type="List" default="[]"/>
+	<aura:attribute name="productFilters" type="List" default="[]"/>
+	<aura:attribute name="periodFilters" type="List" default="[]"/>
+
+	<!-- layout controller -->
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="errorOnCall" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallHistory" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallNewProducts" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallAdjustment" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallOccurrence" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallFees" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallPpv" type="Boolean" default="false"/>
+	<aura:attribute name="errorOnCallOutage" type="Boolean" default="false"/>
+    
+    <!-- Markup -->
+    <div>
+        <div class="custom-padding">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="large" />
+			</aura:if>
+			
+			<div class="slds-text-heading_large small-header custom-padding"><!--Filtrar Eventos--></div>
+			<c:Financeiro_Filtros periodFilters="{!v.periodFilters}"
+									productFilters="{!v.productFilters}"
+                                    showStatusFilter="false"
+                                  	showPesquisar="false"
+									statusFilters="{!v.statusFilters}"
+									FilterStartDate="{!v.FilterStartDate}"
+									FilterEndDate="{!v.FilterEndDate}"
+									handlePeriodFilter="{!c.handlePeriodFilter}"
+									onClickFiltrarPeriodo="{!c.onClickFiltrarPeriodo}"
+									period="{!v.period}"
+									status="{!v.status}"
+									PeriodoCustomizado="{!v.PeriodoCustomizado}"/>
+									
+
+			<div class="slds-section slds-is-close" aura:id="cancelamentosContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="cancelamentosList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="cancelamentosContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Cancelamentos em andamento ou executados">Cancelamentos em andamento ou executados</span>
+					</button>
+				</h3>
+		
+				<div class="slds-section__content" id="cancelamentosList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.cancelData)))}">
+							<lightning:datatable name="cancelamentosTable"
+													aura:id="cancelamentosTable"
+													columns="{!v.columns}"
+													data="{!v.cancelData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedEvent}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByCancelamento}"
+													sortedDirection="{!v.sortedDirectionCancelamento}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortCancelamento}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.cancelData), not(v.errorOnCall))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCall}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<div class="slds-section slds-is-close" aura:id="comprasContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="comprasList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="comprasContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Compras/ Movimentações de Produtos e Serviços">Compras/ Movimentações de Produtos e Serviços</span>
+					</button>
+				</h3>
+		
+				<div class="slds-section__content" id="comprasList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.comprasData)))}">
+							<lightning:datatable name="comprasTable"
+													aura:id="comprasTable"
+													columns="{!v.columns}"
+													data="{!v.comprasData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedEvent}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByCompras}"
+													sortedDirection="{!v.sortedDirectionCompras}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortCompras}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.comprasData), not(v.errorOnCall))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCall}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<div class="slds-section slds-is-close" aura:id="eventsContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="eventsList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="eventsContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Eventos Técnicos / Serviços">Eventos Técnicos / Serviços</span>
+					</button>
+				</h3>
+		
+				<div class="slds-section__content" id="eventsList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.eventsData)))}">
+							<lightning:datatable name="eventsTable"
+													aura:id="eventsTable"
+													columns="{!v.columns}"
+													data="{!v.eventsData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedEvent}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByEvents}"
+													sortedDirection="{!v.sortedDirectionEvents}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortEvents}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.eventsData), not(v.errorOnCall))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCall}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<div class="slds-section slds-is-close" aura:id="historyContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="historyList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="historyContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Eventos por Manual de Lançamento">Lançamentos Manuais</span>
+					</button>
+				</h3>
+				<!-- arrumar o layout -->
+				<div class="slds-section__content" id="historyList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallHistory), not(empty(v.historyData)))}">
+							<lightning:datatable name="historyEventsTable"
+													aura:id="historyEventsTable"
+													columns="{!v.historyColumns}"
+													data="{!v.historyData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedHistory}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByHistory}"
+													sortedDirection="{!v.sortedDirectionHistory}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortHistory}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.historyData), not(v.errorOnCallHistory))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallHistory}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<!-- Occurrences Accordion - Acompanhamentos-->
+			<div class="slds-section slds-is-close" aura:id="occurrencesContainerAcompanhamento">
+				<h3 class="slds-section__title">
+					<button aria-controls="occurrencesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="occurrencesContainerAcompanhamento">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Ocorrências">Ocorrências - Acompanhamento Chamados</span>
+					</button>
+				</h3>
+
+				<div class="slds-section__content" id="occurrencesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOccurrence), not(empty(v.occurrenceDataAcompanhamento)))}">
+							<lightning:datatable name="occurrencesTableAcompanhamento"
+													aura:id="occurrencesTableAcompanhamento"
+													columns="{!v.occurrenceColumns}"
+													data="{!v.occurrenceDataAcompanhamento}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOccurrence}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOccurrenceAcompanhamento}"
+													sortedDirection="{!v.sortedDirectionOccurrenceAcompanhamento}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOccurrencesAcompanhamento}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.occurrenceDataAcompanhamento), not(v.errorOnCallOccurrence))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOccurrence}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+				
+			</div>
+
+			<!-- Occurrences Accordion - Financeiras-->
+			
+			<div class="slds-section slds-is-close" aura:id="occurrencesContainerFinanceira">
+				<h3 class="slds-section__title">
+					<button aria-controls="occurrencesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="occurrencesContainerFinanceira">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Ocorrências">Ocorrências - Financeiras</span>
+					</button>
+				</h3>
+			
+				<div class="slds-section__content" id="occurrencesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOccurrence), not(empty(v.occurrenceDataFinanceira)))}">
+							<lightning:datatable name="occurrencesTableFinanceira"
+													aura:id="occurrencesTableFinanceira"
+													columns="{!v.occurrenceColumns}"
+													data="{!v.occurrenceDataFinanceira}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOccurrence}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOccurrenceFinanceira}"
+													sortedDirection="{!v.sortedDirectionOccurrenceFinanceira}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOccurrencesFinanceira}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.occurrenceDataFinanceira), not(v.errorOnCallOccurrence))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOccurrence}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+				
+			</div>
+
+			<!-- Occurrences Accordion - Cancelamentos-->
+		
+			<div class="slds-section slds-is-close" aura:id="occurrencesContainerCancelamento">
+				<h3 class="slds-section__title">
+					<button aria-controls="occurrencesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="occurrencesContainerCancelamento">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Ocorrências">Ocorrências - Intenção de Cancelamento</span>
+					</button>
+				</h3>
+			
+				<div class="slds-section__content" id="occurrencesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOccurrence), not(empty(v.occurrenceDataCancelamento)))}">
+							<lightning:datatable name="occurrencesTableCancelamento"
+													aura:id="occurrencesTableCancelamento"
+													columns="{!v.occurrenceColumns}"
+													data="{!v.occurrenceDataCancelamento}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOccurrence}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOccurrenceCancelamento}"
+													sortedDirection="{!v.sortedDirectionOccurrenceCancelamento}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOccurrencesCancelamento}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.occurrenceDataCancelamento), not(v.errorOnCallOccurrence))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOccurrence}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+				
+			</div>
+
+			<!-- Occurrences Accordion - Serviços-->
+			
+			<div class="slds-section slds-is-close" aura:id="occurrencesContainerServico">
+				<h3 class="slds-section__title">
+					<button aria-controls="occurrencesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="occurrencesContainerServico">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Ocorrências">Ocorrências - Serviços</span>
+					</button>
+				</h3>
+			
+				<div class="slds-section__content" id="occurrencesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOccurrence), not(empty(v.occurrenceDataServico)))}">
+							<lightning:datatable name="occurrencesTableServico"
+													aura:id="occurrencesTableServico"
+													columns="{!v.occurrenceColumns}"
+													data="{!v.occurrenceDataServico}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOccurrence}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOccurrenceServico}"
+													sortedDirection="{!v.sortedDirectionOccurrenceServico}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOccurrencesServico}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.occurrenceDataServico), not(v.errorOnCallOccurrence))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOccurrence}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+				
+			</div>
+
+			<!-- Occurrences Accordion - Solicitações-->
+			
+			<div class="slds-section slds-is-close" aura:id="occurrencesContainerSolic">
+				<h3 class="slds-section__title">
+					<button aria-controls="occurrencesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="occurrencesContainerSolic">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Ocorrências">Ocorrências - Solicitações</span>
+					</button>
+				</h3>
+
+				<div class="slds-section__content" id="occurrencesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOccurrence), not(empty(v.occurrenceDataSolic)))}">
+							<lightning:datatable name="occurrencesTableSolic"
+													aura:id="occurrencesTableSolic"
+													columns="{!v.occurrenceColumns}"
+													data="{!v.occurrenceDataSolic}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOccurrence}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOccurrenceSolic}"
+													sortedDirection="{!v.sortedDirectionOccurrenceSolic}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOccurrencesSolic}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.occurrenceDataSolic), not(v.errorOnCallOccurrence))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOccurrence}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+				
+			</div>
+
+			<!--
+				Roger Rosset
+				Melhoria: Novo agrupamento para ocorrências não categorizadas
+				23-09-2020
+			-->
+
+			<!-- Occurrences Accordion - Outros-->
+			
+			<div class="slds-section slds-is-close" aura:id="occurrencesContainerOutros">
+				<h3 class="slds-section__title">
+					<button aria-controls="occurrencesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="occurrencesContainerOutros">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Ocorrências">Ocorrências - Outras</span>
+					</button>
+				</h3>
+
+				<div class="slds-section__content" id="occurrencesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOccurrence), not(empty(v.occurrenceDataOutros)))}">
+							<lightning:datatable name="occurrencesTableOutros"
+													aura:id="occurrencesTableOutros"
+													columns="{!v.occurrenceColumns}"
+													data="{!v.occurrenceDataOutros}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOccurrence}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOccurrenceOutros}"
+													sortedDirection="{!v.sortedDirectionOccurrenceOutros}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOccurrencesOutros}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.occurrenceDataOutros), not(v.errorOnCallOccurrence))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOccurrence}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+				
+			</div>
+
+			<!-- New Products Accordion-->
+			<div class="slds-section slds-is-close" aura:id="newProductsContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="newProductsList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="newProductsContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Produtos / Ofertas Executadas">Oferta Contratada</span>
+					</button>
+				</h3>
+				<!-- New Products DataTable -->
+				<div class="slds-section__content" id="newProductsList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallNewProducts), not(empty(v.newProductsData)))}">
+							<lightning:datatable name="newProductsTable"
+													aura:id="newProductsTable"
+													columns="{!v.newProductsColumns}"
+													data="{!v.newProductsData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedNewProduct}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByNewProducts}"
+													sortedDirection="{!v.sortedDirectionNewProducts}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortNewProducts}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.newProductsData), not(v.errorOnCallNewProducts))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallNewProducts}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Outage Accordion-->
+			<div class="slds-section slds-is-close" aura:id="outageContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="outageList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="outageContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Outage">Outage</span>
+					</button>
+				</h3>
+				<!-- Outage DataTable -->
+				<div class="slds-section__content" id="outageList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallOutage), not(empty(v.outageData)))}">
+							<lightning:datatable name="outageTable"
+													aura:id="outageTable"
+													columns="{!v.outageColumns}"
+													data="{!v.outageData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedOutage}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByOutage}"
+													sortedDirection="{!v.sortedDirectionOutage}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortOutage}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.outageData), not(v.errorOnCallOutage))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallOutage}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<!-- PPV Accordion-->
+			<div class="slds-section slds-is-close" aura:id="ppvContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="ppvList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="ppvContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Contratações de Pay Per View">PPV</span>
+					</button>
+				</h3>
+				<!-- PPV DataTable -->
+				<div class="slds-section__content" id="ppvList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallPpv), not(empty(v.ppvData)))}">
+							<lightning:datatable name="ppvEventsTable"
+													aura:id="ppvEventsTable"
+													columns="{!v.ppvColumns}"
+													data="{!v.ppvData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedPpv}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByPpv}"
+													sortedDirection="{!v.sortedDirectionPpv}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortPpvs}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.ppvData), not(v.errorOnCallPpv))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallPpv}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<!-- Adjustments Accordion-->
+			<div class="slds-section slds-is-close" aura:id="adjustmentsContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="adjustmentList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="adjustmentsContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Histórico de Reajustes">Reajuste Anual</span>
+					</button>
+				</h3>
+				<!-- Adjustments DataTable -->
+				<div class="slds-section__content" id="adjustmentList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallAdjustment), not(empty(v.adjustmentData)))}">
+							<lightning:datatable name="adjustmentTable"
+													aura:id="adjustmentTable"
+													columns="{!v.adjustmentColumns}"
+													data="{!v.adjustmentData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedAdjustment}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByAdjustment}"
+													sortedDirection="{!v.sortedDirectionAdjustment}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortAdjustments}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.adjustmentData), not(v.errorOnCallAdjustment))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallAdjustment}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+			<!-- RequestFees Accordion-->
+			<div class="slds-section slds-is-close" aura:id="requestFeesContainer">
+				<h3 class="slds-section__title">
+					<button aria-controls="requestFeesList" class="slds-button slds-section__title-action">
+						<span onclick="{!c.toggleSection}" data-auraId="requestFeesContainer">
+							<lightning:icon iconName="utility:switch"
+											size="x-small"
+											class="slds-section__title-action-icon slds-button__icon_right"
+											alternativeText="button icon" 
+											/>
+						</span>
+						<span class="slds-truncate" title="Cobrança de taxas de Solicitações Técnicas">Taxas Técnicas</span>
+					</button>
+				</h3>
+
+				<!-- RequestFees DataTable -->
+				<div class="slds-section__content" id="requestFeesList">
+					<div class="custom-padding">
+						<aura:if isTrue="{!and(not(v.errorOnCallFees), not(empty(v.feesData)))}">
+							<lightning:datatable name="requestFeesTable"
+													aura:id="requestFeesTable"
+													columns="{!v.feesColumns}"
+													data="{!v.feesData}" 
+													keyField="requestID" 
+													maxRowSelection="{!v.maxRowSelection}"
+													onrowselection="{!c.handleSelectedRequestFee}"
+													resizeColumnDisabled="true"
+													sortedBy="{!v.sortedByFee}"
+													sortedDirection="{!v.sortedDirectionFee}"
+													defaultSortDirection="{!v.defaultSortDirection}"
+													onsort="{!c.onSortRequestFees}"/>
+						</aura:if>
+						<aura:if isTrue="{!and(empty(v.feesData), not(v.errorOnCallFees))}">
+							<c:ExceptionContent showNoData="true" 
+												noDataText1="{!$Label.c.Fin_no_events}" />
+						</aura:if>
+						<aura:if isTrue="{!v.errorOnCallFees}">
+							<c:ExceptionContent showError="true" 
+												errorText1="{!$Label.c.Financeiro_ErroGen1}"
+												errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+						</aura:if>
+					</div>
+				</div>
+			</div>
+
+
+			<c:UiModal aura:id="detailModalEvent" title="Detalhe de Evento" size="medium" onClose="{!c.onCloseModal}">
+				<aura:set attribute="content">
+					<lightning:layout horizontalAlign="space" multipleRows="true">
+						<lightning:layoutItem padding="horizontal-medium" size="3" >
+							<div class="middle-text">
+								<label>Tipo de solicitação</label>
+								<p><lightning:formattedText value="{!v.selectedEvent.fullEv.groupType}" /></p>
+							</div>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="3">
+							<div class="middle-text">
+								<label>Data de fechamento</label>
+								<p><lightning:formattedText value="{!v.selectedEvent.fullEv.formattedDate}" /></p>
+							</div>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="6">
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="3">
+							<div class="middle-text">
+								<label>Usuário</label>
+								<p><lightning:formattedText value="{!v.selectedEvent.fullEv.openUser}" /></p>
+							</div>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="3">
+							<div class="middle-text">
+								<label>Tipo de Fechamento</label>
+								<p><lightning:formattedText value="{!v.selectedEvent.fullEv.statusDescription}" /></p>
+							</div>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="6">
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="12">
+							<div class="middle-text">
+								<label>Número de Solicitação</label>
+								<p><lightning:formattedText value="{!v.selectedEvent.fullEv.evId}" /></p>
+							</div>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="12">
+							<div class="middle-text">
+								<label>Observação</label>
+								<p><lightning:formattedText value="{!v.selectedEvent.orders[0].note}" /></p>
+							</div>
+						</lightning:layoutItem>
+						<lightning:layoutItem padding="horizontal-medium" size="12">
+							<div style="margin-top: 25px;">
+								<h2 style="font-weight: 400; margin-bottom: 7px;">Tipo de OC's</h2>
+								<div style="width: 90%; margin: 0 auto;">
+									<lightning:datatable name="detailTable" 
+											aura:id="detailTable"
+											keyField="id"
+											hideCheckboxColumn="true"
+											columns="{!v.columnsDetail}"
+											data="{!v.selectedEvent.configurations}"
+											resizeColumnDisabled="true"
+											sortedBy="{!v.sortedByDetails}"
+											sortedDirection="{!v.sortedDirectionDetails}"
+											defaultSortDirection="{!v.defaultSortDirection}"
+											onsort="{!c.onSortDetails}"/>
+								</div>
+							</div>
+						</lightning:layoutItem>
+					</lightning:layout>
+				</aura:set> 
+				<aura:set attribute="footer">
+					<div class="modal-buttons">
+						<lightning:button variant="brand" label="Fechar" onclick="{!c.closeModal}" />
+					</div>
+				</aura:set>
+			</c:UiModal>
+            
+            <!--MODAL DE HISTÓRICO DE EVENTOS POR MANUAL DE LANÇAMENTO-->
+            
+            <c:UiModal aura:id="detailModalHistory" title="Detalhe de Evento" size="x2-small" onClose="{!c.onCloseHistoryModal}">
+				<aura:set attribute="content">
+					<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+						
+                        <lightning:layoutItem padding="horizontal-medium" size="4" >
+							<div class="middle-text">
+								<label>Descrição</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.extractItemTypeDescription}" /></p>
+							</div>
+						</lightning:layoutItem>
+						
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Tipo</label>
+								<p><lightning:formattedText value="Lançamento Manual" /></p>
+							</div>
+						</lightning:layoutItem>
+						
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Data</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.formattedDate}" /></p>
+							</div>
+						</lightning:layoutItem>
+                        
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Parcelas</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.installments}" /></p>
+							</div>
+						</lightning:layoutItem>
+						
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Valor</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.formattedAmount}" /></p>
+							</div>
+						</lightning:layoutItem>
+
+						
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Usuário</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.extractItensDetails[0].registrationUser}" /></p>
+							</div>
+						</lightning:layoutItem>
+                        
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Produto</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.extractItensDetails[0].productDescription}" /></p>
+							</div>
+						</lightning:layoutItem>
+
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Item</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.extractItensDetails[0].detTypeExtractItemNote}" /></p>
+							</div>
+						</lightning:layoutItem>
+
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Parceiro</label>
+								<p><lightning:formattedText value="{!v.selectedHistory.extractItensDetails[0].partnerName}" /></p>
+							</div>
+						</lightning:layoutItem>                        
+
+					</lightning:layout>
+				</aura:set> 
+				<aura:set attribute="footer">
+					<div class="modal-buttons">
+						<lightning:button variant="brand" label="Fechar" onclick="{!c.closeHistoryModal}" />
+					</div>
+				</aura:set>
+			</c:UiModal>
+
+            <!--MODAL DE HISTÓRICO DE OCORRÊNCIAS-->
+            
+            <c:UiModal aura:id="occurrenceModal" title="Detalhe de Evento" size="x2-small" onClose="{!c.onCloseOccurrenceModal}">
+				<aura:set attribute="content">
+					<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Usuário Abertura</label>
+								<p><lightning:formattedText value="{!v.selectedOccurrence.loginOpening}" /></p>
+							</div>
+						</lightning:layoutItem>
+
+						
+                        <lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Usuário Fechamento</label>
+								<p><lightning:formattedText value="{!v.selectedOccurrence.loginClosing}" /></p>
+							</div>
+						</lightning:layoutItem>
+
+						<lightning:layoutItem padding="horizontal-medium" size="4">
+							<div class="middle-text">
+								<label>Status</label>
+								<p><lightning:formattedText value="{!v.selectedOccurrence.status}" /></p>
+							</div>
+						</lightning:layoutItem>
+                        
+                        <lightning:layoutItem padding="horizontal-medium" size="12">
+							<div class="middle-text">
+								<label>Motivo de Fechamento</label>
+								<p><lightning:formattedText value="{!v.selectedOccurrence.description}" /></p> <!--qual campo na api?-->
+							</div>
+						</lightning:layoutItem>
+
+                        <lightning:layoutItem padding="horizontal-medium" size="12">
+							<div class="middle-text">
+								<label>Obs. Abertura</label>
+								<p><lightning:formattedText value="{!v.selectedOccurrence.note}" /></p> <!--qual campo na api?-->
+							</div>
+						</lightning:layoutItem>      
+						
+						<lightning:layoutItem padding="horizontal-medium" size="12">
+							<div class="middle-text">
+								<label>Obs. Fechamento</label>
+								<p><lightning:formattedText value="{!v.selectedOccurrence.resolutionNote}" /></p> <!--qual campo na api?-->
+							</div>
+						</lightning:layoutItem>    
+
+					</lightning:layout>
+				</aura:set> 
+				<aura:set attribute="footer">
+					<div class="modal-buttons">
+						<lightning:button variant="brand" label="Fechar" onclick="{!c.closeOccurrenceModal}" />
+					</div>
+				</aura:set>
+			</c:UiModal>
+
+	 <!--MODAL DE HISTÓRICO DE REAJUSTES-->
+            
+	 <c:UiModal aura:id="adjustmentModal" title="Detalhe de Evento" size="x2-small" onClose="{!c.onCloseAdjustmentModal}">
+		<aura:set attribute="content">
+			<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Nome do Evento</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.readjustmentType}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Data do Reajuste</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.formattedDate}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Tipo de Evento</label>
+						<p><lightning:formattedText value="Reajuste Anual"/></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Produto</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.productDescription}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Percentual de Reajuste</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.percentAdjusted}" /></p> <!--qual campo na api?-->
+					</div>
+				</lightning:layoutItem>
+				
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Preço Anterior</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.formattedPreviousPrice}" /></p> <!--qual campo na api?-->
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Preço Reajustado</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.formattedReadjustmentPrice}" /></p> <!--qual campo na api?-->
+					</div>
+				</lightning:layoutItem>      
+				
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Valor do Reajuste</label>
+						<p><lightning:formattedText value="{!v.selectedAdjustment.formattedAmount}" /></p> <!--qual campo na api?-->
+					</div>
+				</lightning:layoutItem>    
+
+			</lightning:layout>
+		</aura:set> 
+		<aura:set attribute="footer">
+			<div class="modal-buttons">
+				<lightning:button variant="brand" label="Fechar" onclick="{!c.closeAdjustmentModal}" />
+			</div>
+		</aura:set>
+	</c:UiModal>
+	
+	<!-- MODAL NEW PRODUCTS / OFERTAS -->
+
+	<c:UiModal aura:id="newProductModal" title="Detalhe de Evento" size="x2-small" onClose="{!c.onCloseNewProductModal}">
+		<aura:set attribute="content">
+			<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Tipo de Evento</label>
+						<p><lightning:formattedText value="Oferta Contratada" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Nome / Descrição</label>
+						<p><lightning:formattedText value="{!v.selectedNewProduct.productDescription}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Data</label>
+						<p><lightning:formattedText value="{!v.selectedNewProduct.formattedDate}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Valor</label>
+						<p><lightning:formattedText value="{!v.selectedNewProduct.formattedAmount}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+			</lightning:layout>
+		</aura:set> 
+		<aura:set attribute="footer">
+			<div class="modal-buttons">
+				<lightning:button variant="brand" label="Fechar" onclick="{!c.closeNewProductModal}" />
+			</div>
+		</aura:set>
+	</c:UiModal>
+
+	<!-- MODAL TAXAS DE SOLICITAÇÃO TÉCNICA -->
+
+	<c:UiModal aura:id="requestFeeModal" title="Detalhe de Evento" size="x2-small" onClose="{!c.onCloseRequestFeeModal}">
+		<aura:set attribute="content">
+			<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Nome do Item</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.extractItemTypeDescription}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Tipo de Solicitação</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.requestTypeDescription}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Valor</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.formattedAmount}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Total de Parcelas</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.paymentPlanName}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Número da Parcela</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.installmentNumber}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Produto</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.productDescription}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Usuário Solicitação</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.requestRegistrationUser}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="4">
+					<div class="middle-text">
+						<label>Usuário Taxa</label>
+						<p><lightning:formattedText value="{!v.selectedRequestFee.itemExtractRegistrationUser}" /></p>
+					</div>
+				</lightning:layoutItem>				
+
+			</lightning:layout>
+		</aura:set> 
+		<aura:set attribute="footer">
+			<div class="modal-buttons">
+				<lightning:button variant="brand" label="Fechar" onclick="{!c.closeRequestFeeModal}" />
+			</div>
+		</aura:set>
+	</c:UiModal>
+
+	<!-- MODAL PPV -->
+
+	<c:UiModal aura:id="ppvModal" title="Detalhe de Evento" size="x2-small" onClose="{!c.onClosePpvModal}">
+		<aura:set attribute="content">
+			<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Produto</label>
+						<p><lightning:formattedText value="{!v.selectedPpv.eventName}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Data do Lançamento</label>
+						<p><lightning:formattedText value="{!v.selectedPpv.formattedDate}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="12">
+					<div class="middle-text">
+						<label>Valor</label>
+						<p><lightning:formattedText value="{!v.selectedPpv.formattedPrice}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+			</lightning:layout>
+		</aura:set> 
+		<aura:set attribute="footer">
+			<div class="modal-buttons">
+				<lightning:button variant="brand" label="Fechar" onclick="{!c.closePpvModal}" />
+			</div>
+		</aura:set>
+	</c:UiModal>
+
+	<!-- MODAL OUTAGE -->
+
+	<c:UiModal aura:id="outageModal" title="Detalhe de Evento" size="x2-small" onClose="{!c.onCloseOutageModal}">
+		<aura:set attribute="content">
+			<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Código de retorno</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.returnCode}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Nº Outage</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.OutageNumber}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Tipo de Produto</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].productType}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Serviços Afetados</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].affectedServices}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Sintoma</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].symptom}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Abrangência</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].coverage}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Natureza</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].nature}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Responsável</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].responsible}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Data Início</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].startDate}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Data Previsão</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].previsionDate}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Data Fim</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].endDate}" /></p>
+					</div>
+				</lightning:layoutItem>
+
+				<lightning:layoutItem padding="horizontal-medium" size="3">
+					<div class="middle-text">
+						<label>Status</label>
+						<p><lightning:formattedText value="{!v.selectedOutage.products[0].status}" /></p>
+					</div>
+				</lightning:layoutItem>
+				
+			</lightning:layout>
+		</aura:set> 
+		<aura:set attribute="footer">
+			<div class="modal-buttons">
+				<lightning:button variant="brand" label="Fechar" onclick="{!c.closeOutageModal}" />
+			</div>
+		</aura:set>
+	</c:UiModal>
+
+</div>
+</div>	
+</aura:component>

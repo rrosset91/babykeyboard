@@ -1,0 +1,10 @@
+.THIS .header-number {width:210px;display:block;float:left;}
+.THIS .header-adress {width:calc(100% - 210px);display:block;float:right;text-align:right;}
+.THIS .header-icon {width:16px;display:block;float:left;}
+.THIS .slds-text-align_right.vermelho {color:#da291c;}
+.THIS .title-red {color:#da291c;}
+.THIS table.header-identificacao {width:auto;}
+.THIS table.header-identificacao td:nth-child(1) {padding-right:5px;}
+.THIS table.header-identificacao td:nth-child(2) {padding-right:10px;}
+.THIS table.header-identificacao td:nth-child(3) {color:#da291c;font-size:16px;font-weight:bold;}
+.THIS td.titulo-size16-red {color:#da291c;font-size:16px;font-weight:bold;}

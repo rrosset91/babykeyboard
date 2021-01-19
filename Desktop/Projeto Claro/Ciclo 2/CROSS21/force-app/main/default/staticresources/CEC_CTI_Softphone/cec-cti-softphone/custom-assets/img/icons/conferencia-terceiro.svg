@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="69" height="69" viewBox="0 0 69 69">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="69" height="69" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="conferencia-terceiro" clip-path="url(#clip-path)">
+    <g id="Grupo_244" data-name="Grupo 244" transform="translate(38.871 32.101)">
+      <g id="Grupo_243" data-name="Grupo 243">
+        <path id="Caminho_240" data-name="Caminho 240" d="M58.874,53.5V46.4A5.622,5.622,0,0,0,54.7,40.963l-9.885-2.636V32.846" transform="translate(-44.816 -32.846)" fill="none" stroke="#f5842b" stroke-miterlimit="10" stroke-width="1.5"/>
+      </g>
+    </g>
+    <g id="Grupo_814" data-name="Grupo 814" transform="translate(1 1)">
+      <circle id="Elipse_171" data-name="Elipse 171" cx="33.5" cy="33.5" r="33.5" fill="none" stroke="#f5842b" stroke-miterlimit="10" stroke-width="2"/>
+      <g id="Grupo_812" data-name="Grupo 812" transform="translate(14.548 10.067)">
+        <path id="Caminho_241" data-name="Caminho 241" d="M34.8,32.846v5.481l-9.884,2.636A5.628,5.628,0,0,0,20.737,46.4v7.7" transform="translate(-20.003 -12.085)" fill="none" stroke="#f5842b" stroke-miterlimit="10" stroke-width="1.5"/>
+        <path id="Caminho_242" data-name="Caminho 242" d="M39.741,34h0c-5.176,0-9.372-6.071-9.372-11.247V20.882a9.372,9.372,0,0,1,9.372-9.373h0a9.372,9.372,0,0,1,9.371,9.373v1.873C49.112,27.933,44.917,34,39.741,34Z" transform="translate(-20.263 -11.509)" fill="none" stroke="#f5842b" stroke-miterlimit="10" stroke-width="1.5"/>
+        <path id="Caminho_516" data-name="Caminho 516" d="M0,0,38.969-.047" transform="translate(0 41.824)" fill="none" stroke="#f5842b" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>

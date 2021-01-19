@@ -1,0 +1,522 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    
+    <!-- ATRIBUTOS -->
+    <aura:attribute type="String"  name="nomeOferta" />
+    <aura:attribute type="Object"  name="produtoAtual" />
+	<aura:attribute type="Boolean" name="selecionado" default="true" />
+	<aura:attribute type="Boolean" name="verdade" default="true" />
+	<aura:attribute type="Boolean" name="isPurple" />
+	<aura:attribute type="Boolean" name="isRetencao" />
+
+    <div class="slds-container_center"> 
+
+        <!-- HEADER -->
+        <article class="slds-tile">
+            <div class="slds-grid" Style="background:none">
+                <div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+                <div class="slds-box slds-align_absolute-center box-header">
+                    <div class="slds-col slds-size_11-of-12">
+                        <div class="slds-grid slds-gutters slds-align_absolute-center" Style="height:2.2rem"><strong>{! v.nomeOferta }</strong></div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- CONTENT -->
+        <article class="slds-tile">
+            <div class="slds-grid slds-gutters slds-align_absolute-center" style="margin-top:1rem; background:none">
+                <div class="slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_11-of-12 slds-border_top slds-border_left slds-border_right">
+                    <div class="slds-grid slds-gutters slds-align_absolute-center box-content" style="padding-top:1rem">
+                        <div class="slds-col slds-size_8-of-12 slds-align_absolute-center padding-product">
+                            <strong>{! $Label.c.OFERTA_PRODUTO }</strong>
+                        </div>
+                        <div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+                            <strong>{! $Label.c.OFERTA_PRECO } </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- TV -->
+            <div class="slds-grid slds-gutters slds-align_absolute-center box-content" Style="background:none">
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center box-icon" Style="background:none">
+                    <!--<img src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-tv.png" /> -->
+					<img src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_TVColorido.png' }" /> 
+                </div>
+                <div class="slds-col slds-size_11-of-12 slds-border_left slds-border_right">
+                    <div class="slds-grid slds-wrap slds-align_absolute-center six-lines">
+						
+						<!-- ASSINATURA -->
+						<aura:iteration items="{! v.produtoAtual.tv[0].planTv.lstPromotions }" var="promo" >
+							<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+								<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product " title="{! promo.description }">
+									{! v.produtoAtual.tv[0].planTv.label }
+								</div>
+								<aura:set attribute="else">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product " title="{! promo.description }">
+										{! promo.label }
+									</div>
+								</aura:set>
+							</aura:if>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + v.produtoAtual.tv[0].planTv.originalValue }"/>
+							</div>
+						</aura:iteration>
+						<aura:if isTrue="{! empty(v.produtoAtual.tv[0].planTv.lstPromotions) }">
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product " title="{! v.produtoAtual.tv[0].planTv.label }">
+								{! v.produtoAtual.tv[0].planTv.label } 
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! v.produtoAtual.tv[0].planTv.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+
+						<!-- ADICIONAIS -->
+						<aura:iteration items="{! v.produtoAtual.tv[0].additionalTv.lstPromotions }" var="promo" >
+							<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+								<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }" >
+									{! v.produtoAtual.tv[0].additionalTv.label }
+								</div>
+								<aura:set attribute="else">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }" >
+										{! promo.label }
+									</div>
+								</aura:set>
+							</aura:if>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + add(promo.value,promo.discount)}"/>
+							</div>
+						</aura:iteration>
+						<aura:if isTrue="{! v.produtoAtual.tv[0].additionalTv.value > 0 }">
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product " title="{! v.produtoAtual.tv[0].additionalTv.label }">
+								{! v.produtoAtual.tv[0].additionalTv.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! v.produtoAtual.tv[0].additionalTv.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+
+						<!-- PONTOS OPCIONAIS -->
+						<aura:iteration items="{! v.produtoAtual.tv[0].optionalPointsTv.lstPromotions }" var="promo">
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product " title="{! promo.description }">
+								{! promo.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + add(promo.value,promo.discount)}" />
+							</div>
+						</aura:iteration>
+						<aura:if isTrue="{! v.produtoAtual.tv[0].optionalPointsPromoTv.quantity > 0 }">
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product " title="{! v.produtoAtual.tv[0].optionalPointsPromoTv.label }">
+								{! v.produtoAtual.tv[0].optionalPointsPromoTv.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="0" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+						<aura:if isTrue="{! v.produtoAtual.tv[0].optionalPointsTv.value > 0 }">
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "
+								title="{! v.produtoAtual.tv[0].optionalPointsTv.label }">
+								{! v.produtoAtual.tv[0].optionalPointsTv.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! v.produtoAtual.tv[0].optionalPointsTv.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-grid" Style="background:none">
+            	<div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+                <div class="slds-col slds-size_11-of-12 padding-striped-line slds-border_left slds-border_right">
+                    <hr class="striped-border" />
+                </div>
+            </div>
+            
+            <!-- Virtua -->
+            <div class="slds-grid slds-gutters slds-align_absolute-center box-content" Style="background:none">
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center box-icon" Style="background:none">
+                    <!--<img src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-internet.png" />-->
+					<img src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_BandaLargaColorido.png' }" />
+                </div>
+                <div class="slds-col slds-size_11-of-12 slds-border_left slds-border_right">
+                    <div class="slds-grid slds-wrap three-lines slds-align_absolute-center">
+						
+						<!-- ASSINATURA -->
+						<aura:iteration items="{! v.produtoAtual.broadband.planBroadband.lstPromotions }" var="promo" >
+							<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+								<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+									{! v.produtoAtual.broadband.planBroadband.label }
+								</div>
+								<aura:set attribute="else">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+										{! promo.label }
+									</div>
+								</aura:set>
+							</aura:if>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + v.produtoAtual.broadband.planBroadband.originalValue }"/>
+							</div>
+						</aura:iteration>   
+						<aura:if isTrue="{! empty(v.produtoAtual.broadband.planBroadband.lstPromotions) }"> 
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.broadband.planBroadband.label }" >
+								{! v.produtoAtual.broadband.planBroadband.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price" >
+								<lightning:formattedNumber value="{! v.produtoAtual.broadband.planBroadband.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+
+						<!-- ADICIONAIS -->
+						<aura:iteration items="{! v.produtoAtual.broadband.additionalBroadband.lstPromotions }" var="promo" >
+							<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+								<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+									{! v.produtoAtual.broadband.additionalBroadband.label }
+								</div>
+								<aura:set attribute="else">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+										{! promo.label }
+									</div>
+								</aura:set>
+							</aura:if>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + add(promo.value,promo.discount)}"/>
+							</div>
+						</aura:iteration>   
+						<aura:if isTrue="{! v.produtoAtual.broadband.additionalBroadband.value > 0 }"> 
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.broadband.additionalBroadband.label }" >
+								{! v.produtoAtual.broadband.additionalBroadband.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price" >
+								<lightning:formattedNumber value="{! v.produtoAtual.broadband.additionalBroadband.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+                    </div>
+                </div>
+            </div>
+            
+			<div class="slds-grid" Style="background:none">
+            	<div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+                <div class="slds-col slds-size_11-of-12 padding-striped-line slds-border_left slds-border_right">
+                    <hr class="striped-border" />
+                </div>
+            </div>
+            
+            <!-- Net Fone -->
+            <div class="slds-grid slds-gutters slds-align_absolute-center box-content" Style="background:none">
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center box-icon" Style="background:none">
+                    <!--<img src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-telefone.png" />-->
+					<img src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_FoneColorido.png' }" />
+                </div>
+                <div class="slds-col slds-size_11-of-12 slds-border_left slds-border_right">
+                    <div class="slds-grid slds-wrap three-lines slds-align_absolute-center">
+                        
+						<!-- ASSINATURA -->
+						<aura:iteration items="{! v.produtoAtual.phone.planPhone.lstPromotions }" var="promo" >
+							<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+								<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+									{! v.produtoAtual.phone.planPhone.label }
+								</div>
+								<aura:set attribute="else">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+										{! promo.label }
+									</div>
+								</aura:set>
+							</aura:if>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + v.produtoAtual.phone.planPhone.originalValue }"/>
+							</div>
+						</aura:iteration> 
+						<aura:if isTrue="{! empty(v.produtoAtual.phone.planPhone.lstPromotions) }">  
+							<div class="slds-truncate slds-col slds-size_8-of-12  slds-align_absolute-center padding-product"
+								title="{! v.produtoAtual.phone.planPhone.label }">
+								{! v.produtoAtual.phone.planPhone.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! v.produtoAtual.phone.planPhone.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+						
+						<!-- ADICIONAIS -->
+						<aura:iteration items="{! v.produtoAtual.phone.additionalPhone.lstPromotions }" var="promo" >
+							<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+								<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+									{! v.produtoAtual.phone.additionalPhone.label }
+								</div>
+								<aura:set attribute="else">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+										{! promo.label }
+									</div>
+								</aura:set>
+							</aura:if>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + add(promo.value,promo.discount)}"/>
+							</div>
+						</aura:iteration> 
+						<aura:if isTrue="{! v.produtoAtual.phone.additionalPhone.value > 0 }">  
+							<div class="slds-truncate slds-col slds-size_8-of-12  slds-align_absolute-center padding-product" title="{! v.produtoAtual.phone.additionalPhone.label }">
+								{! v.produtoAtual.phone.additionalPhone.label }
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber value="{! v.produtoAtual.phone.additionalPhone.value }" style="currency" currencyCode="BRL"/>
+							</div>
+						</aura:if>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-grid" Style="background:none">
+            	<div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+                <div class="slds-col slds-size_11-of-12 padding-striped-line slds-border_left slds-border_right">
+                    <hr class="striped-border" />
+                </div>
+            </div>
+            
+            <!-- Net Móvel -->
+            <div class="slds-grid slds-gutters slds-align_absolute-center box-content" Style="background:none">
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center box-icon" Style="background:none">
+					<img src="{! $Resource.cec_identidade + '/images-upload/cec-produto/NBA_MovelColorido.png' }" />
+                </div>
+                <div class="slds-col slds-size_11-of-12 slds-border_left slds-border_right">
+                    <div class="slds-grid three-lines slds-wrap slds-align_absolute-center">	
+						<aura:if isTrue="{! and(!v.isPurple, v.isRetencao) }" >
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="NÃO POSSUI">
+								NÃO POSSUI
+							</div>
+							<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+								<lightning:formattedNumber style="currency" currencyCode="BRL" title=""/>
+							</div>
+							<aura:set attribute="else">	
+								<!-- ASSINATURA -->
+								<aura:iteration items="{! v.produtoAtual.mobile.planMobile.lstPromotions }" var="promo" >
+									<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+										<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+											{! v.produtoAtual.mobile.planMobile.label }
+										</div>
+										<aura:set attribute="else">
+											<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+												{! promo.label }
+											</div>
+										</aura:set>
+									</aura:if>
+									<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+										<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + v.produtoAtual.mobile.planMobile.originalValue }"/>
+									</div>
+								</aura:iteration> 
+								<aura:if isTrue="{! empty(v.produtoAtual.mobile.planMobile.lstPromotions) }">  
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.mobile.planMobile.label }">
+										{! v.produtoAtual.mobile.planMobile.label }
+									</div>
+									<aura:if isTrue="{! v.produtoAtual.mobile.mouseOverTitularSemDesconto > 0 }" >
+										<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+											<lightning:formattedNumber value="{! v.produtoAtual.mobile.planMobile.value }" style="currency" currencyCode="BRL" title="{! v.produtoAtual.mobile.mouseOverValorSemDesconto }" />
+										</div>
+										<aura:set attribute="else">
+											<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+												<lightning:formattedNumber value="{! v.produtoAtual.mobile.planMobile.value }" style="currency" currencyCode="BRL" />
+											</div>
+										</aura:set>
+									</aura:if>
+								</aura:if>
+
+								<!-- ADICIONAIS -->
+								<aura:iteration items="{! v.produtoAtual.mobile.additionalMobile.lstPromotions }" var="promo" >
+									<aura:if isTrue="{! empty(promo.label) || promo.label == '-1' }">
+										<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+											{! v.produtoAtual.mobile.additionalMobile.label }
+										</div>
+										<aura:set attribute="else">
+											<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product "  title="{! promo.description }">
+												{! promo.label }
+											</div> 
+										</aura:set>
+									</aura:if>
+									<div class="slds-col slds-size_4-of-12 slds-align_absolute-center padding-price">
+										<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" title="{! 'VALOR APÓS ' + promo.valid + ' MESES - R$' + add(promo.value,promo.discount)}"/>
+									</div>
+								</aura:iteration> 
+								<aura:if isTrue="{! v.produtoAtual.mobile.additionalMobile.value > 0 }">  
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.mobile.additionalMobile.label }">
+										{! v.produtoAtual.mobile.additionalMobile.label }
+									</div>
+									<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+										<lightning:formattedNumber value="{! v.produtoAtual.mobile.additionalMobile.value }" style="currency" currencyCode="BRL"/>
+									</div>
+								</aura:if>
+
+								<!-- dependentes pós pago (voz + dados) -->
+								<aura:if isTrue="{! v.produtoAtual.mobile.numeroDependentesVozDados > 0 }" >
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.mobile.dependentslMobile.label }">
+										<p>	{! v.produtoAtual.mobile.numeroDependentesVozDados } Dependentes DADOS + VOZ </p> 
+									</div>
+									<aura:if isTrue="{! v.produtoAtual.mobile.descontoDependentePG != '0'}" >
+										<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+											<lightning:formattedNumber value="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoPG }" style="currency" currencyCode="BRL" title='{! v.produtoAtual.mobile.mouseOverDependenteSemDescontoPG }' />
+										</div>
+										<aura:set attribute="else">
+											<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+												<lightning:formattedNumber value="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoPG }" style="currency" currencyCode="BRL" />
+											</div>
+										</aura:set>				
+									</aura:if>
+								</aura:if>
+																
+								<!-- dependentes banda larga (dados) -->
+								<aura:if isTrue="{! v.produtoAtual.mobile.numeroDependentesDados > 0 }">
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.mobile.dependentslMobile.label }">
+										<p> {!  v.produtoAtual.mobile.numeroDependentesDados } Dependentes DADOS </p>
+									</div>
+									<aura:if isTrue="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoBL != '0' }">
+										<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+											<lightning:formattedNumber value="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoBL }" style="currency" currencyCode="BRL" title='{! v.produtoAtual.mobile.mouseOverDependenteSemDescontoBL }'/>
+										</div>
+										<aura:set attribute="else">
+											<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+												<lightning:formattedNumber value="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoBL }" style="currency" currencyCode="BRL" />
+											</div>
+										</aura:set>
+									</aura:if>
+								</aura:if>
+
+								<!-- dependentes controle (controle) -->
+								<aura:if isTrue="{! v.produtoAtual.mobile.numeroDependentesControle > 0 }" >
+									<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product" title="{! v.produtoAtual.mobile.dependentslMobile.label }">
+										<p>	{! v.produtoAtual.mobile.numeroDependentesControle } Dependentes CONTROLE </p> 
+									</div>
+									<aura:if isTrue="{! v.produtoAtual.mobile.descontoDependentControle != '0'}" >
+										<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+											<lightning:formattedNumber value="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoControle }" style="currency" currencyCode="BRL" title='{! v.produtoAtual.mobile.mouseOverDependenteSemDescontoControle }' />
+										</div>
+										<aura:set attribute="else">
+											<div class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price">
+												<lightning:formattedNumber value="{! v.produtoAtual.mobile.mouseOverDependenteComDescontoControle }" style="currency" currencyCode="BRL" />
+											</div>
+										</aura:set>				
+									</aura:if>
+								</aura:if>
+
+							</aura:set>
+						</aura:if>  
+                    </div>
+                </div>
+            </div>
+
+			<!-- Desconto DCC -->     
+			<aura:if isTrue="{! v.produtoAtual.hasDiscountAutomaticDebit }">   
+				<div class="slds-grid" Style="background:none">
+            		<div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+					<div class="slds-col slds-size_11-of-12 padding-striped-line slds-border_left slds-border_right">
+						<hr class="striped-border" />
+					</div>
+				</div>
+				<div class="slds-grid slds-gutters slds-align_absolute-center box-content" Style="background:none">
+					<div class="slds-col slds-size_1-of-12 slds-align_absolute-center box-icon" Style="background:none">
+						<!--<img src="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-celular.png" />-->
+						<!-- <img src="/resource/cec_identidade/images-upload/cec-produto/NBA_MovelColorido.png" /> -->
+					</div>
+					<div class="slds-col slds-size_11-of-12 slds-border_left slds-border_right">
+						<div class="slds-grid three-lines slds-wrap slds-align_absolute-center">
+							<div class="slds-truncate slds-col slds-size_8-of-12 slds-align_absolute-center padding-product ">
+								<p>{! $Label.c.DESCONTO_DCC }</p>
+							</div>
+							<div Class="slds-col slds-size_4-of-12  slds-align_absolute-center padding-price " >
+								-<lightning:formattedNumber  value="{! v.produtoAtual.automaticDebitDiscount }" 
+																														style="currency"
+																														currencyCode="BRL" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</aura:if>
+
+			<div class="slds-grid" Style="background:none">
+            	<div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+				<div class="slds-col slds-size_11-of-12 padding-striped-line slds-border_left slds-border_right">
+					<hr class="striped-border" />
+				</div>
+			</div>
+            
+            <div class="slds-grid slds-gutters slds-align_absolute-center" Style="background:none">
+                <div class="slds-col slds-size_1-of-12 slds-align_absolute-center" Style="background:none"></div>
+                <div class="slds-col slds-size_11-of-12 slds-border_left slds-border_right slds-border_bottom" Style="height: 7rem">
+                    <div class="slds-grid slds-grid_vertical-align-start box-total">
+                        <div class="slds-col slds-size_3-of-3">
+							<aura:if isTrue="{! false  }" >
+								<div Class="slds-grid box-content" Style="padding-bottom:0.5rem" >
+									<div Class="slds-col slds-size_8-of-12 slds-align_absolute-center"  >
+										<p>{! $Label.c.DESCONTO_DCC }</p>
+									</div>
+									<div Class="slds-col slds-size_4-of-12 slds-align_absolute-center" >
+										<lightning:formattedNumber  value="{! v.produtoAtual.automaticDebitDiscount }" style="currency" currencyCode="BRL" />
+									</div> 
+								</div>
+							</aura:if>
+
+							<div class="text-total">
+								<strong>
+									<!--Total com Descontos:--> {! $Label.c.TOTAL_COM_DESCONTOS } &nbsp;
+									<lightning:formattedNumber value="{! v.produtoAtual.totalValue }" style="currency" currencyCode="BRL"/>
+								</strong>
+							</div>
+							<div class="text-total">
+								<strong>
+									<!--Total sem Descontos:--> {! $Label.c.TOTAL_SEM_DESCONTOS } &nbsp;
+									<lightning:formattedNumber value="{! v.produtoAtual.totalValueOriginal }" style="currency" currencyCode="BRL"/>
+								</strong>
+							</div>
+						<!--	<aura:iteration items="{! v.produtoAtual.lstSteps }" var="degrade" indexVar="indexDegrade">
+								<aura:if isTrue="{! degrade.label != '0' }" >
+									<aura:if isTrue="{! degrade.value > 0}" >	
+										<div class="text-total">
+											<strong>
+												Total com Descontos: &nbsp;
+												<lightning:formattedNumber value="{! v.produtoAtual.totalValue }" style="currency" currencyCode="BRL"/>
+											</strong>
+										</div>
+										<div class="text-total">
+											<strong>
+												Total sem Descontos: &nbsp;
+												<lightning:formattedNumber value="{! v.produtoAtual.totalValueOriginal }" style="currency" currencyCode="BRL"/>
+											</strong>
+										</div>
+									</aura:if>
+										<aura:set attribute="else">
+											Valor Total: &nbsp;
+											<lightning:formattedNumber value="{! v.produtoAtual.totalValue }" style="currency" currencyCode="BRL"/>
+										</aura:set>
+								</aura:if>
+							 </aura:iteration> -->
+                            
+						<!--	<aura:iteration items="{! v.produtoAtual.lstSteps }" var="degrade" indexVar="indexDegrade">
+							<aura:if isTrue="{! degrade.label != '0' }" >
+								<aura:if isTrue="{! degrade.value > 0}" >	
+									<div class="text-total">
+										<strong>
+												Total sem Descontos: &nbsp;
+												{! format($Label.c.OFERTA_APOS_MESES, degrade.label )}&nbsp; 
+											<lightning:formattedNumber value="{! degrade.value }" style="currency" currencyCode="BRL"/>
+										</strong>
+									</div>
+								</aura:if>
+							</aura:if>
+                        </aura:iteration> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- FOOTER -->
+    <article class="slds-tile">
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-12" Style="background:none"></div>
+            <div class="slds-box slds-align_absolute-center box-dif">
+                <div class="slds-col slds-size_11-of-12">
+                    <div class="slds-grid slds-gutters slds-align_absolute-center"><strong>{! $Label.c.OFERTA_DIFERENCA_MENSAL }</strong></div>
+                </div>
+            </div>
+        </div>
+    </article>
+</aura:component>

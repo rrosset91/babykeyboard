@@ -1,0 +1,90 @@
+.container {
+    border: 1px solid #d8dde6;
+    margin: 10px 0 20px 0;
+    height: 100%;
+    width: 900px;
+}
+
+.tipoSolicitacao{
+    width: 230px;
+}
+
+.numBanConta{
+    width: 105px;
+}
+
+.tipoPessoa{
+    width: 150px;
+}
+
+.tipoConta{
+    width: 150px;
+}
+
+.nomeCliente{
+    width: 500px;
+}
+
+.valor{
+    width: 115px;
+}
+
+.cpfCliente{
+    width: 200px;
+}
+
+.cnpjCliente{
+    width: 200px;
+}
+
+.banco{
+    width: 400px;
+}
+
+.agencia{
+    width: 70px;
+}
+
+.contaCorrente{
+    width: 130px;
+}
+
+.digitoContaCorrente{
+    width: 50px;
+}
+
+.motivoReembolso{
+    width: 450px;
+}
+
+.reembolsoEmDobro{
+    width: 45px;
+}
+
+.ddd1{
+    width: 45px;
+}
+
+.tel1{
+    width: 105px;
+}
+
+.ddd2{
+    width: 45px;
+}
+
+.tel2{
+    width: 105px;
+}
+
+.email{
+    width: 370px;
+}
+
+.observacao{
+    width: 800px;
+}
+
+.buttonGerar{
+    width: 100px;
+}

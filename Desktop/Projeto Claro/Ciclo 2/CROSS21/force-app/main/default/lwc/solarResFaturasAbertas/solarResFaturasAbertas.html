@@ -1,0 +1,104 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 04-11-2020
+  @last modified by  : Joao Neves
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   29-10-2020   Joao Neves   Initial Version
+-->
+<template>
+	<lightning-spinner if:true={isLoading} size="medium"></lightning-spinner>
+
+	<header>
+		<h3 class="header-text">Selecione a(s) fatura(s) para visualização.</h3>
+		<div style="padding-top: 5px">
+			<c-solar-filtros onfilterchange={handleFilterNotification} hide-products></c-solar-filtros>
+		</div>
+	</header>
+
+	<div style="padding-top: 25px">
+		<template if:true={hasError}>
+			<c-solar-exception-content show-error="true"></c-solar-exception-content>
+		</template>
+		<template if:false={hasError}>
+			<template if:true={hasData}>
+				<lightning-datatable
+					key-field="id"
+					data={data}
+					columns={columns}
+					sortable="true"
+					onrowaction={handleRowAction}
+					keyfield="billId"
+					max-row-selection="1"
+					resize-column-disabled="true"
+					onrowselection={handleRowSelection}
+					sorted-direction={sortDirection}
+					onsort={handleSortdata}
+					sorted-by={sortBy}
+				>
+				</lightning-datatable>
+			</template>
+			<template if:false={hasData}>
+				<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+			</template>
+		</template>
+	</div>
+
+	<footer>
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex"></div>
+			<div style="width: 50%; justify-content: flex-end; display: flex">
+				<lightning-button variant="brand" label="Ver itens da fatura" onclick={handleDetailsClick} class="slds-m-left_x-small" disabled={disableDetails}></lightning-button>
+			</div>
+		</div>
+	</footer>
+
+	<!-- MODAL DETALHE DA FATURA -->
+	<c-solar-modal show-close-button="true" size="small" header="Detalhe de Fatura">
+		<div slot="content">
+			<div class="slds-form slds-grid slds-wrap slds-gutters">
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Tipo</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.tipoFatura}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Pagamento</dt>
+						<dd class="slds-item_detail custom-content"></dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Valor</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.valor}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Vencimento</dt>
+						<dd class="slds-item_detail custom-content">{modalItem.dataVencimento}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Status</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.status}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Baixa</dt>
+						<dd class="slds-item_detail custom-content"></dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

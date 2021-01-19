@@ -1,0 +1,8 @@
+<design:component label="CECCC_Case">
+    <flexipage:template >
+        <flexipage:region name="left" defaultWidth="small" />
+        <flexipage:region name="center" defaultWidth="small" />
+        <flexipage:region name="right" defaultWidth="large"/>
+    </flexipage:template>
+    
+</design:component>

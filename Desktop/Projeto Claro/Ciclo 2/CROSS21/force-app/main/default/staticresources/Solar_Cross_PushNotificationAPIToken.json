@@ -1,0 +1,24 @@
+{
+    "refresh_token_expires_in": "0",
+    "api_product_list": "[communication-messages-m2m-test]",
+    "api_product_list_json": [
+        "communication-messages-m2m-test"
+    ],
+    "organization_name": "clarobrasil-nonprod",
+    "developer.email": "f02710cf-9942-4193-b50c-59a06ebf15dd@devteam.apigee.io",
+    "token_type": "Bearer",
+    "issued_at": "1608757667317",
+    "client_id": "uzFGAGOErU2vKmCVije8UmeGDASsGBsS",
+    "access_token": "pqwa4CyztgEgkLR89INHvXM6DKzN",
+    "application_name": "22d7e317-7c54-4143-8d2d-60d69cbd8726",
+    "scope": "",
+    "expires_in": "86399",
+    "refresh_count": "0",
+    "status": "approved",
+	"error" : {
+		"httpCode" : 400,
+		"errorCode" : "1050",
+		"message" : "Teste Erro",
+		"detailedMessage" : "Teste Erro Detalhado"
+ 	}
+}

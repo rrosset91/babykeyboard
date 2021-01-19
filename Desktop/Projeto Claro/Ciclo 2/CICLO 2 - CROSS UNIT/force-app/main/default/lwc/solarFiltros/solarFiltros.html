@@ -1,0 +1,39 @@
+<template>
+	<lightning-layout>
+		<lightning-layout-item size="2">
+			<lightning-combobox label="Período" value={valuePeriod} options={optionsPeriod} onchange={handleChangePeriod}></lightning-combobox>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="2" padding="horizontal-small">
+			<lightning-combobox label="Status" value={value} placeholder="Todos" options={optionsStatus} onchange={handleChangeStatus} if:false={hideStatus}></lightning-combobox>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="5"></lightning-layout-item>
+
+		<lightning-layout-item size="3">
+			<div class="search-style">
+				<div data-id="search">
+					<lightning-input label="Busca" value={valueSearch} type="search" onkeyup={handleKeyupSearch}></lightning-input>
+				</div>
+				<div class="refresh-style" if:true={allowRefresh}>
+					<lightning-button-icon icon-name="utility:refresh" title="Atualizar" onclick={handleRefresh}></lightning-button-icon>
+				</div>
+			</div>
+		</lightning-layout-item>
+	</lightning-layout>
+
+	<template if:true={isCustomPeriod}>
+		<lightning-layout vertical-align="center">
+			<lightning-layout-item size="2">
+				<lightning-input type="date" name="startDate" label="Inicio" value={startDate} onchange={handleDateChange}></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="2" padding="horizontal-small">
+				<lightning-input type="date" name="endDate" label="Fim" value={endDate} onchange={handleDateChange}></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="1" alignment-bump="top">
+				<lightning-button variant="brand" label="Confirmar" onclick={handleCustomPeriod}></lightning-button>
+			</lightning-layout-item>
+			<lightning-layout-item size="7" padding="horizontal-small"></lightning-layout-item>
+		</lightning-layout>
+	</template>
+</template>

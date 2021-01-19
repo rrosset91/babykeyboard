@@ -1,0 +1,42 @@
+<aura:component controller="CEC_PME_ResumoPedidoController" implements="force:appHostable,forceCommunity:availableForAllPageTypes" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="pedido" type="CEC_PME_ResumoPedidoController.Data" />
+    <div style="padding:10px;background:#ffffff;">
+    <div class="modal border">
+        <button class="accordion border-b" id="headerResumoCompra" onclick="{!c.toggleSecao}">
+            <div class="col-line-10">
+                <span class="bloco-100 title-section">Resumo dados do cliente 
+				<button onclick="{!c.closeWindow}" id="fecharbutton" class="fechar">fechar [x]</button>
+				</span>
+            </div>
+        </button>
+        <div class="bloco" id="secaoResumoCompra">
+            <div class="bloco-100">
+                <c:CEC_PME_ResumoDadosCliente dadosCliente="{!v.pedido.resumoDadosCliente}" tipoEntrega="{!v.pedido.tipoEntrega}" />
+            </div>
+        </div>
+        
+		<button class="accordion border-b" id="headerResumoPedido" onclick="{!c.toggleSecao}">
+            <div class="col-line-10">
+                <span class="bloco-100 title-section">Resumo do pedido</span>
+            </div>
+        </button>
+        <div class="bloco" id="secaoResumoPedido">
+            <div class="bloco-100">
+                <c:CEC_PME_ResumoResumoPedido resumoPedido="{!v.pedido.resumoPedido}" tipoEntrega="{!v.pedido.tipoEntrega}"/>
+            </div>
+        </div>
+        
+        <button class="accordion border-b" id="headerAssociacaoAparelhos" onclick="{!c.toggleSecao}">
+            <div class="col-line-10" >
+                <span class="bloco-100 title-section">Associação de linhas</span>
+            </div>
+        </button>
+        <div class="bloco" id="secaoAssociacaoAparelhos">
+            <div class="bloco-100">
+                <c:CEC_PME_ResumoAssocAparelhos associacaoAparelhos="{!v.pedido.associacaoAparelhos}" tipoEntrega="{!v.pedido.tipoEntrega}" />
+            </div>
+        </div>
+    </div>
+    </div>
+</aura:component>

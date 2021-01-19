@@ -1,0 +1,208 @@
+<!-- CEC_PME_FinalizarPedido.cmp -->
+<aura:component controller="CEC_PME_FinalizarPedidoController" implements="force:appHostable,forceCommunity:availableForAllPageTypes" >
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- <aura:dependency resource="markup://force:navigateToURL" type="EVENT"/> -->
+    <lightning:workspaceAPI aura:id="workspace" />
+    <lightning:navigation aura:id="navService"/>
+    
+    <aura:attribute name="closeTab" type="String" default="false" />
+    <aura:attribute name="cTabId" type="String" />
+    <aura:attribute name="idPedido" type="String" />
+    <aura:attribute name="lstData" type="List" />
+    <aura:attribute name="sessao" type="Object" />
+    <aura:attribute name="enableSessaoNovo" type="Boolean" default="false"/>
+    <aura:attribute name="isDesktop" type="Boolean"/>
+    <aura:attribute name="isLoading" type="Boolean"/>
+    <aura:attribute name="showModalError" type="Boolean" />
+    <aura:attribute name="msgModalError" type="String" />
+    
+    <aura:attribute name="ld21Options" type="String[]" default=",Sim,Não"/>
+    <aura:attribute name="ld21Seleted" type="String" default=""/>
+    
+    <!-- Capturar evento -->
+    <aura:handler name="AssociacaoPendente" event="c:CEC_PME_AssociacaoPendente" action="{!c.changeAssocPendente}"/>
+    
+    <!-- communication between Aura and VF -->
+    <aura:handler event="c:CEC_PME_CloseConsoleTabEvent" action="{!c.closeConsoleTabEventHandler}"/>
+    <aura:registerEvent name="CEC_PME_CloseConsoleTabExternalEvent" type="c:CEC_PME_CloseConsoleTabExternalEvent" />
+
+    <aura:if isTrue="{!v.showModalError}">
+        <div>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">
+                    <ui:outputText value="{!v.msgModalError}"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button label="Fechar" onclick="{!c.closeModalError}"/>
+                </footer>
+                </div>
+            </section>
+        </div>
+    </aura:if>
+    
+    <lightning:navigation aura:id="navService"/>
+    
+    <!-- Texto Associação pendente -->
+    <div class="slds-m-top_medium">
+        <span class="title-gray">Associação de aparelho</span>
+    </div>
+    <!-- Container/div principal -->
+    <div class="c-container slds-m-top_medium">
+        <aura:if isTrue="{!v.isLoading}" >
+            <lightning:spinner alternativeText="Loading" size="large" />
+        </aura:if>
+        
+        <div class="slds-m-vertical_x-small">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12">
+                    <div class="select-small">
+                        <lightning:select name="select" label="LD 21" required="true" value="{!v.ld21Seleted}" onchange="{!c.onChangeLd21}">
+                            <aura:iteration items="{!v.ld21Options}" var="ld21Option">
+                                <option text="{!ld21Option}"></option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <div class="slds-form-element__help">Para falar ilimitado para móvel ou fixo do Brasil, usando o 21</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabela pai com os nomes dos planos-->
+        <table class="all-table">
+            <aura:iteration items="{!v.lstData}" var="itemData" indexVar="indexParent">
+                <tr class="parent-table-row slds-box slds-box_x-small">
+                    <td height="34">
+                        <!-- flecha/chevron aonde habilita ou esconde a sessão -->
+                        <div style="width: 35px;display: -webkit-inline-box;">
+                        <span class="arrow" id="{!'parent-row-'+ globalId + indexParent}" onclick="{!c.expandeSessaoPai}">
+                            <span>
+                            </span>
+                            <span>
+                            </span>
+                        </span></div>
+                        <div class="title-tab">
+                        <ui:outputText value="{!itemData.planName}" class="white-text"/>
+                            </div>
+                    </td>
+                </tr>
+                <!-- linha principal das sessões -->
+                <div id="{!'parent-section-'+ globalId + indexParent}" class="over-flow-width">
+                    <tr class="parent-gray-row slds-box slds-box_x-small no-mobile-767">
+                        <th>Tipo</th>
+                        <th>Regional</th>
+                        <th>UF</th>
+                        <th>DDD</th>
+                        <th>Qtd Linha</th>
+                        <th>Kit</th>
+                        <th>Grupo</th>
+                        <th>Franquia</th>
+                        <th>Plugin</th>
+                        <th>Aparelhos</th>
+                        <th>Simcard Avulso</th>
+                        <th><span class="no-mobile">Associação</span> Pendente</th>
+                    </tr>
+                    <!-- sessoes a serem carregadas -->
+                    <aura:iteration items="{!itemData.sessao}" var="sessao" indexVar="indexChild">
+                        <tr id="{!'table-row-'+ globalId + indexParent + indexChild}" class="child-gray-row slds-box slds-box_x-small">
+                            <td>
+                            <div class='arrow-tab'>
+                                
+                                <table class="lista-mobile-plano">
+                                    <tr>
+                                        <td><span class="arrow-child active" id="{!'table-arrow-'+ globalId + indexParent + indexChild}" onclick="{!c.expandeSessao}"><span>
+                                </span><span></span></span></td>
+                                <td>
+                                <span class="view-mobile-767">
+                                <div class="bloco-767-520">
+                                Tipo: <ui:outputText value="{!sessao.tipo}"/>
+                                - Regional: <ui:outputText value="{!sessao.regional}"/>
+                                - UF: <ui:outputText value="{!sessao.uf}"/>
+                                - DDD: <ui:outputText value="{!sessao.ddd}"/>
+                                - Qtd. Linhas: <ui:outputText value="{!sessao.qtdLinha}"/>
+                                - Kit: <ui:outputText value="{!sessao.kit}"/>
+                                    <div class="bloco-linhadois">
+                                    Grupo: <ui:outputText value="{!sessao.grupo}"/>
+                                    - Franquia: <ui:outputText value="{!sessao.franquia}"/>
+                                    - Plugin: <ui:outputText value="{!sessao.plugin}"/>
+                                    - Aparelhos: <ui:outputText value="{!sessao.aparelhos}"/>
+                                    - SimCard: <ui:outputText value="{!sessao.simcardAvulso}"/>
+                                    - Pendente: 
+                                        <span class="{!sessao.associacaoPendente == 'Sim' ? 'red-text' : 'lightblue-text'}" 
+                                              id="{!'table-rowtext1-'+ globalId + indexParent + indexChild}">
+                                            {!sessao.associacaoPendente}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="bloco-519-360">
+                                Tipo: <ui:outputText value="{!sessao.tipo}"/>
+                                - Regional: <ui:outputText value="{!sessao.regional}"/>
+                                - UF: <ui:outputText value="{!sessao.uf}"/>
+                                - DDD: <ui:outputText value="{!sessao.ddd}"/>
+                                    <div class="bloco-linhadois">
+                                    Qtd. Linhas: <ui:outputText value="{!sessao.qtdLinha}"/>
+                                    - Kit: <ui:outputText value="{!sessao.kit}"/>
+                                    - Grupo: <ui:outputText value="{!sessao.grupo}"/>
+                                    - Franquia: <ui:outputText value="{!sessao.franquia}"/>
+                                    - Plugin: <ui:outputText value="{!sessao.plugin}"/>
+                                    </div>
+                                    <div class="bloco-linhadois">
+                                    Aparelhos: <ui:outputText value="{!sessao.aparelhos}"/>
+                                    - SimCard: <ui:outputText value="{!sessao.simcardAvulso}"/>
+                                    - Pendente: 
+                                        <span class="{!sessao.associacaoPendente == 'Sim' ? 'red-text' : 'lightblue-text'}" 
+                                              id="{!'table-rowtext2-'+ globalId + indexParent + indexChild}">
+                                            {!sessao.associacaoPendente}
+                                        </span>
+                                    </div>
+                                </div>
+                                </span>
+                                </td>
+                            </tr>
+                        </table>
+                            </div>
+
+                            <div class='title-tab no-mobile-767'><ui:outputText value="{!sessao.tipo}"/></div>
+                            
+                            </td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.regional}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.uf}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.ddd}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.qtdLinha}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.kit}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.grupo}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.franquia}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.plugin}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.aparelhos}"/></td>
+                            <td class="no-mobile-767"><ui:outputText value="{!sessao.simcardAvulso}"/></td>
+                            <td class="no-mobile-767"><span class="{!sessao.associacaoPendente == 'Sim' ? 'red-text' : 'lightblue-text'}" 
+                                      id="{!'table-rowtext3-'+ globalId + indexParent + indexChild}">
+                                    {!sessao.associacaoPendente}
+                                </span>
+                            </td>
+                        </tr>
+                        <!-- Verifica qual tipo de sessão abrir, cada componente se comporta de acordo com cada sessão -->
+                        <div id="{!'table-section-'+ globalId + indexParent + indexChild}" class="d-display over-flow-width">
+                            <aura:if isTrue="{!sessao.tipo == 'Novo'}">
+                                <c:CEC_PME_FinalizarPedidoNovo sessao="{!sessao}" isDesktop="{!v.isDesktop}" idElementoAssociacao="{!'table-rowtext-'+ globalId + indexParent + indexChild}"/>
+                            </aura:if>
+                            <aura:if isTrue="{!sessao.tipo == 'Portabilidade'}">
+                                <c:CEC_PME_FinalizarPedido_Portabilidade sessao="{!sessao}" idElementoAssociacao="{!'table-rowtext-'+ globalId + indexParent + indexChild}"/>
+                            </aura:if>
+                            <aura:if isTrue="{!sessao.tipo == 'TT PF/PJ'}">
+                                <c:CEC_PME_FinalizarPedidoTransferencia sessao="{!sessao}" idElementoAssociacao="{!'table-rowtext-'+ globalId + indexParent + indexChild}"/>
+                            </aura:if>
+                        </div>
+                    </aura:iteration>
+                </div>
+            </aura:iteration>
+        </table>
+        <div class="slds-m-top_x-small">
+            <lightning:button label="Resumo" onclick="{!c.openResumo}" class="button-resumo"/>
+            <lightning:button label="Finalizar Pedido" onclick="{!c.finalizarPedido}" class="button-endorder"/>  
+        </div>  
+    </div>
+</aura:component>

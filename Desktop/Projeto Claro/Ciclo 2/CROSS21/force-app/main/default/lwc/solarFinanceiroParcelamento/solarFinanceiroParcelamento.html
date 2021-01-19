@@ -1,0 +1,77 @@
+<template>
+	<template if:true={uiProperties.generalUi.show}>
+		<div style="background-color: white">
+			<div class="custom-header">Simulação</div>
+		</div>
+
+		<div class="negotiation-amount">
+			<dl>
+				<div>
+					<dt class="slds-item_label slds-text-color_weak slds-text-align_left">Valor Total a Negociar</dt>
+					<dd class="slds-item_detail slds-text-align_left custom-content">R$ 500,00</dd>
+				</div>
+			</dl>
+		</div>
+		<div class="installments-spinner" if:true={uiProperties.installmentOptions.isLoading}>
+			<lightning-spinner alternative-text="Carregando" size="medium"> </lightning-spinner>
+		</div>
+		<div class="discount-container">
+			<h3 class="subtitle">Desconto</h3>
+			<p>Selecione uma opção para simular os valores:</p>
+		</div>
+		<div class="installment-container" if:true={uiProperties.installmentOptions.show}>
+			<div class="installment-option" onclick={handleInstallmentSelection} data-id="installmentOption" id="installmentId">
+				<dl>
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">À Vista</dt>
+						<dd class="slds-item_detail slds-text-align_left">desconto de 20%</dd>
+					</div>
+				</dl>
+			</div>
+
+			<div class="installment-option" onclick={handleInstallmentSelection} data-id="installmentOption" id="installmentId2">
+				<dl>
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">À Vista</dt>
+						<dd class="slds-item_detail slds-text-align_left">desconto de 20%</dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+		<div class="datatable-spinner" if:true={uiProperties.dataTable.isLoading}>
+			<lightning-spinner alternative-text="Carregando" size="medium"> </lightning-spinner>
+		</div>
+		<div class="datatable" if:true={uiProperties.dataTable.show}>
+			<lightning-datatable key-field="id" columns={uiProperties.dataTable.columns} data={installmentsValues} hide-checkbox-column resize-column-disabled="true" sorted-direction="asc" sorted-by="installmentNumber"> </lightning-datatable>
+			<div class="discount-container">
+				<lightning-layout>
+					<lightning-layout-item size="2">
+						<p class="total-title">VALOR TOTAL</p>
+					</lightning-layout-item>
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="2">
+						<p class="total-value">R$ 500,00</p>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+
+			<div class="navigation-buttons">
+				<lightning-layout>
+					<lightning-layout-item size="2">
+						<lightning-button variant="brand-outline" label="Voltar" title="Voltar" onclick={handleBack} class="slds-m-left_x-small"></lightning-button>
+					</lightning-layout-item>
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="2">
+						<lightning-button variant="brand" label="Continuar" title="Continuar" onclick={submitNegotiation} class="slds-m-left_x-small"></lightning-button>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+		</div>
+
+		<c-solar-modal size="small" header="Atenção" show-close-button="false" if:true={uiProperties.modal.show}>
+			<div class="modal-message">
+				<p>{uiProperties.modal.message}</p>
+			</div>
+		</c-solar-modal>
+	</template>
+</template>

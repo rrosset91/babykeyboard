@@ -1,0 +1,84 @@
+<aura:component >
+    <aura:attribute name="contatosAdministrador" type="Object" />
+    <aura:attribute name="contatos" type="Object" />
+    
+    <aura:attribute name="tipoEntrega" type="String" />
+    <aura:handler name="change" value="{!v.contatosAdministrador}" action="{!c.onContatosChanged}"/>
+    
+    <div class="bloco">
+        <div class="bloco-lista table-lista">
+            <div class="col-adm-nome">
+                <span class="title-table">Nome completo</span>
+            </div>
+            <div class="col-adm-sexo">
+                <span class="title-table">Sexo</span>
+            </div>
+            <div class="col-adm-nascimento">
+                <span class="title-table">Nascimento</span>
+            </div>
+            <div class="col-adm-telefone">
+                <span class="title-table">Telefone</span>
+            </div>
+            <div class="col-adm-celular">
+                <span class="title-table">Celular</span>
+            </div>
+            <div class="col-adm-email">
+                <span class="title-table">E-mail</span>
+            </div>
+            <div class="col-adm-representante">
+                <span class="title-table">Representante</span>
+            </div>
+            <div class="col-adm-cargo">
+                <span class="title-table">Cargo</span>
+            </div>
+        </div>
+        <aura:iteration items="{!v.contatos}" var="contato">
+            <div class="bloco-lista table-dados border-b">
+                <div class="col-adm-nome">
+                    <span class="title-table-datos">{!contato.nomeCompleto}</span>
+                </div>
+                <div class="col-adm-nome-dados representante-1270">
+                    <div><span class="legenda-2">Nome: </span><span>{!contato.nomeCompleto}</span></div>
+                    <div><span class="legenda-2">Sexo: </span><span>{!contato.sexo}</span></div>
+					<div><span class="legenda-2">Nascimento: </span><ui:outputDate value="{!contato.nascimento}" format="dd/MM/yyyy"></ui:outputDate></div>
+                </div>
+                <div class="col-adm-nome-dados representante-1270">
+                    <div><span class="legenda-2">E-mail: </span><span class="overflow">{!contato.email}</span></div>
+                    <div><span class="legenda-2">Telefone: </span><ui:outputText value="{!contato.telefone}"></ui:outputText></div>
+                        <div><span class="legenda-2">Celular: </span><ui:outputText value="{!contato.celular}"></ui:outputText></div>
+                        <div><span class="legenda-2">Representante:</span><ui:outputText value="{!contato.representante == true ? 'Sim' : 'Não'}" /></div>
+                        <div><span class="legenda-2">Cargo: </span><span>{!contato.cargo}</span></div>
+                </div>
+                <div class="col-adm-sexo">
+                    <span class="title-table-datos">{!contato.sexo}</span>
+                </div>
+                <div class="col-adm-nascimento">
+                    <span class="title-table-datos">
+                        <ui:outputDate value="{!contato.nascimento}" format="dd/MM/yyyy"></ui:outputDate>
+                    </span>
+                </div>
+                <div class="col-adm-telefone">
+                    <span class="title-table-datos"><ui:outputText value="{!contato.telefone}"></ui:outputText></span>
+                </div>
+                <div class="col-adm-celular">
+                    <span class="title-table-datos"><ui:outputText value="{!contato.celular}"></ui:outputText></span>
+                </div>
+                <div class="col-adm-email">
+                    <span class="title-table-datos overflow">{!contato.email}</span>
+                </div>
+                <div class="col-adm-representante">
+                    <span class="title-table-datos">
+                        <ui:outputText value="{!contato.representante == true ? 'Sim' : 'Não'}" />
+                    </span>
+                </div>
+                <div class="col-adm-cargo">
+                    <span class="title-table-datos">{!contato.cargo}</span>
+                </div>
+            </div>
+        </aura:iteration>
+        
+    </div>
+    
+    
+    
+</aura:component>

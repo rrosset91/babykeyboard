@@ -1,0 +1,54 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 01/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 9] + [Componente do header (bloco 3)]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 01/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 19333 - Solicitar ramal avaya]: Criação da estrutura do componente
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 24/01/2020
+* Autor: Diego Lima - Deloitte
+* Alterações: Remoção do ícone de número de contrato
+-->
+
+
+<apex:component >
+    
+    <div class="slds-grid customer-name-and-contract">
+        <div class="slds-col slds-size_12-of-12 customer-name">
+            <div class="slds-grid">
+                <!--div class="slds-col slds-size_1-of-12">
+                    <img class="img-fisica display-none" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/general/input-customer.svg')}"/>
+                    <img class="img-juridica display-none" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/general/user-company.svg')}"/>   
+                </div-->
+                <div class="slds-col slds-size_12-of-12">
+                    <input type="text" class="number-input" id="nameInputVisible" autocomplete="off" value=""/>    
+                </div>
+            </div>
+        </div>  
+        
+        <!--
+        <div class="slds-col slds-size_1-of-12 customer-contract">
+            <img class="contract-img display-none" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/detalhes.svg')}"/>
+        </div>
+		-->
+	
+    </div>
+    
+    <script>
+    	
+    $( function() {
+        
+        $("#nameInputVisible").prop("disabled",true);
+        $("#nameInputVisible").css("cursor","default");
+        
+    } );
+    
+    </script>
+    
+</apex:component>

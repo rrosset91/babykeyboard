@@ -1,0 +1,84 @@
+<aura:component controller="InvoicesController">
+    <aura:attribute name="sendMethodOptions" type="List" />
+    <aura:attribute name="sendReasonOptions" type="List" />
+    <aura:attribute name="selectedSendMethod" type="String" />
+    <aura:attribute name="selectedSendReason" type="Integer" />
+    <aura:attribute name="duplicate" type="Object" />
+    <aura:attribute name="isLoadingModal" type="Boolean" default="false"/>
+    <aura:attribute name="selectedEmail" type="Boolean"/>
+    <aura:attribute name="selectedSMS" type="Boolean"/>
+    <aura:attribute name="selectedCorreio" type="Boolean"/>
+    <aura:attribute name="disabledSend" type="Boolean" default="true"/>
+    <aura:attribute name="selectedInvoices" type="Object[]" />
+    <aura:attribute name="operatorId" type="String"/>
+    <aura:attribute name="billId" type="String"/>
+    <aura:set attribute="content">
+        <aura:if isTrue="{!v.isLoadingModal}">
+            <lightning:spinner alternativeText="Carregando..." size="large" />
+        </aura:if>
+        <lightning:layout horizontalAlign="center" multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem padding="horizontal-large">
+                <div class="sendDuplicateInvoice">
+                    <lightning:comboBox name="sendMethod"
+                                        flexibility="auto" 
+                                        label="Tipo de Envio"
+                                        placeholder="Selecione um tipo de envio"
+                                        options="{!v.sendMethodOptions}"
+                                        value="{!v.selectedSendMethod}" 
+                                        onchange="{!c.handleSelectedSendMethod}"
+                                        required="true"
+                                        messageWhenValueMissing="Informação obrigatória"
+                                        />
+                </div>
+            </lightning:layoutItem>
+            
+            <aura:if isTrue="{!v.selectedEmail}">
+                <lightning:layoutItem padding="horizontal-large">
+                    <div class="sendDuplicateInvoice" id="customerEmail">
+                        <lightning:input messageWhenTypeMismatch="Insira um email válido." 
+                                         type="email" 
+                                         name="adjustedEmail" 
+                                         value="{!v.duplicate.email}" 
+                                         label="Email para envio:"/>
+                    </div>
+                </lightning:layoutItem>
+            </aura:if>
+            
+            <aura:if isTrue="{!v.selectedSMS}">
+                <lightning:layoutItem padding="horizontal-large">
+                    <div class="sendDuplicateInvoice" id="customerCelphone">
+                        <lightning:input type="tel" 
+                                         pattern="[0-9]{11}" 
+                                         minlength="11" 
+                                         maxlength="11" 
+                                         name="adjustedPhone" 
+                                         value="{!v.duplicate.phoneNumber}" 
+                                         messageWhenPatternMismatch="Celular com 11 dígitos incluindo o DDD" 
+                                         fieldLevelHelp="Ex: 11999999999"
+                                         label="Telefone para envio:"/>
+                    </div>
+                </lightning:layoutItem>
+            </aura:if>
+            <lightning:layoutItem padding="horizontal-large">
+                <div class="sendDuplicateInvoice">
+                    <lightning:comboBox name="sendReason"
+                                        flexibility="auto" 
+                                        label="Motivo de envio"
+                                        placeholder="Selecione um motivo"
+                                        options="{!v.sendReasonOptions}"
+                                        value="{!v.selectedSendReason}" 
+                                        onchange="{!c.handleSelectedSendReason}"
+                                        required="true"
+                                        messageWhenValueMissing="Informação obrigatória"
+                                        />
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:set> 
+    <aura:set attribute="footer">
+        <div class="modal-buttons">
+            <lightning:button class="sendDuplicateButtons" variant="brand-outline" label="Cancelar" onclick="{!c.cancelModal}" />
+            <lightning:button class="sendDuplicateButtons" variant="brand" disabled="{!v.disabledSend}" label="Enviar" onclick="{!c.sendDuplicate}"/>
+        </div>
+    </aura:set>	
+</aura:component>

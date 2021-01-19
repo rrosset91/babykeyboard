@@ -1,0 +1,58 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction"  controller="Solar_Cross_PriorityRoutingController">
+<aura:attribute name="startDate" type="date" />
+<aura:attribute name="finishDate" type="date" />
+<aura:attribute name="maximunDate" type="date"/>
+<aura:attribute name="minimunDate" type="date"/>
+<aura:attribute name="minimunDateFinish" type="date"/>
+<aura:attribute name="messageMinimumDateStart" type="String"/>
+<aura:attribute name="messageMaxDateStart" type="String"/>
+<aura:attribute name="messageMinDateFinish" type="String"/>
+<aura:attribute name="messageMaxDateFinish" type="String"/>
+<aura:attribute name="maxDateFirstDate" type="date"/>
+<aura:attribute name="disableButton" type="boolean" default="false"/>
+<aura:attribute name="openModal" type="boolean" default="false"/>
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+<lightning:card class="slds-size_1-of-4">
+    <div class="slds-text-heading_small" style="text-align:center;">
+        <p>Priorização de Distribuição</p>
+       
+    </div>
+    <div class="slds-grid">
+        <div class='slds-size_1-of-2 custom-text'>
+            <p>Data Inicio:</p>
+        </div>
+        <div class='slds-size_1-of-2' >
+            <lightning:input name="dataInicio" type="date" style="margin-right:20px;" onchange="{!c.onChangeMinDate}" aura:id="minDate" messageWhenBadInput='Uma data mínima precisa ser escolhida' min="{!v.minimunDate}" max="{!v.maxDateFirstDate}" messageWhenRangeUnderflow="{!v.messageMinimumDateStart}" messageWhenRangeOverflow="{!v.messageMaxDateStart}"/>
+        </div>
+    </div>
+    <div class="slds-grid">
+        <div class='slds-size_1-of-2 custom-text'>
+            <p>Data Fim:</p>
+        </div>
+        <div class='slds-size_1-of-2' >
+            <lightning:input name="dataFim" type="date" style="margin-right:20px;" max="{!v.maximunDate}" min="{!v.minimunDateFinish}"  aura:id="maxDate" disabled="{! empty(v.maximunDate)}" required="true" messageWhenBadInput='Uma data máxima precisa ser escolhida' messageWhenRangeUnderflow="{!v.messageMinDateFinish}" messageWhenRangeOverflow="{!v.messageMaxDateFinish}"/>
+        </div>
+    </div>
+    <div class="slds-grid">
+        <div class='slds-size_1-of-2 custom-text' >
+            <p>
+                Prioridade:
+                <lightning:helptext
+                        content="Inserir um valor entre 0 e 100"
+                        iconName="utility:info"
+                        iconVariant="info"
+                         />
+            </p>
+        </div>  
+        <div class='slds-size_1-of-2' >
+            <lightning:input name="prioridade" type="number" style="margin-right:20px;" max="100" min="0" messageWhenStepMismatch="Apenas Inteiros são permitidos" aura:id="prior" required="true" messageWhenBadInput='Uma prioridade precisa ser escolhida'/>
+        </div>
+    </div>
+    <div class="slds-grid">
+        <div class='slds-size_1-of-2 slds-align_absolute-center'  style="padding-top:1.5rem;">
+            <lightning:button label="Repriorizar" onclick="{!c.onClickRepriorizar}" disabled="{!v.disableButton}"/>
+        </div>
+    </div>
+</lightning:card>
+</aura:component>

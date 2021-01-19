@@ -1,0 +1,54 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_FutureInvoiceController">
+	
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String"/>
+    <aura:attribute name="defaultSortDirection" type="String" default="asc"/>
+    <aura:attribute name="futureReleases" type="Object[]"/>
+    <aura:attribute name="allFutureReleases" type="Object[]"/>
+    <aura:attribute name="contractId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="hasMoreRecords" type="Boolean" default="false"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="hasRecords" type="Boolean" default="true"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    
+    <div class="custom-padding">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="large" />
+            </aura:if>
+        
+        <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+        <lightning:accordionSection name="A" label="Lançamentos Futuros">  
+            
+                <div class="custom-padding">
+
+                <aura:if isTrue="{!and(v.hasRecords,!v.hasError)}">
+                    <lightning:datatable 	keyField="id"
+                                            columns="{!v.columns }"
+                                            data="{!v.futureReleases}"
+                                            hideCheckboxColumn="true"
+                                            resizeColumnDisabled="true"
+                                            sortedDirection="{!v.sortedDirection}"
+                                            defaultSortDirection="{!v.defaultSortDirection}"
+                                            sortedBy = "{!v.sortedBy}"
+                                            onsort="{!c.onSort}"                                         
+                                            />
+                </aura:if>
+                <aura:if isTrue="{!and(!v.hasRecords,!v.hasError)}">
+                    <div class="slds-text-heading_small slds-text-align_center custom-padding-text">Não foram encontrados eventos para esse registro</div>
+                </aura:if>
+                <aura:if isTrue="{!v.hasError}">
+                    <div class="slds-text-heading_small slds-text-align_center custom-padding-text">Ocorreu um erro ao buscar as informações</div>
+                </aura:if>
+                </div> 
+        <aura:if isTrue="{!v.hasMoreRecords}">
+            <div class="slds-text-heading_small slds-text-align_center custom-padding-text">{!$Label.c.MoreFutureInvoices}</div>
+        </aura:if>
+            
+            </lightning:accordionSection>
+    </lightning:accordion>
+        </div> 
+</aura:component>

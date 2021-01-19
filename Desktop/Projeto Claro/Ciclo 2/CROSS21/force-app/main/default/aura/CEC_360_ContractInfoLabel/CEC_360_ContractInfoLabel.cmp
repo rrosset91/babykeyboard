@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <p>Se o contrato não for encontrado, informe o número do contrato na criação do caso.</p>
+</aura:component>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="29" viewBox="0 0 29 29">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="29" height="29" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="check" clip-path="url(#clip-path)">
+    <g id="correct-symbol" transform="translate(8 9.189)">
+      <path id="Caminho_42" data-name="Caminho 42" d="M13.571,53.14l-1.213-1.213a.861.861,0,0,0-1.213,0L5.3,57.786l-2.621-2.63a.825.825,0,0,0-.606-.25.825.825,0,0,0-.606.25L.25,56.368a.861.861,0,0,0,0,1.213l3.228,3.228L4.69,62.021a.861.861,0,0,0,1.213,0l1.213-1.213,6.455-6.455a.861.861,0,0,0,0-1.213Z" transform="translate(0 -51.678)" fill="#ababaf"/>
+    </g>
+    <path id="Caminho_98" data-name="Caminho 98" d="M341.153,404.388a14.5,14.5,0,1,0,14.5,14.5A14.5,14.5,0,0,0,341.153,404.388Zm0,27.984a13.484,13.484,0,1,1,13.484-13.484A13.484,13.484,0,0,1,341.153,432.372Z" transform="translate(-326.653 -404.388)" fill="#ababaf"/>
+  </g>
+</svg>

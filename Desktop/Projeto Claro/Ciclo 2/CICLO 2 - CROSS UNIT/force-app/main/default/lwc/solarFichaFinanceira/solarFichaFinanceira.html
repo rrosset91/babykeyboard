@@ -1,0 +1,126 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : IBM
+
+  @last modified on  : 05-11-2020
+  @last modified by  : Diego Almeida
+
+  Modifications Log 
+  Ver   Date         Author          	Modification
+  1.0   27-10-2020   Joao Neves   		Initial Version
+  1.1   27-10-2020   Diego Almeida 		Add component detalhes
+
+  1.1   27-10-2020   Diego Almeida 		Add components steps
+-->
+<template>
+	<template if:true={passoListaFaturas}>
+
+		<div style="background-color: white">
+			<div class="custom-header">Ficha Financeira</div>
+			<lightning-tabset>
+				<lightning-tab label="Cobranças">
+					<c-solar-faturas-abertas base-attributes={baseAttributes} onfetchdetails={fetchDetails}></c-solar-faturas-abertas>
+				</lightning-tab>
+				<lightning-tab label="Histórico de Eventos">
+					<c-solar-financeiro-eventos base-attributes={baseAttributes}></c-solar-financeiro-eventos>
+				</lightning-tab>
+
+				<!-- <lightning-tab label="Reembolso">
+					<c-solar-financeiro-solicitacaode-reembolso></c-solar-financeiro-solicitacaode-reembolso>
+				</lightning-tab> -->
+
+			</lightning-tabset>
+		</div>
+	</template>
+	<template if:true={passoDetalhesFatura}>
+		<div style="background-color: white">
+
+			<c-solar-fatura-header
+				header={headerInfo.headerTitle}
+				vencimento={headerInfo.dataVencimento}
+				valor={headerInfo.valor}
+				status={headerInfo.status}
+				forma-pagamento={headerInfo.formaPagamento}
+				modo-envio={headerInfo.modoRecebimento}
+				endereco-cobranca={headerInfo.enderecoCobranca}
+			></c-solar-fatura-header>
+
+			<div style="margin: 10px">
+				<c-solar-financeiro-detalheda-fatura
+					base-attributes={baseAttributes}
+					base-detail={baseDetail}
+					onbackfaturas={openFaturas}
+					onopenpdf={openPDF}
+					oncontestation={openContestation}
+
+				></c-solar-financeiro-detalheda-fatura>
+			</div>
+		</div>
+	</template>
+	<template if:true={passoContestacao}>
+		<div style="background-color: white">
+			<c-solar-fatura-header
+				header={headerInfo.headerTitle}
+				vencimento={headerInfo.dataVencimento}
+				valor={headerInfo.valor}
+				status={headerInfo.status}
+				forma-pagamento={headerInfo.formaPagamento}
+				modo-envio={headerInfo.modoRecebimento}
+				endereco-cobranca={headerInfo.enderecoCobranca}
+			></c-solar-fatura-header>
+			<div style="margin: 10px">
+				<c-solar-financeiro-contestacao
+					base-attributes={baseAttributes}
+					base-detail={baseDetail}
+					onbackdetails={fetchDetails}
+					onopenconfirmation={openConfirmation}
+				></c-solar-financeiro-contestacao>
+			</div>
+		</div>
+	</template>
+	<template if:true={passoConfirmacaoContestacao}>
+		<div style="background-color: white">
+			<c-solar-fatura-header
+				header={headerInfo.headerTitle}
+				vencimento={headerInfo.dataVencimento}
+				valor={headerInfo.valor}
+				status={headerInfo.status}
+				forma-pagamento={headerInfo.formaPagamento}
+				modo-envio={headerInfo.modoRecebimento}
+				endereco-cobranca={headerInfo.enderecoCobranca}
+			></c-solar-fatura-header>
+			<div style="margin: 10px">
+				<c-solar-financeiro-confirmacao-contestacao
+					base-attributes={baseAttributes}
+					base-detail={baseDetail}
+					onbackcontestation={openContestation}
+					onopenrefund={openRefund}
+					onfinishcontestation={finishContestation}
+				></c-solar-financeiro-confirmacao-contestacao>
+			</div>
+		</div>
+	</template>
+	<template if:true={passoReembolso}>
+		<div style="background-color: white">
+			<c-solar-fatura-header
+				header={headerInfo.headerTitle}
+				vencimento={headerInfo.dataVencimento}
+				valor={headerInfo.valor}
+				status={headerInfo.status}
+				forma-pagamento={headerInfo.formaPagamento}
+				modo-envio={headerInfo.modoRecebimento}
+				endereco-cobranca={headerInfo.enderecoCobranca}
+			></c-solar-fatura-header>
+			<div style="margin: 10px">
+				<c-solar-financeiro-solicitacaode-reembolso
+					base-attributes={baseAttributes}
+					base-detail={baseDetail}
+					onbackconfirmation={openConfirmation}
+					onfinishcontestation={finishContestation}
+				></c-solar-financeiro-solicitacaode-reembolso>
+
+			</div>
+		</div>
+	</template>
+</template>

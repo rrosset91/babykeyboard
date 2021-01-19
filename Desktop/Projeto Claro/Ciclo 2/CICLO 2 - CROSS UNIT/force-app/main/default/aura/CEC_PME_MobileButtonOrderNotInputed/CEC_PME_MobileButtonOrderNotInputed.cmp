@@ -1,0 +1,40 @@
+<!-- CEC_PME_MobileButtonOrderNotInputed.cmp -->
+<aura:component implements="force:lightningQuickAction,force:hasRecordId" controller="CEC_PME_MobileButtonsController">
+    <aura:registerEvent name="CEC_PME_MobileButtonEvt" type="c:CEC_PME_MobileButtonEvt"/>
+
+    <aura:attribute name="isQuickAction" type="Boolean" default="true" required="true"/>
+    <aura:attribute name="order" type="Order" />
+    
+    <lightning:card class="slds-p-around_medium">
+        <lightning:spinner aura:id="mySpinner" alternativeText="Loading" size="large" class="slds-hide"/>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-12">
+                <h1>
+                    <span class="slds-page-header__title slds-truncate">
+                        {!$Label.c.CEC_PME_MobileButtonOrderNotInputed_1}
+                    </span>
+                </h1>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                <div class="slds-grid slds-wrap slds-grid_align-end">
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12">
+                        <div class="slds-m-around_xxx-small">
+                            <lightning:button label="{!$Label.c.CEC_PME_MobileButtonOrderNotInputed_2}" onclick="{!c.closeAction}" class="slds-button_stretch" />
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12">
+                        <div class="slds-m-around_xxx-small">
+                            <lightning:button variant="brand" label="{!$Label.c.CEC_PME_MobileButtonOrderNotInputed_3}" onclick="{!c.save}" class="slds-button_stretch"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1"> 
+                <lightning:textarea value="{!v.order.ErroMsg__c}" label="{!$Label.c.CEC_PME_MobileButtonOrderNotInputed_5}" />
+                
+            </div>
+        </div>
+    </lightning:card>
+
+</aura:component>

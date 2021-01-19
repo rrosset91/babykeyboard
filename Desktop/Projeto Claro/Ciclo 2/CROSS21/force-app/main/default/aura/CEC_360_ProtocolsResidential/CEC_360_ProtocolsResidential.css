@@ -1,0 +1,12 @@
+.THIS .slds-accordion__summary-heading > button > span {
+    order: 1
+    
+}
+
+.THIS .slds-accordion__summary-heading > button > lightning-primitive-icon {
+    display:none
+}
+
+.THIS .tallTextArea input {
+  height: 2rem;
+}

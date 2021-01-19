@@ -1,0 +1,38 @@
+<aura:component  implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="ura" type="String" default="URA"/>
+    <aura:attribute name="requestSupportLabel" type="String" />
+    <aura:attribute name="requestSupportTitle" type="String" />
+    <aura:attribute name="humanAtt" type="String" default="Falar com atendimento humano"/>
+    <aura:attribute name="recordTypeName" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+
+    <!-- Necessário trazer pelo menos um campo dentro do recordEditForm, para que ele carregue as informações do registro. Ele segue sendo escondido pela DIV pois está sendo utilizado apenas para trazer as infos do registro para o controlador através do payload, não se fazendo necessário um controlador APEX -->
+    <div class="slds-hide"> 
+        <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" onload="{!c.onInit}">
+            <lightning:outputField fieldName="CaseNumber" />
+        </lightning:recordEditForm>
+    </div>
+
+    <lightning:card class="customCardClass slds-m-vertical_medium">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Carregando..." size="small" variant="brand" position="relative" height="20px" />
+            <aura:set attribute="else">  
+                <div class="slds-m-horizontal_large">
+                    <lightning:breadcrumbs title="URA">
+                        <aura:unescapedHtml value="{!v.ura}"/>
+                        <aura:if isTrue="{!not(empty(v.requestSupportTitle))}">
+                            <lightning:breadcrumb label="{!v.recordTypeName}" title="{!v.recordTypeName}"/>
+                            <lightning:breadcrumb label="{!v.humanAtt}" title="{!v.humanAtt}"/>
+                            <lightning:breadcrumb label="{!v.requestSupportLabel}" title="{!v.requestSupportTitle}"/>
+
+                            <aura:set attribute="else">
+                                <lightning:breadcrumb label="Não foi encontrada nenhuma informação."/>
+                            </aura:set>
+                        </aura:if>
+                    </lightning:breadcrumbs>
+                </div>
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+</aura:component>

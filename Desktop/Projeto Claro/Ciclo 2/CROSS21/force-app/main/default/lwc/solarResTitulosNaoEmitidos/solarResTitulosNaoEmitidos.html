@@ -1,0 +1,102 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 10-11-2020
+  @last modified by  : Joao Neves
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   10-11-2020   Joao Neves   Initial Version
+-->
+<template>
+	<lightning-spinner if:true={loading} alternative-text="Carregando..." size="medium"></lightning-spinner>
+
+	<header>
+		<h3 class="header-text">Filtrar títulos não emitidos</h3>
+		<div style="padding-top: 5px; width: 100%; display: flex; justify-content: flex-end" onkeyup={handleFiltroBusca}>
+			<lightning-input name="enter-search" label="Busca" type="search"> </lightning-input>
+		</div>
+	</header>
+
+	<div style="padding-top: 25px">
+		<template if:true={hasData}>
+			<lightning-accordion allow-multiple-sections-open>
+				<template for:each={dataOnTable.groupDebts} for:item="item">
+					<lightning-accordion-section key={item.groupId} name={item.groupId} label={item.groupDescription}>
+						<lightning-datatable
+							key-field="idEvent"
+							data={item.debts}
+							columns={columns}
+							onrowaction={handleRowAction}
+							hide-checkbox-column
+							resize-column-disabled="true"
+						>
+						</lightning-datatable>
+					</lightning-accordion-section>
+				</template>
+			</lightning-accordion>
+		</template>
+		<template if:false={hasData}>
+			<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+		</template>
+	</div>
+
+	<!-- Modal Mais informações -->
+	<c-solar-modal size="small" header="Titulo não Emitido">
+		<div slot="content">
+			<div class="slds-form slds-grid slds-wrap slds-gutters">
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Lançamento do Item</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.dueDate}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Produto</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.productDescription}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Item de extrato</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.itemDescription}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Numero da Parcela</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.installmentNumber}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Lancamento do Item</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.entryDate}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Parceiro</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.partnerId}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Total de Parcelas</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.totalInstallments}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Inicio da Proporcionalidade</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.proportionalityEntryDate}</dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

@@ -1,0 +1,15 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global" 
+                controller="CEC_ME_CaseButtonsController">
+    <!-- Id do Caso -->
+	<aura:attribute name="recordId" type="String"/>
+    <!-- Habilita botão Reagendar -->
+    <aura:attribute name="disableReagendar" type="Boolean" default="true"/>
+    <!-- Habilita botão Cancelar -->
+    <!-- Função de carregamento da página -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="white-background slds-p-around_x-small slds-box">
+        <lightning:button variant="brand" label="Reagendar" title="Reagendar" onclick="{!c.doReagendar}" disabled="{!v.disableReagendar}"/>
+        <lightning:button variant="brand" label="Cancelar" title="Cancelar" onclick="{!c.doCancelar}" disabled="{!v.disableCancelar}"/>
+    </div>
+</aura:component>

@@ -1,0 +1,50 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+        
+    <aura:attribute name="title" type="string" default="Título"/>
+    <aura:attribute name="typeIcon" type="string" default="utility:success"/>
+    <aura:attribute name="typeVariant" type="string" default="Success"/>
+    <aura:attribute name="message" type="string" default="Mensagem"/>
+    <aura:attribute name="showButton1" type="Boolean" default="true"/>
+    <aura:attribute name="showButton2" type="Boolean" default="true"/>
+    <aura:attribute name="textbutton1" type="string" default="Fechar"/>
+    <aura:attribute name="textbutton2" type="string" default="Fechar e ir para Ficha Financeira"/>
+    <aura:attribute name="onClickButton1" type="string"/>
+    <aura:attribute name="onClickButton2" type="string"/>
+    <aura:attribute name="showButtonX" type="Boolean" default="true"/>
+    <aura:attribute name="isLoadingModal" type="Boolean" default="true"/>
+	
+	<aura:method name="open" action="{!c.handleOpen}" />
+    <aura:method name="close" action="{!c.handleClose}" />
+    
+	<c:UiModal aura:id="Solar_Cross_messageModal" class="title" title="{!v.title}" size="dialog" showButtonX="{!v.showButtonX}">
+        
+    	<aura:set attribute="content">
+            <div>
+                <lightning:layout verticalAlign="center" horizontalAlign="center">
+                    <lightning:layoutItem padding="around-small">
+                    	<lightning:icon iconName="{!v.typeIcon}" variant="{!v.typeVariant}" title="medium (default) "/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem >
+            			<ui:outputText value="{!v.message}"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </aura:set>		
+        <aura:set attribute="footer">
+        	<div class="modal-buttons">
+                <lightning:layout horizontalAlign="spread">
+                    <aura:if isTrue="{!v.showButton1}">
+                        <div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small" >
+                            <lightning:button variant="brand-outline" label="{!v.textbutton1}" onclick="{!c.onCancel}" />
+                        </div>
+                        </aura:if>
+                   <!-- <aura:if isTrue="{!v.showButton2}">
+                        <div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small">
+                            <lightning:button variant="brand" label="{!v.textbutton2}" onclick="{!v.onClickButton2}"/>
+                        </div>
+                    </aura:if>-->
+                </lightning:layout>
+            </div>
+       </aura:set>
+	</c:UiModal>
+</aura:component>

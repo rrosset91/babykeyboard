@@ -1,0 +1,110 @@
+<aura:component
+  controller="CEC_360_ShowOccurrencesController"
+  implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
+>
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="contractNumber" type="String" />
+  <aura:attribute name="startDate" type="Date" />
+  <aura:attribute name="endDate" type="date" />
+  <aura:attribute name="maxDate" type="String" />
+  <aura:attribute name="minDate" type="String" />
+  <aura:attribute name="isDate" type="Boolean" default="false" />
+  <aura:attribute name="data" type="Object[]" />
+  <aura:attribute name="ordersItem" type="List" />
+  <aura:attribute name="recordId" type="String" />
+  <aura:attribute name="showTable" type="Boolean" default="false" />
+  <aura:attribute name="sortAsc" type="Boolean" default="true" />
+
+  <div class="slds-grid slds-gutters">
+    <div class="slds-p-bottom_medium data-inicio">
+      <div>
+        <span>
+          <lightning:input aura:id="startDate" label="Data início" type="date" value="{!v.startDate}" max="{!v.maxDate}" messageWhenBadInput="Data inválida." disabled="{!v.isDate}"
+          />
+        </span>
+      </div>
+    </div>
+    <div class="slds-p-bottom_medium  data-fim">
+      <div>
+        <span>
+          <lightning:input
+            aura:id="startDate"
+            label="Data fim"
+            type="date"
+            value="{!v.endDate}"
+            max="{!v.maxDate}"
+            messageWhenBadInput="Data inválida."
+            disabled="{!v.isDate}"
+          />
+        </span>
+      </div>
+    </div>
+    <div class="slds-p-bottom_medium">
+      <div class="slds-p-top_large">
+        <span>
+          <lightning:button
+            variant="destructive"
+            label="Buscar"
+            onclick="{!c.retInvoiceData}"
+            class="botao-busca"
+          >
+          </lightning:button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <aura:if isTrue="{!v.showTable}">
+    <table class="lista-ocorrencias slds-table slds-row-hover">
+      <thead>
+        <tr>
+          <th scope="col" onclick="{!c.sortByDate}" class="width-190">Data de Criação
+            <span>
+                  <aura:if isTrue="{! v.sortAsc}">
+                      <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                      <aura:set attribute="else">
+                          <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                      </aura:set>
+                  </aura:if>
+                  <aura:set attribute="else">
+                      <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                  </aura:set>
+          </span>
+          </th>
+          <th>Grupo</th>
+          <th>Tipo de Resolução</th>
+        </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.ordersItem}" var="order" indexVar="orderIndex">
+          <tr>
+            <td><lightning:buttonIcon
+                value="{!orderIndex}"
+                onclick="{!c.expandDetails}"
+                iconName="{!order.showDetails?'utility:chevrondown':'utility:chevronright'}"
+                class="icon-border-none"
+              />&nbsp;&nbsp;{!order.creationDate}</td>
+            <td>{!order.groupTypeDescription}</td>
+            <td>{!order.typeDescription}</td>
+          </tr>
+          <aura:if isTrue="{!order.showDetails}">
+          <tr>
+            <td colspan="4" id="tdDetails">
+                <div class="details">
+                    <div class="box-sessao">Ocorrência</div> 
+                    <div class="margin-16">
+                    	<div class="box-sessao-dados">Número<p>{!order.number_Z}</p></div>
+                        <div class="box-sessao-dados">Origem<p>{!order.areaOrigin}</p></div>
+                        <div class="box-sessao-dados">Resolução<p>{!order.resolutionDate}</p></div>
+                        <div class="box-sessao-dados">Usuário<p>{!order.loginOpening}</p></div>
+                    </div>
+                    <div class="box-sessao">Nota</div>
+                    	<div class="dados">{!order.note}</div>
+                </div>
+            </td>
+        </tr>
+            </aura:if>
+        </aura:iteration>
+      </tbody>
+    </table>
+  </aura:if>
+</aura:component>

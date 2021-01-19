@@ -1,0 +1,171 @@
+.header-text {
+	font-weight: bold;
+	font-size: 20px;
+	color: #da291c;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.custom-content 
+{ font-weight: 600; }
+
+/* **************** Header **************** */
+.headerTitle
+{ padding-top: 0.75rem; }
+.custom-bg
+{ background-color:#F3F2F2; }
+.slds-button_icon-bare
+{ display: none; }
+.table-align-center
+{ text-align: center; }
+.ObservacaoDeFechamento
+{ font-size: 12px; }
+.css-box-obs
+{ width: 194vh; }
+.ObservacaoDeFechamento
+{ font-size: 12px; }
+.css-box-obs
+{ width: 194vh; }
+.bodyModalMotivo
+{ height: 25vh; }
+.bodyModalCalculator
+{ height: 25vh; }
+
+.box
+{
+    width:100%px;
+    height:100px;
+    border:5px solid red;
+    padding:10px;
+}
+
+
+.field-title
+{
+    font-weight: bold;
+    color: darkgray;
+}
+
+
+.custom-header
+{
+    color: #DA281C;
+    font-weight: 400;
+    font-size: x-large;
+    font-weight: bold;
+    padding-top: 0.75rem;
+    padding-left: 1%;
+}
+
+
+.header-columnAdress
+{
+    white-space: normal;
+    word-wrap: break-word;
+    width: 250px;
+}
+
+
+.valueHeader
+{
+    font-weight: bold;
+    color: black;
+}
+
+
+.title-table
+{
+  font-size: 16px;
+  font-weight: bold;
+  padding: 25px 21px;
+}
+
+
+.espacamentoDeCampos
+{
+   margin-right: 6%;
+   text-align: center;
+   height: 73px;
+   padding-left: 20px;
+}
+
+
+.header-columnAdress
+{
+    white-space: normal;
+    word-wrap: break-word;
+    width: 250px;
+}
+
+
+template lightning-datatable
+{
+    text-decoration: none;
+    content: counter(row-number);
+    display: none;
+}
+
+
+.slds-button__icon
+{
+    display: none;
+    fill: currentColor;
+}
+
+
+.calculatorContestation
+{
+    color: red;
+    text-align: center;
+}
+
+
+.backButton
+{
+    text-align: right;
+    font-size: 12px;
+}
+
+
+.nextButton
+{
+    font-size: 12px;
+    margin-left: 80%;
+}
+
+
+fieldset button
+{
+    display: inline;
+    position: absolute;
+}
+
+
+.THIS .modal-buttons button
+{
+	height: fit-content;
+	text-align: right;
+}
+
+
+/* **************** Campo obeservaçao N1 **************** */
+.headerN2
+{
+    border: 2px solid #f10a35;
+    border-radius: 10px;
+    background: white !important;
+    height: 55px;
+    width: auto;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+
+hr
+{   
+	border-top: 1px solid gray !important;
+    height: 1px !important;
+    clear: both !important;
+    margin:  0 !important;
+
+
+}

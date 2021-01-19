@@ -1,0 +1,265 @@
+<aura:component implements="lightning:isUrlAddressable" controller="Solar_Cross_ProtocolHistoryController" access="global">
+    <aura:attribute name="completeHistoryData" type="Object[]"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="data" type="Object[]"/>
+    <aura:attribute name="maxDate" type="Date"/>
+    <aura:attribute name="minDate" type="Date"/>
+    <aura:attribute name="beginDate" type="Date"/>
+    <aura:attribute name="endDate" type="Date"/>
+    <aura:attribute name="staticBeginDate" type="Date"/>
+    <aura:attribute name="staticEndDate" type="Date"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="itensNumber" type="String"/>
+    <aura:attribute name="itemString" type="String"/>
+    <aura:attribute name="modalText" type="String" default=""/>
+    <aura:attribute name="dataLoadSucess" type="Boolean" default="true"/>
+    <aura:attribute name="errorMessage" type="String" default="Mensagem de erro dinâmica que exibe qual erro foi gerado na tentativa de trazer os dados"/>
+    <aura:attribute name="viewOptions" type="List" default="[
+        {'label': 'Todos', 'value': 'Todos'},
+        {'label': 'Abertos', 'value': 'Abertos'},
+        {'label': 'Fechados', 'value': 'Fechados'},
+        ]"/>
+    <aura:attribute name="ps8Filter" type="Boolean" default="true"/>
+    <aura:attribute name="netsmsFilter" type="Boolean" default="true"/>
+    <aura:attribute name="solarFilter" type="Boolean" default="true"/>
+    <aura:attribute name="modalTitle" type="String"/>
+    <aura:attribute name="requisition" type="Object"/>
+    <aura:attribute name="ps8MoreInfo" type="Object"/>
+    <aura:attribute name="viewSelected" type="String" default="Todos"/>
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity" title="opportunity">
+                            <lightning:icon iconName="standard:date_time" size="large" alternativeText="Indicates approval"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Histórico de demandas">Histórico de demandas</span>
+                                </h1>
+                            </div>
+                        </div>
+                        <p class="slds-page-header__name-meta">{!v.itensNumber}{!v.itemString}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.isLoading}">
+        <!-- Spiner de carregamento da tela -->
+        <lightning:spinner alternativeText="Carregando..." size="medium" />
+        <aura:set attribute="else">
+            <!-- Mensagem exibida caso haja erro de integração -->
+            <aura:if isTrue="{!(!v.dataLoadSucess)}">
+                <div class="slds-card slds-m-top_small">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-grid slds-p-horizontal_large slds-m-bottom_small slds-align_absolute-center slds-m-top_medium">
+                                <h2>
+                                    <b>Alerta</b>       
+                                </h2>
+                            </div>
+                            <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                                {!v.errorMessage}
+                            </div>
+                            <div class="slds-grid slds-align_absolute-center">
+                                <div class="slds-m-top_x-small">
+                                    <lightning:buttonIcon class="forceListViewManagerHeader" iconName="utility:refresh" alternativeText="Recarregar Informações" onclick="{!c.onInit}" />
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-align_absolute-center slds-m-bottom_medium">
+                                Recarregar
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <aura:set attribute="else">
+                    <div class="slds-grid slds-wrap">
+                        <!-- <lightning:button iconName="utility:left" variant="base" label="Base" title="Base action" style="display:flex;width:20rem;height:37.5rem"/> -->
+                        <div class="slds-col slds-size_2-of-12">
+                            <article class="slds-card">
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <div class="slds-grid slds-p-horizontal_large slds-m-bottom_small">
+                                        Filtros da Lista
+                                    </div>
+                                    <div>
+                                        <lightning:input type="date" aura:id="beginDate" name="beginDate" label="Início" min="{!v.minDate}" max="{!v.maxDate}" value="{!v.beginDate}"/>
+                                    </div>
+                                    <div>
+                                        <lightning:input type="date" aura:id="endDate" name="endDate" label="Fim" max="{!v.maxDate}" value="{!v.endDate}"/>
+                                    </div>
+                                    <div>
+                                        <lightning:combobox name="progress" label="Status" value="{!v.viewSelected}" options="{!v.viewOptions}"/>
+                                    </div>
+                                    <div class="slds-m-top_large slds-align_absolute-center">
+                                        <lightning:button variant="brand-outline" label="Pesquisar" title="Brand action" onclick="{!c.searchData}" />
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-m-top_xx-large">
+                                        <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+                                            <lightning:input type="toggle" label="" name="PS8" messageToggleActive="PS8" messageToggleInactive="PS8" checked="{!v.ps8Filter}" onchange="{!c.searchData}"/>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+                                            <lightning:input type="toggle" label="" name="NETSMS" messageToggleActive="NET SMS" messageToggleInactive="NET SMS" checked="{!v.netsmsFilter}" onchange="{!c.searchData}"/>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">
+                                            <lightning:input type="toggle" label="" name="Solar" messageToggleActive="Solar" messageToggleInactive="Solar" checked="{!v.solarFilter}" onchange="{!c.searchData}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="slds-col slds-size_10-of-12">
+                            <aura:if isTrue="{!(empty(v.data))}">
+                                <!-- Mensagem exibida caso o cliente não tenha nenhuma demanda em seu histórico -->
+                                <article class="slds-card slds-m-top_x-small">
+                                    <div class="slds-illustration slds-illustration_large slds-m-vertical_x-large" aria-hidden="true">
+                                        <img src="{!$Resource.SldsEmptyData}" style="opacity: 0.8"/>
+                                        <div class="slds-text-color_weak">
+                                            <h3 class="slds-text-heading_medium slds-p-around_medium" style="color:#da291c"><b>Nenhuma demanda no histórico</b></h3>
+                                        </div>
+                                    </div>
+                                    <!-- <h3>Nenhuma demanda no histórico</h3> -->
+                                </article>
+                                <aura:set attribute="else">
+                                    <!-- Tabela com todas as demandas do cliente -->
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Base">Base</div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Início">Tipo</div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Número do Protocolo">Número do Atendimento</div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-grid slds-has-flexi-truncate">
+                                                        <div class="slds-truncate" title="Ocorrência">Ocorrência</div>
+                                                    </div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Início">Resolução</div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Início">Início</div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Fim">Fim</div>
+                                                </th>
+                                                <th class="slds-truncate slds-table--cell-buffer " scope="col">
+                                                    <div class="slds-truncate" title="Situação">Situação</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.data}" var="item">
+                                                <tr class="slds-hint-parent">
+                                                    <td data-label="">
+                                                        <div class="slds-truncate" title="{!item.Base}">{!item.Base}</div>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <div class="slds-truncate" title="{!item.Type}">{!item.Type}</div>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <aura:if isTrue="{!item.Type == 'Solicitações'}">
+                                                            <!-- Entra nesse nó caso o protocolo iterado seja uma Solicitação -->
+                                                            <lightning:button name="OSs e OCs" variant="base" label="{!item.ProtocolNumber}" title="{!item.ProtocolNumber}" value="{!item}" onclick="{! c.descriptionModal }"/>
+                                                            <aura:set attribute="else">                                                                
+                                                                <aura:if isTrue="{!and(item.Type == 'Protocolo', item.Base == 'PS8')}">
+                                                                <!-- Entra nesse nó caso o protocolo iterado seja um Protocolo PS8 -->
+                                                                    <lightning:button name="Protocolo PS8" variant="base" label="{!item.ProtocolNumber}" title="{!item.ProtocolNumber}" value="{!item}" onclick="{! c.descriptionModal }"/>
+                                                                    <aura:set attribute="else">
+                                                                        <aura:if isTrue="{!(empty(item.Id))}">
+                                                                            <!-- Entra nesse nó caso o protocolo iterado seja um qualquer registro que tenha vindo sem link -->
+                                                                            <div class="slds-truncate" title="{!item.ProtocolNumber}">{!item.ProtocolNumber}</div>
+                                                                            <aura:set attribute="else">
+                                                                                <!-- Entra nesse nó caso o protocolo iterado seja um Caso do Solar -->
+                                                                                <lightning:formattedUrl value="{!'/' + item.Id}" 
+                                                                                    label="{!item.ProtocolNumber}"
+                                                                                    target="_self"
+                                                                                    tooltip="{!item.ProtocolNumber}"
+                                                                                    class="slds-truncate"/>
+                                                                            </aura:set>
+                                                                        </aura:if>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <aura:if isTrue="{!greaterthan(item.Description.length,50)}">
+                                                            <lightning:button name="Descrição" variant="base" label="{!item.DescriptionLabel}" title="{!item.Description}" onclick="{! c.descriptionModal }" value="{!item.Description}"/>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-truncate" title="{!item.Description}">{!item.Description}</div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <aura:if isTrue="{!greaterthan(item.Resolution.length,50)}">
+                                                            <lightning:button name="Resolução" variant="base" label="{!item.ResolutionLabel}" title="{!item.Resolution}" onclick="{! c.descriptionModal }" value="{!item.Resolution}"/>
+                                                            <aura:set attribute="else">
+                                                                <div class="slds-truncate" title="{!item.Resolution}">{!item.Resolution}</div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <div class="slds-truncate" title="{!item.StartDate}">{!item.StartDate}</div>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <div class="slds-truncate" title="{!item.EndDate}">{!item.EndDate}</div>
+                                                    </td>
+                                                    <td data-label="">
+                                                        <div class="slds-truncate" title="{!item.Situation}">{!item.Situation}</div>
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="DescriptionModal" class="slds-modal slds-modal_medium">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeDescriptionModal}" variant="container" alternativeText="Fechar" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                <h2 id="header43" class="slds-text-heading--medium">{!v.modalTitle}</h2>
+            </div>
+            <aura:if isTrue="{!v.modalTitle == 'OSs e OCs'}">
+                <!-- Component que exibe OSs e OCs -->
+                <c:Solar_Cross_ProtHist_OSAndOC requisition="{!v.requisition}"/>          
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!v.modalTitle == 'Protocolo PS8'}">
+                        <!-- Component que exibe o campo memot / mais detalhes do Protocolo PS8 -->
+                        <c:Solar_Cross_ProtHist_PS8MoreInfos ps8MoreInfo="{!v.ps8MoreInfo}"/>                        
+
+                        <aura:set attribute="else">                        
+                            <div class="slds-modal__content slds-p-around--medium ">
+                                <div class="slds-align_absolute-center slds-m-vertical_large">                    
+                                    {!v.modalText}
+                                </div>
+                            </div>
+                        </aura:set>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+            <div class="slds-modal__footer">
+                <lightning:button label="Fechar" variant="brand" title="Fechar" onclick="{!c.closeDescriptionModal}" />
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop " aura:id="ModalDescription"></div>
+</aura:component>

@@ -1,0 +1,94 @@
+<!-- CEC_360_ShowRequisitions.cmp -->
+<aura:component controller="CEC_360_ShowRequisitionsController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="searchConfig" type="object" />
+    <aura:attribute name="table" type="object" />
+    <aura:attribute name="hasRequisitions" type="boolean" default="false"  />
+    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-p-bottom_medium data-inicio">
+            <div>
+                <lightning:input aura:id="startDate"
+                                 label="{!v.searchConfig.startDate.label}"
+                                 type="date"
+                                 value="{!v.searchConfig.startDate.value}"
+                                 max="{!v.searchConfig.startDate.maxDate}"
+                                 min="{!v.searchConfig.startDate.minDate}"
+                                 messageWhenBadInput="{!v.searchConfig.startDate.messageWhenBadInput}"
+                                 disabled="{!v.searchConfig.startDate.isDisabled}" 
+                                 onchange="{!c.startDateChange}" 
+                                 />
+            </div>
+        </div>
+        <div class="data-fim">
+            <div class="slds-m-horizontal_xx-small">
+                <lightning:input aura:id="endDate"
+                                 label="{!v.searchConfig.endDate.label}"
+                                 type="date"
+                                 value="{!v.searchConfig.endDate.value}"
+                                 max="{!v.searchConfig.endDate.maxDate}"
+                                 min="{!v.searchConfig.endDate.minDate}"
+                                 messageWhenBadInput="{!v.searchConfig.endDate.messageWhenBadInput}"
+                                 disabled="{!v.searchConfig.endDate.isDisabled}" 
+                                 onchange="{!c.endDateChange}"
+                                 />
+            </div>
+        </div>
+        <div class="select-tipo">
+            <div class="slds-m-horizontal_xx-small">
+                <lightning:select name="type" label="Status" value="{!v.searchConfig.typeInput.value}">
+                    <aura:iteration items="{!v.searchConfig.typeInput.options}" var="option">
+                        <option text="{!option.label}" value="{!option.value}"></option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </div>
+        <div class="buscar">
+            <div class="slds-m-horizontal_xx-small">
+                <div class="slds-p-top_large button-break">                    
+                    <span>
+                        <lightning:button variant="destructive"
+                                          label="{!v.searchConfig.searchButton.label}"
+                                          disabled="{!v.searchConfig.searchButton.disabled}"
+                                          onclick="{!c.search}"
+                                          class="botao-busca"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.hasRequisitions}">
+    <aura:if isTrue="{!not(empty(v.table.listRequisitions))}">
+        <table class="lista-ocorrencias slds-table slds-row-hover">
+            <thead>
+                <tr>
+                    <th>Número da Solicitação</th>
+                    <th>Tipo</th>
+                    <th>Fechamento</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.table.listRequisitions}" var="requisition">
+                    <tr>
+                        <td><lightning:buttonIcon value="{!requisition.id}"
+                                                  onclick="{!c.changeAccordion}"
+                                                  iconName="{!requisition.isSelected?'utility:chevrondown':'utility:chevronright'}"
+                                                  class="icon-border-none"
+                                                  />{!requisition.orderRequest.requestID}</td>
+                        <td>{!requisition.orderRequest.requestTypeDescription}</td>
+                        <td>{!requisition.orderRequest.closeDate}</td>
+                        <td>{!requisition.orderRequest.statusDescription}</td>
+                    </tr>
+                    <aura:if isTrue="{!requisition.isSelected}">
+                        <c:CEC_360_ShowRequisitionsDetail requisition="{!requisition}"/>
+                    </aura:if>
+                    
+                </aura:iteration>
+            </tbody>
+        </table>
+    </aura:if>
+    </aura:if>
+</aura:component>

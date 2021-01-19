@@ -1,0 +1,74 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-18-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   01-12-2021   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+	<header>
+        <h1 class="headerTitle">Negociação</h1>
+	</header>
+
+	<main>
+		<section id="Datatable" style="padding-top: 5px">
+			<!--<template if:true={hasError}> -->
+				<!--<c-solar-exception-content show-error="true"></c-solar-exception-content>-->
+			<!--</template> -->
+			<!--<template if:false={hasError}> -->
+			<!--<template if:true={hasData}> -->
+          <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle} active-section-name={activeSections} class="accordion">
+						<div class="slds-p-around_medium">
+							<lightning-accordion-section name="accordionFatura" data-id="faturas" label="FATURA(S)" aria-expanded="true">
+								<lightning-datatable   data={data} 
+                                       key-field="chargeId" 
+                                       columns={columns} 
+                                       hide-number-column="true"
+                                       sorted-direction={sortDirection}
+                                       onsort={handleSortData}
+                                       onrowselection={handleRowSelection}
+                                       sorted-by={sortBy}> 
+                </lightning-datatable>
+							</lightning-accordion-section>
+                        </div>
+                        
+            <div class="slds-p-around_medium">
+							<lightning-accordion-section name="accordionlancamentoFuturos" data-id="lancamentoFuturos" label="LANÇAMENTO FUTUROS /JUROS E MULTAS">
+								<lightning-datatable   data={data} 
+                                       key-field="chargeId" 
+                                       columns={columns} 
+                                       hide-number-column="true"
+                                       sorted-direction={sortDirection}
+                                       onsort={handleSortData}
+                                       onrowselection={handleRowSelection} 
+                                       sorted-by={sortBy}> 
+                </lightning-datatable>
+							</lightning-accordion-section>
+						</div>
+          </lightning-accordion><hr />
+			<!--</template> -->
+			<!--<template if:false={hasData}>
+					    <c-solar-exception-content show-empty="true"></c-solar-exception-content>
+			</template> -->
+			<!-- </template> -->
+        </section>
+    </main>    
+
+	<footer>
+		<div style="margin-left: 95%; margin-top: 8%;">
+			<!--<template if:false={hasError}>-->
+				<div style="width: 50%; justify-content: flex-end; display: flex">
+                    <lightning-button label="Simular"
+                                      variant="brand"
+                                      class="slds-m-left_x-small" 
+                                      onclick={handleSimulation}
+                                      disabled={buttonSimulation}>
+                    </lightning-button>
+				</div>
+			<!--</template>-->
+		</div>
+    </footer>
+</template>

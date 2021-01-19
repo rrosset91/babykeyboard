@@ -1,0 +1,96 @@
+.custom-header {
+	color: #da291c;
+	font-weight: bold;
+	font-size: 23px;
+}
+.negotiation-amount {
+	padding: 20px;
+	margin-top: 25px;
+	background-color: #e4e4e4;
+	width: 50%;
+	border-radius: 5px;
+}
+.header-text {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.custom-content {
+	font-weight: 600;
+}
+.discount-container {
+	padding: 20px;
+}
+.subtitle {
+	font-weight: bold;
+	font-size: 20px;
+}
+.installment-container {
+	padding: 20px 10px;
+}
+.datatable-spinner {
+	padding: 20px 10px;
+}
+.installments-spinner {
+	padding: 20px 10px;
+}
+.installment-option {
+	display: inline-block;
+	border: 1px solid #cdcdcd;
+	border-radius: 10px;
+	padding: 10px 15px;
+	position: relative;
+	width: 170px;
+	margin-left: 10px;
+}
+.installment-option:hover {
+	cursor: pointer;
+	display: inline-block;
+	border: 1px solid red;
+	border-radius: 10px;
+	padding: 10px 15px;
+	position: relative;
+	width: 170px;
+	margin-left: 10px;
+}
+.installment-selected {
+	display: inline-block;
+	border: 2px solid red;
+	border-radius: 10px;
+	padding: 10px 15px;
+	position: relative;
+	width: 170px;
+	margin-left: 10px;
+}
+.datatable {
+	padding: 20px;
+	width: 50%;
+	maring-top: 10px;
+}
+.total-title {
+	text-align: left;
+	align-items: left;
+	align-self: left;
+	font-weight: bold;
+	font-size: 17px;
+	position: relative;
+	display: inline-block;
+}
+.total-value {
+	text-align: right;
+	align-items: right;
+	align-self: right;
+	font-weight: bold;
+	font-size: 17px;
+	position: relative;
+	display: inline-block;
+	margin-left: auto;
+}
+.navigation-buttons {
+	margin-top: 20px;
+}
+.modal-message {
+	text-align: center;
+	position: relative;
+	width: 100%;
+}

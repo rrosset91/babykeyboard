@@ -1,0 +1,73 @@
+<aura:component >
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.dadosEmpresa}" action="{!c.doInit}"/>
+    <aura:attribute name="dadosEmpresa" type="Object" default="{}"/>
+    <aura:attribute name="tipoEntrega" type="String" />
+    
+    <aura:attribute name="possuiServicosOptions" type="List" default="[]"/>
+    <aura:attribute name="possuiServicosValues" type="List" default="[]"/>
+    
+    <div class="bloco">
+        <div class="col-w1024-3 border-b" id="razao-social">
+            <span class="title">Razão Social</span>
+            <span class="dado">{!v.dadosEmpresa.razaoSocial? v.dadosEmpresa.razaoSocial : '--'}</span>
+        </div>
+        <div class="col-w1024-2 border-b" id="cnpj">
+            <span class="title">CNPJ</span>
+            <span class="dado">{!v.dadosEmpresa.cnpj? v.dadosEmpresa.cnpj : '--'}</span>
+        </div>
+        <div class="col-w1024-2 border-b" id="inscricao-e">
+            <span class="title">Inscrição estadual</span>
+            <!--input type="checkbox" disabled="true" checked="{!v.dadosEmpresa.inscricaoEstadualIsento}" /> Isento-->
+            <span class="dado">{!v.dadosEmpresa.inscricaoEstadual? v.dadosEmpresa.inscricaoEstadual : '--'}</span>
+        </div>
+        <div class="col-w1024-2 border-b" id="inscricao-m">
+            <span class="title">Inscrição municipal</span>
+            <!--input type="checkbox" disabled="true" checked="{!v.dadosEmpresa.inscricaoMunicipalIsento}" /> Isento-->
+            <span class="dado">{!v.dadosEmpresa.inscricaoMunicipal? v.dadosEmpresa.inscricaoMunicipal : '--'}</span>
+        </div>
+        <div class="col-w1024-1 border-b" id="cnae-p">
+            <span class="title">CNAE Primário</span>
+            <span class="dado">{!v.dadosEmpresa.cnaePrimario? v.dadosEmpresa.cnaePrimario : '--'}</span>
+        </div>
+        <div class="col-w1024-1 border-b" id="cnae-s">
+            <span class="title">CNAE Secundário</span>
+            <span class="dado">{!v.dadosEmpresa.cnaeSecundario? v.dadosEmpresa.cnaeSecundario : '--'}</span>
+        </div>
+        <div class="col-w1024-15 border-b" id="funcionarios">
+            <span class="title">Nº funcionários</span>
+            <span class="dado">{!v.dadosEmpresa.numeroFuncionarios? v.dadosEmpresa.numeroFuncionarios : '--'}</span>
+        </div>
+        <div class="col-w1024-15 border-b" id="tipo">
+            <span class="title">Tipo de empresa</span>
+            <span class="dado">{!v.dadosEmpresa.tipoEmpresa? v.dadosEmpresa.tipoEmpresa : '--'}</span>
+        </div>
+        <div class="col-w1024-15 border-b" id="seguimento">
+            <span class="title">Segmento comercial</span>
+            <span class="dado">{!v.dadosEmpresa.segmentoComercial? v.dadosEmpresa.segmentoComercial : '--'}</span>
+        </div>
+        <div class="col-w1024-1 border-b" id="vencimento">
+            <span class="title">Data vencimento fatura</span>
+            <span class="dado">{!v.dadosEmpresa.dataVencimentoFatura? v.dadosEmpresa.dataVencimentoFatura : '--'}</span>
+        </div>
+        <div class="col-w1024-2 border-b" id="possui-servicos">
+            <span class="title">Possui serviços</span>
+            <span class="dado">
+                <aura:iteration items="{!v.possuiServicosOptions}" var="option" >
+                    <span style="margin: 0 5px;">
+                        <input disabled="true" 
+                               type="checkbox" 
+                               checked="{!option.value}"
+                               style="margin: 0 3px;"
+                               /> {!option.label} 
+                    </span>
+                </aura:iteration>
+            </span>
+        </div>
+        <div class="col-w1024-15 border-b" id="num-contrato">
+            <span class="title">Número do contrato</span>
+            <span class="dado">{!v.dadosEmpresa.numeroContrato ? v.dadosEmpresa.numeroContrato : '--'}</span>
+        </div>
+    </div>
+</aura:component>

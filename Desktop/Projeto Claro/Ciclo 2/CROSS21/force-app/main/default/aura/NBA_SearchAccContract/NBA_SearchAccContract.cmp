@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                controller="NBA_CustomCasePath_CC" access="global" >
+	
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+    <!-- HANDLER -->
+    <aura:handler value="{! this }" name="init" action="{! c.doInit }" />
+    
+	<aura:attribute type="String"  name="contractNumber" />
+    <aura:attribute type="String"  name="cityCode" />
+  
+</aura:component>

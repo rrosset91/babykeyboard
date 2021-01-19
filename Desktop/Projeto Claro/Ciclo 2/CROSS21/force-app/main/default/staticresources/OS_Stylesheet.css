@@ -1,0 +1,358 @@
+
+/* resset */ 
+
+img {border: 0;}
+a {color: #1f577b;}
+body {
+	padding: 8px;
+}
+
+
+@media (min-width:50em) {
+	/* steps */    
+	header.flexipageHeader.slds-page-header.uiBlock.oneAnchorHeader {
+		display: none;
+	}
+	.via-slds.via-omni .vlc-slds-wizard:before {
+		background: #ffffff !important;
+	}
+	.vlc-slds-wizard.labsxd-StepChart.ng-scope.ng-isolate-scope {
+		background: #ffffff;
+		padding: 0px 10px;
+	}
+	.slds-col.slds-clearfix {
+		background-color: #e7e7e7;
+	}
+	.itemopacity7 {
+		opacity : 1 !important;
+	}
+	.vlc-slds-wizard.labsxd-StepChart.ng-scope.ng-isolate-scope {
+		padding-top: 0px;
+	}
+	label.slds-form-element__label.vlc-slds-step-chart--title.ng-binding.ng-scope {
+		display:none !important;
+	}
+	.slds-card__header.slds-grid {
+		display: none !important;
+	}
+	.labsxd-StepChart {
+		padding: 2rem 0 2rem 0 !important;
+	}
+
+	/*section.slds-page-header.vlc-slds-page--header {display: none !important;}*/
+	bpTree {
+		width: 100%;
+	}
+	.slds-media__body {
+		display: none;
+	}
+	span.slds-card__header-title.slds-truncate {
+		display: none !important;
+		color: #fff;
+	}
+	.vlc-slds-bpTree-step-chart__container.testValerio2 {
+		margin-bottom: 0px !important;
+	}
+	li.list-group-item {
+		float:left;padding-top: 25px;
+	}
+	li.list-group-item[state=true] {
+		background: url('/resource/cec_pme_image/icones/ponto-on.png') top center;
+		background-repeat: no-repeat;
+	}
+	li.list-group-item[state=false] {
+		background: url('/resource/cec_pme_image/icones/point-off.png') top center;
+		background-repeat: no-repeat;
+	}
+	li.list-group-item:first-child[state=true] {
+		background: url('/resource/cec_pme_image/icones/ponto-on-first.png') top center;
+		background-repeat: no-repeat;
+	}
+	li.list-group-item:last-child[state=true] {
+		background: url('/resource/cec_pme_image/icones/ponto-on-last.png') top center;
+		background-repeat: no-repeat;
+	}
+	li.list-group-item:first-child[state=false] {
+		background: url('/resource/cec_pme_image/icones/ponto-off-first.png') top center;
+		background-repeat: no-repeat;
+	}
+	li.list-group-item:last-child[state=false] {
+		background: url('/resource/cec_pme_image/icones/ponto-off-last.png') top center;
+		background-repeat: no-repeat;
+	}
+	span.slds-form-element__label.ng-binding {
+		margin-left: .75rem;
+	}
+	li.list-group-item.ng-scope.completed.active:active {
+		outline: none;
+	}
+	ol.ng-scope {
+		margin-top: 10px;
+	}
+	li.list-group-item {
+		outline: none;text-align: center;
+	}
+	.via-slds.via-omni form[stepForm] {
+		min-height: fit-content;
+		padding-right: 0px !important;
+		padding-top: 95px;
+	}
+}
+
+span.vlc-slds--grippy {
+	width: -webkit-fill-available;
+	padding-right: 1.3rem;
+	outline: none;
+}
+ol.ng-scope {
+	margin-right: 0.5rem;
+	margin-left: 0.5rem;
+}
+li[state="true"] span {
+	color: #1f577b !important;
+	font-weight: 400 !important;
+}
+li[state="false"] span {
+	color: #706e6b !important;
+}
+.vlc-slds-container--grippy.ng-scope {
+	width: 100%;
+	right: 15px;
+	left: 15px;
+}
+.block-logo {
+	float: left;
+	display: inline-block;
+	margin-left: -7px;
+	width: 200px;
+}
+.block-logo img {
+	width: 200px;
+	height: 40px;
+}
+.block-passos {
+	float: right;
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	width: 85px;
+}
+.block-dados {
+	display: inline-block;
+	float: left;
+	width: auto;
+}
+.tit-passos {
+	font-size: 16px;
+	font-weight: bold;
+	color: #b31e13;
+	padding-right: 10px;
+}
+.vlc-slds-wizard.labsxd-StepChart.ng-scope.ng-isolate-scope.expand {
+	background: #ffffff;
+}
+.via-slds {
+	background:#ffffff !important;
+}
+.via-slds ::selection {
+	background: #ffffff !important;
+}
+.via-slds ::-moz-selection{
+	background:#ffffff !important;
+}
+.slds-col.slds-clearfix.lucastest.ng-scope {
+	background: #ffffff !important;
+}
+.via-slds .slds-theme--error {
+	background-color: #880cc9;
+}
+
+
+/*GENERIC*/
+body.slds-modal--shown {
+    overflow: initial !important;
+}
+.step-step > form {
+	padding-top: 0 !important;
+}
+
+/*
+* TITLE OMNISCRIPT
+*/
+.labsxd-header {
+    padding: 1.5rem !important;
+}
+.labsxd-header > div {
+    display: inline-flex;
+}
+.labsxd-header h2 {
+	text-align: right;
+}
+.labsxd-header {
+	display: grid !important;
+	height: initial !important;
+}
+.labsxd-header:after {
+	display: none !important;
+}
+.labsxd-header .vlc-slds-underline--gradient {
+	border-bottom: .05rem solid #cfd7e6 !important;
+}
+
+.altura-scroll {
+	max-height: 350px;
+	overflow-y: scroll !important;
+}
+
+/*
+* HIDE DEFAULT STEP SECTION
+*/
+bpTree + sidebar {
+	display: none;
+}
+
+
+/*SLDS-CONTROL-FORM*/
+.via-slds .slds-select,  .slds-form-element__control input {
+    border: 1px solid #d8dde6 !important;
+}
+.via-slds .slds-select.ng-invalid:not(.ng-empty),  .slds-form-element__control input.ng-invalid:not(.ng-empty) {
+    border: 1px solid red !important;
+}
+.slds-form-element__control .slds-select_container{
+    border-color: #d8dde6 !important;
+}
+.via-slds.via-omni .vlc-slds__border {
+    border: none !important;
+}
+.slds-form-element__control.lookup-isSelect > div > span {
+	display: block !important;
+}
+.slds-form-element__control.lookup-isSelect > div > select.slds-select {
+	opacity: -1 !important;
+}
+.slds-form-element__control.lookup-isSelect {
+	border: 1px solid #d8dde6 !important;
+    height: 3rem;
+}
+.slds-form-element__control .slds-select_container > span {
+    display: none !important;
+}
+.via-slds .slds-select {
+    opacity: 1 !important;
+    padding: 0 0 0 8px !important;
+}
+.via-slds .slds-select[disabled] {
+    opacity: 1 !important;
+}
+.slds-form-element__control input[disabled], .via-slds .slds-select[disabled] {
+    border: 1px solid #d8dde6 !important;
+    background: #F3F2F2 !important;
+}
+.via-slds.via-omni .slds-col--padded.slds-size--1-of-1.alt-vlc-slds--control ng-form>label[for].slds-form-element__label:first-child {
+    min-height: 25px;
+	font-size: .6rem !important;
+}
+#IPAChecarCredito, #RABuscar, #IPAGetOperadora {
+	margin-top: 1.75rem;
+}
+#RABuscar, #IPAGetOperadora {
+    padding-top: 1.5rem;
+    height: 50px;
+}
+#IPAChecarCredito {
+    padding-top: 1rem;
+    height: 35px;
+}
+.slds-datepicker .slds-datepicker__filter > div:nth-child(1) {
+	flex-grow: 0.8 !important;
+}
+.slds-datepicker .slds-datepicker__filter > div:nth-child(2) {
+	flex-grow: 0.2 !important;
+}
+
+/*VALIDACIONES*/
+.via-slds.via-omni div[msg=Requirement] {
+    background: transparent !important;
+    color: #e24c36 !important;
+}
+.via-slds.via-omni div[msg=Comment], .via-slds.via-omni div[msg=Requirement] {
+    margin-top: 20px !important;
+}
+
+/*Resumo*/
+#StepResumoDoPedido .vlc-slds-text-block h5 {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+#StepResumoDoPedido .vlc-slds-text-block h5 > span {
+	border-bottom: solid 3px #009ed3;
+	font-size: 16px;
+}
+#StepResumoDoPedido .vlc-slds-text-block p > p {
+    border-bottom: solid 1px #cfd7e6;
+}
+#StepResumoDoPedido .vlc-slds-text-block p > hr + p {
+    border: none !important;
+}
+#StepResumoDoPedido #ProductsName input[disabled] {
+    background: none !important;
+    border-bottom: solid 1px #cfd7e6 !important;
+    padding-left: 0!important;
+	height: 30px !important;
+    min-height: 30px !important;
+}
+#StepResumoDoPedido #ProductsName label {
+    font-weight: 700!important;
+    margin-top: 16px;
+}
+#StepResumoDoPedido #ProductBlock > div > div > div:first-child {
+    display: none;
+}
+#StepResumoDoPedido .labsxd-input_horizontal {
+    margin-bottom: 30px !important;
+}
+
+
+
+/*VLC CART*/
+#vlcCart {
+	width: 25% !important;
+	border: solid 1px #cdd8e7;
+}
+#vlcCart_Top {
+	border-bottom: solid 1px #cdd8e7;
+    padding: 8px;
+}
+#vlcCart_Top .labsxd-cartTitle {
+	font-size: 18px !important;
+    color: #22597c;
+    font-weight: 700;
+}
+
+
+/*RESPONSIVE*/
+@media (max-width: 800px) {
+	/*GENERIC*/
+	child {
+		padding: 0 4px 0 4px !important;
+	}
+	
+	/*STEPS*/
+	.labsxd-StepChart ol {
+		padding: 16px !important;
+	}
+	.labsxd-StepChart ol > li {
+		width: 100% !important
+	}
+	
+	/*
+	* TITLE OMNISCRIPT
+	*/
+	.labsxd-header > div {
+		display: block;
+	}
+	.labsxd-header h2 {
+		text-align: left;
+	}
+}

@@ -1,0 +1,21 @@
+.exampleHolder {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.accordionsGroup {
+  margin: 15px;
+}
+.filtersGroup {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.loading-spinner-div{
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  height: 80px;
+}

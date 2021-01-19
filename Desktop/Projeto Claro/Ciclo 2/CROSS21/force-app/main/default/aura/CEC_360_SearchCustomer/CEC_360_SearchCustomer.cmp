@@ -1,0 +1,232 @@
+<!--
+Autor: Victor Araujo - Deloitte
+Alteração: 16/01/2020
+Descrição: Alteração no campo input CEP, inclusão do atributo maxlength para 9 caracteres.
+Nome do projeto/ID: CEC Calro - Time: SQUAD v360. -->
+
+<aura:component controller="CEC_SearchAccount" >    
+    <aura:attribute name="statusOptions" type="List" default="[]"/>
+    <aura:attribute name="searchBy" type="string" default="Document" />
+    <aura:attribute name="inputValue" type="String" default="" />
+    <aura:attribute name="cep" type="String" />
+    <aura:attribute name="logradouro" type="String" />
+    <aura:attribute name="numero" type="String" />
+    <aura:attribute name="complemento" type="String" />
+    <aura:attribute name="UF" type="String" />
+    <aura:attribute name="codOperadoraValue" type="String" />
+    <aura:attribute name="nomeCidade" type="String" />
+    <aura:attribute name="errorMessage" type="String" />
+    
+    <aura:attribute name="isCPF" type="Boolean" default="True" />
+    <aura:attribute name="isCNPJ" type="Boolean" default="False" />
+    <aura:attribute name="isCom" type="boolean" />
+    <aura:attribute name="isContractSearch" type="Boolean" />
+    <aura:attribute name="accountIntegration" type="boolean" />
+    
+    <aura:attribute name="acctList" type="Object[]" />
+    <aura:attribute name="paginationList" type="Object[]" />
+    <aura:attribute name="pageSize" type="Integer" />
+    <aura:attribute name="totalSize" type="Integer" />
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer" />
+    
+    <aura:attribute name="spinner" type="boolean" />
+    <aura:attribute name="isProfileCanalCritico" type="Boolean" />
+    <aura:attribute name="isProfileNBONBA" type="Boolean" />
+    <aura:attribute name="isProfileComercialUsers" type="Boolean" />
+    <aura:attribute name="isProspect" type="boolean" />    
+    <aura:attribute name="showModalPesquisa" type="Boolean" />
+    <aura:attribute name="showPaginationList" type="Boolean" default="True"  />
+    
+    <aura:handler name="init" value="{! this }" action="{! c.loadOptions }"/>
+
+        
+    <div class="border-bottom">
+        <div class="box-title-busca">
+            <span class="title-busca">Buscar cliente</span>
+        </div>
+        <aura:if isTrue="{! or($Browser.isTablet, $Browser.isPhone)}">            
+            
+            <lightning:combobox aura:id="selectSearch" name="Search" label=""
+                                placeholder="Selecionar"
+                                value="Document"
+                                dropdownAlignment="left"
+                                variant="standard"
+                                onchange="{!c.handleOptionSelected}"
+                                options="{!v.statusOptions}"
+                                />
+            
+            
+            <!-- Menu opções para DESKTOP-->
+            <aura:set attribute="else">
+                <div class="box-abas">
+                    <lightning:buttonGroup>
+                        <lightning:button class="aba-selecionada" aura:id="Document" label="CPF/CNPJ" onclick="{!c.handleButtonSearch}" />
+                        <aura:if isTrue="{!not(v.isProfileComercialUsers)}" >
+                            <lightning:button aura:id="Contract" label="Contrato" onclick="{!c.handleButtonSearch}" />
+                            <lightning:button aura:id="Phone" label="Telefone" onclick="{!c.handleButtonSearch}" />
+                            <lightning:button aura:id="Address" label="Endereço" onclick="{!c.handleButtonSearch}" />
+                            <lightning:button aura:id="Name" label="Nome" onclick="{!c.handleButtonSearch}" />
+                        </aura:if>
+                    </lightning:buttonGroup>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+    
+    <aura:If isTrue="{!v.searchBy == 'Document'}">
+        <lightning:layout verticalAlign="center" multipleRows="false" class="documento-bloco-535">
+            <lightning:layoutItem  class="custom-box documento-cpf-cnpj">
+                <div name="tipoDocument" class="documento-tipo">
+                    <span class="slds-radio">
+                        <input type="radio" aura:id="radioCPF" onclick="{!c.isCPF}" id="cpfRadio" name="tipoCPF" checked="{!v.isCPF}" value="cpfRadio"/>
+                        <label class="slds-radio__label" for="cpfRadio"><span class="slds-radio_faux"></span></label>
+                        <span class="slds-form-element__label">CPF</span>
+                    </span>
+                    <span class="slds-radio">
+                        <input type="radio" aura:id="radioCNPJ" onclick="{!c.isCNPJ}" id="cnpjRadio" name="tipoCNPJ" checked="{!v.isCNPJ}" value="cnpjRadio"/>
+                        <label class="slds-radio__label" for="cnpjRadio"><span class="slds-radio_faux"></span></label>
+                        <span class="slds-form-element__label">CNPJ</span>
+                    </span>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="documento-campo-input">
+                <span onkeypress="{!c.handleTypeSearch}" class="documento-input">
+                    <lightning:input aura:id="txtDoc" value="{!v.inputValue}" maxlength="{! v.isCPF ? 15 : 18 }" onchange="{!c.formatText}" />
+                </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="documento-botao">
+                <lightning:button variant="brand" label="Buscar" onclick="{!c.typeSearch}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:If>
+    <aura:If isTrue="{!v.searchBy == 'Contract'}">
+        <lightning:layout verticalAlign="center" multipleRows="false" class="contrato-box documento-bloco-535">
+            <lightning:layoutItem class="contrato-bloco-768">
+                <div class="contrato-campos">
+                    <div class="contrato-cidade-codigo">
+                        <span>Código da cidade:</span>
+                    </div>
+                    <div class="contrato-campo-cidade slds-grid–vertical-align-center slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                        <span onkeypress="{!c.handleSearchCityByCarrierCode}">
+                            <lightning:icon class="slds-is-absolute slds-m-top_x-small slds-m-left_x-small slds-icon-utility-search slds-icon_container" iconName="utility:search" size="x-small" onclick="{!c.handlePesquisa}"/>
+                            <input id="txtCodOperadora" oninput="{!c.handleSearchCityByCarrierCode}" class="slds-input" type="text" autocomplete="off" maxlength="3" value="{!v.codOperadoraValue}"/>
+                        </span>
+                    </div>
+                    <div class="contrato-cidade-nome slds-grid–vertical-align-center slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                        <span>ou Nome da cidade:</span>
+                    </div>
+                    <div class="contrato-cidade-campo slds-grid–vertical-align-center slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                        <lightning:icon class="slds-is-absolute slds-m-top_x-small slds-m-left_x-small slds-icon-utility-search slds-icon_container" iconName="utility:search" size="x-small" onclick="{!c.handlePesquisa}"/>
+                        <span onkeypress="{!c.handleSearchCityByName}" onkeydown="{!c.handleKeydown}"> 
+                            <input id="txtNomeCidade" class="slds-input" type="text" autocomplete="off" value="{!v.nomeCidade}"/>
+                        </span>
+                    </div>
+                    <!--div class="contrato-cidade-campo slds-grid–vertical-align-center slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                        <lightning:input aura:id="txtUF" value="{!v.UF}" label="UF" readOnly="true"/>
+                    </div-->
+                </div>
+                <div class="contrato-campo-numeros">
+                    <div class="contrato-campo-numero">
+                        <span>N° do contrato:</span>
+                    </div>
+                    <div class="contrato-campo-input">
+                        <span onkeypress="{!c.handleTypeSearch}">
+                            <lightning:input aura:id="txtContrato" onmouseover="{!c.searchAddress}" label="" value="{!v.inputValue}" onchange="{!c.formatText}" />
+                        </span>
+                    </div>
+                    <div class="contrato-campo-busca">
+                        <lightning:button variant="brand" label=	"Buscar" onclick="{!c.typeSearch}"/>
+                    </div>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:If>
+    <aura:If isTrue="{!v.searchBy == 'Phone'}">
+        <lightning:layout verticalAlign="center" multipleRows="false" class="documento-bloco-535">
+            <lightning:layoutItem  class="custom-box telefone-bloco">
+                <span>Fixo ou móvel:</span>
+            </lightning:layoutItem>
+            <lightning:layoutItem  class="custom-box telefone-input padding-right-10">
+                <span onkeypress="{!c.handleTypeSearch}">
+                    <lightning:input aura:id="txtMSISDN" value="{!v.inputValue}" maxlength="15"  onchange="{!c.formatText}" class="slds-p-bottom_medium" />
+                </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="custom-box telefone-busca">
+                <lightning:button variant="brand" label="Buscar" onclick="{!c.typeSearch}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:If>
+    <aura:If isTrue="{!v.searchBy == 'Address'}">
+        <lightning:layout verticalAlign="center" multipleRows="false" class="margin-bottom-10 documento-bloco-535">
+            <lightning:layoutItem class="endereco-cidade-cod">
+                <label class="slds-form-element__label" for="txtCodOperadora">Cód. da cidade:</label>
+                
+                <div class="slds-grid–vertical-align-center slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                    <lightning:icon class="slds-is-absolute slds-m-top_x-small slds-m-left_x-small" iconName="utility:search" size="x-small" onclick="{!c.handlePesquisa}"/>
+                    <span onkeypress="{!c.handleSearchCityByCarrierCode}">
+                        <input id="txtCodOperadora" oninput="{!c.handleSearchCityByCarrierCode}" autocomplete="off" class="slds-input" type="text"  maxlength="3" value="{!v.codOperadoraValue}"/>
+                    </span>
+                </div> 
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem class="endereco-cidade-nome" padding="horizontal-small">
+                <label class="slds-form-element__label" for="txtNomeCidade">ou Nome da cidade:</label>
+                <div class="slds-grid–vertical-align-center slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+                    <lightning:icon class="slds-is-absolute slds-m-top_x-small slds-m-left_x-small" iconName="utility:search" size="x-small" onclick="{!c.handlePesquisa}"/>
+                    <span onkeypress="{!c.handleSearchCityByName}" onkeydown="{!c.handleKeydown}">
+                        <input id="txtNomeCidade" class="slds-input" type="text" autocomplete="off" value="{!v.nomeCidade}"/>
+                    </span>
+                </div>
+            </lightning:layoutItem>
+            <!--lightning:layoutItem class="endereco-cidade-nome">
+                <lightning:input aura:id="txtUF" value="{!v.UF}" label="UF" readOnly="true"/>
+            </lightning:layoutItem-->
+        </lightning:layout>
+        <lightning:layout verticalAlign="center" multipleRows="false" class="bloco-768">
+            <lightning:layoutItem  class="endereco-cep">
+                <span onkeypress="{!c.handleAddressSearch}">
+                    <lightning:input onkeypress="{!c.handleAddressSearch}" onmouseover="{!c.searchAddress}" aura:id="txtCep" label="CEP" name="CEP" maxlength="9"  onchange="{!c.formatCep}" value="{!v.cep}" />
+                </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem  class="endereco-logradouro" padding="horizontal-small">
+                <span onkeypress="{!c.handleAddressSearch}">
+                    <lightning:input onkeypress="{!c.handleLogradouro}" onmouseover="{!c.searchAddress}" aura:id="txtLogradouro" label="Endereço" name="Logradouro"  value="{!v.logradouro}" onchange="{!c.formatLogradouro}" />
+                </span>                    
+            </lightning:layoutItem>
+            <lightning:layoutItem  class="endereco-numero" padding="horizontal-small">
+                <span onkeypress="{!c.handleAddressSearch}">
+                    <lightning:input aura:id="txtNumero" label="Número" onmouseover="{!c.searchAddress}" value="{!v.numero}" onchange="{!c.formatNumero}" onkeypress="{!c.handleNumero}" />
+                </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="endereco-complemento" padding="horizontal-small">
+                <span onkeypress="{!c.handleAddressSearch}">
+                    <lightning:input aura:id="txtComplemento" value="{!v.complemento}" onmouseover="{!c.searchAddress}" label="Complemento" onkeypress="{!c.handleComplemento}" onchange="{!c.formatComplemento}" />
+                </span>
+            </lightning:layoutItem>
+            <lightning:layoutItem class="endereco-buscar">
+                <div class="slds-grid–vertical-align-center">
+                    <lightning:button variant="brand" label="Buscar" onclick="{!c.addressSearch}" class="slds-m-top_large"/>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:If>
+    <aura:If isTrue="{!v.searchBy == 'Name'}">
+        <lightning:layout verticalAlign="center" multipleRows="false" class="documento-bloco-535">
+            <lightning:layoutItem>
+                <div class="nome-nome slds-grid–vertical-align-center ">
+                    <span>Nome:</span>
+                </div>
+                <div class="nome-input">
+                    <span onkeypress="{!c.handleTypeSearch}">
+                        <lightning:input aura:id="txtName" value="{!v.inputValue}" maxlength="80"  onchange="{!c.formatText}" style="margin-top: -19px !important;" />
+                    </span>
+                </div>
+                <div class="nome-busca">
+                    <lightning:button variant="brand" label="Buscar" onclick="{!c.typeSearch}"/>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:If>
+    <hr class="linha" />
+</aura:component>

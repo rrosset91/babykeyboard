@@ -1,0 +1,30 @@
+<!-- CEC_PME_OpenEnvelope -->
+<apex:page cache="false" standardController="Order" extensions="CEC_PME_OpenEnvelopeController" action="{!open}" lightningStyleSheets="true">
+    <apex:slds />
+    <div class="slds-scope">      
+        <apex:form id="form">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="slds-region_narrow slds-is-relative">
+                        <div class="slds-notify_container slds-is-absolute">
+                            <div class="slds-notify slds-notify_toast {!cssClassMessage}" role="status">
+                                <div class="slds-notify__content" style="width:25rem">
+                                    <h2 class="slds-text-heading_small">{!message}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_12-of-12">
+                    <apex:pageBlock rendered="{!urlEmbedded != null}" >
+                        <div>
+                            <iframe src="{!urlEmbedded}" width="100%" height="800px" />
+                        </div>
+                    </apex:pageBlock>
+                </div>
+            </div>
+        </apex:form>
+    </div>   
+</apex:page>

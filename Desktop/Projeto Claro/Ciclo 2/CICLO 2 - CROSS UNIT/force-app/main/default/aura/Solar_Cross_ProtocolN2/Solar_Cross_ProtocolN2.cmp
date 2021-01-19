@@ -1,0 +1,46 @@
+<aura:component>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean"/> 
+    <aura:attribute name="message" type="String"/> 
+
+    <div class="slds-grid slds-m-bottom_large slds-p-horizontal_small">
+        <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-col slds-size_1-of-1">
+            <aura:unescapedHtml value="{!v.message}" />
+        </div>
+    </div>
+
+    <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Case" class="slds-p-horizontal_small" onload="{!c.loaded}">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="ContractBusinessUnit__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Category__c" class="slds-border_bottom"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Product__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Modalidade__c" class="slds-border_bottom"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="EntryReason__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Description" class="slds-border_bottom"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="LeavingReason__c" class="slds-border_bottom"/>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning:outputField fieldName="Resolution__c" class="slds-border_bottom"/>
+            </div>
+        </div>
+    </lightning:recordEditForm>
+</aura:component>

@@ -1,0 +1,361 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 09-03-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   09-02-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<aura:component implements="force:hasRecordId,flexipage:availableForRecordHome"
+    controller="CEC_CC_InteractionClientController" access="global">
+
+    <!-- ************************************************************** -->
+    <!-- ************************* Attributes ************************* -->
+    <!-- ************************************************************** -->
+    <aura:attribute name="typeProtocol" type="String" />
+    <aura:attribute name="interactionType" type="String" />
+    <aura:attribute name="filterInteraction" type="String" />
+    <aura:attribute name="caseType" type="String" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="listCustomerInteractions" type="List" />
+    <aura:attribute name="case" type="Case" />
+    <aura:attribute name="contentDocument" type="ContentDocument" />
+    <aura:attribute name="listContentDocument" type="List" />
+    <aura:attribute name="showLoadingSpinner" type="Boolean" default="false" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:attribute name="isOpenModal" type="boolean" default="false" />
+    <aura:attribute name="lLstDocument" type="list" />
+    <aura:attribute name="disabledBtnCreate" type="Boolean" default="false" />
+
+    <aura:attribute name="prefixURL" type="String"
+        default="/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB720BY480&amp;versionId=" />
+    <aura:attribute name="urlDonwload" type="String" default="/sfc/servlet.shepherd/version/download/" />
+
+    <aura:attribute name="lstDocumentId" type="list" />
+    <aura:attribute name="StatusMeiosContato" type="List" default="['E-mail', 'Telefone']" />
+    <aura:attribute name="accept" type="List" default="['.jpg', '.jpeg', '.pdf', '.jpg', '.txt', '.xls', '.xlsx']" />
+    <aura:attribute name="multiple" type="Boolean" default="true" />
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+
+    <aura:attribute name="ObjectName" type="String" default="vlocity_cmt__CustomerInteraction__c" access="global" />
+    <aura:attribute name="caseReject" type="String" default="TypeInteractionGov__c" access="global" />
+    <aura:attribute name="TypePicklist" type="list" />
+    <aura:attribute name="StatusPicklist" type="list" />
+
+    <aura:attribute name="isOpen" type="boolean" default="false" />
+    <aura:attribute name="checkUpload" type="boolean" default="false" />
+    <aura:attribute name="checkStatus" type="boolean" default="false" />
+    <aura:attribute name="checkSizeText" type="boolean" default="false" />
+    <aura:attribute name="message" type="string" />
+
+    <aura:attribute name="contsucesso" type="String" default="0" />
+    <aura:attribute name="continsucesso" type="Integer" default="0" />
+    <aura:attribute name="liberaTelefone" type="boolean" default="false" />
+    <aura:attribute name="liberaEmail" type="boolean" default="false" />
+    <aura:attribute name="checkStatus2" type="boolean" default="false" />
+    <aura:attribute name="inputTel" type="String" default="" />
+
+
+    <!-- ************************************************************** -->
+    <!-- *************************** Handler ************************** -->
+    <!-- ************************************************************** -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}" />
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}" />
+
+
+    <!-- ************************************************************** -->
+    <!-- *************** Modal Inserção de Inteteração **************** -->
+    <!-- ************************************************************** -->
+    <div class="slds-form-element">
+        <aura:if isTrue="{!v.Spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>
+
+        <div id="typeInteraction" class="slds-form-element__control">
+            <lightning:select aura:id="typeInteraction" name="Type" label="Tipo de Interação"
+                onchange="{!c.changeAction}">
+                <aura:iteration items="{!v.TypePicklist}" var="val">
+                    <option value="{!val}"> {!val}</option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+
+        <aura:if isTrue="{!v.checkStatus}">
+            <div id="statusInteraction" class="slds-form-element__control">
+                <lightning:select aura:id="statusInteraction" name="Status" label="Status" required="true"
+                    title="Status da Interação">
+                    <option value="">Selecionar</option>
+                    <aura:iteration items="{!v.StatusPicklist}" var="val">
+                        <option value="{!val}"> {!val}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </aura:if>
+
+        <!-- Meios de contato para comunicação -->
+        <aura:if isTrue="{!v.checkStatus2}">
+            <div id="statusInteraction2" class="slds-form-element__control">
+                <lightning:select aura:id="statusInteraction2" name="Meio de contato" label="Meio de contato"
+                    onchange="{!c.changeActionMeiosContato}" title="Status da Interação">
+                    <option value="">Selecionar</option>
+                    <aura:iteration items="{!v.StatusMeiosContato}" var="val">
+                        <option value="{!val}"> {!val}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+
+            <aura:if isTrue="{!v.liberaEmail}">
+                <lightning:input aura:id="emailcontato" name="email" type="email" label="E-mail para contato"
+                    placeholder="Insira um e-mail para contato" onfocusout="{!c.validateEmail}" required="true"
+                    pattern="^(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)(\s*;\s*|\s*$))*$" />
+                <!-- onfocusout="{!c.ValidateEmail}" -->
+            </aura:if>
+
+            <aura:if isTrue="{!v.liberaTelefone}">
+                <lightning:input aura:id="telefonecontato" name="telefone" type="tel" label="Telefone para contato"
+                    placeholder="insira um telefone para contato" maxlength="15" onchange="{!c.validateTel}"
+                    value="{!v.inputTel}" required="true" />
+            </aura:if>
+
+        </aura:if>
+
+
+        <aura:if isTrue="{!v.isOpen}">
+            <div id="interactionDiv" class="slds-form-element__control">
+                <lightning:textarea aura:id="descriptionInteraction" name="interaction" class="topText"
+                    label="Interação" placeholder="Escreva aqui..." required="true"
+                    messageWhenValueMissing="Preencha este campo." />
+                <aura:if isTrue="{!v.checkSizeText}">
+                    <label class="slds-form-element__label" for="inpMessage">
+                        <span style="color:red;">*</span>A interação deve ter no mínimo 30 e no máximo 3.000 caracteres.
+                    </label>
+                </aura:if>
+            </div>
+
+            <aura:if isTrue="{!v.checkUpload}">
+                <div class="slds-form-element__control">
+                    <lightning:fileUpload name="fileUploader" label="Upload de arquivos" multiple="{!v.multiple}"
+                        accept="{!v.accept}" disabled="{!v.disabled}" recordId="{!v.recordId}"
+                        onuploadfinished="{! c.handleUploadFinished }" onchange="{! c.handleUploadFinished }" />
+
+                    <label class="slds-form-element__label" for="inpMessage">
+                        <span style="color:red;">*</span>O anexo deve ter no máximo 1 MB.
+                    </label>
+                </div>
+            </aura:if>
+            <br />
+            <div id="buttonNewCase" class="slds-form-element__control"
+                style="margin-right:15px;display:inline-block;padding-top:23px;">
+                <lightning:button label="Salvar" class="slds-button slds-button_brand" variant="brand"
+                    disabled="{!v.disabledBtnCreate}" aura:id="btnCreate" onclick="{!c.create}" />
+            </div>
+        </aura:if>
+        <br /><br />
+
+        <aura:if isTrue="{!v.listCustomerInteractions.length > 0}">
+            <br />
+            <span class="topico">Contatos com sucesso: </span><span class="dados">{!v.contsucesso}</span> <br />
+            <span class="topico">Contatos sem sucesso: </span> <span class="dados">{!v.continsucesso}</span>
+            <br />
+            <br />
+        </aura:if>
+
+        <!-- ************************************************************** -->
+        <!-- ************* Listagem de Interações Inseridas *************** -->
+        <!-- ************************************************************** -->
+        <aura:if isTrue="{!v.listCustomerInteractions.length > 0}">
+            <div
+                style="width: 100%;border-bottom: solid 1px #dddbda;line-height: 34px;display: block;margin-bottom: 10px;">
+                <span style="font-size:14px;color:#009de3;font-weight:bold;">
+                    <i class="icon icon-v-down-caret size-icon-2"></i>HISTÓRICO DE INTERAÇÕES:
+                </span>
+            </div>
+            <aura:iteration items="{!v.listCustomerInteractions}" var="lstBody">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="insert-dados">
+                                <!-- ************************************************************** -->
+                                <!-- ***************** Listagem Interação CLIENTE ***************** -->
+                                <!-- ************************************************************** -->
+                                <aura:if isTrue="{!v.filterInteraction == 'Cliente'}">
+                                    <span class="topico">Tentativa Por: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.LoginClaro__c}</span><br />
+
+                                    <span class="topico">Data da Interação: </span>
+                                    <span class="dados" format="dd/MM/yyyy HH:mm" />
+                                    <ui:outputDateTime
+                                        value="{!lstBody.vlocity_cmt__CustomerInteractionId__r.vlocity_cmt__StartDateTime__c}" />
+                                    <br />
+
+                                    <span class="topico">Status: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.vlocity_cmt__Status__c}</span><br />
+
+                                    <span class="topico">Autor: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.Author__c}</span><br />
+
+                                    <span class="topico">Tipo da Interação: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.TypeInteractionGov__c}</span><br />
+
+                                    <aura:if
+                                        isTrue="{!lstBody.vlocity_cmt__CustomerInteractionId__r.TypeInteractionGov__c == 'Redirecionamento da Reclamação'}">
+                                        <span class="topico">Nova Empresa: </span>
+                                        <span
+                                            class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.NewCompany__c}</span><br />
+                                    </aura:if>
+
+                                    <span class="topico">Interação: </span>
+                                    <span class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.Description__c
+                                        }</span><br />
+
+                                    <span class="topico">Data da última modificação: </span>
+                                    <span class="dados" format="dd/MM/yyyy HH:mm" />
+                                    <ui:outputDateTime
+                                        value="{!lstBody.vlocity_cmt__CustomerInteractionId__r.LastModifiedDate}" />
+                                    <br />
+
+                                    <aura:if
+                                        isTrue="{!and(lstBody.vlocity_cmt__CustomerInteractionId__r.TypeInteractionGov__c != 'Redirecionamento da Reclamação', lstBody.vlocity_cmt__CustomerInteractionId__r.Attachment__c)}">
+                                        <lightning:button label="Anexos" class="slds-button slds-button_brand"
+                                            variant="brand" value="{!lstBody.Id}" onclick="{!c.openModal}" />
+                                    </aura:if>
+                                    <br /><br />
+                                </aura:if>
+                                <!-- ************************************************************** -->
+                                <!-- ***************** Listagem Interação INTERNA ***************** -->
+                                <!-- ************************************************************** -->
+                                <aura:if isTrue="{!v.filterInteraction == 'Interna'}">
+                                    <span class="topico">Data da Interação: </span>
+                                    <span class="dados" format="dd/MM/yyyy HH:mm" />
+                                    <ui:outputDateTime
+                                        value="{!lstBody.vlocity_cmt__CustomerInteractionId__r.vlocity_cmt__StartDateTime__c}" />
+                                    <br />
+
+                                    <span class="topico">Criado por: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.Owner.Name}</span><br />
+
+                                    <span class="topico">Tipo da Interação: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.TypeInteractionGov__c}</span><br />
+
+                                    <span class="topico">Status: </span>
+                                    <span
+                                        class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.vlocity_cmt__Status__c}</span><br />
+
+                                    <aura:if
+                                        isTrue="{!lstBody.vlocity_cmt__CustomerInteractionId__r.TypeInteractionGov__c == 'Tentativa de Contato'}">
+                                        <aura:if
+                                            isTrue="{!lstBody.vlocity_cmt__CustomerInteractionId__r.ContactEmail__c != NULL}">
+                                            <span class="topico">E-mail para contato: </span>
+                                            <span
+                                                class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.ContactEmail__c}</span><br />
+                                        </aura:if>
+                                        <aura:if
+                                            isTrue="{!lstBody.vlocity_cmt__CustomerInteractionId__r.ContactPhone__c != NULL}">
+                                            <span class="topico">Telefone para contato: </span>
+                                            <span
+                                                class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.ContactPhone__c}</span><br />
+                                        </aura:if>
+                                    </aura:if>
+
+                                    <span class="topico">Interação: </span>
+                                    <span class="dados">{!lstBody.vlocity_cmt__CustomerInteractionId__r.Description__c
+                                        }</span><br />
+
+                                    <br /><br />
+                                </aura:if>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </aura:iteration>
+        </aura:if>
+
+        <!-- ************************************************************** -->
+        <!-- *************** Modal de visualização de anexo *************** -->
+        <!-- ************************************************************** -->
+        <aura:if isTrue="{!v.isOpenModal}">
+            <div role="dialog" tabindex="-1" aria-labelledby="header99" aura:id="Modalbox"
+                class="slds-modal slds-modal--medium slds-fade-in-open">
+                <aura:if isTrue="{!v.Spinner}">
+                    <div aura:id="spinnerId" class="slds-spinner_container">
+                        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative"
+                            role="alert">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <button class="slds-button slds-button--icon-inverse slds-modal__close"
+                            onclick="{!c.closeModal}">
+                            <lightning:icon iconName="utility:close" size="medium" variant="bare" />
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Anexo</h2>
+                    </div>
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <aura:if isTrue="{!v.lLstDocument.length > 0}">
+                            <div class="slds-grid slds-grid--vertical slds-navigation-list--vertical">
+                                <ul class="uiAbstractList">
+                                    <aura:iteration items="{!v.lLstDocument}" var="documentLst">
+                                        <!--<img src="{!'/servlet/servlet.FileDownload?file=' + documentLst.ContentDocumentId}" width="200" height="200"/>-->
+                                        <li class=" forceContentVirtualRelatedListStencil forceRecordLayout">
+
+                                            <div
+                                                class="slds-show_inline-block slds-float_left slds-align-middle thumbnailImg medium">
+                                                <div class="forceContentContentThumbnail">
+                                                    <div class="thumbnailContainer">
+                                                        <a
+                                                            href="{!v.urlDonwload + documentLst.ContentDocument.LatestPublishedVersionId}">
+                                                            <img src="{!v.prefixURL + documentLst.ContentDocument.LatestPublishedVersionId}"
+                                                                class="thumbnailImg medium" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="slds-show_inline-block slds-float_left slds-p-left--x-small slds-truncate slds-m-right_x-small">
+                                                <span
+                                                    class="itemTitle slds-text-color--default slds-text-body--regulardesktop uiOutputText"
+                                                    title="">{!documentLst.ContentDocument.Title}</span>
+                                                <p
+                                                    class="slds-m-around--none secondaryFields slds-text-body--small slds-truncate">
+                                                    <span class="dados" format="dd/MM/yyyy HH:mm">
+                                                        <ui:outputDateTime
+                                                            value="{!documentLst.ContentDocument.CreatedDate}" />
+                                                    </span>
+                                                    <span class="itemLabel slds-truncate uiOutputText">
+                                                        - {!documentLst.ContentDocument.FileExtension}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </aura:iteration>
+                                </ul>
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>
+        </aura:if>
+    </div>
+</aura:component>

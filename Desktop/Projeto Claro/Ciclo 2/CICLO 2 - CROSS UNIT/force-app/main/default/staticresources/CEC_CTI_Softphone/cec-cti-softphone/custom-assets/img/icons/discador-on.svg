@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="29" viewBox="0 0 29 29">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="29" height="29" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="discador-on" clip-path="url(#clip-path)">
+    <g id="transferir-on" transform="translate(-151 -450)">
+      <path id="Caminho_96" data-name="Caminho 96" d="M341.153,404.388a14.5,14.5,0,1,0,14.5,14.5A14.5,14.5,0,0,0,341.153,404.388Zm0,27.984a13.484,13.484,0,1,1,13.484-13.484A13.484,13.484,0,0,1,341.153,432.372Z" transform="translate(-175.653 45.612)" fill="#acacac"/>
+    </g>
+    <g id="Grupo_300" data-name="Grupo 300" transform="translate(0 0.294)">
+      <g id="Grupo_289" data-name="Grupo 289" transform="translate(-58 -451.294)">
+        <circle id="Elipse_193" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_294" data-name="Grupo 294" transform="translate(-58 -446.294)">
+        <circle id="Elipse_193-2" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_297" data-name="Grupo 297" transform="translate(-58 -441.294)">
+        <circle id="Elipse_193-3" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_290" data-name="Grupo 290" transform="translate(-63 -451.294)">
+        <circle id="Elipse_193-4" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_293" data-name="Grupo 293" transform="translate(-63 -446.294)">
+        <circle id="Elipse_193-5" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_296" data-name="Grupo 296" transform="translate(-63 -441.294)">
+        <circle id="Elipse_193-6" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_299" data-name="Grupo 299" transform="translate(-63 -436.294)">
+        <circle id="Elipse_193-7" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_291" data-name="Grupo 291" transform="translate(-69 -451.294)">
+        <circle id="Elipse_193-8" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_292" data-name="Grupo 292" transform="translate(-69 -446.294)">
+        <circle id="Elipse_193-9" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+      <g id="Grupo_295" data-name="Grupo 295" transform="translate(-69 -441.294)">
+        <circle id="Elipse_193-10" data-name="Elipse 193" cx="2" cy="2" r="2" transform="translate(76 457)" fill="#da291c"/>
+      </g>
+    </g>
+  </g>
+</svg>

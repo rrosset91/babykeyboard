@@ -1,0 +1,73 @@
+<apex:page >
+    <apex:includeScript value="/support/console/46.0/integration.js"/>
+    <apex:includeLightning />
+    <div id="associacaoAparelho"></div>
+    <script>
+    var callCloseTab = function callCloseTab(result) {
+        //alert('Closing current tab. Id: ' + result.id);
+        sforce.console.closeTab(result.id);
+    }        
+    function closeTab(value) {
+        if (value == "true") {
+            setTimeout(function() {
+                sforce.console.getEnclosingTabId(callCloseTab);
+            }, 1000);
+        }
+        else {
+            console.log("Tab wont close because value returned isn't >true< | value: " + value);
+        }
+    }
+    
+    function closeTabHandler(event) {
+        var eventValue = event.getParam('data');
+        if (eventValue.type == "closeTab") {
+            if (eventValue.value == "true") {
+                setTimeout(function() {
+                    sforce.console.closeTab(eventValue.id);
+                }, 1000); // Atraso de 1000ms para não ocorrer impactos na experiência do usuário
+            }
+        }
+        else {
+            if (eventValue.type == "openTab") {
+                openTab(eventValue.id, eventValue.value);
+            }
+        }
+        
+    }
+    
+    function openNewTabHandler(event) {
+        var eventValue = event.getParam('data');
+        if (eventValue == "true" || eventValue == "false") {
+            return;
+        }
+        openTab(null, eventValue);
+    }
+    
+    function openTab(id, url) {
+    	sforce.console.openPrimaryTab(id, url, true);
+    }
+    
+    
+    //document.getElementById("closetabvalue").addEventListener("click", displayDate);
+    window.onload = function() {
+        $Lightning.use("c:CEC_PME_FinalizarPedidoApp", function() {
+            $Lightning.createComponent("c:CEC_PME_FinalizarPedido",
+                                       {},
+                                       "associacaoAparelho",
+                                       function(cmp) {
+                                           console.log('>>>>> App is hosted');
+                                           $A.eventService.addHandler({"event": "c:CEC_PME_CloseConsoleTabExternalEvent",
+                                                                       "handler" : closeTabHandler });
+                                           //$A.eventService.addHandler({"event": "c:CEC_PME_CloseConsoleTabExternalEvent",
+                                           //                            "handler" : openNewTabHandler });
+                                           var getThisTabId = function getThisTabId(result) {
+                                               //alert('Closing current tab. Id: ' + result.id);
+                                               cmp.set("v.cTabId", result.id);
+                                               console.log("cTabId >> " + result.id);
+                                           }  
+                                           sforce.console.getEnclosingTabId(getThisTabId);
+                                       });
+        });
+    }
+    </script>
+</apex:page>

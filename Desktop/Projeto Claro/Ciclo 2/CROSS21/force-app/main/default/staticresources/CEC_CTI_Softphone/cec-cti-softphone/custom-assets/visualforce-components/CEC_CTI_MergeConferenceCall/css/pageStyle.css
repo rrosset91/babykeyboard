@@ -1,0 +1,15 @@
+.in-attendance.merge {
+    padding-top:20px;
+} 
+
+.in-attendance.merge .img-merge img {
+    width: 23%;
+}
+
+.call-duration-text.conference{
+    padding-bottom: 0px !important;         
+}
+
+.customer-wait-count.conference{
+    margin-top: -1px;
+}

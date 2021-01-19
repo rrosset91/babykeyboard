@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <lightning:button label="Criar Caso" variant="brand" onclick="{!c.createCase}"/>
+</aura:component>

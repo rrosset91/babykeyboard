@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29">
+  <g id="agenda-search" transform="translate(-274 -293)">
+    <rect id="Retângulo_8" data-name="Retângulo 8" width="29" height="29" rx="4" transform="translate(274 293)" fill="#da291c"/>
+    <g id="lupa-com-seta-de-navegacao" transform="translate(279.665 298.971)">
+      <g id="Grupo_43" data-name="Grupo 43">
+        <path id="Caminho_74" data-name="Caminho 74" d="M15.6,12.256A7.181,7.181,0,0,0,5.443,2.1a7.042,7.042,0,0,0-1.08,8.667.3.3,0,0,1-.042.36L.657,14.791a1.673,1.673,0,0,0-.256,2.4l.111.111a1.673,1.673,0,0,0,2.4-.256l3.656-3.656a.307.307,0,0,1,.368-.049A7.042,7.042,0,0,0,15.6,12.256ZM6.769,10.93a5.306,5.306,0,1,1,7.5,0A5.312,5.312,0,0,1,6.769,10.93Z" transform="translate(-0.001 0)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

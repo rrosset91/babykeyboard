@@ -1,0 +1,1831 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+    <div class="scroll-wrapper">
+    <div class="vlocity via-slds" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="JourneyOS" >
+        <vlocity_cmt:BusinessProcessComponent strOmniScriptType="PME"
+            strOmniScriptSubType="JourneyOS"
+            strOmniScriptLang="Portuguese (Brazil)"
+            previewMode="{!$CurrentPage.parameters.previewEmbedded}"
+            verticalMode="{!$CurrentPage.parameters.verticalMode}"
+            strOmniScriptId="{!$CurrentPage.parameters.designerPreviewId}"
+            scriptLayout="lightning"
+            />
+        <script type="text/javascript">
+            var modules = ['vlocity-business-process'];
+            var myModule = angular.module('JourneyOS', modules);
+        </script>
+        
+         <script type="text/javascript">
+var onResize = function(){
+ console.log('resize');
+}
+
+window.addEventListener('resize',onResize);
+        </script>
+<script type="text/ng-template" id="bpTree.html">
+         <div class="slds-col slds-clearfix lucastest" ng-if="children && children.length>0" style="background-color: #e7e7e7;"
+             
+             <auto-saveforlater-msg></auto-saveforlater-msg>
+             <vlc-slds-right-panel></vlc-slds-right-panel>
+             <div>
+             <div class="vlc-slds-bpTree-step-chart__container testValerio2">
+                 <bptree class="pme-content slds-clearfix"></bptree>
+                 <sidebar class="slds-col--padded slds-cleafix lucastest2"></sidebar>
+             </div>
+             
+             </div>
+         </div>
+      </script>
+      
+      
+      <script type="text/ng-template" id="vlcAlertModal.html">
+         <div role="dialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt via-slds via-omni">
+  <div id="alert-container" class="slds-modal__container">
+    <div class="slds-modal__header slds-theme--info slds-theme--alert-texture" ng-class="{'slds-theme--error':error,'slds-theme--warning':warning}">
+      <h2 class="slds-text-heading--medium" id="prompt-heading-id">{{::title}}</h2>
+    </div>
+    <div class="slds-modal__content slds-p-around--medium">
+      <p>{{::content.replace('Error:','')}}</p>
+      <input ng-model='input'
+             type='text'
+             name='loopname'
+             class='slds-input'
+             ng-if="alertType !== undefined && alertType == 'Prompt'"/>
+    </div>
+    <div class="slds-modal__footer slds-theme--default">
+      <button id="alert-cancel-button" class="slds-button slds-button--neutral" ng-if="alertType !== undefined && alertType != 'Alert'" ng-click="cancel()">{{::cancelLabel}}</button>
+      <button id="alert-ok-button" class="slds-button slds-button--neutral" ng-click="submit(input)">{{::submitLabel}}</button>
+    </div>
+  </div>
+</div>
+      </script>
+      
+      
+      <script type="text/ng-template" id="bpTreePreview">
+         <div id='debug-panel' class='panel panel-default'
+         ng-if="!isPreviewEmbedded">
+             <div class='panel-heading' ng-click='showDebugTabs = !showDebugTabs' style='padding:0;'>
+                 <h5 class='pull-left'>Troubleshooting </h5>
+                 <span class='pull-right' ng-class='{"icon-v-up-caret": showDebugTabs, "icon-v-down-caret": !showDebugTabs}'>
+                 </span>
+             </div>
+             <div class='row' style='background-color: #969696; margin: 0;'>
+                 <ul id='debug-tabs' ng-show='showDebugTabs'>
+                     <li ng-repeat="tab in tabs"  ng-class="{active: isActiveTab(tab.page)}" ng-click="onClickTab(tab, $event);">{{tab.title}}</li>
+                 </ul>
+             </div>
+             <div id="mainView" ng-class='{collapse: !showDebugTabs}'>
+                 <div class='panel-body' style='height: 200px; overflow: auto;' ng-include="currentTab"></div>
+             </div>
+         </div>
+         
+         <div class="slds-col slds-clearfix" ng-if="children && children.length>0">
+             <sidebar class="slds-col--padded slds-cleafix"></sidebar>
+             <auto-saveforlater-msg></auto-saveforlater-msg>
+             <div class="vlc-slds-bpTree-step-chart__container testValerio">
+                 <!-- step chart for lightning this is the stepchar -->
+                 <bptree class="slds-clearfix"></bptree>
+                 <vlc-slds-right-panel></vlc-slds-right-panel>
+             </div>
+         </div>
+      </script>
+      <script type="text/ng-template" id="vlcSldsRightPanel.html">
+         <div class="pmeTest" ng-if="::!bpTree.propSetMap.hideStepChart">
+
+            <div vlc-slds-step-chart map="StepChart"></div>
+        
+            <!-- knowledge component will go here -->
+            <ng-include ng-repeat="vlcPC in ::bpTree.propSetMap.persistentComponent"
+                        ng-if='bpTree.showPCNew[vlcPC.pcIndex] && ($index === 1 )'
+                        id='{{::vlcPC.id}}'
+                        knowledge="true"
+                        src="::bpTree.dfHPSTmpl[vlcPC.pcIndex]"/>
+        </div>
+        
+      </script>
+      
+      <script type="text/ng-template" id="vlcStepChart.html">
+           <div class="vlc-slds-wizard pmeStepChart" role="navigation" vlc-slds-toggle-element="test">
+        
+            
+        
+            <label class="slds-form-element__label vlc-slds-step-chart--title">
+                {{::customLabels.OmniStepChartDesc}}
+            </label>
+        
+        
+            <!-- this banner is the header  in mobile -->
+            <vlc-slds-banner src="vlcSldsHeadingBanner.html"></vlc-slds-banner>
+        
+            <ol>
+                <li ng-repeat="step in ::children"
+                    ng-if="step.type === 'Step' && step.show"
+                    class="list-group-item"
+                    state="{{step.bAccordionActive}}"
+                    vlc-slds-expand="test"
+                    ng-click="sidebarNav(step)"
+                    vlc-slds-step-styler>
+                    <span class="slds-form-element__label">
+                      {{::step.propSetMap.label}}
+                    </span>
+                </li>
+                
+            </ol>
+            <div class="vlc-slds-container--grippy">
+                <span class="vlc-slds--grippy" vlc-slds-expand="test" style="width:calc(100% - 60px);padding-right: 15px;">
+                <div class="block-logo"><img src="/resource/cec_pme_image/icones/logo-claro-400x80.png" class="logo-mobile"></div>
+                <div class="block-passos">
+                    <img src="/resource/cec_pme_image/icones/steps.png">
+                </div>
+                </span>
+                <div class="icon-closecart">
+                    <a onclick="Mudarestado('vlcCart')"><img src="/resource/cec_pme_image/icones/cart-icon.png">
+                </div>
+            </div>
+        </div>
+
+        <vlc-slds-instruction></vlc-slds-instruction>
+        
+      </script>
+<script>
+function Mudarestado(el) {
+  var display = document.getElementById(el).style.display;
+  if (display == "none")
+    document.getElementById(el).style.display = 'block';
+  else
+    document.getElementById(el).style.display = 'none';
+}
+</script>
+</div>
+</div>
+<style>
+/* resset */ 
+* {text-decoration: none;}
+img {border: 0;}
+a {color: #1f577b;}
+a:hover {text-decoration: none !important;}
+div {display: block;width: 100%;}
+div {outline: none;}
+
+.slds-modal--shown, .nds-modal--shown {overflow: auto !important;}
+.scroll-wrapper {
+    -webkit-overflow-scrolling: touch;
+    height:auto; /* change 100vh important:  dimensions or positioning here! */
+
+}
+.via-slds .slds-select {border:solid 1px #b3b4b4;}
+
+@media (min-width: 767px) {
+.scroll-wrapper {
+    -webkit-overflow-scrolling: touch;
+    height:auto; /* change 100vh important:  dimensions or positioning here! */
+}
+}
+div[title="Limpar"] {background: #999999 !important;height: 34px;line-height: 0px !important;padding: 0px !important;margin: 0px !important;height: 34px !important;width: 120px;text-align: center;padding-left: 15px !important;padding-right: 15px !important;cursor: pointer;}
+iframe#iFrameResizer0 {z-index: 999;top: -10px;position: absolute;width: calc(100% + 15px);left: -10px;margin-right: -10px;}
+header.flexipageHeader.slds-page-header.uiBlock.oneAnchorHeader {display: none !important;}
+.oneFlexipage header {display: none;}
+.oneFlexipage.flexipageHeader {display: none !important;}
+div#brandBand_1 {padding: 0px;}
+
+@media (min-width:50em) {
+/* steps */    
+.via-slds.via-omni .vlc-slds-wizard:before {background: #ffffff !important;}
+.via-slds.via-omni form[stepForm] {min-height: fit-content;padding-right: 0px !important;margin-top:-19px;background: transparent;}
+form#a2I2C000000HR5VUAW-1 {background: #fff;border-right: 0px;}
+.vlc-slds-wizard.pmeStepChart.ng-scope.ng-isolate-scope {background: #ffffff;padding: 0px 10px;}
+.vlc-slds-bpTree-step-chart__container.testValerio2 {margin-bottom: 0px !important;}
+.slds-col.slds-clearfix {background-color: #e7e7e7;}
+.slds-card__header.slds-grid {display: none !important;}
+.slds-media__body {display: none;}
+.itemopacity7 {opacity : 1 !important;}
+span.slds-form-element__label.ng-binding {margin-left: .75rem;}
+span.slds-card__header-title.slds-truncate {display: none !important;color: #fff;}
+label.slds-form-element__label.vlc-slds-step-chart--title.ng-binding.ng-scope {display:none !important;}
+section.slds-page-header.vlc-slds-page--header {display: none !important;}
+select, input {font-size: 12px !important;}
+
+bpTree {width: 100%;}
+ol.ng-scope {display: flex !important;width: 100% !important;}
+.active, .accordion:active {width: auto !important;}
+li.list-group-item {background: url('/resource/cec_pme_image/icones/point-off.png') top center;background-repeat: no-repeat;}
+li.list-group-item.ng-scope {background: url('/resource/cec_pme_image/icones/point-off.png') top center;background-repeat: no-repeat;}
+li.list-group-item.ng-scope:first-child {background: url('/resource/cec_pme_image/icones/ponto-off-first.png') top center;background-repeat: no-repeat;margin-left: -18px;padding-left: 0px!Important;}
+li.list-group-item.ng-scope:last-child {background: url('/resource/cec_pme_image/icones/ponto-off-last.png') top center;background-repeat: no-repeat;}
+li.list-group-item.ng-scope.active {background: url('/resource/cec_pme_image/icones/ponto-on.png') top center;background-repeat: no-repeat;}
+li.list-group-item.ng-scope.active:first-child {background: url('/resource/cec_pme_image/icones/ponto-on-first.png') top center;background-repeat: no-repeat;width: 160px;width: 138px;margin-left: -18px;padding-left: 0px!Important;}
+li.list-group-item.ng-scope.active:last-child {background: url('/resource/cec_pme_image/icones/ponto-on-last.png') top center;background-repeat: no-repeat;}
+li.list-group-item.ng-scope.completed.active:active {outline: none;}
+li.list-group-item {outline: none;text-align: center;}
+}
+/* endereco*/
+div#PME_PreTransformDataCNPJ {border: solid 1px #999999 !important;}
+div#PME_PreTransformDataCNPJ:hover {border: solid 1px #009DE3 !important;background-color: #009DE3 !important;}
+input#name, input#PME_AC_ContactLastName, input#PME_AC_ContactName, input#ContactFirstName, input#NumberMainAddress, input#ComplementMainAddress, input#NumberBillingAddress, input#ComplementBillingAddress, input#BillingAddress_City, input#PME_AC_ContactLastName, input#TypeStreetMainAddress_RO, input#AddressMain_RO, input#NumberMainAddress_RO, input#ComplementMainAddress_RO, input#NeighborhoodMainAddress_RO, input#ShippingAddress_City_RO, input#ShippingAddress_State_RO, input#NeighborhoodMainAddress, input#ShippingAddress_City, input#AddressBilling, input#NeighborhoodBillingAddress, input#AddressMain {border-bottom: solid 1px #b3b4b4 !important;}
+tr.slds-text-title_caps.slds-text-heading--label {background: #e6e6e6;color: #434444;}
+table.slds-table.slds-table--bordered.slds-table--cell-buffer.slds-max-medium-table--stacked-horizontal.vlc-slds-table.ng-scope {width: calc(100% - 15px);margin-top: 10px;}
+.via-slds.via-omni table.slds-table--bordered th {border-top: 1px solid #d8dde6 !important;}
+.via-slds.via-omni .slds-icon:hover {fill: #ffffff;}
+div#VIP_PopulateRecipient, div#SearCEPBillingAddress, div#SearchCEPMainAddress {width: 120px;background: #706e6b;margin-top: 22px !important;border:solid 1px #706e6b !important;}
+div#VIP_PopulateRecipient:hover, div#SearCEPBillingAddress:hover, div#SearchCEPMainAddress:hover {background: #009de3;border:solid 1px #009de3 !important;}
+ng-form#CorreiosLink div p {border-bottom: solid 1px #b3b4b4 !important;width: 100%;}
+ng-form#CorreiosLink div p:first-child {border: 0px !important;font-weight: 400;}
+ng-form#CorreiosLink a {color:#1f577b;font-size: 12px;font-weight: 500;}
+span.slds-form-element__label.ng-binding {font-weight: 400 !important;}
+ng-form#ShippingContactsInfo div p {border-bottom: solid 1px #b3b4b4 !important;width: 100%;}
+ng-form#ShippingContactsInfo div p:first-child {border: 0px !important;font-weight: 400;margin-bottom: 0px;font-size: 13px;}
+.vlc-slds-edit-block__label.ng-binding {display: none;}
+ng-form#ShippingContactsInfo h6 {font-size: 13px;border-bottom: solid 1px #b3b4b4;line-height: 32px;color: #1f577b;}
+ng-form#CEPSearchMainAddress child:first-child {min-width: 190px !important;width: 190px !important;}
+ng-form#CEPSearchBillingAddress child:first-child {min-width: 190px !important;width: 190px !important;}
+label.slds-form-element__label.ng-binding.ng-scope {padding-top: 5px;}
+
+label[for="CPFConsulted"] {display: none !important;}
+input#CPFConsulted {display: none !important;}
+input#CPF {min-width: 160px;}
+ng-form#ContactInfo child:nth-child(12) {min-width: 300px;}
+ng-form#PME_CR_TextBlockBankDetails {border-bottom: solid 1px #b3b4b4;margin-right: 10px !important;width: calc(100% - 15px);margin-bottom: 10px !important;}
+ng-form#PME_CR_TextBlockBankDetails p {font-weight: bold;line-height: 27px;padding-right: 15px;font-size: 16px !important;margin-top: 14px;}
+.ng-scope div child span.ng-binding.ng-scope {white-space: initial;}
+.via-slds .slds-truncate {white-space: initial !important;}
+div#VIP_GetContact_ByCPF {width: 120px;background: #706e6b;margin-top: 22px;border:solid 1px #706e6b !important;}
+div#VIP_GetContact_ByCPF:hover {background: #009DE3;border:solid 1px #009DE3 !important;}
+label[for="CPFConsulted"] {font-size: 16px !important;margin-left: -9px !important;}
+input#ContactBirthdate {border-radius: 4px !important;border: solid 1px #b3b4b4 !important;padding-left: 10px !important;height: 36px !important;}
+.slds-shrink-none.nds-shrink-none {width: 100px;}
+.via-slds .slds-datepicker td.slds-is-selected:not(.slds-disabled-text)>.slds-day {background: #009DE3 !important;}
+div#VIP_AddContactToRecipient {border: 0px !important;margin: 0 auto;border-top: solid 1px #b3b4b4 !important;background: transparent;margin-bottom: 10px;}
+div#VIP_AddContactToRecipient p {width: 120px !important;margin-top: 10px !important;background: #706e6b;border-radius: 3px;}
+div#VIP_AddContactToRecipient p:hover {background: #009de3 !important;}
+input#ContactMobilePhone, input#ContactFirstName, input#ContactFirstName, input#ContactPhone, input#ContactEmail {border-bottom: solid 1px #b3b4b4 !important;}
+.slds-datepicker__filter--month.slds-grid.slds-grid--align-spread.slds-grow.nds-datepicker__filter--month.nds-grid.nds-grid--align-spread.nds-grow .slds-align-middle.nds-align-middle {width: 32px;}
+label.slds-form__element__label.ng-binding.text-blocked {color: #928f8f !important;}
+label.slds-form__element__label.ng-binding.price-blocked {color: #928f8f !important;}
+label.slds-form__element__label.ng-binding.text-selected-franquia {color: #ffffff !important;}
+label.slds-form__element__label.ng-binding.price-selected-franquia {color: #ffffff !important;   }
+div#border-blocked {background: #ecebea !important;}
+div#border-blocked span {color: #b0adab !important;}
+ng-form#check-type-client div label.slds-checkbox {padding-top: 0px !important;margin-top: -15px !important;}
+.border-blocked div {background: #ecebea !important;}
+#border-blocked div {background: #ecebea !important;}
+label.slds-form__element__label.ng-binding.border-blocked {color: #b0adab !important;}
+label #border-blocked {color: #b0adab !important;}
+.border-selected-franquia {background: #009DE3 !important;}
+#border-selected-franquia {background: #009DE3 !important;}
+label.slds-form__element__label.ng-binding.border-selected-franquia {color: #fff !important;}
+label #border-selected-franquia {color: #ffffff !important;}
+ng-form#Links label {display: none;}
+label[for="RecipientPhone1"], label[for="RecipientMobilePhone1"], label[for="RecipientRG1"], label[for="RecipientFullName1"] {font-size: 13px !important;font-family: 'Salesforce Sans' !important;margin-left: -11px;transform: none !important;top: 0px !important;}
+input#RecipientFullName1, input#RecipientMobilePhone1, input#RecipientRG1, input#RecipientPhone1 {margin-top: 15px;}
+a.ng-scope {width: 15px !important;height: 15px !important;font-size: 8px !important;line-height: 16px !important;}
+div .slds-box.no-border.vlc-slds-item--image {padding: 0px !important;width: 135px !important;}
+div#ProductGroup .item-block.slds-size--5-of-12.slds-medium-size--5-of-12.vlc-slds-item--details {width: 140px !important;}
+div#ProductPrice {width: calc(100% - 146px) !important;}
+span#DeviceColor {font-size: 13px !important;font-weight: 400;float: left;}
+.via-slds .slds-button {border: solid 1px #b3b4b4 !important;}
+.via-slds .slds-button:hover {border: solid 1px #009de3 !important;background: #009de3 !important;color: #fff !important;}
+div#ProductGroup {width: 33%;min-width: 370px;margin-right: 3px;padding-right: 10px;}
+.via-slds.via-omni .vlc-slds-remote-action--button .vlc-control-wrapper .slds-box {background: #1f577b;border:solid 1px #1f577b !important;padding: 0px;margin-top: 5px;}
+.via-slds.via-omni .vlc-slds-radio-control div[horizontalmode=true]>label.slds-radio {display: flex;}
+td.qtty div div input {text-align: right !important;}
+td..qtty {width: 100px;}
+td.qtty input {border: solid 1px #b3b4b4 !important;border-radius: 3px !important;}
+.qtty.number {font-weight: bold;color: #009DE3;}
+div#ProductName label {font-size: 16px;font-weight: 300 !important;}
+ng-form#PME_Plan_SelItem ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope .vlc-slds-items--container.ng-scope .slds-grid--vertical.slds-box {height: 343px;}
+label#radio-PME_AddNewFranquia_Radio {font-size: 16px !important;color: #009de3 !important;font-weight: 400 !important;}
+.via-slds .slds-notify {background: #E8EEF1!important;padding: 5px;margin-bottom: 10px;}
+.via-slds.via-omni span.slds-icon_container {background: transparent;color: #434444 !important;}
+ng-form#BlockAparelhos child:nth-child(2) {z-index: 10;}
+ng-form#BlockAparelhos child:nth-child(3) {z-index: 9;}
+ng-form#BlockAparelhos child:nth-child(4) {z-index: 8;}
+input#Brand {text-transform: uppercase;}
+input#Model {text-transform: uppercase;}
+input#Color {text-transform: uppercase;}
+
+/*pedido*/
+ng-form#BillingAddressTitle div {border-bottom: solid 1px #b3b4b4;margin-top: 15px;}
+ng-form#ContactsRecipientsTitle div {border-bottom: solid 1px #b3b4b4;margin-top: 15px;}
+ng-form#BillingAddressTitle label {display: none;}
+ng-form#ContactsRecipientsTitle label {display: none;}
+ng-form#ContactsRecipientsTitle p p {font-size: 16px;font-weight: bold;padding-right: 15px;line-height: 18px;}
+ng-form#BillingAddressTitle p p {font-size: 16px;font-weight: bold;padding-right: 15px;line-height: 18px;}
+span.links-uteis-title {font-size: 14px;font-weight: 400;}
+td[data-label="Telefone"] span {width: 102px !important;display: block;}
+p.ng-binding p.legenda-links-uteis-pme {font-size: 12px !important;line-height: 22px !important;border-bottom: solid 0px #fff!important;color: #434444 !important;font-weight: normal!important;display: block;border-bottom: solid 1px #b3b4b4 !important;width: 100%;margin-bottom: 15px;}
+span[for="IsMunicipalSubscriptionFree"] {padding-left: 0px !important;margin-left: 0px !important;padding-right: 0px !important;margin-right: 0px !important;}
+span[for="IsStateSubscriptionFree"] {padding-left: 0px !important;margin-left: 0px !important;padding-right: 0px !important;margin-right: 0px !important;}
+input#CNPJFormula, input#StateSubscriptionRO, input#MunicipalSubscriptionRO {border-bottom: solid 1px #b3b4b4 !important;}
+span.slds-checkbox--faux {margin-right: 0px !important;}
+ng-form#PME_AddNewFranquia_Radio div label {font-size: 14px !important;font-weight: bold !important;color: #009de3 !important;}
+.via-slds.via-omni label.vlc-slds-inline-control__label a[vlc-slds-tool-tip] {width: 20px;height: 20px;line-height: 20px;background: #1f577b;}
+p.passaporte-mundo {font-size: 12px;font-weight: normal;color: #434444;border-bottom: 0px !important;}
+p.ng-binding p.legenda-passaporte-mundo {font-size: 12px !important;line-height: 17px !important;border-bottom: solid 0px #fff!important;color: #434444 !important;font-weight: normal!important;display: block;padding-left: 10px !important;}
+ng-form#rules-service-plan p.ng-binding p.legenda-passaporte-mundo {padding-left: 0px !important;}
+ng-form#FranquiaLimitText p p {border-bottom: 0px !important;font-weight: normal;color: #009de3;padding-left: 7px;}
+ng-form#BlockAparelhos child:nth-child(2) {width: 230px;margin-right: 10px;}
+ng-form#BlockAparelhos child:nth-child(3) {margin-right: 15px;}
+ng-form#BlockAparelhos child:nth-child(4) {width: 180px;margin-right: 15px;}
+ng-form#PlanoRepeatableBlock child:nth-child(1) {width: calc(25% - 15px) !important;margin-right: 10px;margin-left: 5px;}
+ng-form#PlanoRepeatableBlock child:nth-child(2) {width: calc(25% - 10px) !important;margin-right: 10px;}
+ng-form#PlanoRepeatableBlock child:nth-child(4) {width: calc(25% - 10px) !important;margin-right: 10px;}
+ng-form#PlanoRepeatableBlock child:nth-child(5) {width: 25% !important;margin-right: 0px !important;}
+
+
+a.points-top {height: 26px;}
+
+input#Brand, input#Model, input#Color {border: solid 1px #b3b4b4 !important;border-radius: 4px !important;height: 34px !important;font-size: 12px !important;padding: 0px 10px !important;cursor:default;}
+.via-slds.via-omni .vlc-slds-type-ahead .slds-form-element__control.vlc-slds-type-ahead--alttemplate_label svg {top: 48px;height: 12px;right: 0px;} /* setas de aparelhos */
+.slds-modal__header.slds-theme--info.slds-theme--alert-texture.slds-theme--error {background: #d52b1e !important;}
+.via-slds.via-omni .slds-col--padded.slds-size--1-of-1.alt-vlc-slds--control ng-form.ng-valid.ng-dirty span.vlc-asterix.icon-v-asterix:before {color: #009de3;}
+.via-slds.via-omni span.vlc-asterix.icon-v-asterix:before {color: #d52b1e;}
+
+ng-form#FranquiaHelpMessageText p {font-size: 13px !important;color: #434444;font-weight: normal;}
+ng-form#FranquiaLimitTextp p p {border-bottom: 1px solid #b3b4b4!important;width: 100%;margin-bottom: 15px;font-size: 13px;color: #434444;font-weight: normal;}
+.via-slds .slds-radio .slds-radio--faux {border: solid 1px #b3b4b4 !important;}
+span.slds-form-element__label.ng-binding.ng-scope {color: #434444 !important;font-weight: normal !important;font-size: 13px;}
+ng-form#TextBlock5 {color: #434444 !important;font-weight: normal !important;font-size: 13px;}
+p.ng-binding p {border-bottom: 0px !important;}
+label.slds-form-element__label.ng-binding.ng-scope {font-size: 13px !important;}
+.slds-notify.slds-notify_alert.slds-theme_alert-texture.slds-theme_info.slds-m-top_small.ng-binding.ng-scope {background: #efefef;color: #434444;font-size: 13px;margin: 10px 0px;padding: 10px;}
+.slds-notify.slds-notify_alert.slds-theme_alert-texture.slds-theme_info.slds-m-top_small.ng-binding.ng-scope span:first-child {display: none;}
+.via-slds.via-omni .dropdown-menu li a{font-size:12px !important;padding: 3px 0px;}
+.via-slds.via-omni .dropdown-menu li:hover {background: #efefef;}
+ng-form[id^="PossuiAparelhos"] {width: 200px;}
+label[for="PlugLines"] {white-space: nowrap;}
+label[for="LinesQtty"] {white-space: nowrap;}
+.via-slds.via-omni label.vlc-slds-inline-control__label {font-size: 12px !important;}
+.via-slds.via-omni .vlc-slds-error-block, .via-slds.via-omni .vlc-sub-block {color: #d52b1e;}
+
+ng-form {padding-bottom:0px}
+.via-slds.via-omni .vlc-slds-control-action__container {display: none;}
+.via-slds.via-omni .vlc-slds-error-block, .via-slds.via-omni .vlc-sub-block {display: inline-block;}
+label.slds-form-element__label.ng-binding.ng-scope {color: #434444 !important;}
+label.slds-form-element__label.ng-binding {color: #434444 !important;font-weight: normal !important;}
+label.slds-form__element__label.ng-binding {color: #434444 !important;font-weight: normal !important;}
+span.slds-form-element__label {color: #434444;}
+.via-slds .slds-input {padding-left: 0px !important;}
+span.vlc-slds--grippy {width: -webkit-fill-available;padding-right: 1.3rem;outline: none;}
+ol.ng-scope {margin-right: 0.5rem;margin-left: 0.5rem;}
+li[state="true"] span {color: #1f577b !important;font-weight: 400 !important;}
+li[state="false"] span {color: #434444 !important;}
+.vlc-slds-container--grippy.ng-scope {width: 100%;right: 15px;left: 15px;}
+.slds-size--11-of-12.vlc-slds-flex-grow.vlc-slds-underline--gradient {display: none;}
+.block-logo {float: left;display: inline-block;margin-left: -7px;width: 200px;}
+.block-logo img {width: 200px;height: 40px;}
+.block-passos {float: right;display: inline-block;height: 40px;line-height: 40px;width: 40px;margin-right: 0px;text-align: right;}
+.block-passos div:nth-child(1) {width: 40px;}
+.block-dados {display: inline-block;float: left;width: auto;}
+.tit-passos {font-size: 16px;font-weight: bold;color: #b31e13;padding-right: 10px;padding-left: 10px;}
+.vlc-slds-wizard.pmeStepChart.ng-scope.ng-isolate-scope.expand {background: #ffffff;}
+.via-slds {background:#ffffff !important;}
+.slds-col.slds-clearfix.lucastest.ng-scope {background: #ffffff !important;}
+.via-slds .slds-theme--error {background-color: #880cc9;}
+.via-slds.via-omni .slds-input, .via-slds.via-omni .slds-select[vlc-slds-val-checker] {min-height: auto !important;height: auto  !important;}
+.via-slds.via-omni .slds-form-element__control .vlc-control-wrapper {min-height: auto !important;}
+.slds-form-element__control.vlc-slds-checkbox {min-height: auto !important;}
+span.slds-form-element__label.ng-binding {font-size: 12px !important;}
+/*pesquisa cliente*/
+input {border: 0px !important;border-bottom: solid 1px #b3b4b4 !important;border-radius: 0px !important;font-size: 14px !important;color: #080707 !important;}
+input[type=text]{outline:none !important;box-shadow: none !important;}
+input[type=password]{outline:none !important;box-shadow: none !important;}
+div[ng-controller="planoDAController"] div {background: #efefef;}
+.img-plan {text-align: center;background: #ffffff !important;border-radius: 5px 5px 0px 0px;}
+div[ng-controller="planoDAController"] div.vlc-slds-items--container {width: 50% !important;float: left;}
+div[ng-controller="planoDAController"] label {font-size: 18px;font-weight: bold;margin-top: 10px;}
+div[ng-controller="planoDAController"] div.via-slds .slds-box {border-radius: 0px;}
+div[ng-controller="customOverrideController"] div.vlc-slds-items--container.item.ng-scope div {background: #ffffff;border-radius: 3px;padding: 3px 0px;}
+div[id^='item'] {width: auto;}
+div[ng-controller="customOverrideController"] div.vlc-slds-items--container.item.ng-scope {float: left;margin-right: 10px;height: 65px;}
+div#AddFranquia {background: #1f577b;width: fit-content;height: 34px;overflow: hidden;padding: 5px 14px;padding-top: 0px;line-height: 34px;min-height: inherit;margin-left: 4px;}
+div#AddServices {background: #1f577b;width: fit-content;height: 34px;overflow: hidden;padding: 5px 14px;padding-top: 0px;line-height: 34px;min-height: inherit;}
+div#AddSMS {background: #1f577b;width: fit-content;height: 34px;overflow: hidden;padding: 5px 14px;padding-top: 0px;line-height: 34px;min-height: inherit;}
+@-webkit-keyframes autofill {to {background: transparent;}}
+input:-webkit-autofill {-webkit-animation-name: autofill;-webkit-animation-fill-mode: both;}
+label.slds-form-element__label.ng-binding.ng-scope {color: #434444 !important;font-size: 12px important;font-weight: normal !important;}
+label[for].slds-form-element__label:first-child {color: #434444 !important;font-size: 12px important;font-weight: normal !important;}
+input#PME_CNPJ {width: 170px;}
+div#PME_CNPJ_Pesquisar {background: #1f577b !important;font-size: 13px !important;color: #ffffff !important;padding: 0px 15px !important;width: 120px!important;height: 34px;margin-bottom: 15px;}
+div#PME_CNPJ_Pesquisar:focus {outline: none;}
+.via-slds.via-omni .vlc-slds-remote-action--button .vlc-control-wrapper p {width: auto !important;white-space: normal !important;position: relative !important;left: auto !important;transform: none;font-size: 14px !important;line-height: 34px;height: 34px;margin: 0px auto!important;}
+.message.description.ng-binding.ng-scope {background: #fff;color: #009de3 !important;font-size: 13px;}
+.via-slds.via-omni div[msg=Requirement] {background: #fff;color: #009de3;font-size: 16px;}
+.vlc-slds-button--tertiary.ng-binding.ng-scope {display: none;}
+label.slds-form-element__label.slds-clearfix.ng-scope.clicked {display: none;}/*titulos*/
+label.slds-form-element__label.slds-clearfix.ng-scope.clicked svg {display: none;padding-left: 0px !important;}
+.via-slds.via-omni .vlc-slds-block label[vlc-slds-toggle=toggle]~div[vlc-slds-toggle-elem=visible] {padding-left: 0px !important;font-size: 12px !important;font-weight: normal !important;padding-top: 0px !important;color: #1f577b !important;}
+input#CNPJfromSearch, input#CommercialSegment {border-bottom: solid 1px #b3b4b4 !important;}
+.via-slds.via-omni .slds-input {color: #080707!important;}
+.imgItemContainer.ng-scope {background: #1f577b;height: 34px;line-height: 0px !important;padding: 0px !important;margin: 0px !important;height: 34px !important;width: auto !important;text-align: center;padding-left: 15px !important;padding-right: 15px !important;cursor: pointer;}
+span.imgItem.ng-binding.ng-scope {position: relative;font-size: 13px;color: #fff;transform: none;}
+ng-form.vlc-slds-radio-control, ng-form.vlc-slds-text-block {min-height: 34px;}
+.borderOverlay {display: none;}
+.via-slds.via-omni .slds-form-element .slds-checkbox [type=checkbox]~.slds-checkbox--faux_container .imgItemContainer .imgItem, .via-slds.via-omni .slds-form-element .slds-radio [type=radio]~.slds-radio--faux_container .imgItemContainer .imgItem {position: relative;left: auto;right: auto;}
+p.ng-binding:focus {outline: none;}
+.via-slds.via-omni .vlc-slds-remote-action__container {border: solid 1px #b3b4b4;margin: 0 auto;left: 50%;width: auto;}
+p.ng-binding p {border-bottom: solid 3px #009de3 !important;width: fit-content;padding-right: 15px;line-height: 34px;}
+.via-slds.via-omni form[stepForm] {padding-left: 10px;border-right: 0px;}
+li.slds-form-element__control.ng-scope {font-size: 13px !important;color: #434444 !important;    float: left;display: inline-block;width: 150px !important;}
+ul.slds-form-element.ng-scope {display: inline-block;float: left !important;-webkit-flex-direction:unset !important;}
+.slds-grid.slds-wrap.slds-grid--pull-padded.vlc-slds-small--size-column {border-top: solid 1px #b3b4b4;padding-top: 10px;}
+/*forward and back*/
+div[id$='AddFranquiaIndiv'] {background: #1f577b !important;font-size: 13px !important;color: #ffffff !important;padding: 0px 15px !important;width: 180px!important;height: 34px;}
+div[id$='AddServicesIndiv'] {background: #1f577b !important;font-size: 13px !important;color: #ffffff !important;padding: 0px 15px !important;width: 180px!important;height: 34px;}
+div[id$='AddFranquiaIndivNet'] {background: #1f577b !important;font-size: 13px !important;color: #ffffff !important;padding: 0px 15px !important;width: 180px!important;height: 34px;}
+div[ng-controller="descUnitCompController"] div label {padding: 5px 0px;}
+#AddPlugins_new, #AddFranquiaAndServicesIndv, #GetServices_Refresh, div[id$='_nextBtn'] {background: #1f577b !important;font-size: 13px !important;color: #ffffff !important;padding: 0px 15px !important;width: 120px!important;height: 34px;float: right;}
+div[id$='_nextBtn']:focus {outline: none;}
+div[id$='_prevBtn'] p {color: #ffffff !important;}
+#GetDevices, div[value="Show Angular"], #loadMoreProducts, #Adicionaraocarrinho_IPBtn, div[id$='_prevBtn'] {background: #1f577b !important;font-size: 13px !important;color: #ffffff !important;padding: 0px 15px !important;width: 120px!important;height: 34px;float: left;}
+#Adicionaraocarrinho_IPBtn, div[title="Verificar Preço"] {width:calc(100% - 10px) !important}
+div[id$='_prevBtn']:focus {outline: none;}
+div#GetDevices {margin-top: 29px;width: 90px !important;}
+button {outline: none;}
+textarea:focus, input:focus, select:focus, button:focus {box-shadow: 0 0 0 0;border: 0 none;outline: 0;} 
+#AddPlugins_new, #AddFranquiaAndServicesIndv {float: left;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 154px;}
+.vlc-slds-items--container.item.ng-scope {width: 33%;}
+ng-form#DevicesTableText p.ng-binding p {border-bottom: 0px !important;margin-top: 21px;line-height: 18px;}
+ng-form#DevicesTableText {border-bottom: solid 1px #b3b4b4 !important;width: 100%;margin-bottom: 15px;}
+div[ng-controller="customDeviceListController"] div {border: 0px !important;text-align: left;}
+div[ng-controller="customDeviceListController"] .slds-size--12-of-12.slds-align--absolute-center {text-align: left;justify-content: left !important;}
+div[ng-controller="customDeviceListController"] .slds-box.vlc-slds-item--image img {width: 170px;height: 270px;max-width: 155px !important;}
+div[ng-controller="customDeviceListController"] .slds-size--12-of-12.slds-align--absolute-center label {font-size: 18px;font-weight: lighter !important;height: 63px;overflow: hidden;}
+div[ng-controller="customDeviceListController"] .vlc-slds-items--container.item.ng-scope {width: 33%;min-width: 300px;}
+.via-slds.via-omni .vlc-slds-small--size-column .vlc-slds-remote-action--button {margin-bottom: 0;width: 50%;float: left;padding: 0px;margin: 0px;}
+.via-slds.via-omni .vlc-slds-remote-action--button .vlc-control-wrapper .slds-box.vlc-slds-box--neutral p {color: #fff !important;}
+div#ProductItem .slds-box.vlc-slds-item--image {padding: 0px !important;width: 135px;float: left;}
+div#ProductItem div:nth-child(2) {width: calc(100% - 140px);display: inline-block;}
+div#ProductItem div:nth-child(2) h {width: 40px;display: block;}
+div#ProductItem div:nth-child(3) h {width: 50px;}
+div#ProductItem div:nth-child(2) h div {width: 70px;display: block;}
+div#ProductItem ng-form.slds-form-element.vlc-flex.vlc-slds-select-control.ng-pristine.ng-scope.ng-valid.ng-valid-required {width: 140px;height: 35px;}
+div#ProductItem .vlc-slds-error-block.ng-scope {display: none !important;}
+div#ProductItem div:nth-child(3) h div {width: 100px;}
+div#ProductItem .slds-box.vlc-slds-item--image img {border-radius: 5px;border: 0px !important;}
+div#ProductImage {float: left;background: url('/resource/cec_pme_image/icones/device-image-2.png');background-repeat: no-repeat;width: 160px;}
+div#ProductPrice {float: right;width: calc(100% - 160px);}
+div#ProductImage div {padding: 0px;}
+div#ProductItemSelectedQtd {float: left;width: 70px;padding-right: 5px;}
+#Priceblockdescount     {width: calc(100% - 70px);float: left;display: unset;}
+div#ProductItemSelectedDescount {float: left;padding-right: 0px;}
+div#ProductDescount {display: -webkit-box;}
+div#ProductGroup {color: #434444 !important;}
+div#ProductGroup:hover {color: #434444 !important;}
+div#ProductValue {display: flex;}
+span#DevicePriceValue {font-size: 28px;color: #434444 !important;padding-top: 3px;}
+div#ProductValue div:nth-child(1) {width: 26px;line-height: 13px;}
+div#ProductValue div:nth-child(2) {padding-top: 2px;}
+span#DevicePriceDe {line-height: 13px;display: block;}
+div#ProductItemSelectedDe {width: 30px;display: grid;float: left;}
+div#price-device div:first-child {display: flex;}
+div#ProductItemSelectedValue {width: fit-content;height: 30px;float: left;display: grid;}
+div#ProductColor {display: -webkit-box;}
+div#ProductColor span {font-size: 13px;color: #434444 !important;}
+span#selected-franquia-group {font-size: 11px !important;margin-left: -5px;}
+div#ProductGroup span {font-size: 12px !important;}
+div#ProductGroup div {font-size: 13px !important;text-align: left;padding-top: 3px;}
+.tooltip {width: 15px;font-size: 10px;height: 15px;text-align: center !important;line-height: 15px;float: none !important;}
+div#iconTooltip {background: url(/resource/cec_pme_image/icones/infoi.png) #003560;background-position: top 2px left 2px;}
+
+div#ProductName {margin-bottom: 10px;margin-top: 15px;text-align: left;}
+span#DevicePriceRS {line-height: 14px;}
+.devices-table td:nth-child(1) {width:auto;font-size: 12px;padding: 3px 0px;}
+.devices-table td:nth-child(2) {width:30px;text-align:center;}
+.devices-table td:nth-child(3) {width:85px;text-align:right;padding-right:5px;}
+.devices-table td:nth-child(4) {width:25px;}
+.devices-table tr:last-child td:nth-child(1) {text-align: right;}
+div#ProductItemSelected1 div:nth-child(1) {width: 20px;float: left;line-height: 13px;}
+div#ProductItemSelected1 div:nth-child(2) {padding-top: 2px;}
+.via-slds.via-omni .vlc-slds-multiSelect-control ul[horizontalmode] span.slds-form-element__label {margin-left: 0px;font-size: 13px;}
+.slds-grid--vertical.slds-box {padding: 0px;text-align: center;}
+.plan-text {padding: 10px;text-align: left;}
+.content-plan {background: #efefef;}
+.content-plan label {color: #1f577b;font-weight: bold;font-size: 18px;width: 100%;text-align: left;padding-left: 20px;padding-top: 10px;}
+.plan-text p {font-size: 13px !important;color: #434444 !important;text-align: left;width: 100%;
+    padding-left: 10px;line-height: 16px;height: 95px;overflow-y: auto;}
+button.btn-add-to-cart {margin: 0 auto;background: #1f577b;border: 0px;border-radius: 3px;    margin: 10px;padding: 5px 15px;color: #fff;font-size: 13px;}
+button.btn-add-to-cart b {font-weight: 100 !important;}
+.showcasecontainer {padding: 0px !important;margin-right: 15px;border-radius: 5px !important;border: solid 1px #b3b4b4;margin-bottom: 15px;}
+img.img-container {display: none;}
+.product-info.padding0 p {display: none;}
+.showcasedetails {background: transparent !important;}
+.product-info h3.title.ng-binding {padding-bottom: 0px !important;margin: 0px;height: auto;line-height: 34px;}
+div#vlocity-price {font-size: 12px;}
+button.btn.btn-primary.col-md-12.ng-scope {background: #1f577b;border-radius: 3px;color: #fff;font-size: 13px;height: 45px;}
+.slds-select_container.vlc-control-wrapper.vlc-slds__border.vlc-slds__border--primary {padding: 0px 5px !important;border-radius: 3px;border: solid 1px #b3b4b4 !important;height: 34px;line-height: 34px;padding: 0px 10px !important;font-size: 12px;min-height: auto !important;}
+.vlc-slds-items--container.ng-scope {font-size: 13px;line-height: 25px;margin-bottom: 10px !important;min-width: 130px;}
+a.vlc-slds-items--container.ng-scope div {background: #fff !important;padding: 0px 10px;} /* evitar ajuste*/
+a.vlc-slds-items--container.ng-scope {width: calc(16.6% - 15px);font-size: 12px;}
+.slds-grid--vertical.slds-box label {line-height: 28px;}
+.showcase4.ng-scope div div.showcasecontainer {width: calc(16.6% - 15px);min-width: 140px;}
+select#RegionalComp, select#DDDComp, select#DDDCustom {min-height: auto;}
+.via-slds.via-omni .slds-icon {fill: #4d4d4d;}
+.via-slds.via-omni .slds-form-element__control>svg {top:18px;}
+.via-slds .slds-icon--small {width: 0.75rem;}
+label.slds-form__element__label.ng-binding {line-height: 20px;padding: 2px 5px 0px 5px;}
+label[for="CEPMainAddressConsulted"] {display: none !important;}
+input#CEPMainAddressConsulted {display: none !important;}
+table.regional {height: 45px;}
+ng-include#vlcCart {border-top: 0px;}
+.via-slds.via-omni .vlc-slds-cart ng-include {padding: 0px !important;}
+button.accordion.active {width: 100% !important;}
+button.accordion:active {width: 100% !important;}
+.accordion {background:url('/resource/cec_pme_image/icones/cart-plan-add-close.gif');background-repeat:no-repeat;background-position:top 13px left 10px;cursor: pointer;width:100%;border: none;text-align: left;outline: none; font-size: 15px;padding-left: 24px;margin-left: 10px;}
+.active, .accordion:active {background:url('/resource/cec_pme_image/icones/cart-plan-add-open.gif');background-repeat:no-repeat;background-position:top 15px left 10px;cursor: pointer;width:100%;border: none;text-align: left;outline: none; font-size: 15px;}
+.accordion-subgroup {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-close.png');background-color:#efefef;background-repeat:no-repeat;background-position:top 12px left 14px;cursor: pointer;width:100%;text-align: left;outline: none; font-size: 15px;padding: 0px;padding-left: 18px;border:none;border-top: solid 1px #b3b4b4;}
+.active-subgroup, .accordion-subgroup:active  {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-open.png');background-repeat:no-repeat;background-position:top 15px left 14px;background-color:#efefef;cursor: pointer;width:100%;text-align: left;outline: none; font-size: 15px;padding: 0px;padding-left: 18px;border:none;border-top: solid 1px #b3b4b4;border-bottom: solid 1px #b3b4b4;}
+.accordion-subgroup-2 {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-close-cinza.png');background-repeat:no-repeat;background-position:top 10px left 14px;cursor: pointer;width:100%;border: none;text-align: left;outline: none; font-size: 15px;padding: 0px;border-top: solid 1px #b3b4b4;}
+.active-subgroup-2, .accordion-subgroup-2:active  {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-open-cinza.png');background-repeat:no-repeat;background-position:top 8px left 14px;cursor: pointer;width:100%;text-align: left;outline: none; padding: 0px;}
+.accordion-subgroup-close {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-close.png');background-color:#efefef;background-repeat:no-repeat;background-position:top 12px left 14px;cursor: pointer;width:100%;text-align: left;outline: none; font-size: 15px;padding: 0px;padding-left: 18px;border:none;border-top: solid 1px #b3b4b4;}
+.accordion-subgroup-open  {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-open.png');background-repeat:no-repeat;background-position:top 8px left 14px;background-color:#efefef;cursor: pointer;width:100%;text-align: left;outline: none; font-size: 15px;padding: 0px;padding-left: 18px;border:none;border-top: solid 1px #b3b4b4;border-bottom: solid 1px #b3b4b4;}
+.accordion-subgroup-2-close {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-close-cinza.png');background-repeat:no-repeat;background-position:top 10px left 14px;cursor: pointer;width:100%;border: none;text-align: left;outline: none; font-size: 15px;padding: 0px;border-top: solid 1px #b3b4b4;}
+.accordion-subgroup-2-open  {background:url('/resource/cec_pme_image/icones/cart-plan-add-subgroup-open-cinza.png');background-repeat:no-repeat;background-position:top 12px left 14px;cursor: pointer;width:100%;text-align: left;outline: none; padding: 0px;border:none;}
+.line-value {font-size: 11px;display: block;line-height: 26px;}
+.regional td {color: #434444;font-weight: 600;height: 37px;}
+.regional td:first-child {cursor: pointer;width:auto;border: none;text-align: left;outline: none; font-size: 12px;padding-left: 14px;font-weight: normal;}
+.regional td:nth-child(2) {font-size: 12px;padding-right: 10px;text-align: right;width: 100px;font-weight: normal;}
+.regional td:nth-child(3) {width: 25px;}
+.regional-uf td {font-size: 12px;font-weight: 600;}
+.regional-uf td:nth-child(1) {padding-left: 25px;width: auto;height: 30px;}
+.regional-uf td:nth-child(2) {width:100px;padding-right: 10px;text-align: right;} 
+.regional-uf td:nth-child(3) {width:25px;}
+.regional-uf-2 td {font-size: 12px;font-weight: 600;height: 30px;}
+.regional-uf-2 td:nth-child(1) {cursor: pointer;padding-left: 40px;width: auto;}
+.regional-uf-2 td:nth-child(2) {width:100px;padding-right: 10px;text-align: right;}
+.regional-uf-2 td:nth-child(3) {width:25px;}
+.regional-uf-add td {font-size: 12px;font-weight: 500;border-top: solid 1px #b3b4b4;height: 30px;cursor: pointer;color: #434444 !important;}
+.regional-uf-add tr td:nth-child(1) {padding-left: 22px;width: auto;}
+.regional-uf-add tr td:nth-child(2) {width:100px;padding-right: 10px;text-align: right;} 
+.regional-uf-add tr td:nth-child(3) {width:25px;}
+.regional-uf-add tr:last-child td {border-bottom: 0px !important;}
+button.accordion-subgroup-2-open table tr:first-child td {border-top: solid 1px #b3b4b4 !important;height: 32px;}
+button.accordion-subgroup-2-open td {padding-top: 3px;}
+.text-description-right {float: right;padding-right: 10px;}
+.text-description-left {float:left;display: inline-block;width: calc(100% - 42px);}
+.regional-uf-dados-uf {font-size: 12px !important;padding-left: 30px !important;padding-top: 4px !important;}
+.regional-uf-dados-valor {font-size: 12px !important;text-align: right !important;padding-right: 10px !important;padding-top: 4px !important;}
+.regional-uf-local {font-weight: 500;color: #1f577b !important;}
+.font-normal {font-weight:normal !important;}
+#gestor-online-off {display: none;}
+#gestor-online-on {display: block;}
+.panel {display: block;overflow: hidden;}
+.panel2 {display: block;overflow: hidden;}
+.cart-block {width: auto;border:solid 1px #b3b4b4;border-bottom: 0px;margin-right: 1px;}
+.cart-block-group, .cart-block-group-add, .cart-block-group-mobile {width: auto;background: #f7f7f7;padding: 0px 10px 0px 10px;}
+.cart-block-group-add {background: #ffffff;border-bottom: 0px;}
+.cart-block-title, .cart-block-plan-title {padding:5px 0px;border-bottom: solid 1px #b3b4b4;line-height: 34px;}
+.cart-block-plan-title {border-bottom: 0px;}
+.cart-block-total {padding-top:5px;line-height: 22px;font-weight:600;}
+.cart-title-img-desk, .cart-title-img, .cart-title-plan-img {height: 28px;display: inline-block;float: left;width: 48px;}
+.cart-title-img-desk {width: 31px;}
+.cart-title-plan-img {height: 16px;display: inline-block;float: left;width: 16px;padding-top: 8px;}
+.cart-title-cart {font-size: 16px;color: #1f577b;font-weight: bold;height: 28px;display: inline-block;line-height: 28px;width: auto;padding-left: 0px;padding-top: 4px;}
+.cart-title-plan {font-size: 14px;color: #1f577b;height: 36px;display: inline-block;line-height: 40px;width: auto;}
+.cart-total-lines-unit {width: 19%;display: inline-block;color: #1f577b;font-size: 12px;font-weight: normal;}
+.cart-total-lines-unit-2 {width: 25%;display: inline-block;color: #1f577b;font-size: 12px; width: 60px;padding-left: 10px;font-weight: normal;} 
+.cart-total-lines-value {width: 25%;display: inline-block;color: #1f577b;font-size: 12px;font-weight: normal;}
+.cart-total-lines-value-2 {width: 27%;display: inline-block;color: #1f577b;font-size: 12px;float: right;padding-right: 0px;font-weight: normal;}
+.cart-point-resume {float: right;font-size: 13px;display: inline-block;}
+.cart-block-plan {padding-top:5px;line-height: 22px;}
+.cart-plan-add {display: block;}
+.cart-plan-add-title {float:left;color: #009de3;font-size: 13px;width: auto;padding-left: 10px;}
+.cart-plan-add-action {float: right;width: auto;height: 38px;padding-top: 3px;width: 25px;}
+.cart-plan-add-action img {padding-left: 5px;}
+.cart-plan-group {width: 55px;float: right;margin-right: 10px;height: 38px;}
+.cart-plan-subgroup {font-size: 12px;line-height: 16px;color: #1f577b;font-weight: 400;display: table;font-weight: 600;padding-top: 10px;}
+table.regionais-detail {width:100%;}
+table.regionais-detail tr:first-child td {border-top: 0px;}
+table.regionais-detail td:first-child {padding-left: 29px;}
+table.regionais-detail td {font-size: 12px;border-top: solid 1px #b3b4b4;height: 30px;color: #434444;}
+table.regionais-detail td:nth-child(3) {width: 86px;}
+table.regionais-detail tr:hover td {background: #f7f7f7;}
+table.regionais-detail tr:last-child td {border-bottom: solid 1px #b3b4b4;color:#009de3;}
+table.regionais-detail td:last-child {text-align: right;padding-right: 10px;}
+.cart-points-total {padding-top:5px;line-height: 22px;}
+.cart-points-total div {display: inline-block;color: #009de3;font-size: 12px;vertical-align: top;}
+.cart-points-total div:nth-child(1) {width: 80px;height: 48px;}
+.cart-block-points.top10.mobileoff {margin-top: 0px !important;}
+.cart-block-points {border-top: solid 1px #b3b4b4;}
+button.accordion-subgroup-open {border-top: solid 1px #b3b4b4;border-bottom: solid 1px #b3b4b4;height: 50px;}
+button.accordion-subgroup-close {border-top: solid 1px #b3b4b4;border-bottom: solid 1px #b3b4b4;height: 50px;}
+.cart-points-total div:nth-child(2) {width: 80px;height: 48px;}
+.cart-points-total div:nth-child(3) {width: 80px;height: 48px;}
+button.page-button.page-button.slds-button.slds-button_brand.ng-binding.page-selected {background: #1f577b;color: #fff;}
+.cart-points-total div:nth-child(4) {float: right;width: 35px;margin-top: 1px;he}
+.cart-title-points-bottom {font-size: 12px;color: #009de3;float: right;display: inline-block;width: auto;padding-right: 5px;}
+.points-top {display: block;border-radius: 3px 3px 0px 0px;background-color: #1f577b !important;width: 35px;height: 25px;margin-top: 21px;background: url('/resource/cec_pme_image/icones/top.gif');background-repeat: no-repeat;background-position: top 5px center;background-color: #1f577b;}
+.top10 {margin-top: 10px;}
+.points-total {padding-top:5px;line-height: 22px;border-bottom: solid 1px #b3b4b4;}
+.points-total div {display: inline-block;font-size: 12px;}
+.points-total div:nth-child(1) {width: 100px;}
+.points-total div:nth-child(2) {width: 100px;text-align: right;float: right;}
+.points-total div:nth-child(2) a {color: #1f577b;}
+.points-title {font-size: 18px !important;color: #1f577b;font-weight: bold;height: 28px;display: inline-block;line-height: 28px;width: auto;}
+.cart-block-group-mobile {display: none;}
+.div-plan {border-top: solid 1px #b3b4b4;display:block;height:1px;}
+.cart-block-buttons {width: 338px;background-color: #ffffff;padding-top: 10px;height: 40px;}
+.cart-block-buttons div.left {float: left;display: inline-block;width: auto;}
+.cart-block-buttons div.right {float: right;display: inline-block;width: auto;}
+.buttons-actions {border-radius: 3px;background-color: #1f577b;color: #ffffff !important;font-size: 12px !important;border: 0px;padding: 5px 10px;height: 34px;}
+.border-selected  {border: solid 1px #b3b4b4 !important;background-color: #dbdada;}
+.border-selected label {color: #ffffff !important;}
+.border-selected_Plan  {border: solid 1px #1f577b !important;background-color: #ffffff;}
+.border-selected_Plan label {color: #ffffff !important;}
+div#Addplano div.border-selected {border: solid 1px #b3b4b4 !important;}
+.selected-border {border: solid 2px #1f577b !important;}
+.via-slds.via-omni .vlc-slds-items--container {width: max-content;float: left;}
+#Adicionaraocarrinho_IPBtn, div[title="Verificar Preço"] {margin-bottom: 10px;min-width: 165px;}
+ng-form#PME_CompartilhadoServices_Block {padding: 10px;border: solid 1px #ebe8e8 !important;border-radius: 3px;padding-left: 10px;margin-top: -1px;}
+
+#PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected {
+    background: url(/resource/cec_pme_image/icones/border-pluginlines-v9.png) top 48px center !important;background-repeat: no-repeat !important;z-index: 99;position: relative;height: 61px;margin-bottom: -15px;border: 0px !important;}
+#PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected div:nth-child(1) {border: solid 1px #009de3!important;border-radius: 5px 5px 0px 0px;border-bottom: 0px !important;}
+#PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected div:nth-child(2) {border: solid 1px #009de3;border-top: 0px;border-radius: 0px 0px 5px 5px;}
+#PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected label {color: #009DE3 !important;padding-top: 0px;}
+
+ng-form#PME_Compartilhado_Plugins_SelItem div[id^="item"] label.slds-form__element__label.ng-binding {padding-top: 0px !important;}
+
+table.slds-table.slds-table--bordered.slds-table--cell-buffer.slds-max-medium-table--stacked-horizontal.vlc-slds-table.ng-scope thead tr th div {text-transform: initial !important;font-weight: 300 !important;}
+ng-form#PME_CR_BankDetails child:nth-child(3) {min-width: 141px !important;}
+label[for="CEPMainAddress_RO"] {white-space: nowrap;}
+ng-form#ShippingContactsInfo label:first-child {display: none;}
+ng-form#CorreiosLink label:first-child {display: none;}
+.via-slds.via-omni div.message.description:first-child {margin-left: -10px;}
+.error {text-align: left !important;line-height: 12px !important;}
+form[name="editblockform"] div span {font-size: 12px;line-height: 12px;font-weight: normal;color: #434444;}
+div#PME_CR_PrepareBusinessReference_VIP {margin-top: 23px;width: 120px;}
+ng-form#DevicesTableText label:first-child {display: none;}
+ng-form#BlockAparelhos .vlc-slds-control-action__container.ng-scope {display: none;}
+ng-form[id^="Pagamento"] .vlc-slds-error-block {display: none !important;}
+label[for="CEPBillingAddressConsulted"] {display: none !important;}
+input#CEPBillingAddressConsulted  {display: none !important;}
+/*ng-form#ContactInfo child:nth-child(1) {width: 150px !important;} cpf e nome...*/
+
+ol.ng-scope {margin-top: 19px;}
+li.list-group-item.ng-scope span {padding-top: 19px;}
+ng-form#PME_CR_BankDetails child:nth-child(1) .message.description.ng-binding.ng-scope {font-size: 13px !important;min-height: 22px !important;padding-left: 11px;}
+ng-form#PME_CR_BusinessReferences child:nth-child(1) .message.description.ng-binding.ng-scope {font-size: 13px !important;padding-left: 10px !important;min-height: 22px !important;}
+input#ContactBirthdate {font-size: 12px !important;}
+form[id^="a2I2C000000MI4WUAW"] child:nth-child(2) ng-form.slds-form-element.vlc-flex.vlc-slds-message.ng-valid.ng-scope.ng-valid-vlc-val-error.ng-dirty .slds-form-element__control .vlc-control-wrapper .message.description.ng-binding.ng-scope {height: 22px !important;padding: 0px !important;min-height: 22px !important;}
+ng-form#PME_Individual_Services_SelItem .slds-notify.slds-notify_alert.slds-theme_alert-texture.slds-theme_info.slds-m-top_small.ng-scope {display: none;}
+ng-form#solarPMESIBonus .slds-notify.slds-notify_alert.slds-theme_alert-texture.slds-theme_info.slds-m-top_small.ng-scope {display: none;}
+input#ContactBirthdateFree {border: solid 1px #b3b4b4 !important;border-radius: 3px !important;height: 34px !important;padding: 0px 10px !important;}
+p.legenda-passaporte-mundo {padding-top: 10px !important;}
+#cpf-administrator {min-width: 140px;}
+#select-cargo {margin-left: -10px;padding-right: 0px !important;}
+#select-cargo-block {margin-left: 10px;}
+div#Messaging2 {margin-top: -62px;margin-left: 170px;width: 100% !important;}
+ng-form[id^="title-step"] label {display: none !important;}
+ng-form[id^="title-step"] {padding-bottom: 10px;}
+ng-form[id^="title-step"] div {border-bottom: solid 1px #b3b4b4;border-top: solid 1px #b3b4b4;padding-top: 15px;}
+ng-form[id^="title-step"] div p {font-weight: bold;color: #1f577b;border-bottom: solid 3px #009DE3;width: fit-content;padding-right: 19px;font-size: 16px;}
+ng-form#MessGol {margin-top: -61px;margin-left: 170px;}
+ng-form#TextMessGol {margin-top: -58px;margin-left: 150px;}
+ng-form#MessGol p p {border-bottom: 0px !important;color: #434444!important;width: 300px;line-height: 20px;}
+#PME_Devices_Step5_midBtn {width: 140px !important;margin-left: 10px;float: right;margin-top: -34px;}
+#myBtn, #BtnResumo, #PME_Devices_Step5_prevBtn {width: 140px !important;} /* voltar aparelhos*/
+#BtnResumo {margin:0 auto;margin-top: 15px;}
+#myBtn {margin:0 auto;margin-top: 15px;}
+label[for="PME_Device_SelItem"] {display: none !important;}
+div#selectable-Brand label {font-size: 13px !important;color: #434444 !important;}
+div#selectable-Model label {font-size: 13px !important;color: #434444 !important;}
+div#selectable-Color label {font-size: 13px !important;color: #434444 !important;}
+label[for="PME_Franquia_SelItem"] {font-size: 14px !important;}
+label[for="PME_Individual_Services_SelItem"] {font-size: 14px !important;}
+label[for="PME_Bonus_SelItem"] {font-size: 14px !important;}    
+label[for="solarPMESIBonus"] {font-size: 14px !important;}
+label[for="PME_Compartilhado_GOL_SelItem"] {font-size: 14px !important;}
+label[for="PME_Compartilhado_Services_SelItem"] {font-size: 12px !important;}
+label[for="PME_Compartilhado_Plugins_SelItem"] {font-size: 14px !important;}
+label[for="PME_FranquiaComp_SelItem"] {font-size: 14px !important;}
+label[for="DDDComp"] span {color: #434444 !important;font-size: 12px !important;}
+label[for="PlugLines"] span {color: #434444 !important;font-size: 12px !important;}
+label[for="RegionalSelect"] span {color: #434444 !important;}
+label[for="UFSelect"] span {color: #434444 !important;}
+label[for="Regional"] span {color: #434444 !important;}
+label[for="UF"] span {color: #434444 !important;}
+label[for="DDD"] span {color: #434444 !important;}
+label[for="LinesQtty"] span {color: #434444 !important;}
+.via-slds.via-omni .slds-form-element__label span {color: #434444 !important;}
+table#table-teste-mobile {display: none;}
+ng-form#DevicesTableText {border-top: solid 1px #b3b4b4;margin-top:10px;padding-bottom: 10px;}
+.via-slds a {color: #1f577b !important;font-weight: 400;}
+li#page-selected a {color: #ffffff !important;height: 32px;}
+div#title-selected-franquia {width: max-content;padding-right: 5px;display: -webkit-inline-box;}
+#adicionar-carrinho {width: 160px;}
+.description-device-qtty {color: #009DE3 !important;font-size: 12px !important;line-height: 14px;}
+span#DevicePrice span {font-size: 18px !important;font-weight: 400;}
+div#ProductGroup span.tooltiptext {font-size: 12px !important;color: #fff !important;}
+.tooltipempresa.tooltiptext {margin-left: 15px !important;}
+td.qtty div div input {text-align: center !important;}
+div#block-desconto {width: 160px;}
+ng-form#rules-service-plan-Ind p {border-bottom: 0px !important;font-size: 12px !important;color: #434444;line-height: 14px;}
+td.qtty div input {padding: 0px !important;}
+a[vlc-slds-tool-tip="test"] {color: #ffffff !important;}
+g-form#BlockAparelhos child:nth-child(2) {width: 200px;margin-right: 5px;}
+ng-form#BlockAparelhos child:nth-child(3) {margin-right: 5px;}
+ng-form#BlockAparelhos child:nth-child(6) {width: 92px;}
+ng-form#BlockAparelhos child:nth-child(5) {min-width: 230px;margin-right: 10px;}
+ng-form#BlockAparelhos child:nth-child(7) {display: none;}
+.slds-grid.slds-wrap.vlc-slds-button--footer {padding-bottom: 15px !important;}
+div#ProductPrice span {font-size: 13px !important;color: #434444 !important;text-align: left;font-weight: 500 !important;padding-top: 2px;}
+.vlocity .pagination > .active > a, .vlocity .pagination > .active > a:hover, .vlocity .pagination > .active > a:focus {background: #1f577b;}
+table.pontos-cart td {font-size: 11px !important;font-weight: lighter;color: #009DE3;line-height: 13px;vertical-align: inherit;}
+table.pontos-cart td:nth-child(1) {width: auto;}
+table.pontos-cart td:nth-child(2) {width: 70px;padding-right: 5px;}
+table.pontos-cart td:nth-child(3) {width: 70px;padding-right: 5px;}
+table.pontos-cart td:nth-child(4) {width: 60px;padding-right: 5px;}
+.pontos-cart-space {margin-right: 7px !important;display: block;font-weight: 400;font-size: 11px !important;}
+.pontos-cart-space-2 {margin-right: 0px !important;display: block;font-weight: 400;font-size: 11px !important;}
+table.pontos-cart td:nth-child(1) img {padding-top: 3px;}
+button.accordion-subgroup.active {width: 100% !important;}
+ng-form#DeliveryData child {padding-top: 10px;}
+span.regional-sub-uf.ng-binding {color: #1f577b !important;font-size: 12px !important;font-weight: 500;}
+.bloco-price-cart {width: 100px;text-align: right !important;padding-right: 0px;}
+.bloco-left {text-align: left !important;}
+
+ng-form#Block_Bonus_Net child p p {width: 100% !important;    font-weight: 400;font-size: 14px;}
+ng-form#Block_Bonus_Net child span {padding-left: 6px;color: #434444 !important;font-size: 14px;}
+ng-form#BonusNet {margin-top: 10px;}
+ng-form#BonusNet div:first-child {background: #dbdada;margin-left: 3px !important;margin-right: 10px !important;width: 142px;height: 40px;margin-top: -2px;border-radius: 4px !important;border: solid 1px #b0abab!important;margin-bottom: 10px;}
+ng-form#BonusNet label {display: none !important;}
+ng-form#BonusNet div div {padding-right: 0px !important;margin-right: -10px !important;margin-left: 5px !important;}
+ng-form#BonusNet p p {font-weight: 400;}
+ng-form#BonusNet p {border-bottom: 0px !important;color: #434444 !important;font-size: 13px !important;}
+
+p.passaporte-mundo {font-size: 12px !important;line-height: 17px !important;border-bottom: solid 0px #fff!important;color: #434444 !important;font-weight: normal!important;display: block;border: 0px !important;}
+ng-form#rules-service-passaport-world p {border: 0px !important;}
+ng-form#PlanoRepeatableBlock child:nth-child(7) {margin-left: -4px !important;}
+label[for="PME_Compartilhado_GOL_SelItem"] {padding-left: 0px !important;}
+ng-form#PME_Compartilhado_GOL_SelItem ng-include {margin-left: -5px;}
+ng-form#PME_Compartilhado_Services_SelItem {margin-left: -5px;}
+label#radio-PME_PC_AddNewFranquia_Radio {color: #009DE3 !important;font-size: 14px !important;padding-top: 10px;}
+ng-form#rules-service-plan label {display: none !important;}
+ng-form#rules-service-plan {min-height: auto;}
+ng-form#BlockTypeStreetBillingAddress {margin-top: -9px;}
+ng-form#BlockTypeStreetMainAddress {margin-top: -10px;}
+form#table-title-datos span {font-size: 13px !important;color: #434444 !important;font-weight: normal !important;}
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {margin-top: 21px !important;}
+ng-form#BillingAddressTitle {padding-bottom: 10px;}
+.regional-uf-add tr:first-child td {border-top: 0px !important;border-bottom: solid 1px #b3b4b4;}
+button.accordion-subgroup-2-open {border-bottom: solid 1px #b3b4b4;height: 34px;}
+button.accordion-subgroup-2-close {height: 26px;}
+button.accordion-subgroup-2-close:focus {border-top: solid 1px #b3b4b4 !important;}
+img#editar-registro {margin-left: -5px;display: none;}
+img#remover-registro {margin-left: 20px;}
+.via-slds.via-omni .vlc-slds-select-control.ng-dirty.ng-valid .slds-select_container span {color: #434444 !important;font-weight: 400;}
+.slds-datepicker.slds-dropdown.slds-dropdown--left.nds-datepicker.nds-dropdown.nds-dropdown--left.ng-scope {min-width: 300px;}
+table.slds-datepicker__month.nds-datepicker__month tr:last-child {display: none;}
+#space-div-datos-title-mobile {display: none !important;}
+td.col-table-datos {background: #f3f2f2;padding: 5px;border-bottom: solid 1px #b3b4b4;color: #434444 !important;font-weight: normal;font-size: 12px;height: 34px;}
+table#table-menu-desktop {width: calc(100% - 25px);}
+table#table-menu-desktop td:nth-child(2) {width: calc(100% - 425px);}
+table#table-menu-desktop td:nth-child(3) {width: 100px;}
+table#table-menu-desktop td:nth-child(4) {width: 130px;}
+table#table-menu-desktop td:nth-child(5) {width: 175px;}
+ng-form#BlockTradein {min-width: 120px;}
+label[for="PME_PC_TradeIn"] {margin-top: -8px !important;}
+ng-form#BlockTradein div {padding-right: 0px;}
+#CriarPedidoDv {width: 141px;margin: 0 auto;margin-top: 15px;}
+section#PME_Devices_Step5 child:nth-child(2) {min-width: 230px !important;padding-right: 15px;} /* titulo da pagina vindo de simulacao*/
+section#PME_Devices_Step5 child:nth-child(2) ng-form {padding-right: 0px;}
+/* section#PME_Devices_Step5 child:nth-child(4)  {width: 177px !important;} só é possivel ajustar se alterar omniscript*/
+section#PME_Devices_Step5 child:nth-child(4) {min-width: 158px !important;}
+li.list-group-item.ng-scope {pointer-events: none;}
+label[for="DeliveryType"] {min-width: 121px;}
+label[for="Pagamento|0"] {width: 193px;}
+
+/* botoes hover*/
+button.btn-add-to-cart:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_CNPJ_Pesquisar:hover {background: #009de3 !important;border-color: #009de3 !important;}
+.imgItemContainer.ng-scope:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#AddFranquiaAndServicesIndv:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#CompanyInfo_prevBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#CompanyInfo_nextBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#Addresses_prevBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#AddPlugins_new:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#Addresses_nextBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#AdminContacts_prevBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#AdminContacts_nextBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_AddPlan_Step1_prevBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_AddPlan_Step1_nextBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_PlanosIndividual_Step2_prevBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_PlanosIndividual_Step2_nextBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_Devices_Step5_prevBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#PME_Devices_Step5_midBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+#GetDevices:hover {background: #009de3 !important;border-color: #009de3 !important;}
+.vlocity .pagination > li > a:hover {background: #009de3;color: #ffffff !important;}
+li.disabled a:hover {background: #009de3 !important;color: #fff;}
+div#PME_Devices_Step5_nextBtn:hover {background: #009de3 !important;border-color: #009de3 !important;}
+div#CriarPedidoDv:hover {background: #009de3 !important;border-color: #009de3 !important;}
+div#adicionar-carrinho div div div:hover {background: #009de3 !important;border-color: #009ed3 !important;}
+div#PME_PlanosCompartilhado_Step3_prevBtn:hover {background: #009de3 !important;border-color: #009ed3 !important;}
+div#AddFranquia:hover {background: #009de3 !important;border-color: #009ed3 !important;}
+#BtnResumo:hover {background: #009de3 !important;border-color: #009ed3 !important;}
+#myBtn:hover {background: #009de3 !important;border-color: #009ed3 !important;}
+
+/*net e embratel*/
+ng-form#DadosEmpresa child:nth-child(16) child:nth-child(2) {width: calc(50% - 10px) !important;margin-right: 10px !important;padding-top: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(16) child:nth-child(3) {width: 50% !important;margin-right: 0px !important;padding-top: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(16) .slds-grid.slds-wrap.slds-grid--pull-padded {padding-left: 0px;}
+ng-form#DadosEmpresa child:nth-child(16) ng-form#IsExistCustumer div div child div ng-form div div {display: none;}
+ng-form#DadosEmpresa child:nth-child(16) .vlc-slds-control-action__container.ng-scope {display: none;}
+
+ng-form#PlanoRepeatableBlock child:nth-child(1) {width: 150px !important;margin-right: 10px;margin-left: 0px;}
+ng-form#PlanoRepeatableBlock child:nth-child(2) {width: 150px !important;margin-right: 10px;}
+ng-form#PlanoRepeatableBlock child:nth-child(4) {width: 150px !important;margin-right: 10px;}
+ng-form#PlanoRepeatableBlock child:nth-child(5) {width: 150px !important;margin-right: 0px !important;}
+
+ng-form#PME_CompartilhadoServices_Block child:nth-child(6) div.vlc-sub-block {display: none;}
+ng-form#PME_CompartilhadoServices_Block child:last-child p.ng-binding p.legenda-passaporte-mundo
+ng-form#PME_CompartilhadoServices_Block child:last-child p.ng-binding p.legenda-passaporte-mundo {padding-left: 3px !important;} /* compartilhado mundo*/
+ng-form#TextMessGol p p {width: calc(100% - 160px) !important;max-width: 545px;font-size: 14px !important;border-bottom: 0px !important;line-height: 19px !important;color: #434444 !important;}
+ng-form#DeliveryData child:nth-child(8) div ng-form div#VIP_PopulateRecipient {padding-top: 10px;width: 100%;background: transparent;border: 0px !important;border-top: solid 1px #b3b4b4 !important;}
+ng-form#DeliveryData child:nth-child(8) {width: 100%;}
+ng-form#DeliveryData child:nth-child(8) div ng-form div#VIP_PopulateRecipient p {background: #706e6b;width: 120px !important;border-radius: 3px !important;}
+ng-form#DeliveryData child:nth-child(8) div ng-form div#VIP_PopulateRecipient p:hover {background: #009de3;}
+
+/* teste botao voltar*/
+.slds-grid.slds-wrap.slds-grid--pull-padded.vlc-slds-small--size-column .slds-size--1-of-1.slds-medium-size--3-of-12.vlc-slds-remote-action--button {width: 100% !important;}
+.slds-grid.slds-wrap.slds-grid--pull-padded.vlc-slds-small--size-column .slds-size--1-of-1.slds-medium-size--3-of-12.vlc-slds-remote-action--button:nth-child(2) {margin-top: -39px;}
+table.regional-uf-add tr:hover {background: rgba(241, 241, 241,0.5);}
+div[id^="item"] .slds-grid--vertical.slds-box.border-selected-franquia div:hover {background: #009DE3;}
+ng-form#PME_Franquia_SelItem div .slds-grid--vertical.slds-box:hover {background: #f1f1f1;}
+div[id^="item"] .slds-grid--vertical.slds-box.border-selected-franquia .slds-size--12-of-12.slds-align--absolute-center:hover {background: #009DE3 !important;}
+#PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected div:hover {background: #ffffff;}
+button[id^="item"]:hover div {background: rgba(241, 241, 241, 0.5);}
+.data-nascimento-adm {padding-top: 52px;}
+ng-form#message-mobile-net {display: none !important;}
+span.info-mobile-message {display: none;}
+ng-form#PME_LeadCreation child:nth-child(4) {display: none !important;}
+input#ContactEmail {margin-right: 10px;}
+ng-form#message-info-mobile-company {display: none !important;}
+.slds-grid--vertical.slds-box {border-color: #b3b4b4 !important;}
+ng-form#BlockContacts child .message.description.ng-binding.ng-scope {margin-top: -32px;color: red !important;font-weight: bold;font-size: 65%;font-weight: 600;background: transparent;;}
+span.tooltip-net-empresa {padding-left: 7px;}
+.tooltipempresa {color: #434444;}
+label[for="ContactBirthdateFree"]::after {content: '';color: red;font-size: 10px;top: 4px;position: absolute;margin-left: 5px;}
+ng-form#BlockContacts child child {width: 100% !important;margin-right: 0px !important;}
+ng-form#BlockContacts child .vlc-slds-control-action__container.ng-scope {display: none !important;} /*risco*/
+/*inicio responsividade*/
+
+@media (min-width: 1101px) {
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {min-width: 388px !important;max-width: 388px !important;border-bottom: 0px;border-left: solid 1px #b3b4b4;position: inherit;right: 0px;margin-top: 19px !important;}
+.via-slds.via-omni .vlc-slds-instruction--container {display: none !important;}
+.via-slds.via-omni .vlc-slds-instruction--container p {display: none;}
+li.list-group-item {float:left;padding-top: 0px;}
+}
+
+/* planejar quebras /1920 a 1280 / 1280 a 1024 / 768 / 720 a 360 / 320 */
+
+@media (max-width: 1600px) {
+    div#ProductName {max-height: 48px;}
+
+    
+}
+
+@media (max-width: 1610px) {
+    div#ProductGroup {margin-right: 15px;width: calc(50% - 15px);}
+    div#block-desconto {display: inline-block;padding-right: 10px;width: 100px;}
+    div#block-device-value {width: calc(100% - 104px) !important;padding-right: 0px !important;margin-right: 0px !important;}
+}
+
+
+
+@media (max-width: 1504px) {
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {margin-top: 20px !important;}
+}
+
+
+@media (max-width:1480px) {
+div[ng-controller="customDeviceListController"] .vlc-slds-items--container.item.ng-scope {width: 50% !important;min-width: 340px !important;}
+li.list-group-item {float:left;max-height: 60px;overflow-y: hidden;}
+}
+
+@media (max-width: 2600px) {
+div#ContactInfoRecipient {border-top: solid 2px #009DE3;width: calc(100% - 30px)}
+div#ContactInfoRecipient:last-child {border-bottom: solid 1px #b3b4b4;}
+.space-div-datos {padding-right: 10px;border-bottom: solid 1px #b3b4b4;}
+.space-div-datos form {display: table-row;width: 100%;}
+span.space-div-datos-title.ng-binding {color: #434444 !important;font-size: 13px !important;display: table-row;line-height: 24px;}
+div[data-label="Nome Completo"] {width: calc(100% - 505px);display: -webkit-inline-box;vertical-align: top;}
+div[data-label="Nome / Sobrenome"] {width: calc(100% - 425px);display: -webkit-inline-box;vertical-align: top;min-height: 44px;}
+div[data-label="RG"] {width: 100px;display: -webkit-inline-box;vertical-align: top;min-height: 44px;}
+div[data-label="Telefone Fixo"] {width: 130px;display: -webkit-inline-box;vertical-align: top;min-height: 44px;}
+div[data-label="Telefone Celular"] {width: 130px;display: -webkit-inline-box;vertical-align: top;min-height: 44px;}
+div[data-label="CPF"] {width: 130px;display: -webkit-inline-box;vertical-align: top;}
+div[data-label="Data de Nascimento"] {width: 150px;display: -webkit-inline-box;vertical-align: top;}
+div[data-label="Telefone"] {width: 225px;display: -webkit-inline-box;padding-right: 0px !important;border-bottom: solid 1px #b3b4b4;vertical-align: top;}
+div[data-label="E-mail"] {width: calc(100% - 505px);display: -webkit-inline-box;border-bottom: 0px;vertical-align: top;}
+div[data-label="Resp. Assinatura"] {width: 130px;padding-left: 0px;display: -webkit-inline-box;border-bottom: 0px;vertical-align: top;}
+div[data-label="Cargo"] {width: 330px;padding-left: 0px;display: -webkit-inline-box;border-bottom: 0px;vertical-align: top;}
+div#remove-datos {width: 45px;display: -webkit-inline-box;margin-left: -4px;padding-left: 10px;}
+div#remove-datos a img {margin-top: 4px !important;position: absolute;}
+div#remove-datos-2 {width: 45px;display: -webkit-inline-box;margin-left: -4px;padding-left: 10px;border-bottom: solid 1px #b3b4b4;position: absolute;height: 44px;}
+div#remove-datos-2 a img {margin-top: -30px !important;position: absolute;}
+div#submenuoff {margin-top: 4px;}
+div[ng-if="isTableView"] {padding-top: 8px;padding-bottom: 4px;min-height: 34px;}
+}
+
+@media (max-width: 1320px) {
+    div[data-label="Nome Completo"] {width: calc(100% - 280px);display: -webkit-inline-box;}
+    div[data-label="E-mail"] {width: calc(100% - 225px);display: -webkit-inline-box;border-bottom: solid 1px #b3b4b4;}
+    div[data-label="Telefone"] {width: 225px;display: -webkit-inline-box;padding-right: 0px !important;border-bottom: solid 1px #b3b4b4;}
+    div[data-label="Resp. Assinatura"] {width: 130px;padding-left: 0px;display: -webkit-inline-box;border-bottom: 0px;}
+    div[data-label="Cargo"] {width: calc(100% - 175px);padding-left: 0px;display: -webkit-inline-box;border-bottom: 0px;}
+}
+@media (max-width: 1024px) {
+    div[data-label="Nome Completo"] {width: 100%;display: -webkit-inline-box;}
+    div[data-label="CPF"] {width: 50%;display: -webkit-inline-box;}
+    div[data-label="Data de Nascimento"] {width: 50%;display: -webkit-inline-box;}
+    div[data-label="Telefone"] {width: 100%;display: -webkit-inline-box;padding-right: 0px !important;border-bottom: solid 1px #b3b4b4;}
+    div[data-label="E-mail"] {width: 100%;display: -webkit-inline-box;border-bottom: solid 1px #b3b4b4;}
+    
+}
+
+@media (max-width: 768px) {
+    div[data-label="Nome Completo"] {width: calc(100% - 280px);display: -webkit-inline-box;}
+    div[data-label="CPF"] {width: 130px;display: -webkit-inline-box;}
+    div[data-label="Data de Nascimento"] {width: 150px;display: -webkit-inline-box;}
+    div[data-label="Telefone"] {width: 225px;display: -webkit-inline-box;padding-right: 0px !important;border-bottom: solid 1px #b3b4b4;}
+    div[data-label="E-mail"] {width: calc(100% - 225px);display: -webkit-inline-box;border-bottom: solid 1px #b3b4b4;}
+
+}
+
+@media (max-width: 1440px) {
+    ng-form#BlockContacts child {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#BlockContacts child label {padding-top: 8px;}
+    ng-form#BlockContacts child:nth-child(1) child {width: 100% !important;}
+    ng-form#BlockAparelhos child:nth-child(3) {margin-right: 0px;width: calc(100% - 250px) !important;min-width: calc(100% - 250px) !important;}
+}
+
+@media (max-width: 1400px) {
+    div#VIP_GetContact_ByCPF {margin-left: 35px;}
+    label[for="PME_CR_BankCode"] {margin-right: 0px !important;}    
+}
+@media (max-width: 1424px) {
+label[for="ContactBirthdateFree"]::after {top: 11px;}
+}
+@media (max-width: 1366px) {
+    div#block-desconto {width: 160px;}
+    div#block-device-value {width: 100% !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(5) {width: 123px;}
+    ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 151px;}
+}
+
+@media (max-width: 1360px) {
+    ng-form#PME_CR_BankDetails child:nth-child(5) {width: 121px;}
+}
+
+
+@media (max-width: 1280px)  {
+div#ProductGroup span.selected-franquia-group {font-size: 11px !important;}
+div#VIP_GetContact_ByCPF {margin-left: 50px;}
+div#ContactInfoRecipient {border-top: solid 2px #009DE3;width: calc(100% - 20px) !important;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(2) {margin-left: 10px;margin-right: 10px;} /* ddd compartilhado*/
+ng-form#DadosEmpresa child:nth-child(2) {width: 100% !important;} /* serviços net e razão social */
+ng-form#PME_CR_BankDetails child:nth-child(6) {width: 145px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(6) ng-form {padding-right: 0px !important;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {width: 354px !important;} /* tipo de solicitacao compartilhado*/
+}
+
+@media (max-width: 1250px)  {
+    div#ProductGroup {width: 100%;margin-right: 0px;}
+    div#block-device-value {width: calc(100% - 164px) !important;}
+    td.qtty {width: 120px !important;}
+}
+
+@media (max-width: 1240px)  {
+ng-form#DadosEmpresa child {width: calc(50% - 10px) !important;margin-right: 10px !important;padding-top: 10px;}
+ng-form#DadosEmpresa child:nth-child(1) {width: 100% !important;}
+ng-form#DadosEmpresa child:nth-child(5) {width: calc(50% - 90px)!important;}
+ng-form#DadosEmpresa child:nth-child(6) {width: 70px !important;}
+ng-form#DadosEmpresa child:nth-child(7) {width: calc(50% - 90px)!important;}
+ng-form#DadosEmpresa child:nth-child(8) {width: 70px !important;}
+ng-form#BillingAddress div div div {padding: 0px;}
+table.slds-table.slds-table--bordered.slds-table--cell-buffer.slds-max-medium-table--stacked-horizontal.vlc-slds-table.ng-scope thead tr th div {white-space: initial !important;}
+}
+@media (max-width: 1248px)  {
+.via-slds.via-omni .vlc-slds-instruction--container {display:none;}
+}
+
+
+@media (max-width: 1229px)  {
+div#ProductGroup {width: 100%;min-width: 370px;margin-right: 3px;}
+div#block-device-value {width: calc(100% - 164px) !important;}
+}
+
+@media (max-width: 1224px)  {
+    .via-slds.via-omni .vlc-slds-instruction--container {display:none;}
+}
+
+@media (max-width: 1200px)  {
+.via-slds.via-omni .vlc-slds-instruction--container {display:none;}
+}
+
+
+@media (min-width: 1180px) and (max-width: 1180px)  {
+ng-form#PME_CR_BankDetails child:nth-child(5) {width: 98px !important;min-width: 98px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(6) {width: 155px !important;}
+}
+
+
+@media (max-width: 1140px)  {
+ng-form#BlockAparelhos child:nth-child(5) {margin-top: 0px;}
+}
+
+@media (max-width:1152px) {
+    table#table-menu-desktop {display: none;}
+    #space-div-datos-title-mobile {display: table-cell !important;font-size: 11px !important;font-weight: normal!important;}
+    div[data-label="Nome / Sobrenome"] {width: calc(100% - 20px);display: -webkit-inline-box;border-top: solid 2px #009DE3;margin-top: 10px;}
+    div[data-label="RG"] {width: calc(33% - 60px);display: -webkit-inline-box;border-bottom: 0px;}
+    div[data-label="Telefone Fixo"] {width: 33%;border-bottom: 0px;}
+    div[data-label="Telefone Celular"] {width: 34%;border-bottom: 0px;}
+    div#remove-datos-2 {border-bottom: 0px;margin-top: 5px;}
+    sidebar.slds-col--padded.slds-cleafix.lucastest2 {margin-top: 21px !important;}
+    div#VIP_GetContact_ByCPF {margin-left: 68px;}
+    ng-form#PME_CR_BankDetails child:nth-child(6) {width: 145px !important;margin-right: 10px;}
+    ng-form#PME_CR_BankDetails child:nth-child(4) {width: calc(100% - 141px);}
+    li.list-group-item.ng-scope {padding-left: 10px;}
+    ng-form#PlanoRepeatableBlock child:nth-child(1) {width: calc(25% - 15px) !important;margin-right: 10px;margin-left: 5px;}
+    ng-form#PlanoRepeatableBlock child:nth-child(2) {width: calc(25% - 10px) !important;margin-right: 10px;}
+    ng-form#PlanoRepeatableBlock child:nth-child(4) {width: calc(25% - 10px) !important;margin-right: 10px;}
+    ng-form#PlanoRepeatableBlock child:nth-child(5) {width: 25% !important;margin-right: 0px !important;}
+}
+
+@media (max-width: 1101px) {
+li.list-group-item.ng-scope span {margin-top: 0px;}
+ng-form#ContactInfo child:nth-child(15) {width: 65%;}
+}
+
+@media (max-width: 1100px)  {
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {min-width: 388px !important;max-width: 388px !important;border-bottom: 0px;border-left: solid 1px #b3b4b4;position: inherit;right: 0px;margin-top: 11px !important;}    
+.via-slds.via-omni .vlc-slds-instruction--container {display: none;} 
+ng-form#PME_LeadCreation child {width: 50% !important;}
+ng-form#PME_LeadCreation child:nth-child(2) {margin-left: 0px !important;}
+ng-form#PME_LeadCreation child:nth-child(3) {width: 100% !important;}
+ng-form#ContactInfo child:nth-child(14) {width: 33% !important;}
+ng-form#ContactInfo child:nth-child(15) {width: 67% !important;}
+ng-form#ContactInfo child:nth-child(16) {width: 420px !important;}
+form[name="editblockform"] span {font-size: 12px;}
+div[ng-controller="planoDAController"] label {font-size: 16px !important;}
+}
+/* ipad*/
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+iframe[id^="vfFrameId"] body.ext-webkit.ext-chrome.ext-linux {background: #ffffff !important;}
+body.ext-webkit.ext-chrome.ext-linux {background: #ffffff !important;}
+.via-slds.via-omni .vlc-slds-instruction--container  {display:none;}
+}
+
+@media (max-width: 1024px)  {
+li.list-group-item.ng-scope:nth-child(8) {padding-left: 0px;padding-right: 0px;min-width: 108px;}
+li.list-group-item.ng-scope:first-child {background: url(/resource/cec_pme_image/icones/ponto-off-first.png) top center;background-repeat: no-repeat;margin-left: -18px;padding-left: 0px!Important;min-width: 80px;}
+div#VIP_PopulateRecipient {margin-top: 0px !important;}
+div#SearCEPBillingAddress {margin-top: 24px !important;}
+div#SearchCEPMainAddress {margin-top: 24px !important;} /* busca do endereço principal*/
+div#block-desconto {width: 160px;display: inline-block;}    
+div#blocko-device-value {width: calc(100% - 160px) !important;margin-right: 0px !important;}
+ng-form#DeliveryData child:nth-child(4) {width: calc(100% - 170px) !important;} /* rg do representnte*/
+ng-form#DeliveryData child:nth-child(6) {width: 50% !important;margin-right: 0px !important}
+ng-form#DeliveryData child:nth-child(7) {width: 50% !important;margin-right: 0px !important;margin-left: 0px !important;}
+ng-form#ContactInfo child:nth-child(14) {width: 50% !important;}
+ng-form#ContactInfo child:nth-child(15) {width: 100% !important;}
+ng-form#DadosEmpresa child:nth-child(5) div:first-child {padding-top: 13px;}
+ng-form#DadosEmpresa child:nth-child(6) div:first-child {padding-top: 22px;}
+ng-form#DadosEmpresa child:nth-child(7) div:first-child {padding-top: 13px;}
+ng-form#DadosEmpresa child:nth-child(8) div:first-child {padding-top: 22px;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(1) {width: 95px !important;margin-right: 10px !important;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(2) {width: 110px !important;}
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {margin-top: 20px !important;}
+ng-form#MainAddress child:nth-child(7) {width: 102px !important;}
+ng-form#MainAddress child:nth-child(8) {width: 100% !important;margin-right: 0px !important;}
+ng-form#MainAddress child:nth-child(9) {width: 100% !important;} /* endereço*/
+ng-form#MainAddress child:nth-child(10) {width: 50% !important;margin-right: 0px !important;}
+ng-form#MainAddress child:nth-child(12) {width: 100% !important;} /* endereço*/
+ng-form#MainAddress child:nth-child(13) {width: 100% !important;} /* endereço*/
+ng-form#MainAddress child:nth-child(11) {width: 50%;margin-right: 0px !important;}
+ng-form#BillingAddress child:nth-child(7) {width: 100% !important;}
+ng-form#BillingAddress child:nth-child(8) {width: 100% !important;}
+ng-form#BillingAddress child:nth-child(9) {width: 50% !important;}
+ng-form#BillingAddress child:nth-child(10) {width: 50% !important;}
+ng-form#BillingAddress child:nth-child(11) {width: 100% !important;}
+ng-form#BillingAddress child:nth-child(12) {width: 100% !important;}
+ng-form#BillingAddres_RO child:nth-child(2) {width: 100% !important;}
+ng-form#BillingAddres_RO child:nth-child(3) {width: 100%;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(4) {width: 50% !important;}
+ng-form#BillingAddres_RO child:nth-child(5) {width: 50% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(6) {width: 100%;}
+ng-form#BillingAddres_RO child:nth-child(7) {width: 100% !important;}
+ng-form#BillingAddres_RO child:nth-child(8) ng-form {padding-right: 0px !important;}
+ng-form#DeliveryData child:nth-child(5) {width: calc(100% - 170px) !important;}
+ng-form#DeliveryData child:nth-child(5) {width: 170px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(4) {width: calc(100% - 126px) !important;}
+ng-form#PME_CR_BankDetails child:nth-child(7) {width: 58% !important;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 141px;}
+button[id^="item"] {width: 188px !important;}
+ng-form#PME_Compartilhado_Plugins_SelItem div[id^="item"] {width: 125px !important;} /* nao aumentar a largura pra nao ter quebra no 1024*/
+div#VIP_GetContact_ByCPF {margin-left: 90px;}
+ng-form#PME_CR_BusinessReferences child:nth-child(6) {width: 100% !important;}
+ng-form#PME_CR_BusinessReferences child:nth-child(8) {width: 66%  !important;}
+ng-form#DadosEmpresa child:nth-child(5) {width: calc(100% - 90px)!important}
+ng-form#DadosEmpresa child:nth-child(7) {width: calc(100% - 90px)!important;}
+ng-form#PME_Plan_SelItem ng-include div div {width: 100% !important;}
+ng-form#PlanoRepeatableBlock child:nth-child(5) ng-form {padding-right: 0px;}
+}
+
+@media (max-width: 1023px)  {
+div#block-device-value {width: 100% !important;}
+}
+
+
+@media (min-width: 842px) and (max-width: 800px;) {
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {display:block !important;}
+}
+
+@media (max-width: 799px) {
+div#ProductName label {font-size: 16px;font-weight: 400!important;}
+ng-form#BlockAparelhos .slds-grid.slds-wrap.slds-grid--pull-padded {padding-left: 5px;padding-right: 0px;}
+body {background: #ffffff !important;}
+ng-form#PME_Plan_SelItem ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope .vlc-slds-items--container.ng-scope:nth-child(1) {height: 353px !important;width: calc(50% - 10px) !important;margin-right: 10px;}
+button.btn-add-to-cart {margin-top: 0px;}
+.vlc-slds-instruction--container.vlc-slds-rte.ng-scope p p {font-size: 14px !important;}
+div[id^="item"] {margin-right: 10px;}
+.slds-form-element__control p p {font-size: 14px !important;}
+.via-slds.via-omni .vlc-slds-items--container {width: auto;float: left;background: transparent !important;font-size: 12px;}    
+.via-slds.via-omni .vlc-slds-selItem label.vlc-slds-selItem__label {font-size: 14px;}
+.via-slds.via-omni .slds-col--padded.slds-size--1-of-1.alt-vlc-slds--control ng-form>label[for].slds-form-element__label:first-child {font-size: 13px;}
+.via-slds.via-omni .vlc-slds-instruction--container {display: none;} 
+.oneAlohaPageDeprecated>iframe {background: #ffffff !important;}
+.slds-size--11-of-12.vlc-slds-flex-grow.vlc-slds-underline--gradient {display: none;}
+ol.ng-scope {width: -webkit-fill-available;z-index: 13;position: relative;margin-left: 0px;margin-right: 0px;margin-top: 9px !important;}
+li[state="true"] {background: #f7f7f7 !important}
+li.list-group-item {float:none;padding:5px;border: solid 1px #b3b4b4;border-bottom: 0px;display: block;cursor: default;height: 34px;outline: none;background: #ffffff !important;width: 100%;}
+li.list-group-item.ng-scope:first-child {margin-left: 0px;}
+li.list-group-item:hover {background:#f8f8f8 !important;}
+li.list-group-item:last-child {border-bottom: solid 1px #b3b4b4;padding-left: 0px !important;}
+li.list-group-item.ng-scope span {font-size: 12px !important;font-weight: 400 !important;padding-left: 5px;padding-left: 15px;}
+li.list-group-item.ng-scope:first-child span {padding-left: 0px;}
+li.list-group-item.ng-scope:last-child span {padding-left: 0px;}
+.via-slds.via-omni form[stepForm] {padding-right: 0px;padding-left: 0px;padding-bottom: 10px;min-height: auto;background: transparent;}
+.cart-total-lines-unit-2 {padding-left: 5px;}
+.mobileoff {display: none;}
+.cart-block-group {display: none;}
+.cart-block-group-mobile {display: block;border-bottom: solid 1px #b3b4b4; }
+.border-bottom-none {border-bottom: 0px;}
+.border-bottom-on {border-bottom: solid 1px #b3b4b4;}
+.position-mobile-cart {position: fixed;bottom: 0px;left: 10px;}
+#position-mobile-plan {position:relative;bottom:144px;overflow:auto;top:-10px;overflow-y: auto ;height: -webkit-fill-available;display: none;background: #fff;left:-4px;width: 100%;border-bottom: 0px;}
+.cart-block-buttons {position: fixed;bottom: 0;left: 10px;width: calc(100% - 22px);background: #ffffff;height: 50px;}
+.col-w767-1 {width: 100%;}
+.col-w767-1 input {margin-right: 10px;}
+.col-w767-2 {width: 50%;}
+.col-w767-2 input {margin-right: 10px;}
+.col-w767-2c  {width: calc(50% - 10px);}
+.col-w767-2c input {margin-right: 0px;}
+.cart-block {width: calc(100% - 20px);z-index: 11;}
+sidebar.slds-col--padded.slds-cleafix.lucastest2 {min-width: 100% !important;max-width: 100% !important;border-bottom: 0px;border-left: 0px;position: initial;top: 18px;right: 0px;padding-right: 6px !important;}
+.pmeTest.ng-scope {position: fixed;top: 0;left: 0;z-index: 15;background: #ffffff;height: 48px;}
+div#alert-container {width: auto;max-width: 90%;}
+.via-slds.via-omni .vlc-slds-items--container {padding-top: 0px;}
+.via-slds.via-omni .vlc-slds-items--container:after {min-height: auto;}
+.via-slds .slds-input {min-height: auto;}
+.via-slds.via-omni .slds-form-element__control .vlc-control-wrapper {min-height: auto;}
+.via-slds.via-omni .slds-form-element__control.vlc-slds-checkbox span.slds-form-element__label {font-size: 12px;}
+input#CNPJfromSearch {margin-right: 10px;width: -webkit-fill-available;}
+input#ContactFirstName {margin-right: 10px !important;width: -webkit-fill-available;}
+input#ContactTelephone {margin-right: 10px;width: -webkit-fill-available;}
+input#ContactEmail {width: -webkit-fill-available;}
+.slds-grid.slds-wrap.vlc-slds-button--footer div div {flex-direction: inherit !important;-webkit-flex-direction:inherit !important;}
+.vlc-slds-items--container.item.ng-binding.ng-scope {width: 150px !important;margin-left: 0px !important;border-radius: 5px!important;}
+div[ng-controller="descUnitCompController"] div {width: auto;min-width: 123px}
+ng-form#PME_FranquiaComp_SelItem div label {padding-top: 5px;padding-bottom: 5px;}
+div[ng-controller="customOverrideController"] div.vlc-slds-items--container.item.ng-scope {min-width: 167px !important;float: left;margin-right: 10px;height: auto;margin-left: 0px !important;margin-bottom: 10px !important;}
+div[ng-controller="descUnitCompController"] div.via-slds.via-omni.vlc-slds-items--container {height: 65px;}
+ng-form#PME_Compartilhado_GOL_SelItem div { margin-left: -5px;}
+label.slds-form__element__label.ng-binding {padding-top: 5px;}
+ng-form#PME_Compartilhado_Plugins_SelItem {margin-left: -10px;}
+ng-form#PME_Compartilhado_Services_SelItem {margin-left: -15px;}
+ng-form#PME_Compartilhado_Services_SelItem div:nth-child(1) label[for].slds-form-element__label:first-child {padding-left: 20px;}
+.via-slds.via-omni .slds-grid.slds-wrap.slds-grid--pull-padded {padding-left: 10px;padding-right: 10px;padding-top: 10px;}
+.slds-grid.slds-wrap.slds-grid--pull-padded.vlc-slds-small--size-column {border-top: 0px #b3b4b4;}
+.via-slds.via-omni .vlc-slds-error-block, .via-slds.via-omni .vlc-sub-block {display: block !important;}
+ng-form#FranquiaLimitText p p {border-bottom: 1px solid #b3b4b4!important;width: 100%;margin-bottom: 15px;padding-left: 10px;font-weight: lighter !important;font-size: 13px !important;line-height: 15px;padding-bottom: 10px;}
+ng-form [id^="PossuiAparelhos"] div {margin-left: 0px;}
+ng-form[id^="PME_Franquia_NET"] {margin-left: -10px;}
+label[for^="PME_Franquia"] {padding-left: 15px !important;}
+ng-form#PME_Individual_Services_SelItem {margin-left: -10px;}
+label[for^="PME_Individual_Services_SelItem"] {padding-left: 16px !important;}
+ng-form#solarPMESIBonus {margin-left: -10px;}
+label[for^="solarPMESIBonus"] {padding-left: 16px !important;}
+ng-form#PlanoRepeatableBlock {margin-left: -10px;}
+ng-form#PME_Individual_Services_SelItem button {margin-right: 10px;width: 175px;}
+ng-form#solarPMESIBonus button {margin-right: 10px;width: 175px;}
+div#ProductGroup {width: 480px;}
+.device-selection.ng-scope div#ProductGroup {margin: auto !important;}
+ng-form#DadosEmpresa child:nth-child(15) {width: 100%;}
+ng-form#PME_Compartilhado_Services_SelItem button {margin-right: 10px;width: 175px;}
+div#ProductName {border-top: solid 1px #b3b4b4;margin-top: 15px;padding-top: 15px;}
+ng-form#MainAddress child:nth-child(12) ng-form.slds-form-element.vlc-flex.vlc-slds-select-control.ng-pristine.ng-scope.ng-valid.ng-valid-required div {padding-right: 0px !important;}
+ng-form#MainAddress .slds-grid.slds-wrap.slds-grid--pull-padded {padding-left: 0px !important;padding-top: 0px;}
+ng-form#DeliveryData {margin-left: -10px !important;}
+ng-form#DadosEmpresa child:nth-child(1) {padding-top: 0px;}
+}
+
+
+@media (max-width: 768px) {
+span.vlc-slds--grippy {border-bottom: solid 1px #b3b4b4;height: 48px;}
+.icon-closecart {float: right;width: 35px;display: -webkit-inline-box;padding-right: 10px;margin-right: 25px;padding-top: 8px;border-bottom: solid 1px #b3b4b4;height: 48px;}
+.icon-closecart img {width:27px;height:26;}
+li.list-group-item.ng-scope.active {background: #f1f1f1 !important;}
+span.tooltiptext {display: none;}
+span.tooltip-net-empresa {display: none;}
+ng-form#message-info-mobile-company {display: block !important;}
+ng-form#message-info-mobile-company p {border: 0px !important;font-size: 12px !important;color: #009de3 !important;line-height: 17px !important;}
+ng-form#BlockContacts child:nth-child(1) child {width: 100% !important;margin-left: -10px;}
+ng-form#BlockContacts child child {width: 100% !important;}
+ng-form#BlockContacts child:nth-child(7) {width: 100% !important;}
+ng-form#ContactInfo child:nth-child(9) {width: 100% !important;padding: 10px 0px;}
+ng-form[id^="title-step"] div {border-top: 0px;}
+ng-form#TextMessGol {margin-top: -66px;margin-left: 150px;}
+ng-form[id^="RadioNRTypePlanosIndividual"] {margin-left: 7px;}
+div[data-label="Nome / Sobrenome"] {width: calc(100% - 10px);}
+ng-form[id^="PME_PC_AddNewFranquia"] {margin-left: 10px;}
+div#PME_PlanosCompartilhado_Step3_prevBtn {margin-left: 10px;}
+ng-form#MessGol {margin-top: -61px;margin-left: 150px;} 
+section#PME_PlanosCompartilhado_Step3 child:nth-child(2) {margin-right: 10px;}
+section#PME_PlanosCompartilhado_Step3 child:nth-child(4) {margin-right: 10px !important;}
+div#ContactInfoRecipient {border-top: solid 2px #009DE3;width: calc(100% - 40px) !important;margin-left: 10px;}
+ng-form#PME_Compartilhado_GOL_SelItem div {margin-left: -3px;}
+ng-form#PME_Plan_SelItem div:nth-child(1) ng-include {padding-left: 0px !important;}
+ng-form#PME_Plan_SelItem .vlc-slds-items--container.ng-scope:nth-child(2) {width: 50% !important;}
+div#VIP_PopulateRecipient {margin-top: 24px !important;}
+div#SearCEPBillingAddress {margin-top: 24px !important;}
+div#SearchCEPMainAddress {margin-top: 24px !important;} /* busca do endereço principal*/
+.via-slds.via-omni form[stepForm] {padding-top: 10px !important;margin-top: 18px;}
+li#page-selected {width: auto;}
+li#page-selected a {height: 37px;line-height: 31px;}
+ng-form#PME_CR_TextBlockBankDetails {margin-left: 5px;width: calc(100% - 20px);}
+ng-form#title-step-referencias {margin-left: -5px !important;}
+div#AddFranquia {margin-left: 10px;}
+ng-form#PME_FranquiaComp_SelItem ng-include div#item-0 {margin-left: 0px;}
+ng-form#PME_FranquiaComp_SelItem ng-include {padding-left: 4px;}
+div#AddFranquiaAndServicesIndv {margin-left: 6px;}
+ng-form#Block_Bonus_Net child span {margin-left: -17px;} /* bonus */
+ng-form#BonusNet {margin-left: -13px;} /* bonus bloco */
+ng-form#PME_Franquia_SelItem ng-include {padding-left: 0px;}
+ng-form#rules-service-passaport-world {margin-left: 7px;}
+ng-form#rules-service-passaport-world p {border: 0px !important;font-size: 12px !important;padding-left: 0px;}
+p.passaporte-mundo {margin-top: 10px;}
+div#iconTooltip {display: none;}
+a[vlc-slds-tool-tip="test"] {display: none !important;}
+span.pontos-cart-space br {display: none;}
+span.pontos-cart-space-2 br {display: none;}
+table.pontos-cart td:nth-child(4) span {width: 115px !important;}
+table.pontos-cart td:nth-child(5) span {width: 90px !important;}
+table.pontos-cart td:nth-child(6) span {width: 90px;text-align: right;}
+div#block-device-value {width: calc(100% - 124px) !important;}
+td.qtty input {padding: 0px !important;}
+div#GetDevices {margin-top: 21px !important;} /* se precisar mudar altera a largura dos outros campos*/
+div#block-desconto {width: 120px;display: inline-block;}
+table#table-teste-desktop {display: none;}
+table#table-teste-mobile {display: block;margin-left: 10px;margin-top: 15px;width: calc(100% - 20px) !important;}
+table#table-teste-mobile td {background: url(/resource/cec_pme_image/icones/linha-dados.gif) top center;border: solid 1px #b3b4b4;border-bottom: 0px;}
+td#table-remove-action {border: solid 1px #b3b4b4;border-left: 0px;}
+div#title-table-header {border:solid 1px #b3b4b4;border-bottom: 0px;border-right: 0px;height: 34px;line-height: 34px;padding: 0px 5px;text-transform: none !important;font-weight: normal !important;}
+div#block-table-adm {height: 34px;line-height: 34px;padding: 0px 5px;color: #434444 !important;font-weight: 400;border-left: 0px;}
+ng-form#BlockAparelhos child:nth-child(5) {padding-top: 10px;width: 230px;}
+ng-form#BlockAparelhos child:nth-child(6) {padding-top: 20px;}
+div#PME_Devices_Step5_midBtn {margin-right: 0px;}
+div#ProductName label {line-height: 25px;}
+div#AdminContacts_nextBtn {margin-right: 10px;}
+div#AdminContacts_prevBtn {margin-left: 10px;}
+div#PME_CR_AdministratorContacts_prevBtn {margin-left: 5px;}
+div#PME_CR_AdministratorContacts_nextBtn {margin-right: 15px;}
+div#PME_AddPlan_Step1_nextBtn {margin-right: 10px;}
+div#Addresses_nextBtn {margin-right: 10px;}
+div#Addresses_prevBtn {margin-left: 10px;}
+div#ProductGroup {width: 100%;}
+div#ProductName {height: auto;}
+div#ProductPrice {width: calc(100% - 160px) !important;margin-right: 0px;}
+span#selected-franquia-device {font-size: 11px !important;margin-left: -8px;}
+span#selected-franquia-pts {margin-left: -8px;font-size: 11px;}
+span#selected-franquia-points {margin-left: -8px;font-size: 11px;}
+input#CNPJfromSearch {margin-right: 0px !important;}
+.via-slds.via-omni .slds-grid.slds-wrap.slds-grid--pull-padded {padding-top: 0px;}    
+ng-form#title-step {margin-right: 10px !important;padding-right: 10px;}
+ng-form[id^="title-step"] div p {font-size: 15px;}    
+label[for="PME_CNPJ"] {padding-left: 10px !important;}
+div#SearchCEPMainAddress {margin-left: 10px;}    
+div#SearCEPBillingAddress {margin-left: 10px;}    
+input#PME_CNPJ {margin-left: 10px !important;}
+ng-form[id^="PME_FirstStep"] {margin-left: 10px !important;}
+#select-cargo {margin-left: -10px;}
+#select-cargo-block {margin-left: 20px !important;}
+ng-form#PME_CompartilhadoServices_Block {margin-top: -1px;}
+label[for="PME_Compartilhado_Plugins_SelItem"] {padding-left: 10px !important;}
+label[for="PME_FranquiaComp_SelItem"] {padding-top: 10px !important;margin-top: 10px !important;}
+label[for="PME_Franquia_SelItem"] {margin-left: -10px !important;}
+label#radio-PME_AddNewFranquia_Radio {font-size: 13px !important;padding-top: 15px;}
+form[id^="a2I2C000000MI4WUAW"] child:nth-child(2) {margin-left: 10px !important;}
+form[id^="a2I2C000000MIHQUA4-53"] child:nth-child(2) {margin-left: 10px !important;margin-right: 10px !important;width: 150px;}
+div#VIP_GetContact_ByCPF {margin-top: 28px !important;margin-left: 50px !important;}
+td.vlc-slds-block_table-body__td.ng-scope form span.ng-binding.ng-scope {float: right;white-space: initial;}
+li.list-group-item.ng-scope span {padding-left: 5px;padding-top: 0px;}
+li.list-group-item.ng-scope:first-child span {padding-left: 15px;}
+li.list-group-item.ng-scope:last-child span {padding-left: 15px;}
+.slds-col--padded.slds-size--1-of-1.slds-m-top--medium.slds-m-bottom--medium {padding-bottom: 10px;}
+ng-form#ShippingContactsInfo h6 {font-size: 13px !important;}
+ng-form#message-mobile-net {display: block !important;}
+span.info-mobile-message {font-size: 12px !important;width: 100%;display: -webkit-inline-box;}
+ng-form#PME_LeadCreation child {width: 50% !important;padding-top: 10px;}
+ng-form#PME_LeadCreation child:nth-child(1) {width: 170px !important;margin-right: 10px !important;}
+ng-form#PME_LeadCreation child:nth-child(2) {width: calc(100% - 190px) !important;margin-right: 0px !important;}
+ng-form#PME_LeadCreation child:nth-child(4) {display: block !important;width: 100% !important;}
+ng-form#PME_LeadCreation child:nth-child(4) p {border-bottom: 0px !important;line-height: 18px !important;font-size: 12px !important;}
+ng-form#PME_LeadCreation child:nth-child(4) label {display: none !important;}
+ng-form#PME_LeadCreation child:nth-child(5) {margin-right: 0px !important;width: 50% !important;}
+ng-form#PME_LeadCreation child:nth-child(7) {width: 140px !important;}
+ng-form#PME_LeadCreation child:nth-child(10) {width: 100% !important;}
+ng-form#PME_LeadCreation child:nth-child(11) {width: calc(100% - 10px) !important;}
+ng-form#PME_CR_BankDetails child:nth-child(7) {width: calc(58% - 10px)!important;}
+ng-form#MainAddress child span.vlc-label-description.ng-binding {padding-top: 10px;}    
+ng-form#MainAddress child:nth-child(7) {width: 112px !important;margin-right: 10px !important;} /* tipo*/
+ng-form#MainAddress child:nth-child(8) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#MainAddress child:nth-child(9) {width: 50% !important;margin-right: 0px !important;}
+ng-form#MainAddress child:nth-child(10) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#MainAddress child:nth-child(10) ng-form {width: 100% !important;padding-right: 0px !important;}
+ng-form#MainAddress child:nth-child(11) {width: 50% !important;margin-right: 0px !important;}
+ng-form#MainAddress child:nth-child(12) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#MainAddress child:nth-child(13) {width: 50% !important;margin-right: 0px !important;}
+ng-form#MainAddress child:nth-child(13) ng-form div {padding-right: 0px !important;}
+ng-form#MainAddress child:nth-child(14) {width: 50% !important;margin-right: 0px !important;}
+label[for="TypeStreetBillingAddress"] {padding-top: 10px;}
+label[for="TypeStreetMainAddress"] {padding-top: 10px;}
+ng-form#CEPSearchBillingAddress child:first-child {width: 140px !important;}
+ng-form#BillingAddress child span.vlc-label-description.ng-binding {padding-top: 10px;}
+ng-form#BillingAddres_RO {margin-left: -10px !important;}
+ng-form#BillingAddres_RO child:nth-child(2) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#BillingAddres_RO child:nth-child(3) {margin-right: 0px !important;width: 50% !important;}
+ng-form#BillingAddres_RO child:nth-child(4) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#BillingAddres_RO child:nth-child(5) {margin-right: 0px !important;width: 50% !important;}
+ng-form#BillingAddres_RO child:nth-child(6) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#BillingAddres_RO child:nth-child(7) {margin-right: 0px !important;width: 50% !important;}
+ng-form#BillingAddres_RO child:nth-child(8) {width: 100px !important;margin-right: 0px !important;}
+ng-form#DeliveryData child:nth-child(4) {margin-right: 10px !important;}
+ng-form#DeliveryData child:nth-child(5) {width: 160px !important;margin-right: 0px !important;}
+ng-form#DeliveryData child:nth-child(6) {width: 140px !important;margin-right: 10px !important;}
+ng-form#DeliveryData child:nth-child(7) {width: 140px !important;margin-right: 10px !important;}
+ng-form#DeliveryData .slds-grid.slds-wrap.slds-grid--pull-padded {padding-right: 0px;}
+ng-form#BillingAddress child:nth-child(6) {width: 115px !important;margin-right: 10px;}
+ng-form#BillingAddress child:nth-child(7) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#BillingAddress child:nth-child(8) {width: calc(50% - 10px) !important;margin-right: 10px !important;} /* endereço*/
+ng-form#BillingAddress child:nth-child(9) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#BillingAddress child:nth-child(10) {width: calc(50% - 10px) !important;margin-right: 10px !important;} /*  complemento*/
+ng-form#BillingAddress child:nth-child(11) {width: calc(50% - 10px) !important;margin-right: 10px !important;} /* bairro*/
+ng-form#BillingAddress child:nth-child(12) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#BillingAddress child:nth-child(13) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#ContactInfo child:nth-child(10) {width: 100% !important;margin-left: -10px !important;margin-right: -10px !important;} /* nome administrador e bloco tem que ser 100%*/
+ng-form#ContactInfo child:nth-child(10) .slds-grid.slds-wrap.slds-grid--pull-padded {padding-right: 0px;}
+ng-form#ContactInfo child:nth-child(14) {width: 130px !important;margin-right: 10px !important;} /* tel fixo administrador */
+ng-form#ContactInfo child:nth-child(15) {width: 130px !important;margin-right: 10px !important;} /* cel administrador */
+ng-form#ContactInfo child:nth-child(16) {width: calc(100% - 445px) !important;margin-right: 0px !important;} /* email fixo administrador */
+ng-form#ContactInfo child:nth-child(17) {width: 420px !important;margin-right: 0px !important;} /* é representante administrador */
+ng-form#ContactInfo child:nth-child(18) {width: calc(100% - 430px) !important;margin-right: 0px !important;} /* cargo representante administrador */
+ng-form#ContactInfo child:nth-child(19) div div div:first-child {border-top: solid 1px #b3b4b4 !important;margin-top: 10px;} /* adicionar administrador */
+ng-form#PME_CR_BusinessReferences child {padding-top: 10px;}
+ng-form#PME_CR_BusinessReferences child:nth-child(6) {margin-right: 10px !important;width: calc(100% - 300px) !important;margin-left: -5px;}
+ng-form#PME_CR_BusinessReferences child:nth-child(7) {width: 290px !important;}
+ng-form#PME_CR_BusinessReferences child:nth-child(8) {margin-right: 10px !important;width: calc(100% - 300px) !important;}
+ng-form#PME_CR_BusinessReferences child:nth-child(9) {width: 140px !important;margin-right: 10px !important;}
+ng-form#PME_CR_BusinessReferences child:nth-child(10) {width: 140px !important;margin-right: 0px !important;}
+ng-form#PME_CR_BankDetails child {padding-top: 10px;}
+ng-form#PME_CR_BankDetails child:nth-child(3) {width: 141px !important;margin-right: 10px !important;margin-left: -5px;} /* codigo do banco*/
+ng-form#PME_CR_BankDetails child:nth-child(4) {width: calc(100% - 435px) !important;margin-right: 10px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(5) {width: 100px !important;margin-right: 10px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(6) {width: 174px !important;margin-right: 0px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(7) {width: calc(100% - 300px)!important;margin-right: 10px;margin-left: -5px;} /* contato*/
+ng-form#PME_CR_BankDetails child:nth-child(8) {width: 140px !important;margin-right: 10px !important;}
+ng-form#PME_CR_BankDetails child:nth-child(9) {width: 144px !important;margin-right: 0px !important;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {width: 354px !important;margin-top: -7px !important;} /* bloco tipo compartilhado*/
+ng-form#PME_CompartilhadoServices_Block child:nth-child(2) {width: 110px !important;margin-right: 10px !important;}
+ng-form#DadosEmpresa child:nth-child(2) {margin-left: 0px !important;width: 100% !important;margin-right: 0px !important;} /* serviços NET e razao social */
+ng-form#DadosEmpresa child:nth-child(1) {padding-top: 0px;margin-right: 0px !important;padding-right: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(3) {width: 100% !important;margin-right: 0px !important;} /* razao social*/
+ng-form#DadosEmpresa child:nth-child(4) {width: 100% !important;margin-right: 0px !important} /* cnpj*/
+ng-form#DadosEmpresa child:nth-child(5) {width: calc(50% - 80px) !important;} /*ie*/
+ng-form#DadosEmpresa child:nth-child(5) div:first-child {padding-top: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(6) {padding-top: 0px !important;width: 70px !important;margin-top: -9px !important;} /* isento */
+ng-form#DadosEmpresa child:nth-child(7) {width: calc(50% - 90px) !important;} /* IM*/
+ng-form#DadosEmpresa child:nth-child(7) div:first-child {padding-top: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(8) {padding-top: 0px !important;width: 70px !important;margin-right: 0px !important;margin-top: -9px !important;} /*isento*/
+ng-form#DadosEmpresa child:nth-child(9) {width: 25% !important;margin-right: 10px !important;}
+ng-form#DadosEmpresa child:nth-child(10) {width: calc(25% - 20px) !important;margin-right: 10px !important;}
+ng-form#DadosEmpresa child:nth-child(11) {width: 50% !important;margin-right: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(12) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#DadosEmpresa child:nth-child(14) {width: 50% !important;margin-right: 0px !important;}
+ng-form#DadosEmpresa child:nth-child(15) {width: calc(50% - 10px) !important;}
+ng-form#DadosEmpresa child:nth-child(16) {width: 50% !important;margin-right: 0px !important;}   
+ng-form#DadosEmpresa child:nth-child(17) {width: 100% !important;}
+ng-form#DadosEmpresa child:nth-child(18) {width: 100% !important;}
+ng-form#CEPSearchBillingAddress_RO child:nth-child(1) {margin-left: -10px !important;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 131px;}
+label[for="CNPJFormula"] {margin-left: 0px !important;}
+div#CompanyInfo_prevBtn {margin-left: 10px;}
+div#CompanyInfo_nextBtn {margin-right: 10px;}
+ng-form#BillingAddressTitle {padding-right: 10px;padding-top: 10px;}
+ng-form#DeliveryData child {padding-top: 5px;}
+ng-form#BillingAddres_RO child {padding-top: 5px;}
+p.ng-binding p.legenda-passaporte-mundo {padding-left: 0px !important;}
+ng-form#TextMessGo {margin-left: 150px;}
+ng-form#PME_LeadCreation child:nth-child(12) {width: 100% !important;margin-right: 0px !important;}
+}/*fimn 768*/
+
+@media (max-width: 767px) { /* ate 721*/
+ng-form#ContactBirthdateChecked {margin-left: -10px;width: calc(100% + 20px);}
+#select-cargo {margin-left: -20px !important;}
+ng-form#BlockContacts child {width: 100% !important;}
+ng-form#ContactInfo child:nth-child(2) {width: 100% !important;}
+ng-form#BonusNet {margin-left: -13px;} /* bonus*/
+ng-form#Block_Bonus_Net child span {margin-left: -17px;} /* bonus*/
+ng-form[id^="RadioNRTypePlanosIndividual"] {margin-left: 0px;} /* tipo individual*/
+label[for="PME_Franquia_SelItem"] {margin-left: -15px !important;}    
+ng-form#PlanoRepeatableBlock child:nth-child(1) {width: calc(25% - 10px) !important;margin-right: 10px;margin-left: 0px;}
+ng-form#rules-service-passaport-world {margin-left: 0px;}
+ng-form#BlockTradein {margin-left: -10px;}
+label[for="LDSelect"] {padding-top: 5px;}
+label[for="RegionalSelect"] {padding-top: 8px;}
+label[for="UFSelect"] {padding-top: 8px;}
+label[for="PME_PC_TradeIn"] {padding-top: 8px;}
+div#AddPlugins_new {margin-left: -4px;}
+div#ContactInfoRecipient {border-top: solid 2px #009DE3;width: calc(100% - 5px) !important;margin-left: 3px;}
+li#page-selected a {height: 27px;line-height: normal;}
+ng-form#PlanoRepeatableBlock child:nth-child(7) {margin-left: 0px !important;}
+label[for="PME_FranquiaComp_SelItem"] {padding-left: 5px !important;}
+div#AddFranquiaAndServicesIndv {margin-left: 0px;}
+div#AddFranquia {margin-left: 4px;}
+.via-slds.via-omni .vlc-slds-type-ahead .slds-form-element__control.vlc-slds-type-ahead--alttemplate_label svg {top: 48px;height: 12px;right: 5px;}
+ng-form#BillingAddres_RO child {padding-top: 10px;}
+.slds-modal__content.slds-p-around--medium {border-left: solid 1px #f3f3f3;border-right: solid 1px #f3f3f3;font-size: 12px;}
+.via-slds.via-omni.slds-modal--prompt .slds-modal__content, .via-slds.via-omni.slds-modal_prompt .slds-modal__content {border: solid 1px #e4e4e4 !important;}
+h2#prompt-heading-id {font-size: 14px;font-weight: 400;}
+button#alert-ok-button {font-size: 12px;}
+div#selectable-Brand label {margin-top: 10px;}
+div#selectable-Color label {margin-top: 10px;}
+.vlocity dir-pagination-controls {display: flex;text-align: center;font-size: 12px;}
+.active, .accordion:active {width: auto;font-size: 12px;}
+.vlocity .pagination {display: -webkit-inline-box;padding-left: 0;margin: 20px auto;border-radius: 3px;}
+div#ProductName {margin-left: -1px !important;width: 100% !important;padding-top: 5px;}
+div#VIP_GetContact_ByCPF {margin-left: 0px !important;margin-top: 10px !important;}
+ng-form#PME_CompartilhadoServices_Block {margin-top: 4px;}
+ng-form#BlockAparelhos {width:100%;}
+.via-slds.via-omni .slds-form-element__control>svg {right: 5px;width: 10px;}
+div#ProductGroup .item-block.slds-size--5-of-12.slds-medium-size--5-of-12.vlc-slds-item--details {width: 130px !important;margin-left: -5px;} /* bloco aparelhos ipad*/
+div#ProductPrice {width: calc(100% - 132px) !important;margin-right: 0px;}
+.error {text-align: left !important;line-height: 12px !important;font-size: 13px !important;}
+ng-form#PME_Compartilhado_GOL_SelItem div div .slds-grid--vertical.slds-box {width: 140px !important;}
+ng-form#ShippingContactsInfo label:first-child {display: none;}
+ng-form#PME_LeadCreation child:nth-child(5) {width: calc(50% - 10px) !important;margin-right: 10px !important;} 
+p.ng-binding p.legenda-passaporte-mundo {margin-left: 0px !important;}
+ng-form#CEPSearchMainAddress child:nth-child(2) {width: 120px;}
+div#SearCEPBillingAddress {margin-top: 27px !important;}
+div#SearchCEPMainAddress {margin-top: 27px !important;}
+ng-form#CEPSearchBillingAddress child:nth-child(2) {width: 150px;}
+ng-form#MainAddress child:nth-child(9) {margin-right: 0px !important;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 122px;min-width: 122px !important;}
+ng-form#DadosEmpresa child:nth-child(2) {margin-right: 10px !important;}
+input#CPF {min-width: 160px !important;width: 160px !important;}
+input#ContactEmail {margin-right: 0px !important;width: -webkit-fill-available;}
+input#ContactFirstName {margin-right: 0px !important;width: -webkit-fill-available;}
+}
+@media (max-width: 665px) {
+    div#GetDevices {margin-top: 20px !important;}
+    .via-slds.via-omni .slds-form-element__label span {color: #434444 !important;font-size: 12px !important;}
+}
+
+
+@media (max-width: 640px) { /* ate 640*/
+    ng-form#ContactInfo child:nth-child(14) {width: 210px !important;margin-right: 0px !important;}
+    ng-form#ContactInfo child:nth-child(15) {width: 100% !important;}
+    ng-form#ContactInfo child:nth-child(17) {width: 100% !important;}
+    ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {width: 280px !important;margin-right: 0px !important;}
+    ng-form[id^="RadioNRTypePlanosCompartilhado"] label:nth-child(3) {padding-right: 0px;margin-right: 0px !important;}
+    ng-form[id^="RadioNRTypePlanosCompartilhado"] label:nth-child(2) {margin-right: 0px !important;}
+    ng-form[id^="RadioNRTypePlanosCompartilhado"] label:nth-child(1) {margin-right: 0px !important;}
+    ng-form#ContactInfo child:nth-child(17) {width: calc(100% - 430px) !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(4) {width: calc(100% - 140px) !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(6) {width: 169px !important;margin-right: 10px !important;}
+    div#SearCEPBillingAddress {margin-left: 10px;}
+    input#ContactEmail {margin-right: 0px !important;width: -webkit-fill-available;}
+    input#ContactMobilePhone, input#ContactPhone {margin-right: 0px !important;padding-right: 0px !important;}
+    ng-form#PlanoRepeatableBlock child:nth-child(6) ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope {margin-left: 0px !important;margin-right: 0px !important;width: 100% !important;}
+    ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 110px;min-width: 110px !important;margin-right: 10px;}
+    div[ng-controller="descUnitCompController"] div {width: auto;min-width: 108px;}
+    ng-form#PME_Compartilhado_Plugins_SelItem div[id^="item"] {width: 127px !important;}   
+    label[for="PME_Compartilhado_GOL_SelItem"] {margin-left: -2px;}
+    p.legenda-passaporte-mundo {margin-top: 16px;padding-left: 10px !important;}
+    ng-form#BlockContacts child:nth-child(1) child {width: 100% !important;margin-left: 0px;}
+
+}
+@media (max-width: 639px) { /* ate 412*/
+    ng-form#BlockContacts {margin-left: 0px;}
+    div[data-label="Nome Completo"] {width: 100%;display: -webkit-inline-box;overflow-x: hidden;}
+    div[data-label="CPF"] {width: 50%;display: -webkit-inline-box;}
+    div[data-label="Data de Nascimento"] {width: 50%;display: -webkit-inline-box;}
+    div[data-label="Telefone"] {width: 100%;display: -webkit-inline-box;padding-right: 0px !important;border-bottom: solid 1px #b3b4b4;}
+    div[data-label="E-mail"] {width: 100%;display: -webkit-inline-box;border-bottom: solid 1px #b3b4b4;overflow-x: hidden;}
+    div[data-label="Resp. Assinatura"] {width: 120px;padding-left: 0px;display: -webkit-inline-box;border-bottom: 0px;}
+    div[data-label="Cargo"] {width: calc(100% - 175px);padding-left: 0px;display: -webkit-inline-box;border-bottom: 0px;}
+    div#Messaging2 {margin-top: -62px;margin-left: -176px;width: 100% !important;}
+    label[for="PME_Plan_SelItem"] {display: none !important;}
+    div[ng-controller="planoDAController"] .vlc-slds-items--container.ng-scope {width: 100% !important;}
+    ng-form#PME_Plan_SelItem .slds-form-element__control ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope .ng-scope .vlc-slds-items--container.ng-scope {width: 100% !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(6) {width: 100% !important;}
+    input#ContactFirstName {margin-right: 0px !important;padding-right: 0px !important;}
+    .via-slds.via-omni .vlc-slds-items--container:hover {background: transparent !important;}
+    ng-form#PME_LeadCreation child:nth-child(1) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#PME_LeadCreation child:nth-child(2) {width: 100% !important;margin-right: 0px !important;}
+    input#AddressMain {width: 100% !important;}
+    ng-form#PME_LeadCreation child:nth-child(7) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#PME_LeadCreation child:nth-child(11) {width: 100% !important;margin-right: 0px !important;}
+    form[id^="a2I2C000000MI4WUAW"] child:nth-child(7) label {width: auto;margin-right: 15px;}
+    ng-form#DadosEmpresa child:nth-child(2) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#DadosEmpresa child:nth-child(3) {width: 100% !important;margin-right: 0px !important;} /* criar para embratel  - cnpj*/
+    ng-form#MainAddress child:nth-child(6) {width: 100% !important;}
+    ng-form#MainAddress child:nth-child(7) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#MainAddress child:nth-child(11) {margin-right: 0px !important;width: 100% !important;}
+    ng-form#MainAddress child:nth-child(8) {margin-right: 0px !important;width: 100% !important;}
+    ng-form#BillingAddress child:nth-child(6) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#MainAddress child:nth-child(9) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#BillingAddress child:nth-child(10) {width: 100% !important;margin-right: 0px !important:}
+    ng-form#CEPSearchBillingAddress child:first-child {width: 140px !important;margin-left: 10px !important;} /* cep / endereço principal e consulta não alterar margin-left*/
+    label[for="CEPBillingAddress"] {margin-left: -10px !important;}
+    input#CEPBillingAddress {margin-left: -10px !important;}
+    div#SearchCEPMainAddress {margin-top: 29px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(3) {width: 100% !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(4) {width:100% !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(7) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(6) {width: calc(100% - 110px) !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(8) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#PME_CR_BankDetails child:nth-child(9) {width: 50% !important;margin-right: 0px !important;}
+    .via-slds.via-omni .vlc-slds-radio-control div[horizontalmode=true] label {width: max-content !important;}
+    ng-form[id^="PME_FirstStep"] label {margin-right: 15px !important;}
+    ng-form#DeliveryData child:nth-child(4) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#DeliveryData child:nth-child(5) {width: 120px !important;margin-right: 10px !important;}
+    ng-form#BlockContacts .slds-grid.slds-wrap.slds-grid--pull-padded {padding-left: 0px;padding-right: 0px;}
+    input#ContactEmail {margin-right: 0px;}
+    ng-form#ContactInfo child:nth-child(8) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#ContactInfo child:nth-child(9) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#ContactInfo child:nth-child(10) {width: 100% !important;margin-right: 0px !important;margin-top: 10px;margin-left: -8px !important;padding-bottom: 10px;}
+    ng-form#ContactInfo child:nth-child(11) {width: 100% !important;}
+    ng-form#ContactInfo child:nth-child(12) {width: 100% !important;padding-top: 10px;}
+    ng-form#ContactInfo child:nth-child(17) {width: 100% !important;margin-right: 0px !important;border-top: solid 1px #b3b4b4b4;padding-top: 10px;}
+    .plan-text p {height: 80px !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(5) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(6) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(7) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(8) {width: 100% !important;margin-right: 0px !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(9) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#PME_CR_BusinessReferences child:nth-child(10) {width: 50% !important;margin-right: 0px !important;}
+    ng-form#PME_Device_SelItem ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope {padding: 0px !important;padding-left: 0px !important;}
+    form[id^="a2I2C000000"] child:nth-child(3) {width: 100% !important;}
+    ng-form#ContactInfo child:nth-child(1) {width: 100% !important;}
+    #cpf-administrator {width: 100% !important;}
+    ng-form#MainAddress child.slds-size--1-of-1.slds-medium-size--3-of-12 {margin-right: 0px !important;} 
+    ng-form#MessGol {margin-top: auto;margin-left: auto;}
+    ng-form#TextMessGol {margin-top: auto;margin-left: auto;}
+    ng-form#MainAddress child:nth-child(10) {width:100% !important;margin-right: 0px !important;}
+    ng-form#MainAddress child:nth-child(12) {width:100% !important;margin-right: 0px !important;}
+    ng-form#MainAddress child:nth-child(13) {width:100% !important;margin-right: 0px !important;}
+    ng-form#BillingAddress child:nth-child(8) {width:100% !important;margin-right: 0px !important;}
+    ng-form#BillingAddress child:nth-child(9) {width:100% !important;margin-right: 0px !important;}
+    ng-form#BillingAddress child:nth-child(11) {width:100% !important;margin-right: 0px !important;}
+    ng-form#BillingAddress child:nth-child(12) {width:100% !important;margin-right: 0px !important;}
+    ng-form#TextMessGol p p {width: 100% !important;}
+    ng-form#ContactBirthdateChecked {margin-left: 0px;width: calc(100% + 0px);}
+    input#ContactFirstName {margin-right: 0px !important;width: -webkit-fill-available;}
+}
+
+@media (max-width: 615px) {
+    ng-form#DadosEmpresa child:nth-child(9) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#DadosEmpresa child:nth-child(10) {width: 50% !important;margin-right: 0px !important;}
+    ng-form#DadosEmpresa child:nth-child(11) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#DadosEmpresa child:nth-child(12) {width: 50% !important;margin-right: 0px !important;}
+    ng-form#DadosEmpresa child:nth-child(14) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#DadosEmpresa child:nth-child(15) {width: 50% !important;margin-right: 0px !important;}
+    ng-form#DadosEmpresa child:nth-child(16) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+    ng-form#DadosEmpresa child:nth-child(17) {width: 50% !important;margin-right: 0px !important;}
+}
+
+@media (max-width: 585px) {
+ng-form#ContactInfo child:nth-child(5) {width: 100% - 10px) !important;margin-right: 10px !important;} /* tel fixo*/
+ng-form#ContactInfo child:nth-child(3) {width: 100% !important;margin-right: 0px !important;} 
+ng-form#ContactInfo child:nth-child(4) {width: 100% !important;margin-right: 0px !important;} 
+ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {padding-top: 10px;}
+ng-form#BlockAparelhos child:nth-child(2) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BlockAparelhos child:nth-child(3) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BlockAparelhos child:nth-child(5) {width: 100% !important;margin-right: 0px !important;margin-top: 0px !important;}
+ng-form#BlockAparelhos child:nth-child(6) {padding-top: 0px;}
+
+}
+
+
+@media (max-width: 510px) {
+ng-form#BlockAparelhos child:nth-child(5) {margin-right: 7px !important;}
+span.pontos-cart-space br {display: block;font-size: 10px !important;}
+span.pontos-cart-space-2 br {display: block;font-size: 10px !important;}
+table.pontos-cart td {font-size: 11px !important;font-weight: lighter;color: #009DE3;line-height: 13px;vertical-align: top;}
+table.pontos-cart td:nth-child(4) span {width: auto !important;font-size: 10px !important;}
+table.pontos-cart td:nth-child(5) span {width: auto !important;font-size: 10px !important;}
+table.pontos-cart td:nth-child(6) span {width: auto;text-align: left;font-size: 10px !important;}
+ng-form#DadosEmpresa child:nth-child(5) {width: calc(100% - 90px)!important;}
+ng-form#DadosEmpresa child:nth-child(7) {width: calc(100% - 90px)!important;}
+#select-cargo-block {margin-left: 15px !important;}
+}
+
+@media (max-width: 480px) {
+ng-form#BlockContacts {margin-left: 1px !important;}
+div#AddFranquia {margin-left: 5px;}
+div#selectable-Model {margin-right: 0px;margin-top: 10px;}
+ng-form#PME_Compartilhado_Services_SelItem button {margin-right: 10px;width: 175px !important;}
+div#AdminContacts_prevBtn {margin-left: 0px;}
+ng-form#PME_CompartilhadoServices_Block {margin-left: -9px;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {margin-top: 5px !important;}
+ng-form#ContactInfo child:nth-child(8) {margin-left: -1px;}
+ng-form#PME_CR_BusinessReferences child:nth-child(7) {margin-left: -5px;}
+ng-form#PME_CR_BusinessReferences child:nth-child(9) {margin-left: -5px;}
+ng-form#PME_CR_BankDetails child:nth-child(4) {margin-left: -5px;}
+ng-form#PME_CR_BankDetails child:nth-child(5) {margin-left: -5px;}
+ng-form#ContactInfo .slds-grid.slds-wrap.slds-grid--pull-padded {padding-right: 0px !important;margin-left: -5px;}
+ng-form#MainAddress child:nth-child(8) {margin-top: 10px;margin-left: -1px;}
+ng-form#title-step-administrator {margin-left: 0px;}
+div#block-device-value {width: 100% !important;}
+div#block-desconto {width: 100% !important;padding-right: 0px;}
+div#GetDevices {margin-top: 20px !important;}
+ng-form#MainAddress child:nth-child(11) {margin-right: 0px !important;}
+ng-form#BillingAddress child:nth-child(6) {width: 100% !important;margin-right: 10px !important;}
+ng-form#BillingAddress child:nth-child(7) {margin-right: 10px;width: 100% !important;}
+ng-form#DadosEmpresa child:nth-child(17) {width: 100% !important;margin-right: 10px !important;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 110px;min-width: 110px !important;margin-right: 10px;}
+ng-form#PME_Compartilhado_Plugins_SelItem div[id^="item"] {width: 110px !important;}
+ng-form#DadosEmpresa child:nth-child(16) {width: 100% !important;margin-right: 0px;height: auto !important;}
+ng-form#TextMessGol p p {padding-top: 0px;font-size: 13px !important;padding-left: 0px;width: auto !important;}
+ng-form#BillingAddres_RO child:nth-child(2) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(3) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(4) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(5) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(6) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(7) {width: 100% !important;margin-right: 0px !important;}
+ng-form#BillingAddres_RO child:nth-child(8) {width: 100% !important;margin-right: 0px !important;}
+ng-form#PME_LeadCreation child:nth-child(5) {width: 100% !important;margin-right: 0px !important;}
+ng-form#PME_LeadCreation child:nth-child(6) {width: 100% !important;margin-right: 0px !important;}
+ng-form#PME_LeadCreation child:nth-child(8) {width: 100% !important;margin-right: 0px !important;}
+ng-form#PME_LeadCreation child:nth-child(9) {width: 100% !important;margin-right: 0px !important;}
+ng-form#ContactInfo child:nth-child(1) {width: 100% !important;margin-left: 5px;}
+}
+
+@media (max-width: 479px) { 
+div[data-label="Nome / Sobrenome"] {margin-top: 10px;width: 100%;}
+div[data-label="RG"] {width: 80px;display: -webkit-inline-box;border-bottom: 0px;}
+div[data-label="Telefone Fixo"] {width: 105px;border-bottom: 0px;}
+div[data-label="Telefone Celular"] {width: calc(100% - 229px);border-bottom: 0px;}
+}
+
+@media (max-width: 424px) { 
+    ng-form#DadosEmpresa child:nth-child(11) {width: 100% !important;margin-right: 0px !important: }
+    ng-form#DadosEmpresa child:nth-child(12) {width: 100% !important;margin-right: 0px !important: }
+    ng-form#DadosEmpresa child:nth-child(14) {width: 100% !important;margin-right: 0px !important: }
+    ng-form#DadosEmpresa child:nth-child(15) {width: 100% !important;margin-right: 0px !important: }
+    ng-form#PME_Compartilhado_GOL_SelItem ng-include {margin-left: -4px;}
+    div#SearchCEPMainAddress {margin-top: 28px !important;margin-left: 11px;}
+    ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 118px;min-width: 118px !important;}
+    button[id^="item"] {width: 172px !important;}
+    form#a2I2C000000MIL8UAO-54 child:nth-child(5) {margin-left: 10px;margin-right: 10px;} 
+    ng-form#TextMessGol {margin-top: auto;margin-left: 0px;}
+    ng-form#PME_Compartilhado_Plugins_SelItem ng-include {padding-right: 0px !important;padding-left: 0px;}
+    ng-form#PME_Compartilhado_Plugins_SelItem div[id^="item"] {width: 100% !important;margin-right: 0px;min-width: 100% !important;}
+    td.qtty {width: 65px !important;}
+    ng-form#PME_Compartilhado_Services_SelItem {margin-left: -21px;}
+    #PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected {background: transparent;height: 51px;}
+    label[for="PME_Compartilhado_Plugins_SelItem"] {padding-left: 0px !important;}
+    .tit-passos {font-size: 12px !important;font-weight: 200 !important;}
+    .block-passos {width: 40px !important;}
+    .block-logo {width: 170px;padding-top: 7px;}
+    .block-logo img {width: 165px;height: 33px;}
+    .block-passos div:nth-child(1) {width: 40px;text-align: right;} /* remover depois*/
+}
+
+
+@media (max-width: 400px) {
+ng-form#PlanoRepeatableBlock child:nth-child(1) {width: calc(50% - 10px) !important;margin-right: 10px;}
+ng-form#PlanoRepeatableBlock child:nth-child(2) {width: 50% !important;margin-right: 0px !important;}
+ng-form#PlanoRepeatableBlock child:nth-child(4) {width: calc(50% - 10px) !important;margin-right: 10px;margin-top: 10px;}
+ng-form#PlanoRepeatableBlock child:nth-child(5) {width: 50% !important;margin-right: 0px !important;margin-top: 10px;}
+}
+
+@media (max-width: 395px) {
+    div[data-label="Telefone Fixo"] {height: 60px;}
+}
+
+
+@media (max-width: 385px) {
+div#ProductName {width: calc(100% - 26px) !important;padding-top: 5px;}
+}
+@media (max-width: 375px) {
+ng-form#DeliveryData child:nth-child(5) {width: 100% !important;}
+ng-form#DeliveryData child:nth-child(6) {width: calc(50% - 10px) !important;}
+ng-form#DeliveryData child:nth-child(7) {width: 50% !important;margin-right: 0px !important;}
+label[for="DDD"] {margin-top: 10px;}
+label[for="LinesQtty"] {margin-top: 10px;}
+ng-form#PME_Compartilhado_Services_SelItem ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope {padding-left: 0px;}    
+div#ProductGroup span#selected-franquia-group {font-size: 11px !important;}
+ng-form#BlockAparelhos child:nth-child(5) {margin-right: 10px !important;width: 100%;}
+div#SearchCEPMainAddress {margin-left: 10px;}
+div#ProductPrice {width: calc(100% - 133px) !important;margin-right: 20px;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 97px;min-width: 97px !important;}
+#PME_Compartilhado_Plugins_SelItem div.vlc-slds-items--container .slds-grid--vertical.slds-box.border-selected {margin-bottom: 0px !important;}
+div[ng-controller="36"] div {width: auto;min-width: 97px;}    
+div[ng-controller="descUnitCompController"] div {width: auto;min-width: 97px;}
+div#GetDevices {margin-top: 20px !important;}
+div#ProductGroup .item-block.slds-size--5-of-12.slds-medium-size--5-of-12.vlc-slds-item--details {width: 110px !important;margin-left: -5px;}
+div .slds-box.no-border.vlc-slds-item--image {padding: 0px !important;width: 110px !important;}
+.text-description-left {font-size: 11px !important;}
+.text-description-right {font-size: 11px !important;}
+.regional-uf-add tr td:nth-child(2) {font-size: 11px !important;}
+table.regional-uf-add td {font-size: 11px !important;}
+span.regional-sub-uf.ng-binding {font-size: 11px !important;}
+.cart-title-plan {font-size: 12px !important;}
+td.regional-uf-dados-uf.ng-binding {font-size: 11px !important;}
+td.regional-uf-dados-valor.ng-binding {font-size: 11px !important;}
+span.regional-uf-dados-uf.ng-binding {font-size: 11px !important;}
+form#a2I2C000000MIL8UAO-54 child:nth-child(5) {margin-left: 0px;margin-right: 10px;}
+ng-form#MessGol {margin-top: auto;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(1) {width: calc(50% - 10px) !important;margin-right: 10px !important;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(2) {width: 50% !important;margin-right: 0px !important;}
+input#CEPBillingAddress {margin-right: 0px !important;padding-right: 0px !important;}
+ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {padding-top: 10px;}
+ng-form#CEPSearchBillingAddress child:first-child {width: calc(100% - 140px) !important;}
+ng-form#CEPSearchBillingAddress child:nth-child(2) {width: 120px;}
+ng-form#CEPSearchMainAddress child:first-child {width: calc(100% - 120px) !important;}
+ng-form#BillingAddress child:nth-child(8) {margin-left: 0px;}
+div#Addresses_prevBtn {margin-left: 0px;}
+ng-form#rules-service-passaport-world p {margin-left: 1px;}
+.via-slds.via-omni form[stepForm] {padding-top: 10px;}
+
+ng-form#PME_Compartilhado_Services_SelItem {margin-left: -3px;}
+ng-form#PME_Compartilhado_Services_SelItem div:nth-child(1) label[for].slds-form-element__label:first-child {padding-left: 0px;}
+div#AddPlugins_new {margin-left: -5px;}
+ng-form#PME_Compartilhado_GOL_SelItem ng-include {margin-left: -6px;}
+label[for="PME_Compartilhado_GOL_SelItem"] {margin-left: -4px;}
+}
+
+@media (max-width: 374px) { /* menor resolução */
+ng-form#TextMessGol {margin-left: -8px;}
+form#a2I2C000000MIL8UAO-54 child:nth-child(5) {margin-left: 0px;}
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 97px;min-width: 97px !important;margin-right: 5px;}
+ng-form#PME_LeadCreation child:nth-child(7) {width: 100% !important;margin-right: 0px;}
+ng-form#PME_LeadCreation child:nth-child(8) {width: 100% !important;margin-right: 0px;}
+div[ng-controller="descUnitCompController"] div {width: auto;min-width: 91px;}
+div#ProductPrice {width: calc(100% - 138px) !important;margin-right: 25px;}
+div#PME_CR_PrepareBusinessReference_VIP {margin-left: -5px;}
+div[data-label="RG"] {border-bottom: solid 1px #b3b4b4;margin-right: 0px;}
+div[data-label="Telefone Fixo"] {width: calc(100% - 80px);border-bottom: solid 1px #b3b4b4;}
+div[data-label="Telefone Celular"] {width: calc(100% - 45px);}
+section#PME_Devices_Step5 child:nth-child(2) {min-width: 100% !important;width: 100% !important;}
+.block-passos div:nth-child(2) {display: none;}
+.tit-passos {padding-left: 0px;}
+.block-passos div:nth-child(1) {width: 40px;} /* remover depois*/
+}
+
+
+
+@media (max-width: 360px) {
+    ng-form#PME_CompartilhadoServices_Block child:nth-child(3) {width: 100% !important;}
+}
+
+@media (max-width: 359px) {
+    table.pontos-cart td:nth-child(4) {width: 50px;}
+
+    div#ProductGroup {min-width: 100% !important;}
+    div#ProductGroup .item-block.slds-size--5-of-12.slds-medium-size--5-of-12.vlc-slds-item--details {width: 100% !important;}
+    div.slds-box.no-border.vlc-slds-item--image {width: 100%;}
+    div.slds-box.no-border.vlc-slds-item--image {margin-left: auto;margin-right: auto;}
+    div#ProductPrice {width: 100% !important;margin: 0 auto;}
+    .cart-title-cart {font-size: 14px;}
+    div#block-desconto {width: 100%;display: inline-block;margin-right: 0px;padding-right: 0px;}
+    div#ProductName {width: 100% !important;}
+    ng-form#MessGol p p {width: auto !important;}
+    ng-form#PME_CompartilhadoServices_Block child:nth-child(2) {width: 45% !important;margin-right: 0px !important;}
+}
+
+
+@media (max-height: 300px) {
+ng-include.slds-grid.slds-wrap.slds-grid--pull-padded.ng-scope div[id^="item"] {width: 140px;}    
+.cart-block-group-mobile {display: none !important;}
+.cart-block-buttons  {display: none !important;}
+.cart-block-group-mobile {display: none;}
+}
+
+</style>
+<vlocity_cmt:VFActionFunction /> 
+</apex:page>

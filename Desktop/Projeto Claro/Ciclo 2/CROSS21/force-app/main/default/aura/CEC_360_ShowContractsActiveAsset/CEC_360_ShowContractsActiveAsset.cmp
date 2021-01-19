@@ -1,0 +1,151 @@
+<aura:component controller="CEC_360_ShowContractsActiveController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="assets" type="List"/>
+    <aura:attribute name="isProfileCanalCritico" type="Boolean" default="true" />
+    <aura:attribute name="idAsset" type="String"/>
+    <aura:attribute name="idContact" type="String"/>
+    <aura:attribute name="isOpen" type="boolean" default="false" />
+    <aura:attribute name="objType" type="String" required="true" default="Case"/>
+    <aura:attribute name="selectedRecordType" type="String"/>
+    <aura:attribute name="recordTypeList" type="Map"/>
+    <aura:attribute name="selectedRecordTypeName" type="String"/>
+    <aura:attribute name="hasNoContract" type="boolean" default="false" />
+
+    
+    <aura:if isTrue="{!v.isOpen}">
+        <div role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <lightning:buttonIcon class="slds-modal__close" iconName="utility:close" size="large" 
+                                              variant="bare-inverse" alternativeText="Close" onclick="{!c.closeModal}" /> 
+                    
+                    <h2 id="header43" class="slds-text-heading--medium"> Novo Caso </h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-align--absolute-center">
+                         <div class="slds-p-top--small slds-p-bottom--small" >
+                            <fieldset class="slds-form-element">
+                                <h4>  Por favor selecione um Tipo de Registro para este caso </h4>
+                                <div class="slds-form-element__control">
+                                    <aura:iteration items="{!v.recordTypeList}" var="item">
+                                        <label class="slds-radio slds-p-top--small">
+                                            <tr>
+                                                <td>
+                                                    <ui:inputRadio  change="{!c.onChange}" text="{!item.recordTypeId}" name="{!item.recordTypeLabel}"/>
+                                                    <span class="slds-radio--faux"></span>
+                                                </td>                                                
+                                                <span class="slds-form-element__label">{!item.recordTypeLabel}</span>
+                                                <br>                                                    
+                                                </br>
+                                                <span class="slds-form-element__label">{!item.description}</span>
+                                                <br>                                                    
+                                                </br>
+                                            </tr>
+                                        </label>
+                                   </aura:iteration>
+                                 </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button--neutral" onclick="{!c.closeModal}">Cancelar</lightning:button>
+                    <lightning:button class="slds-button slds-button--brand" onclick="{!c.createNewCaseAsset}">Avançar</lightning:button>
+                </div>  
+            </div> 
+        </div> 
+    </aura:if>
+
+    
+ 
+        <div class="slds-card__body cards-container">        
+                    <div class="bloco-title" contenteditable="false"><span class="">Móvel </span></div>
+                    <table class="slds-row-hover lista-dados-mobile"> 
+                        <thead>
+                            <tr>
+                                <th scope="col">Linha</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Plano</th>
+                                <th scope="col">Ação</th>                        
+                            </tr>
+                        </thead>
+                        <aura:if isTrue="{!v.hasNoContract}">
+                                <tr>
+                                    <td colspan="99"> <span class="vermelho">Atenção:</span> O cliente não possui contratos moveis. </td>
+
+                                </tr>
+                                   
+                        <aura:set attribute="else">
+                                    <tbody>
+                                        <aura:iteration items="{!v.assets}" var="asset"  indexVar="contIndex">
+                                            <tr>
+                                                <th data-label="ContractNumber" scope="row">
+                                                    <a target="_blank" data-id="{!asset.id}" onclick="{!c.openDetailPage}"> {!asset.msisdn} </a>
+                                                </th>
+                                                <td data-label="Status">
+                                                    {!asset.status}
+                                                </td>
+                                                <td data-label="ContractAddress" class="slds-truncate_container_25">
+                                                {!asset.plan}
+                                                </td> 
+                                                <td data-label="Action" class="slds-truncate">            
+                                                    <aura:if isTrue="{!asset.openCases.length > 0}">
+                                                        <a href="javacript:;" data-related-cases="{! 'relatedCasesToAsset-' + asset.id}" onclick="{!c.collapseRelatedCasesByAssetTable}"> Ocultar Casos</a>
+                                                        <aura:set attribute="else">
+                                                            <aura:if isTrue="{!v.isProfileCanalCritico}">
+                                                                <a onclick="{!c.openModal}" data-id="{!asset.id}"> Criar caso</a>
+                                                            </aura:if>
+                                                        </aura:set>
+                                                    </aura:if>
+                                                </td>                            
+                                            </tr>
+                                            <aura:if isTrue="{!asset.openCases.length > 0}">
+                                                <tr>
+                                                    <td colspan="4" class="container-subtable">
+                                                        <div id="{! 'relatedCasesToAsset-' + asset.id}">
+                                                            <table class="lista-dados-casos-residence">
+                                                                <thead>
+                                                                    <tr scope="row">
+                                                                        <th scope="col">Número do Caso</th>
+                                                                        <th scope="col">Protocolo do Canal Crítico</th>
+                                                                        <th scope="col">Assunto</th>
+                                                                        <th scope="col">Sub-status</th>
+                                                                        <th scope="col">Tipo de registro</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <aura:iteration items="{!asset.openCases}" var="case">
+                                                                        <tr scope="row">
+                                                                            <td scope="col">
+                                                                                <a href="javascript:;" data-id="{!case.id}" onclick="{!c.openDetailPage}">{!case.caseNumber}</a>
+                                                                            </td>
+                                                                            <td scope="col">{!case.criticalChannelProtocol}</td>
+                                                                            <td scope="col">{!case.subject}</td>
+                                                                            <td scope="col">{!case.subStatus}</td>
+                                                                            <td scope="col">{!case.recordTypeName}</td>
+                                                                        </tr>
+                                                                    </aura:iteration>
+                                                                    <aura:if isTrue="{!v.isProfileCanalCritico}">
+                                                                        <tr class="callToActionRow">
+                                                                            <td colspan="6">
+                                                                                <button class="{!asset.openCases.length > 0 ? 'createCaseBtn notifyInternalAction':'createCaseBtn'}" onclick="{!c.openModal}" data-id="{!asset.id}"> Criar caso</button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </aura:if>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </aura:if>
+                                        </aura:iteration>
+                                    </tbody>
+                       </aura:set>
+            </aura:if>         
+                </table>
+            </div>
+   
+</aura:component>

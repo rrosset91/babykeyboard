@@ -1,0 +1,121 @@
+<aura:component
+	extends="c:Utils"
+	implements="force:appHostable,flexipage:availableForRecordHome,force:lightningQuickAction,lightning:isUrlAddressable"
+	access="global"
+	controller="GeneralInvoicesController"
+>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<aura:handler name="Financeiro_ComponentEvent" event="c:Financeiro_ComponentEvent" action="{!c.handleCpmEvent}" />
+
+	<!--Status Fatura, Nível do Usuário e Fatura do case-->
+	<aura:attribute name="invoicesStatus" type="List" />
+	<aura:attribute name="isBackOfficeN2" type="Boolean" />
+	<aura:attribute name="isInvoiceCase" type="String" />
+
+	<aura:attribute name="showFutureItem" type="Boolean" default="false" />
+	<aura:attribute name="showDetail" type="Boolean" default="false" />
+	<aura:attribute name="hasError" type="Boolean" default="false" />
+	<aura:attribute name="isLoading" type="Boolean" default="false" />
+	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="detailBill" type="String" />
+	<aura:attribute name="evPayload" type="Object" />
+
+	<!--Modal Message-->
+	<aura:attribute name="dialogModal" type="Boolean" />
+	<aura:attribute name="titleMessage" type="string" default="Título" />
+	<aura:attribute name="typeIcon" type="string" default="utility:success" />
+	<aura:attribute name="typeVariant" type="string" default="success" />
+	<aura:attribute name="message" type="string" default="Mensagem" />
+	<aura:attribute name="textButton1" type="string" default="Fechar" />
+	<aura:attribute name="textButton2" type="string" default="Fechar e ir para Ficha Financeira" />
+	<aura:attribute name="onClickButton1" type="string" default="{!c.closeModalMessage}" />
+	<aura:attribute name="onClickButton2" type="string" default="{!c.afterMessage}" />
+	<aura:attribute name="showButton1" type="Boolean" default="false" />
+	<aura:attribute name="showButton2" type="Boolean" default="true" />
+	<aura:attribute name="afterMessage" type="string" />
+
+	<div>
+		<div style="background-color: white">
+			<aura:if isTrue="{!v.isLoading}">
+				<lightning:spinner alternativeText="Carregando..." size="large" />
+			</aura:if>
+
+			<aura:if isTrue="{!v.hasError}">
+				<c:ExceptionContent showError="true" errorText1="Falha ao carregar informações básicas." errorText2="Atualize a página e tente novamente." />
+			</aura:if>
+
+			<aura:if isTrue="{!and(and(not(v.showDetail), not(v.showFutureItem)), not(v.hasError))}">
+				<div class="slds-text-heading_large custom-header">{!$Label.c.Fin_FichaFinanceira_Enunciado}</div>
+
+				<lightning:tabset aura:id="tabset" selectedTabId="faturas">
+					<lightning:tab label="{!$Label.c.Fin_FichaFinanceira_Aba_Faturas}" id="faturas">
+						<c:Financeiro_FaturasEmAberto
+							recordId="{!v.recordId}"
+							aura:id="faturas-em-aberto"
+							contractId="{!v.contractId}"
+							operatorId="{!v.operatorId}"
+							invoicesStatus="{!v.invoicesStatus}"
+						/>
+					</lightning:tab>
+					<lightning:tab label="{!$Label.c.Fin_FichaFinanceira_Aba_LancamentosFuturos}" id="lancamentosfuturos">
+						<c:Financeiro_LancamentosFuturos
+							aura:id="lancamentos-futuros"
+							contractId="{!v.contractId}"
+							operatorId="{!v.operatorId}"
+							invoicesStatus="{!v.invoicesStatus}"
+						/>
+					</lightning:tab>
+					<lightning:tab label="{!$Label.c.Fin_FichaFinanceira_Aba_ItensEmEmissao}" id="titulosnaoemitidos">
+						<c:Financeiro_TitulosNaoEmitidos contractId="{!v.contractId}" operatorId="{!v.operatorId}" />
+					</lightning:tab>
+					<lightning:tab label="{!$Label.c.Fin_FichaFinanceira_Aba_Eventos}" id="eventos">
+						<c:Financeiro_Eventos contractId="{!v.contractId}" operatorId="{!v.operatorId}" />
+					</lightning:tab>
+				</lightning:tabset>
+			</aura:if>
+
+			<aura:if isTrue="{!and(v.showDetail, not(v.hasError))}">
+				<div>
+					<c:Financeiro_DetalhesFatura
+						recordId="{!v.recordId}"
+						contractId="{!v.contractId}"
+						operatorId="{!v.operatorId}"
+						selectedBill="{!v.detailBill}"
+						invoicesStatus="{!v.invoicesStatus}"
+						isBackOfficeN2="{!v.isBackOfficeN2}"
+						isInvoiceCase="{!v.isInvoiceCase}"
+					/>
+				</div>
+			</aura:if>
+			<aura:if isTrue="{!and(v.showFutureItem, not(v.hasError))}">
+				<div>
+					<c:Financeiro_ContestarItemFuturo
+						isN2User="{!v.isBackOfficeN2}"
+						recordId="{!v.recordId}"
+						contractId="{!v.contractId}"
+						operatorId="{!v.operatorId}"
+						evPayload="{!v.evPayload}"
+					/>
+				</div>
+			</aura:if>
+		</div>
+		<!-- Modal MEssage -->
+		<aura:if isTrue="{!v.dialogModal}">
+			<c:modalMessage
+				aura:id="modalMessage"
+				title="{!v.titleMessage}"
+				typeIcon="{!v.typeIcon}"
+				typeVariant="{!v.typeVariant}"
+				message="{!v.message}"
+				textbutton1="{!v.textButton1}"
+				textbutton2="{!v.textButton2}"
+				showButton1="{!v.showButton1}"
+				showButton2="{!v.showButton2}"
+				onClickButton1="{!v.onClickButton1}"
+				onClickButton2="{!v.onClickButton2}"
+			/>
+		</aura:if>
+	</div>
+</aura:component>

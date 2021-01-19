@@ -1,0 +1,308 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 19/09/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 11] + [Componente com as ações de agendamento
+* de chamada]
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 28/01/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: Redefinição do layout de toda a tela de agendamento
+* ---------------------------------------------------------------
+-->
+
+<apex:component controller="CEC_CTI_SchedulingComponentController">
+
+   <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_Scheduling/css/pageStyle.css')}"/>
+	
+    <style>
+        
+        .comboboxIcon{
+            width: 30px;
+            height: 30px;
+            background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/schedule-search.svg')}");
+            background-repeat: no-repeat;
+            background-size: 28px;
+        }
+
+        .comboboxIconOn{
+            width: 30px;
+            height: 30px;
+            background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/schedule-search.svg')}");
+            background-repeat: no-repeat;
+            background-size: 28px;
+            background-position: top left;
+        }
+        
+        .new-schedule .new-date {
+            background-color: #fafaf9;
+            padding-left: 7px;
+            background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/schedule.svg')}");
+            background-position: 94% center;
+            background-position-y: 4px;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        
+        .new-schedule .new-time {
+            background-color: #fafaf9;
+            padding-left: 7px;
+            background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/schedule-clock.png')}");
+            background-position: 94% center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+        }
+        
+        .new-schedule.out-of-conference .css-scrollbar{
+        	height: 345px;
+        }
+        
+        .new-schedule.out-of-conference .css-scrollbar{
+        	height: 345px;
+        }
+        
+        .new-schedule.conference .css-scrollbar{
+        	height: 305px;
+        }
+    </style>
+    
+    <script>
+    //$(document).ready(function(){
+
+            /*$("#agendamento-telefone1").on('input', function (event) { 
+                this.value = this.value.replace(/(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})/g, '');
+                this.mask('00 00000 0000');
+        	});*/
+
+
+            $("#agendamento-telefone1").on('input', function (event) { 
+                .mask('(99) 9999-9999?9');
+                alert('on'); 
+            });    
+                /*    this.mask("(99) 9999-9999?9");
+                .focusout(function (event) {  
+                        alert('focusout');
+                        var target, phone, element;  
+                        target = (event.currentTarget) ? event.currentTarget : event.srcElement;  
+                        phone = target.value.replace(/\D/g, '');
+                        element = $(target);  
+                        element.unmask();  
+                        if(phone.length > 10) {  
+                            element.mask("(99) 99999-999?9");  
+                        } else {  
+                            element.mask("(99) 9999-9999?9");  
+                        }  
+                    });*/
+    //});
+    
+    
+    </script>
+    
+    <div class="new-schedule out-of-conference">
+        <div class="css-scrollbar">
+            <div class="scheduling-inputs">
+
+                <div class="slds-grid">
+                    <div class="customer-name-field">
+                        <input id="agendamento-customerNameScheduling" class="slds-input agendamento-new-telefone" type="text" placeholder="Nome do cliente" />
+                    </div>
+                    <div class="slds-col slds-size_1-of-12 delete-name">
+                        <img class="hover-active agendamento-new-telefone" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/schedule-clear.svg')}" />
+                    </div>
+                </div>
+
+                <div class="slds-col slds-size_12-of-12">
+                    <label>Documento</label>
+                    <input id="agendamento-customerDocumentScheduling" class="slds-input" type="text" name="Documento" />
+                </div>
+
+                <div class="slds-grid">
+                    <div class="calendar-sheduling-input">
+                        <label>Agenda:</label>
+                        <input id="agendamento-dayScheduling" class="slds-input new-date datepicker" type="text" autocomplete="off" />
+                        <!--TESTE DE AGENDA-->
+                    </div>
+                    <div>
+                        <label>a partir das:</label>
+                        <input id="agendamento-hourAppointmentScheduling" class="slds-input new-time timepicker" type="text" autocomplete="off"/>
+                        
+                    </div>
+                </div>
+
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_12-of-12 slds-form-element input-attendance-status">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control apex-input-custom" id="agendamento-titleReasonScheduling">
+
+                                <!--<select id="agendamento-titleReasonScheduling" class="slds-select availability">
+                                    <!--
+                                    <option>DECISOR AUSENTE</option>
+                                    <option>PROBLEMA SISTÊMICO</option>
+                                    <option>NECESSÁRIO TEMPO PARA TOMADA DE DECISAO</option>
+                                    <option>LIGACAO CAIU</option>
+                                    
+                                </select>-->
+                                <apex:inputField id="ipCustomObjectST" html-disabled="true" value="{!dummyCustomObjectRecord.Subject}" onChange="updateHiddenField();" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid">
+                    <!--
+                        <input id="agendamento-textReasonScheduling" class="slds-input" maxlength="50" type="text" placeholder="Comentário adicional" />
+                   -->
+                    <textarea id="agendamento-textReasonScheduling" class="slds-input textarea-motivo" maxlength="255" type="text" rows="3" cols="50" placeholder="Comentário adicional"></textarea>
+                </div>
+
+                <div class="slds-grid phone-numbers">
+                    <div class="slds-col slds-size_12-of-12">
+                        <div class="group-phones slds-grid">
+                            
+                            <div class="input-phone-scheduling phone-margin">
+                                <input id="agendamento-telefone1" class="slds-input telefone-input" type="text" placeholder="xx xxxxx xxxx" maxlength="12"/>
+                            </div>
+                            
+                            <div class="input-phone-scheduling">
+                                <input id="agendamento-telefone2" class="slds-input telefone-input" type="text" placeholder="xx xxxxx xxxx" maxlength="12"/>
+                            </div>
+                            
+                        </div>
+                        <div class="group-phones slds-grid">
+                            <div class="input-phone-scheduling phone-margin">
+                                <input id="agendamento-telefone3" class="slds-input telefone-input" type="text" placeholder="xx xxxxx xxxx" maxlength="12"/>
+                            </div>
+                            <div class="input-phone-scheduling">
+                                <input id="agendamento-telefone4" class="slds-input telefone-input" type="text" placeholder="xx xxxxx xxxx" maxlength="12"/>
+                            </div>
+                        </div>
+                        
+                        <div class="group-phones slds-grid">
+                            <div class="input-phone-scheduling phone-last-item">
+                            	<input id="agendamento-telefone5" class="slds-input telefone-input" type="text" placeholder="xx xxxxx xxxx" maxlength="12"/>
+                       	 	</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="buttons-group">
+            <div class="slds-col slds-size_12-of-12 error-message">
+                <label id="scheduling-error-message"></label>
+            </div>
+            <button class="cti-button-red noselectBtn" type="button" value="Agendar" id="Savebtn" onclick="createScheduling();">Agendar</button>
+            <button class="cti-button-transparent noselectBtn" type="button" value="Cancelar" id="Cancelbtn" onclick="homeOn();">Cancelar</button>
+            <button class="cti-button-yellow noselectBtn" type="button" value="Salvar" id="Savebtn" onclick="openReports();">Agendados</button>
+        </div>
+        
+
+    </div>
+
+    <script>
+    
+    	
+
+    	var $j = jQuery.noConflict();
+         $(function() {
+             
+            $("#agendamento-dayScheduling").datepicker({
+                    initDate: moment(),
+                    minDate:0,
+                    todayHighlight: true,
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+                    dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+                    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+                    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior'
+                });
+
+
+            $('#agendamento-hourAppointmentScheduling').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 15,
+                minTime: '00',
+                maxTime: '23:45',
+                defaultTime: '',
+                startTime: '00:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true
+            });
+
+
+            $(".telefone-input").on('input', function (event) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                var value = $(".telefone-input").val();
+
+            });
+             
+             $("#agendamento-customerNameScheduling").on('input', function (event) { 
+                 this.value = this.value.replace(/[^A-z\s]/g, '');
+                 var value = $("#agendamento-customerNameScheduling").val();
+             });
+             
+             $("#agendamento-customerDocumentScheduling").on('input', function (event) { 
+                 this.value = this.value.replace(/[^0-9]/g, '');
+                 var value = $("#agendamento-customerDocumentScheduling").val();
+             });
+             
+         } );
+
+
+        function completeFieldsFromCall(){
+            setTimeout(function (){
+                var customerPhoneCall = $('#inputPhoneNumber').val();
+                var customerPhoneName = $("#inputCustomerName").val();
+                var customerDoc = $('#inputDocNumber').val();
+				
+                console.log('customerPhoneCall - ' + customerPhoneCall);
+                console.log('customerPhoneName - ' + customerPhoneName);
+                console.log('customerDoc - ' + customerDoc);
+                
+                $('#agendamento-customerDocumentScheduling').val(customerDoc);
+                $('#agendamento-customerNameScheduling').val(customerPhoneName);
+                $('#agendamento-telefone1').val(customerPhoneCall);
+            }, 1700);
+
+        }
+
+
+            //DELETE ALL NUMBERS ON INPUT
+        $(".hover-active.agendamento-new-telefone").on('click',function(){
+            $(".slds-input.agendamento-new-telefone").val("");
+            $(".slds-input.agendamento-new-telefone").val(null);
+        });
+
+    /*
+        function openReports(){
+            sforce.opencti.screenPop({type: sforce.opencti.SCREENPOP_TYPE.URL, params: {url: '/lightning/o/Report/home'}});
+
+        }
+    */
+           
+    function getTitleScheduling(){
+        var tituloMotivoAgendamento = document.getElementById('{!$Component.ipCustomObjectST}').value; 
+        return tituloMotivoAgendamento;
+    }
+    
+    
+    $(".telefone-input").focusout(function(){
+        
+        if($(this).val().length < 10) {
+            $(this).val(null);
+        } ;
+    });
+
+    </script>
+
+
+</apex:component>

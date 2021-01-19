@@ -1,0 +1,17 @@
+.THIS  .exibe-dados {border:0px;}
+.THIS  .exibe-dados td {color:#706e6b;font-weight:normal;line-height:34px;padding-left:10px;}
+
+.THIS  .topico {color:#706e6b;font-size: 12px;}
+
+.THIS  .dados {color: #2b2826;font-size: 14px;}
+
+.THIS  .topico-azul {color: #009de3;font-size: 12px;}
+
+.THIS  .dados-azul {color: #009de3;font-size: 14px;}
+
+.THIS  .bgcinza {background:#f0f0f0;}
+
+.THIS  td.insert-datos {border-bottom:solid 1px #dddbda;padding:10px 0px;}
+
+.THIS  .section-rel {width: 100%;line-height: 34px;display: block;border-bottom:solid 1px #dddbda;}
+.THIS .custom-margin{margin-top: -30px;margin-bottom: -10px;}

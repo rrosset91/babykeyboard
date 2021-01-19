@@ -1,0 +1,1995 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 30/07/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 9] + [Componente do atendimento da chamada]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 30/07/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 19336 - Realizar ligações externas]: Criação da estrutura do componente
+* ---------------------------------------------------------------
+* Data: 29/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 18680 - Realizar Transferência de Chamada]: Criação da estrutura para abertura/fechamento
+* do componente de transferencia de chamada, e criação dos js para tratar os eventos da transferencia
+* ---------------------------------------------------------------
+* Data: 04/09/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15412 - Espera de Chamada] Inclusão da varável checkHoldCall
+* Alterações: [US 18154 - Desligar chamada] Inclusão da varável checkFinishCall
+* ---------------------------------------------------------------
+* Data: 11/09/2019
+* Autor: Eduardo Marques - Deloitte
+* Alterações: [US 15416 - Possibilitar a conferência - Avaya] Habilitar footerActivateConferenceActive()
+* ---------------------------------------------------------------
+* Data: 11/09/2019
+* Autor: Eduardo Marques - Deloitte
+* Alterações: [US 15416 - Possibilitar a conferência - Avaya] Mudança do estado antes de começar a conferencia
+*                   footerDeactivateTransfer();
+*                   footerDeactivateScheduling();
+*                   footerActivateConferenceActive();
+* ---------------------------------------------------------------
+* Data: 25/10/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Possibilitar a conferência - Avaya] mudança para liberação de conferência, espera e Finalizar
+* ligação quando não houver skill
+* Data: 30/10/2019
+*----------------------------------------------------------------
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Possibilitar a conferência - Avaya] mudança para contagem de tempo de merge considerando o tempo
+* inicial da ligação da Ponta A.
+* ---------------------------------------------------------------
+* Data: 11/11/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: Ajuste na funcionalidade de callback com a inclusão da função backToAvailableToAttendance
+*----------------------------------------------------------------
+-->
+
+<apex:page controller="CEC_CTI_ControlSoftphoneController">
+    
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Softphone Claro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+
+    <!-- SLDS -->
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/LightningDesignSystem/assets/styles/salesforce-lightning-design-system.min.css')}"/>
+    
+    <!-- CUSTOM JS -->
+    <apex:includeScript value="{!$Resource.CEC_CTI_ComponentsIconsController}"/>
+    <apex:includeScript value="{!$Resource.CEC_CTI_ComponentsExibitionsController}"/> 
+    
+    <!-- CUSTOM CSS -->
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/css/general-css.css')}"/>
+    
+    <!-- JQUERY -->
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jQuery/jquery-3.3.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jQuery/jquery-ui.min.js')}"/>
+    
+    <!--JSTREE -->
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/jstree.min.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/style.min.css')}"/>
+
+    
+     <!-- MOMENT JS -->
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/moment/moment.min.js')}"/>
+
+
+    <!-- JQUERY TIMEPICKER -->
+    <apex:includescript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jqueryTimepicker/js/timepicker.min.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jqueryTimepicker/css/timepicker.min.css')}" />
+    
+    <!-- EASY TIMER -->
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/easytimer/easytimer.min.js')}"/>
+    
+    <!-- DRIVER CTI -->
+    <apex:includeScript value="{!$Resource.OpenCTI_450}"/>
+    <apex:includeScript value="{!$Resource.BettaDriverJS}"/>
+    <apex:includeScript value="{!$Resource.JQuery}"/>
+    
+    <script>
+        window.onload = function(){
+            //disableAllComponents();
+            //api.driverConnect('','','','');
+            console.log('onload teste');
+            //activeLoginPage();  
+        }
+        
+        
+        sforce.opencti.setSoftphonePanelWidth({
+            widthPX:320
+        });
+    	
+
+        var api = getBettaDriverAPI();
+        var docNumber;
+        var pageURL;
+        var driverSiteId;
+        var numRamal;
+        var descStatus;
+        var tempCallback;
+        var checkExternalCall;
+        var driverCallDuration //TEMPO DE DURACAO DA CHAMADA EXTERNA;
+        var callbackOn = false;
+        var skillID;
+        var treeTransferStruct;
+        var jsonToTree = [];
+        var finalVDN;
+        var checkHoldCall;
+        var checkFinishCall;
+        var checkTransferCall = false;
+        var callFromSalesforce = false;
+        var checkConference = false;
+        var checkConferenceIconClicked  = false;
+        var checkSchedulingIconClicked  = false;
+        var conferenceTwoNumbersActive = false; //CONTROLE DA CONFERENCIA QUANDO AS DUAS CHAMADAS ESTAO CONECTADAS SEM O MERGE
+        var conferenceMergedActive = false; //CONTROLE DA CONFERENCIA QUANDO AS DUAS CHAMADAS ESTAO MERGEADAS
+        var conferenceCompletedStartTime; //VARIAVEL PARA OBTER O HORARIO DO INICIO DA CONFERENCIA MERGEADA
+        var callInProgress = false; //VARIAVEL PARA VERIFICAR SE EXISTE UMA CHAMADA CONECTADA EM PROGRESSO
+        var conferenceTwoNumbersActiveAlternate = false; //VARIAVEL PARA VERIFICAR SE A CONFERENCIA SEM O MERGE ESTA ALTERNADA
+        var callOnHold = false; 
+        var calOnHoldStartTime; //VARIAVEL PAA OBTER O HORARIO DO INICIO DA ESPERA DA CHAMADA PRINCIPAL
+    	var timerCallback = new easytimer.Timer();
+        
+        var vendor; 
+        var idCustomerInteractionReturn;
+
+        var mascaredPhoneNumber;
+        var externalCallConnected = false;
+        var externalCallParameters = [];
+
+        //VARIAVEIS PARA CONTROLAR QUAL NUMERO DA CONFERENCIA ESTA EM ESPERA (ANTES DO MERGE)
+        var holdToFirstNumber = true;
+        var holdToSecondNumber = false;
+
+        console.log('valor inicial callback = ' + callbackOn);
+        var callback = function(response) {
+            if (response.success) {
+                console.log('API method call executed successfully! returnValue:', response.returnValue);
+                console.log('response: ' + JSON.stringify(response) );
+            } else {
+                console.error('Something went wrong! Errors:', response.errors);
+            }
+        };
+    
+        api.onBettaDriverOpen = function(event){
+            var strtype = event;
+            var today = new Date();
+            var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date+' '+time;
+
+            $('.driver-datas #messages').append($('<br/><p>').text('['+dateTime+']: Driver - onBettaDriverOpen'));
+            $('img').on('dragstart', function(event) { event.preventDefault(); });
+            
+            console.log('onBettaDriverOpen');
+
+            idCustomerInteractionReturn = '';
+            
+            showControlSoftphonePage(); // remove classe css 'display-none'
+            disableAllComponents();
+            disableAllFooterIcons();
+            activeLoginPage();
+        }
+
+
+        api.onDriverOpen = function(event){
+            var strtype = event;
+            var today = new Date();
+            var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date+' '+time;
+            let varCrypto = sessionStorage.getItem('varCrypto');
+            
+            $('.driver-datas #messages').append($('<br/><p>').text('['+dateTime+']: Driver - onDriverOpen'));
+            $('img').on('dragstart', function(event) { event.preventDefault(); });
+
+            console.log('onDriverOpen - vendor: ' + event.vendor);
+            console.log('onDriverOpen - idCustomerInteraction: ' + event.idCustomerInteraction);
+
+            vendor = event.vendor;
+            idCustomerInteractionReturn = event.idCustomerInteraction;
+            showControlSoftphonePage(); // remove classe css 'display-none'
+            
+            if(idCustomerInteractionReturn && varCrypto){
+                setTimeout(function(){
+                    sendCryptoToController(varCrypto, idCustomerInteractionReturn);
+                }, 100);
+            } else {
+                disableAllComponents();
+                disableAllFooterIcons();
+                activeLoginPage();
+            }
+        }
+
+        api.onBettaDriverClose = function(event){
+            console.log('onBettaDriverClose');
+ 
+            if(loginPageActive == false){
+                disableAllComponents();
+                activeLoginPage();
+                //hideSpanCodeSF();
+            }
+            
+            setTimeout(function (){
+                $('.error-messages p').remove();
+                $('.error-messages').append($('<p class="text-error">').text('Erro de comunicação.'));
+                $('.error-messages').append($('<p class="text-error">').text('Caso o erro persista acione sua equipe de suporte local.'));
+            	$('.error-messages').append($('<p class="text-error">').text(event.descStatus));
+            }, 2600);
+        }
+
+        api.onBettaDriverError = function(event){
+            console.log('onBettaDriverError');
+            var strtype = event;
+            var today = new Date();
+            var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date+' '+time;
+
+            if(loginPageActive == false){
+                disableAllComponents();	
+                activeLoginPage();
+                //hideSpanCodeSF();
+            }
+
+
+            setTimeout(function (){
+                $('.error-messages p').remove();
+                $('.error-messages').append($('<p class="text-error">').text('Erro de comunicação.'));
+                $('.error-messages').append($('<p class="text-error">').text('Caso o erro persista acione sua equipe de suporte local.'));
+            	$('.error-messages').append($('<p class="text-error">').text(event.descStatus));
+            }, 2600);
+        }
+
+        api.onCallFailed = function(event){
+            console.log("onCallFailed << ",event.type);
+        }
+
+        api.onCallConnected = function(event){
+
+            var today = new Date();
+            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date+' '+time;
+            var varCrypto = event.data;
+
+            console.log('HORARIO -> ' + dateTime);
+            console.log("onCallConnected << ",event.type);
+            console.log("onCallConnected data << ",event.data);
+            //$('.customer-awaiting .customer-number').append($('h1').text(event.ani));
+
+            callInProgress = true;
+            checkSchedulingIconClicked = true;
+            externalCallConnected = true;
+
+            /* 
+            * O ID do customer interaction garantirá que, ao atualizar a pagina durante uma chamada em andamento,  
+            * não seja aberta uma nova tela em contexto e não criará um novo customer interaction.
+            */
+            sessionStorage.setItem('varCrypto', varCrypto);
+            sendCryptoToController(varCrypto, idCustomerInteractionReturn);
+        }
+
+        function updateMascaredPhoneNumber(phoneNumber){
+
+            let paramPhoneNumber; 
+
+            if(externalCallParameters && externalCallParameters.mascaredPhoneNumber){
+                paramPhoneNumber = externalCallParameters.phoneNumber;
+            } else {
+                paramPhoneNumber = phoneNumber;
+            }
+
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.maskPhone}',
+                paramPhoneNumber, false,
+                function(result, event){
+                    if (event.status) {
+                        setTimeout(function(){
+                            mascaredPhoneNumber = result;
+                        }, 300);
+                    }
+                },
+                {escape: false}
+            );
+        }
+
+        function sendCryptoToController(varCrypto, idCustomerInteraction){
+            console.log('site Id dentro da function crypto = ' + driverSiteId);
+
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.decryptDriverData}',
+                varCrypto, driverSiteId, idCustomerInteraction, callFromSalesforce,
+                function(result, event){
+                    if (event.status) {
+                        
+                        updateMascaredPhoneNumber(result.numeroTelefone);
+
+                        let nomeCliente = result.nomeCliente;
+                        let numberDisplay;
+                        let nameDisplay;
+
+                        disableAllComponents();
+                        disableAllFooterIcons();
+                        inactiveGeneralContentComponents();
+                        inactiveLoginPage();
+                        activeComponentHeader1();
+                        activeComponentHeader2();
+                        activeComponentHeader3();
+                        activeAttendance();
+                        activeCallActions();
+                        activeFooter();
+                        
+                        setTimeout(function (){
+
+                            skillID = result.skillId;
+                            checkHoldCall = result.chamadaEspera;
+                            checkFinishCall = result.finalizarChamada;
+
+                            if(result.docIsCPF == true){
+                                $('.customer-name').addClass('pessoa-fisica');
+                                $('.customer-name .slds-grid .img-fisica').removeClass('display-none');
+                            }
+                            if (result.docIsCPF == false) {
+                                $('.customer-name').addClass('pessoa-juridica');
+                                $('.customer-name .slds-grid .img-juridica').removeClass('display-none');
+                            }
+
+                            if (result.docIsNull == true) {
+                                $('.customer-name').addClass('pessoa-fisica');
+                            }
+
+                            if (result.transferenciaChamada == true){
+                                checkTransferCall = true;
+                                footerActivateTransfer();
+                            }
+
+                            if(result.conferenciaChamada == true){
+                                checkConference = true;
+                                footerActivateConference();
+                            }
+                            
+                            console.log('==== valoresSkill ==== ' + skillID);
+                            console.log('checkHoldCall = ' + checkHoldCall);
+                            console.log('checkFinishCall = ' + checkFinishCall);
+                            console.log('checkConference = ' + checkConference); 
+                            console.log('checkTransferencia = ' + checkTransferCall);                            
+                            console.log('NUMERO TELEFONE =====> ' + mascaredPhoneNumber);
+                            console.log('NOME DO CLIENTE =====> ' + nomeCliente);
+
+                            let updateDisplay = setInterval(function (){ 
+
+                                numberDisplay = $('#numberInput').val();
+                                nameDisplay = $('#nameInputVisible').val();
+
+                                if(numberDisplay && nameDisplay){
+                                    console.log('numberDisplay: ' + $('#numberInput').val());
+                                    console.log('nameDisplay: ' + $('#nameInputVisible').val());
+
+                                    clearInterval(updateDisplay);
+                                } else {
+                                    $('#numberInput').val(mascaredPhoneNumber);
+                                    $('#nameInputVisible').val(nomeCliente);
+
+                                    $('#inputPhoneNumber').val(mascaredPhoneNumber);
+                                    $('#inputCustomerName').val(nomeCliente);
+                                    $('#inputDocNumber').val(result.numeroDocumento);
+                                }  
+                            }, 1000);
+
+                            headerDeactivateCallOptions();
+                            callActionsActivateEndCall();
+                            callActionsActivateHold();
+                            footerActivateScheduling();
+                            completeHeaderFields();
+								
+                        }, 1200);
+
+                        var today = new Date();
+                        var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+                        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        var dateTime = date+' '+time;
+
+                        $('.driver-datas #messages').append($('<br/><p>').text('['+dateTime+']: Driver - onCallConnected'));
+                        $('.driver-datas #messages').append($('<br/><p style="margin-left: 15px;">').text(result.encryptValue));
+
+                        driverCallDuration = result.inicioChamadaDriver;
+                        console.log('driverCallDuration => ' + driverCallDuration );
+
+                        console.log('idCustomerInteraction =====> ' + result.idCustomerInteraction)
+                        api.sendIdCustomerInteraction(result.idCustomerInteraction);
+
+                        docNumber = result.numeroDocumento;
+                        pageURL = result.urlReturned;
+
+                        // idCustomerInteraction
+                        screenPop(docNumber, pageURL);
+
+                    }
+                },
+                {escape: false}
+            );
+        }
+
+        // TRANSFERENCIA DE CHAMADA
+        function getTreeStructure(){
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.createTreeToTransfer}',
+                skillID,
+                function(result, event){
+                    if (event.status) {
+                        treeTransferStruct = result;
+                        console.log('treeTransferStruct no componente');
+                        console.dir(treeTransferStruct);
+
+                        //
+
+                        //for(var i=0;i<treeTransferStruct.length;i++){
+                            console.log(treeTransferStruct);
+                            console.log(treeTransferStruct.set1Nivel);
+
+                            jsonToTree = null;
+                            jsonToTree = [];
+
+                            if(treeTransferStruct.set1Nivel.length > 0){
+                                console.log('size: ' + treeTransferStruct.set1Nivel.length);
+
+                                for(var x=0; x<treeTransferStruct.set1Nivel.length;x++)
+                                    {
+                                        console.log('variaveis do for');
+                                        console.log(treeTransferStruct.set1Nivel[x]);
+
+                                        console.log('treeTransferStruct[i].set1Nivel.Id = ' + treeTransferStruct.set1Nivel[x].Id);
+                                        console.log('treeTransferStruct[i].set1Nivel.Name = ' + treeTransferStruct.set1Nivel[x].Name);
+                                            console.log('id do primeiro pai = ' +  treeTransferStruct.set1Nivel[x].Id);
+                                        jsonToTree.push(
+                                            {id: treeTransferStruct.set1Nivel[x].Id, text: treeTransferStruct.set1Nivel[x].Name, parent: "#", state:{"opened":false}, a_attr: {class: "no_checkbox"}},
+                                        );
+                                    }
+                            }
+
+                            if(treeTransferStruct.set2Nivel.length > 0){
+                                for(var x=0; x<treeTransferStruct.set2Nivel.length;x++){
+
+                                    if(treeTransferStruct.set2Nivel[x].NivelSuperior__c)
+                                        var idPai = treeTransferStruct.set2Nivel[x].NivelSuperior__c;
+                                        if(idPai != null){
+                                            jsonToTree.push(
+                                                {id: treeTransferStruct.set2Nivel[x].Id, text: treeTransferStruct.set2Nivel[x].Name, parent: idPai, state:{"opened":false}, a_attr: {class: "no_checkbox"}}
+                                            );
+                                        } else {
+                                            jsonToTree.push(
+                                                {id: treeTransferStruct.set2Nivel[x].Id, text: treeTransferStruct.set2Nivel[x].Name, parent: "#", state:{"opened":false}, a_attr: {class: "no_checkbox"}}
+                                            );
+                                        }
+                                        idPai = null;
+                               }
+                            }
+
+                            for(var x=0; x<treeTransferStruct.set3Nivel.length;x++){
+                                if(treeTransferStruct.set3Nivel[x].NivelSuperior__c)
+                                    var idPai = treeTransferStruct.set3Nivel[x].NivelSuperior__c;
+
+                                    console.log('Id pai - ' + idPai);
+                                    console.log('Name label - ' + treeTransferStruct.set3Nivel[x].Name);
+                                    if(idPai != null){
+                                        jsonToTree.push(
+                                            {id: treeTransferStruct.set3Nivel[x].Id + "VDNTC-"+treeTransferStruct.set3Nivel[x].DestinoVDNTC__c, text: treeTransferStruct.set3Nivel[x].Name, parent: idPai, state:{"opened":false}, li_attr: {class: "no_arrowDown"}}
+                                        );
+                                    } else {
+                                        jsonToTree.push(
+                                            {id: treeTransferStruct.set3Nivel[x].Id + "VDNTC-"+treeTransferStruct.set3Nivel[x].DestinoVDNTC__c, text: treeTransferStruct.set3Nivel[x].Name, parent: "#", state:{"opened":false}, li_attr: {class: "no_arrowDown"}}
+                                        );
+                                    }
+                                    idPai = null;
+                            }
+                                        
+                            setTimeout(function (){        
+                                loadTreeTransfer();
+                            }, 1400);
+                            
+                    }
+                },
+                {escape: false}
+            );
+        }
+
+        function startTransfer(){
+            console.log('teste da function + ' +  finalVDN);
+            api.blindTransfer(finalVDN);
+        }
+                    /*
+        api.onBlindTransfer = function(event){
+            console.log('onBlindTransfer');
+            var strtype = event;
+            console.log('event => ');
+            console.dir(event);
+        }
+        */
+        api.onBlindTransfer = function(event){
+            console.log('onBlindTransfer nok');
+            console.dir(event);
+
+            if(event.descStatus == 'OK'){
+                homeOn();
+                checkTransferCall = false;
+            } else {
+                $('.error-messages p').remove();
+                $('.error-messages').append($('<p class="text-error">').text('Tente novamente, caso o erro persista acione sua equipe de suporte local.'));
+                $('.error-messages').append($('<p class="text-error">').text(event.descStatus));
+            }
+        }
+
+        //DRIVER CONNECT RAMAL
+
+        function sendDataDriver(){
+            console.log('sendDataDriver');
+            driverSiteId = '';
+            numRamal = $('#numero-ramal').val();
+            descStatus = '';
+            tempCallback = '';
+            api.driverConnect(driverSiteId,numRamal,descStatus,tempCallback);
+        }
+
+        api.onDriverConnect = function(event){
+            console.log('onDriverConnect');
+            var strtype = event;
+            driverSiteId = event.siteid;
+            var driverRamal = event.numRamal;
+            $('#inputRamalNumber').val(event.numRamal);  
+            console.log('event => ' + event);
+            console.log('event.descStatus => ' + event.descStatus);
+			
+            $('img').on('dragstart', function(event) { event.preventDefault(); });
+            
+            /* APAGAR */
+            console.log('numero do ramal= ' + numRamal);
+            if(numRamal == '000676111'){
+                event.descStatus = 'OK';
+                driverRamal = '000676111';
+                console.log('entrou if ramal');
+                driverSiteId = 'PROPRIA|SQTESTECTI|DAC01';
+            }
+			
+				
+            console.log('entrou na funcao do login driverSiteId = ' + driverSiteId);
+            /* APAGAR */
+
+            if(event.descStatus == 'OK'){
+                sendSiteIDRamalToController(driverSiteId, driverRamal);
+                $("#inputSiteId").val(driverSiteId);
+                //$("#inputRamalNumber").val(driverRamal);
+            } else {
+
+                if(loginPageActive == false){
+                    activeLoginPage();
+                }
+
+                setTimeout(function (){
+                    $('.error-messages p').remove();
+                    $('.error-messages').append($('<p class="text-error">').text('Tente novamente, caso o erro persista acione sua equipe de suporte local.'));
+                    $('.error-messages').append($('<p class="text-error">').text(event.descStatus));
+                }, 2000);
+            }
+
+        }
+
+        function sendSiteIDRamalToController(driverSiteId, driverRamal){
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.checkRamal}',
+                driverSiteId, driverRamal,
+                function(result, event){
+                    if (event.status) {
+
+                        var today = new Date();
+                        var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+                        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        var dateTime = date+' '+time;
+                        
+                        $('.driver-datas #messages').append($('<br/><p>').text('['+dateTime+']: Driver - onDriverConnected'));
+
+                        console.log('checkramal  conferenceTwoNumbersActive ====== ' + conferenceTwoNumbersActive);
+                        console.log('checkramal  conferenceMergedActive ====== ' + conferenceMergedActive);
+
+                        if(conferenceTwoNumbersActive){
+                            checkFinishCall = true;
+                            checkExternalCall = result.ligacaoExterna;
+                            openConferenceTwoNumbersConnected(); 
+                        }
+
+                        else if(conferenceMergedActive){
+                            checkFinishCall = true;
+                            checkExternalCall = result.ligacaoExterna;
+                            mergedConferenceScreen();
+                            setTimeout(function (){
+                                startCountDurationConference(conferenceCompletedStartTime);
+                                headerDeactivateCallOptions();
+                                completeHeaderFields();
+                            }, 2800);
+                        }
+                        
+                        else if(conferenceTwoNumbersActiveAlternate){
+                            checkFinishCall = true;
+                            checkExternalCall = result.ligacaoExterna;
+                            openConferenceTwoNumbersConnected();
+                            
+                            setTimeout(function (){
+                                startTimerCallHold(calOnHoldStartTime);
+                            }, 2800);
+                        }
+                        
+                        else if(callOnHold){
+                            disableAllComponents();
+                            disableAllFooterIcons();
+                            inactiveGeneralContentComponents();
+                            inactiveLoginPage();
+                            activeComponentHeader1();
+                            activeComponentHeader2();
+                            activeComponentHeader3();
+                            activeAttendance();
+                            activeCallActions();
+                            activeFooter();
+                            setTimeout(function(){
+                                $('.customer-wait-count').removeClass('display-none');
+                                timerCallHold(calOnHoldStartTime);
+                                callActionsDeactivateEndCall();
+                                footerDeactivateTransfer();
+                                callActionsActiveHold();
+                            }, 2000);
+                        }
+                        
+                        else{
+                            let ramalByVendor = updateRamal(driverRamal);
+
+                            if(result.ligacaoExterna == true){
+                                //location.href = '/apex/CEC_CTI_DiskNumber?ramal='+ driverRamal + '&siteId=' + event.siteid;
+                                console.log('ligação externa ativa');
+
+                                checkExternalCall = true;
+
+                                if(vendor.toUpperCase() == 'AVAYA'){
+                                    enableClickToDial();
+                                }
+                                
+                                inactiveLoginPage();
+                                disableAllComponents();
+                                disableAllFooterIcons();
+                                activeComponentHeader1();
+                                //activeComponentHeader2();
+                                //activeComponentHeader3();
+                                activeAvailableToAttendance();
+                                //activeCallActions();
+                                activeFooter();
+                                footerActivateExternalCall();
+                                footerActivateHomeActive();
+                                setTimeout(function(){
+                                    $("#inputRamalNumber").val(ramalByVendor);
+                                    $('#valueRamalHeader').text(ramalByVendor);
+                                }, 2000);
+
+                            } else {
+                                //location.href = '/apex/CEC_CTI_AvailableToAttendance?ramal='+ driverRamal + '&siteId=' + event.siteid;
+                                console.log('entrou no else ligação externa');
+
+                                checkExternalCall = false;
+
+                                inactiveLoginPage();
+                                disableAllComponents();
+                                disableAllFooterIcons();
+                                activeComponentHeader1();
+                                //activeComponentHeader2();
+                                //activeComponentHeader3();
+                                activeAvailableToAttendance();
+                                //activeCallActions();
+                                activeFooter();
+                                setTimeout(function(){
+                                    $("#inputRamalNumber").val(ramalByVendor);
+                                    $('#valueRamalHeader').text(ramalByVendor);
+                                }, 2000);
+                            }
+                        }
+                    }
+                },
+                {escape: false}
+            );
+        }
+
+        function updateRamal(ramal){
+
+            let ramalDescription;
+            // O parametro 'vendor' sempre será preenchido no evento onDriverOpen, mas apenas as versões mais novas do driver disparam esse evento.
+            if(vendor){
+                // vendor pode ter um dos seguintes valores: SIMULADOR, AVAYA, HUAWEI, VOCALCOM.
+                switch (vendor.toUpperCase()) {
+                    case "SIMULADOR":
+                        ramalDescription = 'Em modo de simulação';
+                        break;
+                    case "HUAWEI":
+                        ramalDescription = ramal;
+                        break;
+                    case "AVAYA":
+                        ramalDescription = ramal;
+                        break;	
+                    case "VOCALCOM":
+                        ramalDescription = ramal;
+                        break;
+                }
+            } else {
+                ramalDescription = ramal;
+            }            
+            
+            console.log('ramalDescription << ' + ramalDescription);
+
+            return ramalDescription;
+        }
+
+        // EXTERNAL CALL
+        function sendPhoneNumberToDriver(){
+            if(checkConferenceIconClicked == false){
+                phoneNumber = $('#numberInput').val();
+                
+                if(phoneNumber.length >= 10){
+                	api.dialExternalCall(phoneNumber);
+                	callFromSalesforce = true;
+                } else {
+                	alert('Erro. Verifique o número de telefone digitado');
+                }
+    
+            } else {
+                var phoneConferennce = $('#numberInputConference').val();
+                
+                if(phoneConferennce.length >= 10){
+                    startConferenceToDriver(phoneConferennce);
+                    $('#inputSecondPhoneNumber').val(phoneConferennce);
+            	} else {
+                	alert('Erro. Verifique o número de telefone digitado');
+                }	
+           	}
+        }
+
+        api.onDialExternalCall = function(event){
+            var strtype = event;
+            console.log('event => ' + event.data);
+            console.log('onDialExternalCall');
+        }
+
+        api.onDialPending = function(event){
+            var strtype = event;
+            console.log('onDialPending');
+            console.log(' event.numerodest - ' +  event.numerodest);
+
+            disableAllComponents();
+            disableAllFooterIcons();
+            inactiveGeneralContentComponents();
+            inactiveLoginPage();
+            activeComponentHeader1();
+            activeComponentHeader2();
+            activeComponentHeader3();
+            activeConnectingCall();
+            activeCallActions();
+            activeFooter();
+
+            setTimeout(function (){
+                //callActionsActivateEndCall();
+                callActionsActivateEndCallConnecting();
+                completeHeaderFields();
+                //$('#numberInput').val(event.numerodest);
+            }, 3200);
+
+        }
+
+        // FINISH CALL
+        function finishCall(){
+            console.log('ENTROU FINISH CALL');
+            callbackOn = false;
+            console.log(callbackOn);
+            console.log('acionou hangUp');
+            
+            api.hangup();
+        }
+
+        api.onHangup = function(event){
+            console.log('ENTROU EVENTO HANGUP');
+            var strtype = event;
+            callbackOn = false;
+            checkConferenceIconClicked = false;
+            $('#nameInputVisible').val(null);
+            inactiveLoginPage();
+            disableAllComponents();
+            disableAllFooterIcons();
+            activeComponentHeader1();
+            //activeComponentHeader2();
+            //activeComponentHeader3();
+            //activeCallActions();
+            activeFooter();
+            activeAvailableToAttendance();
+            callActionsDeactivateEndCall();
+            footerActivateHomeActive();
+            footerActivateExternalCall();
+            callActionActivateOffWait();
+            clearHeaderAttendanceInfos();
+            resetVariablesJS();
+            inactiveComponentHeader2();
+            inactiveComponentHeader3();
+            inactiveCallActions();
+            console(onHangup);
+        }
+
+        function sendCallDataToCross(obj){
+
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.sendCallDataToCross}',
+                JSON.stringify(obj),
+                function(result, event){
+                    if (event.status) {
+                        if(result.success){
+                            console.log('Customer Interaction gravado com sucesso.');
+                        } else {
+                            console.log('Erro de gravação do cross: ' + result.message);
+                        }
+                    }
+                },
+                {escape: false}
+            );
+        }
+
+        //CALL DINSCONNECTED
+        api.onCallDisconnected = function(event){
+            var strtype = event;
+            console.log('onCallDisconnected');
+            var today = new Date();
+            var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date+' '+time;
+            $('.driver-datas #messages').append($('<br/><p>').text('['+dateTime+']: Driver - onCallDisconnected'));
+                
+            if(externalCallParameters){
+                externalCallParameters.status = (externalCallConnected == true) ? 'Sucesso' : 'Insucesso';
+                
+                if(externalCallParameters.systemCalling){
+                    if(externalCallParameters.systemCalling.toUpperCase() == "CRM_CROSS") {
+                        sendCallDataToCross(externalCallParameters);
+                    } 
+                } 
+            } 
+
+            externalCallConnected = false;
+
+            console.log('VALOR VARIAVEL CALLBACK = ' + callbackOn);
+            if(callbackOn != true){
+                
+                console.log('ENTROU NO IF DO CALLBACK ON = ' + callbackOn);
+                
+                $('#inputPhoneNumber').val(null);
+                $('#inputCustomerName').val(null);
+                $('#inputDocNumber').val(null);
+                $('#inputSecondPhoneNumber').val(null);
+                $('#nameInputVisible').val(null);
+
+                checkSchedulingIconClicked = false;
+                conferenceTwoNumbersActive = false; 
+                conferenceMergedActive = false;
+                conferenceTwoNumbersActiveAlternate = false;
+                checkTransferCall = false;
+                checkConference = false
+                callOnHold = false;
+                callInProgress = false;
+                
+                inactiveLoginPage();
+                disableAllComponents();
+                disableAllFooterIcons();
+                activeComponentHeader1();
+                //activeComponentHeader2();
+                //activeComponentHeader3();
+                //activeCallActions();
+                activeFooter();
+                activeAvailableToAttendance();
+                callActionsDeactivateEndCall();
+                footerActivateHomeActive();
+                footerActivateExternalCall();
+                callActionActivateOffWait();
+                clearHeaderAttendanceInfos();
+                resetVariablesJS();
+                inactiveComponentHeader2(); 
+                inactiveComponentHeader3(); 
+                inactiveCallActions(); 
+                //activeCallActions();
+            }
+
+        }
+
+        //CALLBACK
+        api.onCallBack = function(event){
+            var strtype = event;
+            //   inactiveGeneralContentComponents();
+            //activeCallback();
+            sforce.opencti.enableClickToDial({callback: callback});   
+            callbackOn = true;
+            
+            
+            $('#inputPhoneNumber').val(null);
+            $('#inputCustomerName').val(null);
+            $('#inputDocNumber').val(null);
+            $('#inputSecondPhoneNumber').val(null);
+            
+            checkSchedulingIconClicked = false;
+            conferenceTwoNumbersActive = false; 
+            conferenceMergedActive = false;
+            conferenceTwoNumbersActiveAlternate = false;
+            checkTransferCall = false;
+            checkConference = false
+            callOnHold = false;
+            callInProgress = false;
+                        
+            inactiveLoginPage();
+            disableAllComponents();
+            disableAllFooterIcons();
+            activeComponentHeader1();
+            activeComponentHeader2();
+            activeComponentHeader3();
+            activeFooter();
+            activeCallback();
+            activeCallActions();
+            disableAllFooterIcons();
+           
+            setTimeout(function (){
+                callActionsActivateEndCall();
+                completeHeaderFields();
+            }, 3200);   
+            
+            timerCallback.start({countdown: true, startValues: {seconds: 9}});
+            
+            timerCallback.addEventListener('targetAchieved', function (e) {
+                console.log('FINAL TEMPO CALLBACK');
+                //api.hangup();
+                backToAvailableToAttendance();
+                callbackOn = false;
+            });
+             
+            console.log('api onCallBack');
+        }
+
+        api.onstartCallback = function(event){
+            var strtype = event;
+            console.log('onstartCallback');
+        }
+
+        function startCallBack(){
+            console.log('entrou no startcallback');
+            callbackOn = false;
+            timerCallback.stop();
+            api.startCallBack();
+        }
+
+        // CHAMADA EM ESPERA
+        function activateHold(){
+            api.hold();
+        }
+
+        api.onHold = function(event){
+            var strtype = event;
+            console.log('onHold');
+            calOnHoldStartTime = event.starttime;
+            /* APAGAR
+            event.descStatus = 'OK';
+            /* APAGAR */
+
+            console.dir(event);
+
+            if(event.descStatus == 'OK')
+            {
+                
+                //IF PARA ABRIR A TELA DE ESPERA NA CHAMADA NORMAL
+                if(checkConferenceIconClicked == false && conferenceMergedActive == false)
+                {
+                    callOnHold = true;
+                    calOnHoldStartTime = event.starttime;
+                    
+                    $('.customer-wait-count').removeClass('display-none');
+                    $('.img-attendance.normal-call').addClass('display-none');
+                    $('.img-attendance.on-hold').removeClass('display-none');
+                    timerCallHold(event.starttime);
+                    callActionsDeactivateEndCall();
+                    footerDeactivateTransfer();
+                    callActionsActiveHold();
+
+                }
+                
+                //ELSE PARA ABRIR A TELA DE ESPERA NA CONFERENCIA
+                else if(conferenceMergedActive){
+                    callOnHold = true;
+                    calOnHoldStartTime = event.starttime;
+                	mergedConferenceScreen();
+                    
+                    setTimeout(function (){
+                        $('.call-duration-text').addClass('display-none'); 
+                        $('.customer-wait-count.conference').removeClass('display-none');
+                        $('.img-merge .conference-active').addClass('display-none');
+                        $('.img-merge .conference-onhold').removeClass('display-none');
+                    	timerCallHoldConf(event.starttime);
+                        callActionsActiveHold();
+                    }, 3200);  
+                    
+                }
+         
+                //ELSE PARA ABRIR A TELA DE DISCAGEM DA CONSULTA DA CONFERENCIA
+                else
+                {
+                    inactiveGeneralContentComponents();
+                    activeConferenceNewCall();
+                    headerActivateCallOptions();  
+                    activeComponentHeader2();
+                    activeComponentHeader3();
+                    activeComponentHeaderNumConference();
+                    headerActivateCallOptions();
+                    footerActivateConferenceActive(); 
+                    footerActivateHome();
+                    footerDeactivateTransfer();
+                    footerDeactivateScheduling();
+                    activeCallActions();
+                    setTimeout(function (){
+                        activeDiskNumber();
+                    	ativarFocusConference();
+                        callActionsActivateStartCall();
+                        callActionActivateOffHold();
+                    }, 3200);   
+                    
+                    setTimeout(function (){
+                        completeHeaderFields();
+                    }, 4000);   
+                    
+                }
+            }
+        }
+
+        function deactivateHold(){
+            api.retrieve();
+        }
+
+        api.onRetrieve = function(event){
+            console.log('onRetrive');
+
+            //IF PARA TIRAR A CONFERENCIA DA ESPERA            
+            if(conferenceMergedActive){
+                callOnHold = false;
+                $('.new-schedule').removeClass('conference');
+                checkFinishCall = true;
+                mergedConferenceScreen();
+                setTimeout(function (){
+                    startCountDurationConference(conferenceCompletedStartTime);
+                    $('.customer-wait-count.conference').addClass('display-none');
+                    $('.call-duration-text').removeClass('display-none'); 
+                    $('.img-merge .conference-onhold').addClass('display-none');
+                    $('.img-merge .conference-active').removeClass('display-none');     
+                }, 3200);
+            }
+            
+            // ELSE PARA TIRAR A CHAMADA NORMAL DA ESPERA
+            else {
+                callOnHold = false;
+                $('.customer-wait-count').addClass('display-none');
+                backToAttendancePage();
+           	}
+        }
+
+        // OPEN SEARCH COMPONENT
+        function screenPop(docNumber, pageURL) {
+            console.log('pageURL => ' +  pageURL)
+            if (pageURL != null)
+            {
+                sforce.opencti.screenPop({type: sforce.opencti.SCREENPOP_TYPE.URL, params: {url: pageURL}});
+            }
+
+        }
+
+        // CONFERENCIA
+
+        function startConferenceToDriver(phoneConferennce){
+            //api.iniciaConferencia(phoneConferennce);
+            api.dialConsultationCall(phoneConferennce);
+            $('#inputSecondPhoneNumber').val(phoneConferennce);
+        }
+
+
+        api.onDialConsultationCall = function(event){
+            console.log('onDialConsultationCall');
+            console.dir(event);
+        }
+
+        function startAlternateCall(){
+            api.alternate();
+        }
+
+        api.onAlternateCompleted = function(event)  {
+            console.log('onAlternateCompleted');
+            if(event.descStatus == 'OK'){
+                conferenceTwoNumbersActiveAlternate = true;
+                
+                $('#inputPhoneNumber').val(event.originalNumber);  
+                $('#inputSecondPhoneNumber').val(event.consultationNumber);  
+                
+                var callOriginalNumber = event.originalNumber;
+                var callConsultationNumber = event.consultationNumber;
+                var callHeldNumber = event.heldNumber;
+                calOnHoldStartTime = event.starttime;
+                
+                if(callHeldNumber == callOriginalNumber){
+                    holdToFirstNumber = true;
+                    holdToSecondNumber = false;
+                    startTimerCallHold(event.starttime);
+                    console.log('NUMERO 1 NA ESPERA');
+                }
+                
+                if(callHeldNumber == callConsultationNumber){
+                    holdToFirstNumber = false;
+                    holdToSecondNumber = true;
+                    startTimerCallHold(event.starttime);
+                    console.log('NUMERO 2 NA ESPERA');
+                }
+                
+                console.log('entrou if alternate = ' + event.starttime);
+            }
+        }
+
+
+        function startMergeConference(){
+            api.conference();
+        }
+
+        api.onConferenceCompleted = function(event) {
+            console.log('onConferenceCompleted');
+            if(event.descStatus == 'OK'){
+                $('#inputPhoneNumber').val(event.originalNumber);  
+                $('#inputSecondPhoneNumber').val(event.consultationNumber);  
+                conferenceTwoNumbersActive = false;
+                conferenceTwoNumbersActiveAlternate = false;
+                checkFinishCall = true;
+                conferenceMergedActive = true;
+                mergedConferenceScreen();
+                conferenceCompletedStartTime = event.originCallInitTime;
+                startCountDurationConference(conferenceCompletedStartTime);
+
+            }
+        }
+
+        api.onConsultationRinging = function(event) {
+            console.log('onConsultationRinging');
+            $('#inputRamalNumber').val(event.ramal);  
+            $('#inputPhoneNumber').val(event.originalNumber);  
+            $('#inputSecondPhoneNumber').val(event.consultationNumber);  
+            openConferenceTwoNumbersRinging();   
+        }
+        
+        api.onConsultationConnected = function(event) {
+            console.log('onConsultationConnected');
+            
+            $('#inputRamalNumber').val(event.ramal);  
+            $('#inputPhoneNumber').val(event.originalNumber);  
+            $('#inputSecondPhoneNumber').val(event.consultationNumber);  
+            conferenceTwoNumbersActive = true;
+            openConferenceTwoNumbersConnected();
+        }
+        
+        api.onConsultationDisconnected = function(event) {
+            console.log('onConsultationDisconnected');
+            $('#inputRamalNumber').val(event.ramal);  
+            $('#inputPhoneNumber').val(event.originalNumber);  
+            $('#inputSecondPhoneNumber').val(null);
+            
+            checkConferenceIconClicked = false;
+            checkSchedulingIconClicked = true;
+            conferenceTwoNumbersActive = false; 
+            conferenceMergedActive = false;
+            conferenceTwoNumbersActiveAlternate = false;
+            callOnHold = false;
+            
+            deactivateHold();
+            
+        }
+
+        api.onConsultationFailed = function(event) {
+            console.log('onConsultationDisconnected');
+            $('#inputRamalNumber').val(event.ramal);  
+            $('#inputPhoneNumber').val(event.originalNumber);  
+            $('#inputSecondPhoneNumber').val(null);
+            
+            checkConferenceIconClicked = false;
+            checkSchedulingIconClicked = true;
+            conferenceTwoNumbersActive = false; 
+            conferenceMergedActive = false;
+            conferenceTwoNumbersActiveAlternate = false;
+            //checkTransferCall = false;
+            //checkConference = false
+            
+            deactivateHold();            
+        }
+
+        //AGENDAMENTO
+
+         function createScheduling(){
+
+             var customerNameScheduling = $('#agendamento-customerNameScheduling').val();
+             var customerDocumentScheduling = $('#agendamento-customerDocumentScheduling').val();
+             var dayScheduling = $('#agendamento-dayScheduling').val();
+             var hourAppointmentScheduling = $('#agendamento-hourAppointmentScheduling').val();
+             var titleReasonScheduling = getTitleScheduling();
+             //var titleReasonScheduling = $('#agendamento-titleReasonScheduling input').val();
+             //var titleReasonScheduling = $('#agendamento-titleReasonScheduling').find(":selected").text();
+             var textReasonScheduling = $('#agendamento-textReasonScheduling').val();
+             var telefone1 = $('#agendamento-telefone1').val();
+             var telefone2 = $('#agendamento-telefone2').val();
+             var telefone3 = $('#agendamento-telefone3').val();
+             var telefone4 = $('#agendamento-telefone4').val();
+             var telefone5 = $('#agendamento-telefone5').val();
+
+             console.log('titleReasonScheduling = ' + titleReasonScheduling);
+
+             Visualforce.remoting.Manager.invokeAction(
+             '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.makeAppointment}',
+             customerNameScheduling, customerDocumentScheduling, dayScheduling,
+                 hourAppointmentScheduling, titleReasonScheduling, textReasonScheduling,
+             telefone1, telefone2, telefone3, telefone4, telefone5,
+                function(result, event){
+                    if (event.status) {
+                       if(result === 'SUCCESS') {
+
+                           homeOn();
+							
+
+                       } else {
+                            console.log('resultado = ' + result);
+                            $("#scheduling-error-message").empty();
+                            $("#scheduling-error-message").append(result);
+                       }
+                    }
+                },
+                {escape: false}
+             );
+         }
+
+
+        function openReports(){
+
+            Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CEC_CTI_ControlSoftphoneController.getReportId}',
+                function(result, event){
+                    if (event.status) {
+                        console.log(event);
+                        console.log(result);
+                        var reportId = result;
+
+                        sforce.opencti.screenPop({type: sforce.opencti.SCREENPOP_TYPE.URL, params: {url: '/lightning/r/Report/'+reportId+'/view'}});
+
+                    }
+                },
+                {escape: false}
+            );
+
+        }
+
+
+    </script>
+    <body id="page-body">
+
+        <apex:form id="generalPageForm">
+            <div id="controlSoftphone" class="display-none">
+                
+                <!-- COMPONENTS VARIABLES -->
+                <apex:variable value="false" var="componentHeader1"/>
+                <apex:variable value="false" var="componentHeader2"/>
+                <apex:variable value="false" var="componentHeader3"/>
+                <apex:variable value="true" var="componentHeaderNumConference"/>
+                <apex:variable value="false" var="componentDiskNumber"/> 
+                <apex:variable value="false" var="componentCallActions"/>
+                <apex:variable value="false" var="componentFooter"/>
+                <apex:variable value="false" var="componentCallActions"/>
+                <apex:variable value="false" var="componentLoginPage"/> 
+                <apex:variable value="false" var="componentDiskNumber"/> 
+                <apex:variable value="false" var="componentAttendance1"/> 
+                <apex:variable value="false" var="componentCallback"/> 
+                <apex:variable value="false" var="componentConnectingCall"/> 
+                <apex:variable value="false" var="componentTransferCall"/> 
+                <apex:variable value="false" var="componentConferenceNewCall"/>
+                <apex:variable value="false" var="componentMergeConferenceCall"/>
+                <apex:variable value="false" var="componentInConferenceTwoNumbers"/>
+                <apex:variable value="false" var="componentConferenceDialing"/>
+                <apex:variable value="false" var="componentScheduling"/>
+                
+                <!-- COMPONENTS ACTION FUNCTIONS -->
+                
+                <!-- HEADER -->
+                <apex:actionFunction name="setComponentHeader1" reRender="compHeader1" >
+                    <apex:param name="setComponentHeader1Param" assignTo="{!componentHeader1}" value=""/>            
+                </apex:actionFunction>
+                <apex:actionFunction name="setComponentHeader2" reRender="compHeader2" >
+                    <apex:param name="setComponentHeader2Param" assignTo="{!componentHeader2}" value=""/>            
+                </apex:actionFunction>
+                <apex:actionFunction name="setComponentHeader3" reRender="compHeader3" >
+                    <apex:param name="setComponentHeader3Param" assignTo="{!componentHeader3}" value=""/>            
+                </apex:actionFunction>
+                <apex:actionFunction name="setComponentHeaderNumConference" reRender="compHeaderNumConference" >
+                    <apex:param name="setComponentHeaderNumConferenceParam" assignTo="{!componentHeaderNumConference}" value=""/>            
+                </apex:actionFunction>
+                
+                
+                <!-- FOOTER -->
+                <apex:actionFunction name="setDiskNumber" reRender="diskNumber" >
+                    <apex:param name="setDiskNumberParam" assignTo="{!componentDiskNumber}" value=""/>            
+                </apex:actionFunction>
+               
+                <apex:actionFunction name="setCallActions" reRender="callActions" >
+                    <apex:param name="setCallActionsParam" assignTo="{!componentCallActions}" value=""/>            
+                </apex:actionFunction>
+                <apex:actionFunction name="setFooter" reRender="footer" >
+                    <apex:param name="setFooterParam" assignTo="{!componentFooter}" value=""/>            
+                </apex:actionFunction>
+                
+                
+                <!-- GENERAL CONTENT -->
+                <apex:actionFunction name="setLoginPage" reRender="loginPage" >
+                    <apex:param name="setLoginPageParam" assignTo="{!componentLoginPage}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setAttendance1" reRender="attendanceComp1" >
+                    <apex:param name="setAttendanceParam1" assignTo="{!componentAttendance1}" value=""/>            
+                </apex:actionFunction>              
+                
+                <apex:actionFunction name="setAvailableToAttendance" reRender="availableToAttendance" >
+                    <apex:param name="setAvailableToAttendanceParam" assignTo="{!componentAvailableToAttendance}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setCallback" reRender="callback" >
+                    <apex:param name="setCallbackParam" assignTo="{!componentCallback}" value=""/>            
+                </apex:actionFunction>
+
+                <apex:actionFunction name="setConnectingCall" reRender="connectingCall" >
+                    <apex:param name="setConnectingCallkParam" assignTo="{!componentConnectingCall}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setTransferCall" reRender="transferCall" >
+                    <apex:param name="setTransferCallParam" assignTo="{!componentTransferCall}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setConferenceNewCall" reRender="conferenceNewCall" >
+                    <apex:param name="setConferenceNewCallParam" assignTo="{!componentConferenceNewCall}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setMergeConferenceCall" reRender="mergeConferenceCall" >
+                    <apex:param name="setMergeConferenceCallParam" assignTo="{!componentMergeConferenceCall}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setInConferenceTwoNumbers" reRender="inConferenceTwoNumbers" >
+                    <apex:param name="setInConferenceTwoNumbersParam" assignTo="{!componentInConferenceTwoNumbers}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setConferenceDialing" reRender="conferenceDialing" >
+                    <apex:param name="setConferenceDialingParam" assignTo="{!componentConferenceDialing}" value=""/>            
+                </apex:actionFunction>
+                
+                <apex:actionFunction name="setScheduling" reRender="schedulingComponent" >
+                    <apex:param name="setSchedulingParam" assignTo="{!componentScheduling}" value=""/>            
+                </apex:actionFunction>
+        
+                <!-- COMPONENTS OUTPUT PANEL -->
+                
+                <!-- HEADER COMPONENTS -->
+                <div class="header-page open-call-infos driver-data-null display-none">
+                    <apex:outputPanel id="compHeader1">
+                        <c:CEC_CTI_ComponentHeader1 rendered="{!$CurrentPage.parameters.setComponentHeader1Param}"></c:CEC_CTI_ComponentHeader1>
+                    </apex:outputPanel>
+                    <apex:outputPanel id="compHeader2">
+                        <c:CEC_CTI_ComponentHeader2 rendered="{!$CurrentPage.parameters.setComponentHeader2Param}"></c:CEC_CTI_ComponentHeader2>
+                    </apex:outputPanel>
+                    <apex:outputPanel id="compHeader3">
+                        <c:CEC_CTI_ComponentHeader3 rendered="{!$CurrentPage.parameters.setComponentHeader3Param}"></c:CEC_CTI_ComponentHeader3>
+                    </apex:outputPanel>
+                    <apex:outputPanel id="compHeaderNumConference">
+                        <c:CEC_CTI_ComponentHeaderNumberConference rendered="{!$CurrentPage.parameters.setComponentHeaderNumConferenceParam}"></c:CEC_CTI_ComponentHeaderNumberConference>
+                    </apex:outputPanel>
+                    
+                </div>
+
+                <apex:outputPanel id="loginPage">
+                    <c:CEC_CTI_LoginPage rendered="{!$CurrentPage.parameters.setLoginPageParam}" ></c:CEC_CTI_LoginPage>  
+                </apex:outputPanel>
+                            
+                
+                <!-- GENERAL CONTENT -->
+                <div class="general-content side-padding display-none">
+                    
+                    <div id="availableAttendanceComp" class="display-none">
+                        <apex:outputPanel id="availableToAttendance">
+                            <c:CEC_CTI_AvailableToAttendance rendered="{!$CurrentPage.parameters.setAvailableToAttendanceParam}" ></c:CEC_CTI_AvailableToAttendance>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div id="attendanceComp" class="display-none">   
+                        <apex:outputPanel id="attendanceComp1">
+                            <c:CEC_CTI_Attendance rendered="{!$CurrentPage.parameters.setAttendanceParam1}" ></c:CEC_CTI_Attendance>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div id="callbackComp" class="display-none">   
+                        <apex:outputPanel id="callback">
+                            <c:CEC_CTI_Callback rendered="{!$CurrentPage.parameters.setCallbackParam}" ></c:CEC_CTI_Callback>  
+                        </apex:outputPanel>
+                    </div>
+
+                    <div id="connectingCallComp" class="display-none">   
+                        <apex:outputPanel id="connectingCall">
+                            <c:CEC_CTI_ConnectingCall rendered="{!$CurrentPage.parameters.setConnectingCallParam}" ></c:CEC_CTI_ConnectingCall>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div id="transferCallComp" class="display-none">   
+                        <apex:outputPanel id="transferCall">
+                            <c:CEC_CTI_TransferCall rendered="{!$CurrentPage.parameters.setTransferCallParam}" ></c:CEC_CTI_TransferCall>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div id="conferenceNewCallComp" class="display-none">   
+                        <apex:outputPanel id="conferenceNewCall">
+                            <c:CEC_CTI_ConferenceNewCall rendered="{!$CurrentPage.parameters.setConferenceNewCallParam}" ></c:CEC_CTI_ConferenceNewCall>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div id="mergeConferenceCallComp" class="display-none">   
+                        <apex:outputPanel id="mergeConferenceCall">
+                            <c:CEC_CTI_MergeConferenceCall rendered="{!$CurrentPage.parameters.setMergeConferenceCallParam}" ></c:CEC_CTI_MergeConferenceCall>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div id="inConferenceTwoNumbersComp" class="display-none">   
+                        <apex:outputPanel id="inConferenceTwoNumbers">
+                            <c:CEC_CTI_InConferenceTwoNumbers rendered="{!$CurrentPage.parameters.setInConferenceTwoNumbersParam}" ></c:CEC_CTI_InConferenceTwoNumbers>  
+                        </apex:outputPanel>
+                    </div>
+					
+                    <div id="conferenceDialingComp" class="display-none">   
+                        <apex:outputPanel id="conferenceDialing">
+                            <c:CEC_CTI_ConferenceDialing rendered="{!$CurrentPage.parameters.setConferenceDilingParam}" ></c:CEC_CTI_ConferenceDialing>  
+                        </apex:outputPanel>
+                    </div>
+				                    
+                    <div id="schedulingComp" class="display-none">   
+                        <apex:outputPanel id="schedulingComponent">
+                            <c:CEC_CTI_Scheduling rendered="{!$CurrentPage.parameters.setSchedulingParam}" ></c:CEC_CTI_Scheduling>  
+                        </apex:outputPanel>
+                    </div>
+                    
+                    <div class="driver-datas display-none">
+                        Modo de depuração - Pressione CTRL + ALT + B para fechar
+                        <div id="messages">
+                        </div>
+                    </div>  
+                </div>
+                
+                <!-- FOOTER -->
+                             
+                <div class="footer-page display-none">
+                    
+                    <apex:outputPanel id="diskNumber">   
+                        <c:CEC_CTI_DiskNumber rendered="{!$CurrentPage.parameters.setDiskNumberParam}" ></c:CEC_CTI_DiskNumber> 
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel id="callActions">   
+                        <c:CEC_CTI_CallActions rendered="{!$CurrentPage.parameters.setCallActionsParam}" ></c:CEC_CTI_CallActions>  
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel id="footer">   
+                        <c:CEC_CTI_DefaultSoftphoneFooter rendered="{!$CurrentPage.parameters.setFooterParam}" ></c:CEC_CTI_DefaultSoftphoneFooter>  
+                    </apex:outputPanel>
+                </div>
+                
+            </div> 
+
+            <div class="hidden-field display-none">
+                <input id="inputSiteId" type="hidden"/>
+                <input id="inputRamalNumber" type="hidden"/>
+                <input id="inputPhoneNumber" type="hidden"/>
+                <input id="inputCustomerName" type="hidden"/>
+                <input id="inputDocNumber" type="hidden"/>
+                <input id="inputSecondPhoneNumber" type="hidden"/>
+            </div>
+            
+            <!-- DIEGO CLIQUE AQUI
+            <p onclick="completeHeaderFields();" style="cursor: pointer;">
+                Clique aqui 
+            </p>
+            --> 
+        </apex:form>
+    </body>
+    
+    
+    <script>
+
+        $(document).ready(function () {
+            
+            $('#page-body').on('keydown keyup',function(e){
+                if(e.ctrlKey && e.altKey && e.key === "d"){
+                    $('.general-content').addClass('css-scrollbar');
+                    $('.driver-datas').removeClass('display-none');
+                }
+                
+            });
+    
+            $('#page-body').on('keydown keyup',function(e){
+                if(e.ctrlKey && e.altKey && e.key === "b"){
+                    $('.general-content').removeClass('css-scrollbar');
+                    $('.driver-datas').addClass('display-none');
+                }
+            });
+    
+        });
+
+        //FOOTER ICONS CONTROL
+
+        // Habilitar funcionalidades da página inicial de um atendimento
+        function homeOn(){
+
+            //if(checkConferenceIconClicked || checkSchedulingIconClicked){
+            if(checkSchedulingIconClicked){
+                
+                console.log('IF 1 HOME ON => checkSchedulingIconClicked' );
+                
+                disableAllComponents();
+                disableAllFooterIcons();
+                inactiveGeneralContentComponents();
+                inactiveLoginPage();
+                activeComponentHeader1();
+                activeComponentHeader2();
+                activeComponentHeader3();
+                activeAttendance();
+                activeCallActions();
+                activeFooter();
+                callActionsActivateHold();
+                checkConferenceIconClicked = false;
+                setTimeout(function(){
+                    completeHeaderFields();
+                    footerActivateScheduling();
+                    footerActivateTransfer();
+                    footerActivateConference();
+                    
+                    if(callOnHold){
+                        $('.customer-wait-count').removeClass('display-none');
+                        callActionsActiveHold();
+                        callActionsDeactivateEndCall();
+                    } else {
+                        callActionsActivateHold();
+                        callActionsActivateEndCall();
+                    }
+                    
+                }, 3200);
+            }
+            
+            else if(conferenceTwoNumbersActive){
+                $('.new-schedule').removeClass('conference');
+                openConferenceTwoNumbersConnected(); 
+            }
+            
+            else if(conferenceMergedActive){
+                $('.new-schedule').removeClass('conference');
+                checkFinishCall = true;
+                mergedConferenceScreen();
+                setTimeout(function (){
+                    startCountDurationConference(conferenceCompletedStartTime);
+                    //completeHeaderFields();
+                }, 2800);
+            }
+            
+           	else if(conferenceTwoNumbersActiveAlternate){
+               $('.new-schedule').removeClass('conference');
+               checkFinishCall = true;
+               openConferenceTwoNumbersConnected();
+                
+               setTimeout(function (){
+                   startTimerCallHold(calOnHoldStartTime);
+               }, 2800);
+            }
+                        
+
+            else{
+                
+                console.log('IF 1 HOME ON => ELSE' );
+                
+                inactiveGeneralContentComponents();
+                activeAvailableToAttendance();
+                //activeComponentHeader2();
+                //activeComponentHeader3();
+                //activeCallActions();
+                inactiveComponentHeader2();
+                inactiveComponentHeader3();
+                inactiveCallActions();
+                disableAllFooterIcons();
+                footerActivateHomeActive();
+                footerActivateExternalCall();
+                footerActivateScheduling();
+                footerActivateTransfer();
+                footerActivateConference();
+                //headerDeactivateCallOptions();
+				$('#numberInput').val(null);
+                
+                
+                /* DESABILITAR PARA CONFERERNCIA
+                inactiveLoginPage();
+                inactiveGeneralContentComponents();
+                disableAllComponents();
+                disableAllFooterIcons();
+
+                setTimeout(function (){
+                    clearHeaderAttendanceInfos();
+                    activeComponentHeader1();
+                    activeComponentHeader2();
+                    activeComponentHeader3();
+                    activeFooter();
+                    activeAttendance();
+                    activeCallActions();
+                    footerActivateHomeActive();
+                    footerActivateExternalCall();
+                    activeAvailableToAttendance();
+                    callActionsDeactivateEndCall();
+                    headerDeactivateCallOptions();
+                }, 1200);
+
+                */
+            }
+        }
+
+        function externalCallOn(){
+            footerActivateHome();
+            inactiveGeneralContentComponents();
+            footerActivateExternalCallActive();
+            activeComponentHeader2();
+            activeComponentHeader3();
+            footerActivateScheduling();
+            activeCallActions();
+            setTimeout(function (){
+                ativarFocus();
+                activeDiskNumber();
+                callActionsActivateStartCall();
+                headerActivateCallOptions();
+            }, 2200);
+        }
+
+        function transferOn(){
+            inactiveGeneralContentComponents();
+            inactiveCallActions();
+            activeTransferCall();
+            footerActivateHome();
+            footerActivateScheduling();
+            footerActivateTransferActive();
+            footerActivateConference();
+            
+            getTreeStructure();
+        }
+
+        function backToAttendance(){
+            inactiveGeneralContentComponents();
+            activeAttendance();
+            activeCallActions();
+            footerActivateTransfer();
+            setTimeout(function (){
+                callActionsActivateHold();
+                callActionsActivateEndCall();
+            }, 2800);
+            checkSchedulingIconClicked = true;
+        }
+
+        //HABILITA OS COMPONENTES DA TELA DE CONFERENCIA
+        function openConference(){
+            checkConferenceIconClicked = true;
+            activateHold();
+        }
+
+        // HABILITA OS COMPONENTES DA TELA DE AGENDAMENTO
+
+        function schedulingOn(){
+            
+            $('img').on('dragstart', function(event) { event.preventDefault(); });
+            
+            setTimeout(function(){
+                inactiveGeneralContentComponents();
+                inactiveCallActions();
+                activeScheduling();
+                inactiveComponentHeader2();
+                inactiveComponentHeader3();
+                footerActivateHome();
+                footerActivateExternalCall();
+                completeFieldsFromCall();
+                footerDeactivateConference();
+                footerActivateSchedulingActive();
+ 
+                if(conferenceTwoNumbersActive || conferenceMergedActive || conferenceTwoNumbersActiveAlternate){
+                    footerDeactivateHome();
+                    footerDeactivateExternalCall();
+                    activeComponentHeader1();
+                    //activeComponentHeader2();
+                    //activeComponentHeader3();
+                    activeComponentHeaderNumConference();
+                    footerActivateSchedulingActive();
+                    setTimeout(function(){
+                        $('.new-schedule').removeClass('out-of-conference');
+                    	$('.new-schedule').addClass('conference');
+                        completeHeaderFields();
+                        
+                        //footerActivateConference();
+                    }, 3800);
+                } 
+                
+                if(callInProgress){
+                    footerActivateHome();
+                    footerActivateTransfer();
+                    footerActivateConference();
+                	footerDeactivateExternalCall();
+                }
+                
+                console.log("testeAgendamento");
+            }, 0800);
+        }
+
+    // FUNCAO PARA HABILITAR COMPONENTES PARA MERGE CONFERENCE CALL
+        function displayComponents(){
+
+        disableAllComponents();
+        activeComponentHeader1();
+        activeComponentHeader2();
+        activeComponentHeader3();
+        activeMergeConferenceCall();
+
+    }
+    
+    // FUNCAO PARA HABILITAR TELA DE CONFERENCIA CHAMANDO TERCEIRO NUMERO
+    function openConferenceTwoNumbersRinging(){
+        console.log('openConferenceTwoNumbers');
+        inactiveLoginPage();
+        disableAllComponents();
+        activeComponentHeader1();
+        activeComponentHeader2();
+        activeComponentHeader3();
+        activeComponentHeaderNumConference();
+        activeCallActions();
+        activeFooter();
+        //activeInConferenceTwoNumbers();
+        activeConferenceDialing();
+        setTimeout(function(){
+            footerDeactivateHome();
+            footerDeactivateExternalCall();
+            footerDeactivateScheduling();
+            footerActivateConferenceActive();
+            completeHeaderFields();
+            holdToFirstNumber = true;
+            holdToSecondNumber = false;
+            startTimerCallHold(calOnHoldStartTime);
+            activateConsultationDialing();
+            headerDeactivateCallOptions();
+        }, 2700);
+        checkSchedulingIconClicked = false;
+    }
+
+    // FUNCAO PARA HABILITAR TELA DE CONFERENCIA CONECTADA SEM O MERGE DAS CHAMDAS
+    function openConferenceTwoNumbersConnected(){
+        console.log('openConferenceTwoNumbers');
+        inactiveLoginPage();
+        disableAllComponents();
+        activeComponentHeader1();
+        activeComponentHeader2();
+        activeComponentHeader3();
+        activeComponentHeaderNumConference();
+        activeCallActions();
+        activeFooter();
+        footerDeactivateHome();
+        footerDeactivateExternalCall();
+        footerActivateScheduling();
+        footerActivateConferenceActive();
+        activeInConferenceTwoNumbers();
+        setTimeout(function(){
+            activateConsultationConnected();
+            callActionsActivateEndCall();
+            completeHeaderFields();
+            startTimerCallHold(calOnHoldStartTime);
+            headerDeactivateCallOptions();
+        }, 2700);
+        checkSchedulingIconClicked = false;
+    }
+
+    //HABILITAR TELA DE CONFERENCIA MERGEADA
+    function mergedConferenceScreen(){
+        inactiveLoginPage();
+        disableAllComponents();
+        activeComponentHeader1();
+        activeComponentHeader2();
+        activeComponentHeader3();
+        activeComponentHeaderNumConference();
+        activeMergeConferenceCall();
+        activeCallActions();
+        activeFooter();
+        footerActivateScheduling();
+        footerActivateConferenceActive();
+        setTimeout(function(){
+            completeHeaderFields();
+            callActionsActivateEndCall();
+            if(callOnHold){
+                $('.customer-wait-count.conference').removeClass('display-none');
+                callActionsActiveHold();
+            } else {
+            	callActionsActivateHold();
+            }
+            headerDeactivateCallOptions();
+        }, 2700);
+   
+        checkSchedulingIconClicked = false;
+
+    }
+    // VOLTAR PARA A TELA DE ATENDIMENTO
+    function backToAttendancePage(){
+        
+        disableAllComponents();
+        disableAllFooterIcons();
+        inactiveGeneralContentComponents();
+        inactiveLoginPage();
+        activeComponentHeader1();
+        activeComponentHeader2();
+        activeComponentHeader3();
+        activeAttendance();
+        activeCallActions();
+        activeFooter();
+        completeHeaderFields();
+        setTimeout(function(){
+            footerActivateTransfer();
+			footerActivateConference();
+            footerActivateScheduling();
+            headerDeactivateCallOptions();
+        }, 3200);
+		
+        setTimeout(function(){
+            activeEndCallAndHold();
+        }, 4000);
+    }
+   
+    function activeEndCallAndHold(){
+        callActionsActivateEndCall();
+        callActionsActivateHold();
+        completeHeaderFields();
+    }
+    
+    // HABILITAR O CLICK-TO-DIAL
+
+    function enableClickToDial() {
+        sforce.opencti.enableClickToDial({callback: callback});
+        console.log('enableClickToDial');
+        // alert(callback);
+    }
+
+    function dialExternalCallDefault(phoneNumber){
+        console.log('dialExternalCallDefault - phone number: ' + phoneNumber);
+        
+        api.dialExternalCall(phoneNumber);
+
+        // externalCallOn();
+        // setTimeout(function (){
+        //     $('#numberInput').val(payload.number);
+        // }, 2000);
+    }
+
+    function dialExternalCallByCross(obj){
+        if(obj.phoneNumber.length >= 10){   
+            
+            // callId será baseado na data em milissegundos + uma string "0" para fornecer o tamanho necessário, 14 digitos.
+            let callId = Date.now();
+            obj.callId = callId + '0';
+            
+            console.log('dialExternalCall - obj.phoneNumber...: ' + obj.phoneNumber);
+            console.log('dialExternalCall - obj.contractNumber: ' + obj.contractNumber);
+            console.log('dialExternalCall - obj.customerName..: ' + obj.customerName);
+            console.log('dialExternalCall - obj.legacyProtocol: ' + obj.legacyProtocol);
+            console.log('dialExternalCall - obj.callId........: ' + obj.callId);
+
+            api.dialExternalCall(obj);
+
+        } else {
+            alert('Erro. Verifique o número de telefone digitado'); 
+        }
+    }
+
+    var listener = function(payload) {
+        
+        if(callInProgress == false){
+            
+            sforce.opencti.setSoftphonePanelVisibility({ visible: true }); 
+            let obj = new Object();
+
+            if(payload.params){
+
+                externalCallParameters = JSON.parse(payload.params);
+
+                switch (externalCallParameters.systemCalling.toUpperCase()) {
+                    case "CRM_CROSS":
+                        obj.toAddress = externalCallParameters.phoneNumber; 
+                        obj.contratoID = externalCallParameters.contractNumber; 
+                        obj.nomeCliente = externalCallParameters.customerName;
+                        obj.protocolo = externalCallParameters.legacyProtocol; 
+                        obj.recorderID = externalCallParameters.callId;
+
+                        dialExternalCallByCross(obj);
+                        break;
+                    // case "outra coisa":
+                    //     dialExternalCallByCross(externalCallParameters);
+                    //     break;
+                } 
+            } else {
+                // se outra squad não enviar parametros especificos para a discagem externa                
+                obj.phoneNumber = payload.number;
+
+                dialExternalCallDefault(obj);
+            }
+
+            callFromSalesforce = true;
+        }
+    };
+
+    window.addEventListener('load', function() {
+        sforce.opencti.onClickToDial({listener: listener});
+    });
+
+    //RESETAR VARIAVEIS DA CHAMADA 
+    function resetVariablesJS(){
+        callFromSalesforce = false;
+        checkFinishCall = false;
+        checkSchedulingIconClicked = false;
+        conferenceTwoNumbersActive = false;
+        conferenceMergedActive = false;
+        callInProgress = false;
+        checkConferenceIconClicked = false;
+        calOnHoldStartTime = null;
+        callbackOn = false;
+        callOnHold = false; 
+    }
+    
+    
+    function backToAvailableToAttendance(){
+        
+        console.log('ENTROU NA backToAvailableToAttendance');
+        
+        $('#inputPhoneNumber').val(null);
+        $('#inputCustomerName').val(null);
+        $('#inputDocNumber').val(null);
+        $('#inputSecondPhoneNumber').val(null);
+        
+        checkSchedulingIconClicked = false;
+        conferenceTwoNumbersActive = false; 
+        conferenceMergedActive = false;
+        conferenceTwoNumbersActiveAlternate = false;
+        checkTransferCall = false;
+        checkConference = false
+        callOnHold = false;
+        callInProgress = false;
+        
+        inactiveLoginPage();
+        disableAllComponents();
+        disableAllFooterIcons();
+        
+        activeComponentHeader1();
+        inactiveComponentHeader2();
+        inactiveComponentHeader3();
+        inactiveCallActions();
+        activeFooter();
+        activeAvailableToAttendance();
+        
+        footerActivateHomeActive();
+        footerActivateExternalCall();
+        callActionActivateOffWait();
+        clearHeaderAttendanceInfos();
+        resetVariablesJS();
+        
+        setTimeout(function(){
+            callActionsDeactivateEndCall();
+        }, 3200);
+        
+    }
+    </script>
+    
+    
+</apex:page>

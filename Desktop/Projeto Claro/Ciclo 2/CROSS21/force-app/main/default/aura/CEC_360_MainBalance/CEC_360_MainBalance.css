@@ -1,0 +1,9 @@
+table.lista-saldo-principal.cCEC_360_MainBalance {border: solid 1px #dbdada;border-right: solid 1px #dbdada;}
+table.lista-saldo-principal.cCEC_360_MainBalance th {font-weight: normal;height: 42px;line-height: 43px;background: #F8F8F8;border-bottom: solid 1px #dbdada;}
+table.lista-saldo-principal.cCEC_360_MainBalance th:last-child {border-right: solid 1px #dbdada;}
+table.lista-saldo-principal.cCEC_360_MainBalance td {border-bottom: solid 1px #dbdada;height: 42px;white-space: initial;vertical-align: top;}
+table.lista-saldo-principal.cCEC_360_MainBalance th:first-child {padding-left: 10px;}
+table.lista-saldo-principal.cCEC_360_MainBalance td:first-child {padding-left: 10px;}
+table.lista-saldo-principal.cCEC_360_MainBalance td {padding-top:9px;}
+.THIS .vermelho {font-size: 14px;  color:#da291c;font-weight:normal;}
+.THIS .slds-text-heading_medium {font-size: 12px;color: #434444;font-weight:normal;}

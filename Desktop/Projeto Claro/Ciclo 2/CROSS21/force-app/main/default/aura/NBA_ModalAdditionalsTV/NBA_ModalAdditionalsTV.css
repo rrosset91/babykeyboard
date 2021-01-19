@@ -1,0 +1,38 @@
+.THIS .check{
+    display:inline-flex;
+}
+
+.THIS .custom-combobox{
+    width			: 11rem !important;
+    float			: right;
+    margin-left		: 1rem !important;
+    height			: 20px;
+}
+
+.THIS .alim-icon-add{
+    display        : flex     !important;
+    justify-content: flex-end !important;
+    margin-right   : 3%       !important;
+}
+.THIS .slds-p-around_medium {
+    padding: 1rem 2rem 1rem 2rem;
+}
+
+.THIS .slds-checkbox_faux{
+    border:	1px solid rgb(0, 157, 227);
+}
+
+.THIS .slds-form-element__label{
+    font-size		:0.815rem!important;
+    padding-top		:0!important;
+}
+.THIS .slds-p-top_small{
+    padding-top: 0.25rem !important;
+}
+.THIS .disableSection{
+    background-color : #ecebea !important;
+    cursor :not-allowed !important;
+}
+.THIS .slds-backdrop {
+    position: fixed !important;
+}

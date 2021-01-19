@@ -1,0 +1,84 @@
+<!-- 
+  @description       : Componente composto por accordion sections com datatables que podem ter ou nao modais associados.
+  @author            : Roger Rosset
+  @group             : 
+
+  @last modified on  : 07-12-2020
+  @last modified by  : Roger Rosset
+
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   10-20-2020   Roger Rosset   Initial Version -->
+<template>
+  <lightning-layout class="loading-spinner-div" if:true={loadingInitSpinner}>
+    <lightning-layout-item size="12">
+			<lightning-spinner alternative-text="Carregando" size="large"> </lightning-spinner>
+    </lightning-layout-item>
+  </lightning-layout>
+  <div class="filtersGroup" if:false={loadingInitSpinner}>
+    <lightning-layout>
+      <lightning-layout-item size="12">
+				<c-solar-filtros allow-refresh="true" hide-products="true" hide-status="true" onfilterchange={handleFilterNotification}> </c-solar-filtros>
+      </lightning-layout-item>
+    </lightning-layout>
+  </div>
+  <div class="accordionsGroup" if:false={loadingInitSpinner}>
+    <lightning-layout>
+      <lightning-layout-item size="12">
+				<lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle} active-section-name={activeSections} class="accordion">
+					<template for:each={accordionsList} for:item="accordion">
+						<div key={accordion.accordionId}>
+							<lightning-accordion-section if:true={accordion.active} name={accordion.accordionId} label={accordion.accordionTitle}>
+								<div class="loadingSpinnerHolder" if:true={loadingSpinner}>
+									<lightning-spinner alternative-text="Carregando" size="medium"> </lightning-spinner>
+
+								  </div>
+									  <div if:false={loadingSpinner}>
+									  <div if:true={accordion.dataEmpty}>
+										  <c-solar-exception-content show-empty="true" empty-message={accordion.noEventsLabel}> </c-solar-exception-content>
+
+									</div>
+									<div if:true={accordion.dataError}>
+										<c-solar-exception-content show-error="true" empty-message={labels.eventsErrorLabel}> </c-solar-exception-content>
+									</div>
+								</div>
+								<div if:true={renderList}>
+									<div if:true={accordion.showDataTable}>
+										<lightning-datatable
+											key-field="id"
+											columns={accordion.columns}
+											data={accordion.responseData}
+											hide-checkbox-column
+											resize-column-disabled="true"
+											sorted-direction={sortDirection}
+											sorted-by={sortBy}
+											onsort={onHandleSort}
+											onrowaction={handleRowAction}
+										>
+										</lightning-datatable>
+									</div>
+								</div>
+              </lightning-accordion-section>
+            </div>
+          </template>
+        </lightning-accordion>
+      </lightning-layout-item>
+    </lightning-layout>
+  </div>
+  <c-solar-modal size="small" header="Detalhes">
+    <div slot="content">
+			<c-solar-modal-data-display modal-data={selectedRow} class-to-add="slds-size_1-of-2"> </c-solar-modal-data-display>
+			<div class="loading-spinner-div" if:true={loadingProtocolSpinner}>
+				<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
+      </div>
+      <div if:true={showModalPaginationComponent}>
+        <div if:false={loadingProtocolSpinner}>
+					<c-solar-financeiro-data-pagination pagination-data={rowResponseData}> </c-solar-financeiro-data-pagination>
+				</div>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+    </div>
+  </c-solar-modal>
+</template>

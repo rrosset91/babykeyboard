@@ -1,0 +1,287 @@
+<!-- CEC_PME_MobileButtonHeader -->
+<aura:component implements="force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,force:hasRecordId" controller="CEC_PME_MobileButtonsController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:CEC_PME_MobileButtonEvt" action="{!c.handleComponentEvent}"/>
+    <aura:registerEvent name="CEC_PME_MobileButtonEvt" type="c:CEC_PME_MobileButtonEvt"/>
+    
+    <aura:attribute name="isQuickAction" type="Boolean" default="true" required="true"/>
+    <aura:attribute name="order" type="Object"/>
+    <aura:attribute name="access" type="Object"/>
+    <aura:attribute name="cpcRole" type="String"/>
+    <aura:attribute name="isNeverManual" type="Boolean" default="true"/>
+    <aura:attribute name="user" type="User"/>
+    
+    <aura:attribute name="currentComponent" type="String" default="CEC_PME_MobileButtonHeader"/> 
+    
+    <aura:If isTrue="{!v.isQuickAction}">
+        <c:CEC_PME_OrderPath recordId="{!v.recordId}" />
+    </aura:If>
+    
+    <article class="slds-card">
+        <div class="slds-m-around_small">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-12">
+                    <h1  onclick="{!c.refreshComponent}">
+                        <div class="slds-truncate slds-m-vertical_xx-small">
+                            <span class="slds-page-header__title slds-truncate">
+                                <lightning:icon aura:id="iconHeader" iconName="standard:orders" size="medium" alternativeText="order" class="slds-m-right_xx-small"/>
+                                {!v.order.OrderNumber}
+                            </span>
+                        </div>
+                    </h1>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_9-of-12">
+                    <div class="slds-grid slds-wrap slds-grid_align-end">
+                        
+                        <aura:If isTrue="{!v.order.Status != null}">
+                            
+                            <aura:If isTrue="{!v.isQuickAction}">    
+                                <div class="slds-col slds-size_1-of-1">
+                                    <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                        <lightning:button label="{!$Label.c.CEC_PME_MobileButtonHeader_1}" title="{!$Label.c.CEC_PME_MobileButtonHeader_1}" onclick="{!c.closeAction}" class="slds-button_stretch slds-truncate" />
+                                    </div>    
+                                </div>
+                            </aura:If>
+                            
+                            <div class="slds-show_large">
+                                <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                    <lightning:button label="{!$Label.c.CEC_PME_MobileButtonHeader_2}" title="{!$Label.c.CEC_PME_MobileButtonHeader_2}" onclick="{!c.navigateToResume}" class="slds-truncate" />
+                                </div>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                    <lightning:button label="{!$Label.c.CEC_PME_MobileButtonHeader_2}" title="{!$Label.c.CEC_PME_MobileButtonHeader_2}" onclick="{!c.navigateToResume}" class="slds-button_stretch slds-truncate" />
+                                </div>  
+                            </div>
+                            
+                            <aura:If isTrue="{!and(and(v.order.Status != 'Cancelado', v.order.Status != 'Status CPC'), v.order.Status != 'Pedido Expirado')}">        
+                                <div class="slds-show_large">
+                                    <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                        <lightning:button label="{!$Label.c.CEC_PME_MobileButtonHeader_3}" title="{!$Label.c.CEC_PME_MobileButtonHeader_3}" onclick="{!c.cancelOrder}" class="slds-truncate" />
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                    <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                        <lightning:button label="{!$Label.c.CEC_PME_MobileButtonHeader_3}" title="{!$Label.c.CEC_PME_MobileButtonHeader_3}" onclick="{!c.cancelOrder}" class="slds-button_stretch slds-truncate" />
+                                    </div>
+                                </div>
+                            </aura:If>
+                            
+                            <aura:If isTrue="{!v.cpcRole != 'VENDEDOR'}">
+                                <aura:If isTrue="{!v.order.Status == 'Pré Analise da Documentação' || v.order.Status == 'Pré Analise'}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_4}" title="{!$Label.c.CEC_PME_MobileButtonHeader_4}" onclick="{!c.setSubStatus}" class="slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_4}" title="{!$Label.c.CEC_PME_MobileButtonHeader_4}" onclick="{!c.setSubStatus}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_5}" title="{!$Label.c.CEC_PME_MobileButtonHeader_5}" onclick="{!c.approveDoc}" class="slds-truncate" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_5}" title="{!$Label.c.CEC_PME_MobileButtonHeader_5}" onclick="{!c.approveDoc}" class="slds-button_stretch slds-truncate" />
+                                        </div>
+                                    </div>
+                                </aura:If>
+                                
+                                <aura:If isTrue="{!v.order.Status == 'Executando Input Manual'}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_7}" title="{!$Label.c.CEC_PME_MobileButtonHeader_7}" onclick="{!c.setOrderNotInputedF}" class="slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_7}" title="{!$Label.c.CEC_PME_MobileButtonHeader_7}" onclick="{!c.setOrderNotInputedF}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_8}" title="{!$Label.c.CEC_PME_MobileButtonHeader_8}" onclick="{!c.setOrderInputedF}" class="slds-truncate" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_8}" title="{!$Label.c.CEC_PME_MobileButtonHeader_8}" onclick="{!c.setOrderInputedF}" class="slds-button_stretch slds-truncate" />
+                                        </div>
+                                    </div>
+                                </aura:If>
+                                <aura:If isTrue="{! !(v.order.Status != 'Status CPC' || isNeverManual) }">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_9}" title="{!$Label.c.CEC_PME_MobileButtonHeader_9}" onclick="{!c.setQuoteStatusF}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_9}" title="{!$Label.c.CEC_PME_MobileButtonHeader_9}" onclick="{!c.setQuoteStatusF}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                </aura:If>
+                            </aura:If>   
+                            
+                            <aura:If isTrue="{!v.cpcRole != 'BACKOFFICE'}">
+                                
+                                <aura:If isTrue="{!v.order.Status == 'Território Associado' || v.order.Status == 'Documentação Devolvida'}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_10}" title="{!$Label.c.CEC_PME_MobileButtonHeader_10}" onclick="{!c.validateBackoffice}" class="slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_10}" title="{!$Label.c.CEC_PME_MobileButtonHeader_10}" onclick="{!c.validateBackoffice}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                </aura:If>  
+                                
+                                <aura:If isTrue="{!v.order.Status == 'Contrato Criado'}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_11}" title="{!$Label.c.CEC_PME_MobileButtonHeader_11}" onclick="{!c.sendToDocusign}" class="slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_11}" title="{!$Label.c.CEC_PME_MobileButtonHeader_11}" onclick="{!c.sendToDocusign}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                </aura:If>
+                                
+                                <aura:If isTrue="{! v.order.Status == 'Aguardando Assinatura' &amp;&amp; (v.order.DocuSignReenviarAssinatura__c == true || v.user.Profile.Name == 'RCV PME')}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_12}" title="{!$Label.c.CEC_PME_MobileButtonHeader_12}" onclick="{!c.showAlterEmailModal}" class="slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_12}" title="{!$Label.c.CEC_PME_MobileButtonHeader_12}" onclick="{!c.showAlterEmailModal}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                </aura:If>
+                                
+                                <aura:If isTrue="{!v.order.Status == 'Contrato Assinado'}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_13}" title="{!$Label.c.CEC_PME_MobileButtonHeader_13}" onclick="{!c.showTerritoryAssociation}" class="slds-truncate" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_13}" title="{!$Label.c.CEC_PME_MobileButtonHeader_13}" onclick="{!c.showTerritoryAssociation}" class="slds-button_stretch slds-truncate" />
+                                        </div>
+                                    </div>
+                                </aura:If>  
+                                
+                                <aura:If isTrue="{!v.order.Status == 'Aguardando criação contrato'}">
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_15}" title="{!$Label.c.CEC_PME_MobileButtonHeader_15}" onclick="{!c.createContract}" class="slds-truncate" />
+                                        </div> 
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_15}" title="{!$Label.c.CEC_PME_MobileButtonHeader_15}" onclick="{!c.createContract}" class="slds-button_stretch slds-truncate" />
+                                        </div> 
+                                    </div>
+                                </aura:If> 
+                                
+                            </aura:If>
+                            
+                            <aura:If isTrue="{!and(v.order.Status == 'Rejeitado a Crédito', v.cpcRole == 'BACKOFFICE')}">
+                                <div class="slds-show_large">
+                                    <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                        <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_14}" title="{!$Label.c.CEC_PME_MobileButtonHeader_14}" onclick="{!c.showResendModel}" class="slds-truncate" />
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                    <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                        <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_14}" title="{!$Label.c.CEC_PME_MobileButtonHeader_14}" onclick="{!c.showResendModel}" class="slds-button_stretch slds-truncate" />
+                                    </div>
+                                </div>
+                                
+                            </aura:If>
+                            
+                            <aura:If isTrue="{!v.access.hasAccBtnInputLegado == true}">            
+                                <aura:If isTrue="{!v.order.Status == 'Documentação Aprovada' || v.order.Status == 'Input com Erro'}">            
+                                    
+                                    <div class="slds-show_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_6}" title="{!$Label.c.CEC_PME_MobileButtonHeader_6}" onclick="{!c.JScloseOrder}" class="slds-truncate" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-hide_large">
+                                        <div class="slds-m-horizontal_xxx-small slds-m-vertical_xx-small">
+                                            <lightning:button variant="Brand" label="{!$Label.c.CEC_PME_MobileButtonHeader_6}" title="{!$Label.c.CEC_PME_MobileButtonHeader_6}" onclick="{!c.JScloseOrder}" class="slds-button_stretch slds-truncate" />
+                                        </div>
+                                    </div>
+                                </aura:If>
+                            </aura:If>
+                        </aura:If>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+    </article>
+    
+    <aura:if isTrue="{! v.currentComponent != 'CEC_PME_MobileButtonHeader' }">
+        <div id="myModal" class="modal slds-fade-in-open">
+            <div class="modal-content slds-fade-in-open">
+                <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsCancelOrder' }">
+                        <c:CEC_PME_MobileButtonsCancelOrder recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsCreateContract' }">
+                        <c:CEC_PME_MobileButtonsCreateContract recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsSignContract' }">
+                        <c:CEC_PME_MobileButtonsSignContract recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsTerritory' }">
+                        <c:CEC_PME_MobileButtonsTerritory recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsSendToBackOffice' }">
+                        <c:CEC_PME_MobileButtonsSendToBackOffice recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsDisapproveDoc' }">
+                        <c:CEC_PME_MobileButtonsDisapproveDoc recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsApproveDoc' }">
+                        <c:CEC_PME_MobileButtonsApproveDoc recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsInputOrder' }">
+                        <c:CEC_PME_MobileButtonsInputOrder recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonsResendRequest' }">
+                        <c:CEC_PME_MobileButtonsResendRequest recordId="{!v.recordId}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonOrderInputed' }">
+                        <c:CEC_PME_MobileButtonQuoteStatus recordId="{!v.recordId}" order="{!v.order}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonOrderNotInputed' }">
+                        <c:CEC_PME_MobileButtonOrderNotInputed recordId="{!v.recordId}" order="{!v.order}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+                    <aura:if isTrue="{! v.currentComponent == 'CEC_PME_MobileButtonQuoteStatus'}">
+                        <c:CEC_PME_MobileButtonQuoteStatus recordId="{!v.recordId}" order="{!v.order}" isQuickAction="{!v.isQuickAction}" />
+                    </aura:if>
+            </div>
+        </div>
+    </aura:if>
+    
+    <aura:If isTrue="{!v.isQuickAction}">
+        <c:CEC_PME_StatusRecipientDocusign recordId="{!v.recordId}" />
+    </aura:If>
+    
+</aura:component>

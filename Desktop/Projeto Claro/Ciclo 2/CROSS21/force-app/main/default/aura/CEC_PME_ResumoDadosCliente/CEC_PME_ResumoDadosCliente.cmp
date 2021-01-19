@@ -1,0 +1,42 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<aura:attribute name="dadosCliente" type="Object" />
+    <aura:attribute name="tipoEntrega" type="String" />
+    
+    
+    <button class="accordion border-b" aura:id="headerDadosEmpresa" onclick="{!c.toggleSecao}" id="headerDadosEmpresa" >
+        <span class="sub-title">Dados da empresa</span>
+    </button>
+    <div class="bloco" id="secaoDadosEmpresa" aura:id="secaoDadosEmpresa" >
+        <c:CEC_PME_ResumoDadosEmpresa dadosEmpresa="{!v.dadosCliente.dadosEmpresa}" tipoEntrega="{!v.tipoEntrega}" />
+    </div>
+    
+    <button class="accordion border-b" aura:id="headerEnderecoPrincipal" onclick="{!c.toggleSecao}" id="headerEnderecoPrincipal" >
+        <span class="sub-title">Endereço principal</span>
+    </button>
+    <div class="bloco" id="secaoEnderecoPrincipal" aura:id="secaoEnderecoPrincipal" >
+        <c:CEC_PME_ResumoEndereco endereco="{!v.dadosCliente.enderecoPrincipal}" tipoEntrega="{!v.tipoEntrega}" />
+    </div>
+    
+    <button class="accordion border-b" aura:id="headerEnderecoCobranca" onclick="{!c.toggleSecao}" id="headerEnderecoCobranca" >
+        <span class="sub-title">Endereço cobrança</span>
+    </button>
+    <div class="bloco" id="secaoEnderecoCobranca" aura:id="secaoEnderecoCobranca" >
+        <c:CEC_PME_ResumoEndereco endereco="{!v.dadosCliente.enderecoCobranca}" tipoEntrega="{!v.tipoEntrega}" />
+    </div>
+    
+    <button class="accordion border-b" aura:id="headerRecebedor" onclick="{!c.toggleSecao}" id="headerRecebedor" >
+        <span class="sub-title">Recebedor</span>
+    </button>
+    <div class="bloco" id="secaoRecebedor" aura:id="secaoRecebedor" >
+        <c:CEC_PME_ResumoRecebedor recebedor="{!v.dadosCliente.recebedor}" tipoEntrega="{!v.tipoEntrega}" />
+    </div>
+    
+    <button class="accordion border-b" aura:id="headerContatosAdministrador" onclick="{!c.toggleSecao}" id="headerContatosAdministrador" >
+        <span class="sub-title">Contatos administrador</span>
+    </button>
+    <div class="bloco" id="secaoContatosAdministrador" aura:id="secaoContatosAdministrador" >
+        <c:CEC_PME_ResumoContatoAdmin contatosAdministrador="{!v.dadosCliente.contatosAdministrador}" tipoEntrega="{!v.tipoEntrega}" />
+    </div>
+    
+</aura:component>

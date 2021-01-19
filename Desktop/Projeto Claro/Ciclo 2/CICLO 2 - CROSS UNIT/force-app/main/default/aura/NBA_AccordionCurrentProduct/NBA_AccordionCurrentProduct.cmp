@@ -1,0 +1,147 @@
+<aura:component controller="NBA_AccordionCurrentProducts_CC" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+    access="global">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="isVirtuaVisible" type="Boolean" default="false" />
+    <aura:attribute name="isTVVisible" type="Boolean" default="false" />
+    <aura:attribute name="isNetFoneVisible" type="Boolean" default="false" />
+    <aura:attribute name="isMovelVisible" type="Boolean" default="false" />
+    <aura:attribute name="Virtua" type="Asset[]" default="null" />
+    <aura:attribute name="TV" type="Asset[]" default="null" />
+    <aura:attribute name="NetFone" type="Asset[]" default="null" />
+    <aura:attribute name="Movel" type="Asset[]" default="null" />
+    <aura:attribute type="Boolean" name="activeTV" default="true" />
+    <aura:attribute type="Boolean" name="activeVirtua" default="true" />
+    <aura:attribute type="Boolean" name="activeNetFone" default="true" />
+    <aura:attribute type="Boolean" name="activeNetMovel" default="true" />
+
+    <ul class="slds-accordion">
+        <aura:if isTrue="{! or(v.isTVVisible, or(v.isVirtuaVisible, or(v.isNetFoneVisible, v.isMovelVisible))) }">
+            <aura:if isTrue="{! v.isTVVisible }">
+                <li class="slds-accordion__list-item">
+                    <section class="{! 'slds-accordion__section ' + (v.activeTV ? 'slds-is-open' : '') }">
+                        <div class="slds-accordion__summary">
+                            <div class="slds-grid slds-grid_align-spread" style="width: 70rem">
+                                <div class="slds-col cursor-hand slds-p-top_large" aria-expanded="{! v.activeTV }"
+                                    data-id="tv" onclick="{! c.openAccordion }">
+                                    <lightning:icon iconName="utility:switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" />
+                                    <span class="slds-text-heading_small"><strong class="tam-font-section">TV</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-accordion__content tam-font">
+                            <aura:iteration items="{!v.TV}" var="TV" indexVar="ind">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2  ">
+                                        <p>{!TV.Name }</p>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 margin-name-price">
+                                        <lightning:formattedNumber value="{!TV.Price}" style="currency" currencyCode="BRL"/>
+                                    </div>
+                                </div>
+                                <p>{!TV.Terminal__c}</p>
+                                <p>{!TV.Product2.Name}</p>
+                                <p>{!TV.SpotType__c}</p>
+                                <p>{!TV.ServiceType__c}</p>
+                                <br />
+                            </aura:iteration>
+                        </div>
+                    </section>
+                </li>
+            </aura:if>
+
+            <aura:if isTrue="{! v.isVirtuaVisible }">
+                <li class="slds-accordion__list-item">
+                    <section class="{! 'slds-accordion__section ' + (v.activeVirtua ? 'slds-is-open' : '') }">
+                        <div class="slds-accordion__summary">
+                            <div class="slds-grid slds-grid_align-spread" style="width: 70rem">
+                                <div class="slds-col cursor-hand slds-p-top_large" aria-expanded="{! v.activeVirtua }"
+                                    data-id="virtua" onclick="{! c.openAccordion }">
+                                    <lightning:icon iconName="utility:switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" />
+                                    <span class="slds-text-heading_small"><strong class="tam-font-section">Virtua</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-accordion__content tam-font">
+                            <aura:iteration items="{!v.Virtua}" var="VT" indexVar="ind">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2 ">
+                                        <p>{!VT.Name }</p>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2  margin-name-price">
+                                        <lightning:formattedNumber value="{!VT.Price}" style="currency" currencyCode="BRL"/>
+                                    </div>
+                                </div>
+                                <p>{!VT.ContractedLimit__c}</p>
+                                <br />
+                            </aura:iteration>
+                        </div>
+                    </section>
+                </li>
+            </aura:if>
+
+            <aura:if isTrue="{! v.isNetFoneVisible }">
+                <li class="slds-accordion__list-item">
+                    <section class="{! 'slds-accordion__section ' + (v.activeNetFone ? 'slds-is-open' : '') }">
+                        <div class="slds-accordion__summary">
+                            <div class="slds-grid slds-grid_align-spread" style="width: 70rem">
+                                <div class="slds-col cursor-hand slds-p-top_large" aria-expanded="{! v.activeNetFone }"
+                                    data-id="netfone" onclick="{! c.openAccordion }">
+                                    <lightning:icon iconName="utility:switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" />
+                                    <span class="slds-text-heading_small"><strong class="tam-font-section">Net Fone</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-accordion__content tam-font">
+                            <aura:iteration items="{!v.NetFone}" var="NF" indexVar="ind">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2 ">
+                                        <p>{!NF.Name }</p>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 margin-name-price">
+                                        <lightning:formattedNumber value="{!NF.Price}" style="currency" currencyCode="BRL"/>
+                                    </div>
+                                </div>
+                                <p>{!NF.MSISDN__c}</p>
+                                <br />
+                            </aura:iteration>
+                        </div>
+                    </section>
+                </li>
+            </aura:if>
+            <aura:if isTrue="{! v.isMovelVisible }">
+                <li class="slds-accordion__list-item">
+                    <section class="{! 'slds-accordion__section ' + (v.activeNetMovel ? 'slds-is-open' : '') }">
+                        <div class="slds-accordion__summary">
+                            <div class="slds-grid slds-grid_align-spread" style="width: 70rem">
+                                <div class="slds-col cursor-hand slds-p-top_large" aria-expanded="{! v.activeNetMovel }"
+                                    data-id="netmovel" onclick="{! c.openAccordion }">
+                                    <lightning:icon iconName="utility:switch" size="xx-small" class="slds-accordion__summary-action-icon slds-button__icon slds-button__icon_left" />
+                                    <span class="slds-text-heading_small"><strong class="tam-font-section">Móvel</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div aria-hidden="true" class="slds-accordion__content tam-font">
+                            <aura:iteration items="{!v.Movel}" var="MV" indexVar="ind">
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-size_1-of-2 ">
+                                        <p>{!MV.Name }</p>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 margin-name-price ">
+                                        <lightning:formattedNumber value="{!MV.Price}" style="currency" currencyCode="BRL"/>
+                                    </div>
+                                </div>
+                                <p>{!MV.MSISDN__c}</p>
+                                <br />
+                            </aura:iteration>
+                        </div>
+                    </section>
+                </li>
+            </aura:if>
+
+            <aura:set attribute="else">
+                <p> Sem Ativos a serem exibidos! </p>
+            </aura:set>
+        </aura:if>
+    </ul>
+</aura:component>

@@ -1,0 +1,65 @@
+.consultation-connected.actions-change-call{
+    padding-top: 10px;
+}
+
+.consultation-connected.actions-change-call .active .persons-icon{
+    width: 83%;
+    padding-top: 6px;
+}
+
+.consultation-connected.actions-change-call .inactive .persons-icon{
+    width: 83%;
+    padding-top: 6px;
+}
+
+.consultation-connected.actions-change-call .persons-icon{
+    padding-bottom: 3px;
+}
+
+.consultation-connected .phone-icon{
+    width: 61%;
+    padding-top: 19px;
+}
+
+.consultation-connected .phone-icon.hold,
+.phone-icon-second-number.inactive .phone-icon.hold{
+    width: 80%;
+    padding-top: 19px;
+    padding-bottom: 4px;
+}
+
+.consultation-connected .phone-icon-second-number{ 
+    color: #f5842b;
+    font-size: 13px;
+}
+
+.consultation-connected .online-number{
+    color: #da291c;
+    line-height: 14px;
+    font-size: 13px;
+}
+
+.consultation-connected .hold-number{
+    color: #ABABAF;
+    line-height: 14px;
+    font-size: 14px;
+}
+
+.consultation-connected .merge-calls{
+    padding-top: 10px;
+    color: #ABABAF;
+}
+
+.consultation-connected .merge-calls img{
+    width: 37%;
+    padding-bottom: 6px;
+}
+
+
+.merge-calls .texto-iniciar-conferencia{
+    font-size: 12px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: #706E6B;
+}
+

@@ -1,0 +1,14 @@
+.THIS .custom-header{
+    color: #DA281C;
+    font-weight: 400;
+    font-size: x-large;
+    font-weight: bold;
+    padding-top: 0.75rem;
+}
+
+.THIS li{
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: 500;
+    text-decoration: none;
+}

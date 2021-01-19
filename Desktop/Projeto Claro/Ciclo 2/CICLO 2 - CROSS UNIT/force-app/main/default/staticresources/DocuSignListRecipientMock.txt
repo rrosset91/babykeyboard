@@ -1,0 +1,31 @@
+{
+  "signers": [
+    {
+      "recipientId": "1",
+      "signInEachLocation": "false",
+      "creationReason": "sender",
+      "isBulkRecipient": "false",
+      "identityVerification": {},
+      "name": "joh vill",
+      "email": "dbraga@deloitte.com",
+      "recipientIdGuid": "041b3646-249f-4a31-8e2e-36b8fba740a7",
+      "requireIdLookup": "false",
+      "userId": "f73d0791-e278-4ebf-b371-4f447d35c3ae",
+      "clientUserId": "1",
+      "routingOrder": "1",
+      "status": "sent",
+      "templateLocked": "false",
+      "templateRequired": "false"
+    }
+  ],
+  "agents": [],
+  "editors": [],
+  "intermediaries": [],
+  "carbonCopies": [],
+  "certifiedDeliveries": [],
+  "inPersonSigners": [],
+  "seals": [],
+  "witnesses": [],
+  "recipientCount": "7",
+  "currentRoutingOrder": "1"
+}

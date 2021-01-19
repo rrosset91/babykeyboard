@@ -1,0 +1,3 @@
+<design:component label="Qualidade do Serviço">
+    <design:attribute name="CEMComponentTitle" label="Título da Experiência do CEM" description="Adicione um título para o sub-componente de exibição das informações do CEM, que é exibido para os contratos móveis."/>
+</design:component>

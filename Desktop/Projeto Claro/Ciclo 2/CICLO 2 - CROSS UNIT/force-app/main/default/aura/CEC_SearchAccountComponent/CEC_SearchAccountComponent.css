@@ -1,0 +1,28 @@
+.THIS slds-modal {
+    position: fixed;
+}
+
+.THIS .slds-modal__content{
+    overflow: initial;
+}
+.THIS table.lista-clientes-busca {border:solid 1px #dbdada;}
+.THIS table.lista-clientes-busca th {font-weight:normal;line-height:42px;height:42px;background:#F8F8F8;font-size:13px;}
+.THIS table.lista-clientes-busca td {font-weight:normal;line-height:34px;height:34px;font-size:12px;}
+.THIS table.lista-clientes-busca td a {border-bottom: dotted 1px}
+.THIS table.lista-clientes-busca th span {float:left;padding-right:5px;}
+.THIS table.lista-clientes-busca td {white-space: normal;line-height: 16px;}
+.THIS  table.lista-clientes-busca td a {color: #DA291C;text-decoration:none;}
+.THIS  table.lista-clientes-busca td {vertical-align: top;padding-top: 10px;}
+.THIS .no-desktop {display:none;}
+
+@media (max-width:900px) {
+.THIS .yes-mobile {display:none;}
+.THIS .yes-ipad {display:block;}
+.THIS .no-col-900 {display:none;}
+}
+
+@media (max-width:600px) {
+.THIS .no-col-600 {display:none;}
+.THIS .yes-ipad {display:none;}   
+.THIS .yes-mobile {display:block;line-height: 20px;padding-top: 5px;}
+}

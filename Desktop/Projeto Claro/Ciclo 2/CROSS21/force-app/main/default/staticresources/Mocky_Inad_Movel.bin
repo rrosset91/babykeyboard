@@ -1,0 +1,28 @@
+{
+  "apiVersion": "1;2017-11-16",
+  "transactionId": "Id-ce6b205e3cc6bf7c7e84968f",
+  "data": {
+    "subscribers": [
+      {
+        "name": "EVERTON DE CAMARGO ASSUNAO ",
+        "serviceType": "MOVEL",
+        "type": "CLARO_CARTAO",
+        "subType": null,
+        "effectiveSinceDate": "2004-01-17T00:00:00.000-02:00",
+        "productStatus": "INADIMPLENTE",
+        "reason": "COBRANCA",
+        "productStatusDate": "2004-01-17T00:00:00.000-02:00",
+        "msisdn": "11994419364",
+        "customer": {
+          "name": "EVERTON DE CAMARGO ASSUNAO",
+          "personType": "PF",
+          "documents": {
+            "cpf": " ",
+            "rg": " ",
+            "passport": null
+          }
+        }
+      }
+    ]
+  }
+}

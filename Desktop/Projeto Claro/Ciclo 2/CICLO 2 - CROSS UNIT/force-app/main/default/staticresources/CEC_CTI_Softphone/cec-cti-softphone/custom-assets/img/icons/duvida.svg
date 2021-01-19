@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17" height="17" viewBox="0 0 17 17">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="17" height="17" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="duvida" clip-path="url(#clip-path)">
+    <circle id="Elipse_181" data-name="Elipse 181" cx="8.5" cy="8.5" r="8.5" fill="#DA291C"/>
+    <text id="_" data-name="?" transform="translate(9 12)" fill="#fff" font-size="11" font-family="SalesforceSans-Regular, Salesforce Sans"><tspan x="-2.766" y="0">?</tspan></text>
+  </g>
+</svg>

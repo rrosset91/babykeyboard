@@ -1,0 +1,7 @@
+<design:component label="Template customizado para PME">
+    <flexipage:template >
+        <flexipage:region name="center" defaultWidth="Xlarge" />
+        <flexipage:region name="left" defaultWidth="MEDIUM" />
+        <flexipage:region name="right" defaultWidth="SMALL" />
+   </flexipage:template>
+</design:component>

@@ -1,0 +1,132 @@
+.general-content{
+    padding-top: 0px;
+}
+
+.general-content .call-content .call-duration{
+    font-size: 12px;
+    line-height: 11px;
+    padding-top: 25px;
+}
+
+.general-content .call-content .call-duration p{
+    color: #DA291C;
+    padding-bottom: 3px;
+}
+
+.general-content .call-content .call-duration label{
+    color: #ABABAF;
+}
+
+.general-content .call-content .claro-customer p{
+    color: #DA291C;
+    font-size: 12px;
+    padding-top: 3px;
+}
+
+.general-content .call-content .plus-signal img{
+    padding-top: 18px;
+}
+
+.general-content .call-content .other-customer p{
+    color: #DA291C;
+    font-size: 12px;
+    padding-top: 3px;
+}
+
+.general-content .call-content .cancel-conference{
+    padding-top: 10px;
+}
+
+.general-content .call-content .cancel-conference p{
+    color: #ABABAF;
+    font-size: 12px;
+    padding-top: 8px;
+}
+.general-content .call-content .cancel-conference a:hover{
+    text-decoration: none;
+}
+
+.display-none{
+    display: none;
+}
+
+.general-content .call-content .in-conference p,
+.general-content .call-content .line-busy p{
+    color: #ABABAF;
+    font-size: 12px;
+}
+
+
+.general-content .call-content .in-conference .conference-duration{
+    color: #DA291C;
+    padding-top: 17px;
+    padding-bottom: 10px;
+    height: 45px;
+}
+
+
+.general-content .call-content .line-busy img{
+    padding-top: 9px;
+    padding-bottom: 7px;
+}
+
+.border-left{
+    border-left: 1px dashed #dbdada;
+}
+
+.border-right{
+    border-right: 1px dashed #dbdada;
+}
+
+
+
+.border-top{
+    border-top: 1px dashed #dbdada;
+}
+
+.border-bottom{
+    border-bottom: 1px dashed #dbdada;
+}
+
+.horizontal-line{
+    margin: 0px;
+    border-top: 0px;
+    border-bottom: 1px dashed #dbdada;
+    width: 85%;
+    margin-left: 6%;
+}
+
+.vertical-line{
+    width: 100%;
+    height: 75%;
+    margin-top: -26px;
+    position: absolute;
+    border-right: 1px dashed #dbdada;
+}
+
+.keyboard-phone{
+    font-size: 18px;
+    color: #706E6B;
+    font-weight: 600;
+    /*border-top: 2px solid #dbdada;
+    border-bottom: 1px solid #dbdada;*/
+}
+
+.keyboard-phone .number-structure{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    position: relative;
+}
+.keyboard-phone.keyboard-active .number-structure:hover{
+    cursor: pointer;
+    color: #DA291C;
+}
+.keyboard-phone .number-structure.hover-off{
+    color: #FAFAFB;
+}
+
+.keyboard-phone .number-structure.hover-off:hover{
+    cursor: default;
+    background-color: #FAFAFB;
+    color: #FAFAFB;
+}

@@ -1,0 +1,30 @@
+<!-- Autor: Danilo Fucuhara - Deloitte -->
+<!-- Criação: 06/05/2019 -->
+<!-- Descrição: Componente de resultados de custom lookup. -->
+<!-- Nome do projeto/ID: CEC FASE - Time: SQUAD 360 -->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="oRecord" type="sObject"/>
+    <aura:attribute name="IconName" type="String"/> 
+    <aura:attribute name="field" type="String"/>
+    
+    <aura:registerEvent name="oSelectedRecordEvent" type="c:selectedsObjectRecordEvent"/>
+    
+    <li role="presentation" class="slds-listbox__item" onclick="{!c.selectRecord}">
+        <span id="listbox-option-unique-id-01" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+            <span class="slds-media__figure">
+                <span class="slds-icon_container">
+                    <lightning:icon iconName="{!v.IconName}" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                </span>
+            </span>    
+            <span class="slds-media__body">
+                <aura:if isTrue="{!v.field == 'MasterLabel'}">
+                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!v.oRecord.MasterLabel}</span>
+                </aura:if>
+                <aura:if isTrue="{!v.field == 'CodigoOperadora__c'}">
+                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!v.oRecord.CodigoOperadora__c}</span>
+                </aura:if>
+            </span>
+        </span>
+    </li>
+</aura:component>

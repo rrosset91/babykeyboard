@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Eventos da página NBA">
+    <aura:attribute name="action" type="String"/>
+    <aura:attribute name="data" type="Object"/>
+</aura:event>

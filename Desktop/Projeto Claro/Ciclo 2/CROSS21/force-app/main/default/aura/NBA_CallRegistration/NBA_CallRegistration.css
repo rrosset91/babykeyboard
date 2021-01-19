@@ -1,0 +1,7 @@
+.THIS .title {
+    background-color	: gray;
+    color				: white;
+}
+.THIS .no-padding-bottom{
+    padding-bottom:0px;
+}

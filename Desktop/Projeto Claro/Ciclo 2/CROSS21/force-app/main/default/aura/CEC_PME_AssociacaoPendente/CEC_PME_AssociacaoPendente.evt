@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT">
+    <aura:attribute name="associacaoPendente" type="String"/>
+    <aura:attribute name="elemento" type="String"/>
+</aura:event>

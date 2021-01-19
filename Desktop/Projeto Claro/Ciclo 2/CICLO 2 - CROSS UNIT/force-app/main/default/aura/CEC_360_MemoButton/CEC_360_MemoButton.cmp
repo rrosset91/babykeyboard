@@ -1,0 +1,8 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name="recordId" type="String"/>
+    
+    <div class="slds-box slds-theme_default">
+        <lightning:button label="{!$Label.c.BTN_SearchMemAssinante}" variant="brand" onclick="{!c.openModal}" />
+    </div>
+</aura:component>

@@ -1,0 +1,47 @@
+<aura:component controller="CEC_360_AdditionalInformationController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="recordId" type="String" /> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+
+    <aura:attribute name="contractData" type="String" default="" />
+    <aura:attribute name="isMovel" type="Boolean" default="false" />
+    <aura:attribute name="isContract" type="Boolean" default="false" />
+    <aura:attribute name="recordTypeName" type="String" default="" />
+
+    <div class="slds-box">
+        <lightning:layout>
+            <lightning:layoutItem>
+            <div class="header-number">
+                <table class="header-identificacao">
+                    <tr>
+                    <aura:If isTrue="{!v.recordTypeName == 'TV'}">
+                        <td><lightning:icon iconName="utility:chevronright" size="x-small" /></td>
+                        <td><img src="{!$Resource.iconTv}"></img></td>
+                    </aura:If>
+                    <aura:If isTrue="{!v.recordTypeName == 'Fixo'}">
+                        <td><lightning:icon iconName="utility:chevronright" size="x-small" /></td>
+                        <td><img src="{!$Resource.iconPhone}"></img></td>
+                    </aura:If>
+                    <aura:If isTrue="{!v.recordTypeName == 'Internet Fixa'}" >
+                        <td><lightning:icon iconName="utility:chevronright" size="x-small" /></td>
+                        <td><img src="{!$Resource.iconNet}"></img></td>
+                    </aura:If>
+                    <aura:If isTrue="{!v.isMovel}">
+                        <td><lightning:icon iconName="utility:chevronright" size="x-small" /></td>
+                        <td><img src="{!$Resource.iconMovel}"></img></td>
+                    </aura:If>
+                    <aura:If isTrue="{!v.isContract}">
+                        <td><lightning:icon iconName="utility:chevronright" size="x-small" /></td>
+                    </aura:If>
+                    <td class="titulo-size16-red">{!v.recordTypeName}</td>
+                </tr>
+            </table>
+            </div>
+            </lightning:layoutItem>
+            <div class="header-adress">
+            <lightning:layoutItem>
+                <div  class="title-red">{!v.contractData}</div>
+            </lightning:layoutItem>
+            </div>
+        </lightning:layout>
+    </div>
+</aura:component>

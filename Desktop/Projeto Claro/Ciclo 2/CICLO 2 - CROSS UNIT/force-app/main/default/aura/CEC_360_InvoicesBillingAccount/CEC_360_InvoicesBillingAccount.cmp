@@ -1,0 +1,49 @@
+<!--- Letícia Freitas - 23/04/2018 -->
+<!--- Danilo Fucuhara - 24/05/2019 - US17676 -->
+
+<aura:component controller="CEC_360_InvoiceController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="isShow" type="Boolean" />
+    <aura:attribute name="drawnTable" type="Boolean" />
+    <aura:attribute name="record" type="String" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="data" type="Object[]" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="minDate" type="Date" />
+    <aura:attribute name="maxDate" type="date" />
+    <aura:attribute name="dataInValue" type="date" />
+    <aura:attribute name="dataEndValue" type="date" />
+    <aura:attribute name="link" type="String" />
+    <aura:attribute name="showSpinner" type="boolean" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <div class="slds-box slds-theme_default">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-orders">
+                            <img src = "/resource/cec_identidade/images-upload/icons/chave.png" style="background-color:#ffffff; height:40px"></img>
+                        </span>
+                    </div>
+                    <div class="slds-media__body slds-p-top_xx-small">
+                        <span class="slds-truncate" style="font-size:13px">Contrato</span>
+                        <span class="slds-page-header__title slds-truncate" title="{!v.record}" style="color:#000000; font-size:17px">{!v.record}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <button class="slds-button slds-button_brand" onclick="{!c.handleShowModalSubscriber}">Ver dados de produto</button>
+                        <button class="slds-button slds-button_brand" onclick="{!c.invoicesModal}">Ver faturas</button>
+                        <button class="slds-button slds-button_brand" onclick="{!c.openMemos}">{!$Label.c.BTN_SearchMemAssinante}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</aura:component>

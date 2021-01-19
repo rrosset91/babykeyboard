@@ -1,0 +1,25 @@
+.THIS .wrap { 
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;      /* IE */
+}
+
+.THIS .selectedbackground {
+    background-color: rgb(236, 235, 234) !important;
+}
+
+.THIS .slds-dropdown-trigger .slds-dropdown {
+    z-index: 10 !important; 
+}
+
+.THIS .padding-table{
+    padding-bottom: 15rem !important;
+}
+
+.THIS .imgSize{
+    max-width: 20px;
+    min-width: 20px;
+    height: auto;
+}

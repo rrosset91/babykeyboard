@@ -1,0 +1,35 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 06-11-2020
+  @last modified by  : Joao Neves
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   29-10-2020   Joao Neves   Initial Version
+-->
+<template>
+	<template if:false={detailsStep}>
+		<div style="background-color: white">
+			<div class="custom-header">Ficha Financeira</div>
+			<lightning-tabset>
+				<lightning-tab label="Cobranças">
+					<c-solar-res-faturas-abertas base-attributes={baseAttributes} onfetchdetails={fetchDetails}></c-solar-res-faturas-abertas>
+				</lightning-tab>
+				<lightning-tab label="Lançamentos Futuros">
+					<c-solar-res-lancamentos-futuros base-attributes={baseAttributes}></c-solar-res-lancamentos-futuros>
+				</lightning-tab>
+				<lightning-tab label="Titulos Não Emitidos">
+					<c-solar-res-titulos-nao-emitidos base-attributes={baseAttributes}></c-solar-res-titulos-nao-emitidos>
+				</lightning-tab>
+				<lightning-tab label="Eventos">
+					<c-solar-res-eventos base-attributes={baseAttributes}></c-solar-res-eventos>
+				</lightning-tab>
+			</lightning-tabset>
+		</div>
+	</template>
+
+	<template if:true={detailsStep}>
+		<c-solar-res-detalhes-fatura base-attributes={baseAttributes} base-detail={baseDetail} onbackfaturas={openFaturas}></c-solar-res-detalhes-fatura>
+	</template>
+</template>

@@ -1,0 +1,19 @@
+.in-attendance{
+    padding-top: 20px;
+}
+
+.in-attendance .cont-regressive{
+    color: #DA291C;
+    font-size: 45px;
+    font-weight: 600;
+    padding-left: 20px;
+}
+
+.in-attendance .text-call-down{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.in-attendance .text-call-down h2{
+    color: #706E6B;
+}

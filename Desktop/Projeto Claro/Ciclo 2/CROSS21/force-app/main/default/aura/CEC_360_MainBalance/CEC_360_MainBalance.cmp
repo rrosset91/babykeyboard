@@ -1,0 +1,49 @@
+<aura:component controller="CEC_360_BalanceController" implements="flexipage:availableForRecordHome,force:hasRecordId" >
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="balance" type="CEC_RestObjects.BalancesMain"/>
+    <aura:attribute name="showSpinner" type="Boolean"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="hasBalance" type="Boolean"/>
+    
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-text-align_center">
+            <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                <lightning:spinner alternativeText="Loading" size="medium" />
+            </div>
+        </div>
+        <aura:set attribute="else">
+                <aura:if isTrue="{! and(v.hasBalance == false)}">            
+                        <div class="slds-box">                      
+                            <lightning:layout>
+                                <lightning:layoutItem size="10">
+                                    <div class="slds-text-heading_medium" contenteditable="false"><span class="vermelho">Atenção:</span> Saldo principal não encontrado.</div>
+                                </lightning:layoutItem>
+                            </lightning:layout>                     
+                        </div>
+                        <aura:set attribute="else"> 
+                            <table class="lista-saldo-principal">
+                            <tr>
+                                <th>Saldo</th>
+                                <th>Vencimento dos créditos</th>
+                                <th>Expiração dos créditos (ZB1)</th>
+                                <th>Bloqueio de chamadas (ZB2)</th>
+                                <th>Expiração do serviço</th>
+                                <th>Expiração do telefone</th>
+                            </tr>
+                            <tr>
+                                <td>{!v.balance.data.balances.principalBalanceAmount}</td>
+                                <td>{!v.balance.data.balances.principalDateExpirationBalance}</td>
+                                <td>{!v.balance.data.balances.principalExpirationDateCredit}</td>
+                                <td>{!v.balance.data.balances.principalDateBlockingCalls}</td>
+                                <td>{!v.balance.data.balances.principalDateExpirationService}</td>
+                                <td>{!v.balance.data.balances.principalDateExpirationPhone}</td>
+                            </tr>
+                        </table>
+                   </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

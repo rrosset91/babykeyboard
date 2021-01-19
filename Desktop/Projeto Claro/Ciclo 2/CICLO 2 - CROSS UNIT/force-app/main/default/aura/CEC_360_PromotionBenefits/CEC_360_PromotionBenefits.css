@@ -1,0 +1,35 @@
+.THIS .changePage { 
+    opacity:0.5;
+}
+
+.THIS .selected {
+    color: #003b70;
+}
+
+.THIS .changePage:hover {
+    opacity:1;
+    cursor:pointer;
+}
+
+.THIS .pages {
+    padding:10px;
+    word-spacing:10px;
+}
+
+.THIS .pageButton {
+    background-color:#01567D;
+}
+
+.THIS th {
+    font-weight:normal !important;
+}
+
+.THIS .headerSize {
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+.THIS .headerColor {
+    padding:10px;
+    background-color:#FAFAFA;
+}

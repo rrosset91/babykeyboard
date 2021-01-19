@@ -1,0 +1,33 @@
+.general-content .in-attendance{
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.general-content .in-attendance .attendance-text{
+    padding-top: 10px;
+    color: #706E6B;
+}
+
+.general-content .in-attendance .img-attendance{
+    padding-left: 45px;
+}
+
+.general-content .in-attendance .call-duration-count{
+    font-size: 20px;
+    font-weight: 100;
+    color: #707070;
+}
+
+.general-content .in-attendance .call-duration-text{
+    color: #F5842B;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.general-content .in-attendance .customer-wait-count,
+.general-content .in-attendance .customer-mute-count{
+    font-size: 15px;
+    color: #DA291C;
+    line-height: 17px;
+}

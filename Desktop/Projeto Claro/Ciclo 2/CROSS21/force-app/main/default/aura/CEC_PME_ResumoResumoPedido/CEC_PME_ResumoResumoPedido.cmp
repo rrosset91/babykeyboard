@@ -1,0 +1,15 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="resumoPedido" type="Object" />
+    <aura:attribute name="listaEquipamento" type="Object" />
+    <aura:attribute name="tipoEntrega" type="String" />
+    <c:CEC_PME_ResumoPedidoPlanos tipoEntrega="{!v.tipoEntrega}" planos="{!v.resumoPedido}" /> 
+    
+    <div class="col-line-10  padding-top-10 margin-bottom-10">
+        <span class="bloco-100 title-section">Equipamentos</span>
+    </div>
+    <aura:iteration items="{!v.resumoPedido.planos}" var="plano" >
+        <c:CEC_PME_ResumoPedidoEquipamentos plano="{!plano}" index="{!_index}" />
+    </aura:iteration>
+    
+</aura:component>

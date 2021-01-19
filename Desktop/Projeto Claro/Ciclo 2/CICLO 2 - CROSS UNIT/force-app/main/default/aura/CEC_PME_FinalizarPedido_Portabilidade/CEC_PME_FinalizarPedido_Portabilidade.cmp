@@ -1,0 +1,129 @@
+<aura:component controller="CEC_PME_FinalizarPedidoController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="sessao" type="Object" />
+    <aura:attribute name="linhas" type="List" />
+    <aura:attribute name="linhasOperadora" type="Object[]" />
+    <aura:attribute name="aparelhos" type="Object[]" />
+    <aura:attribute name="aparelhosEspelho" type="Object[]" />
+    <aura:attribute name="showModal" type="Boolean" />
+    <aura:attribute name="msgModal" type="String" />
+    <aura:attribute name="msgModalStyle" type="String" default="color: black;"/>
+    <aura:attribute name="idElementoAssociacao" type="String"/>
+	<aura:attribute name="assocAuto" type="Boolean" default="false"/>    
+    <aura:registerEvent name="AssociacaoPendente" type="c:CEC_PME_AssociacaoPendente"/>
+    <aura:handler event="force:refreshView" action="{!c.changeAssocPendente}" />
+    <!-- adiciona aparelho a sessão -->
+    <aura:handler name="AdicionarAparelho" event="c:CEC_PME_AdicionarAparelho" action="{!c.addAparelhoEvento}"/>
+    <aura:handler name="AdicionarListaAparelhos" event="c:CEC_PME_AdicionarListaAparelhos" action="{!c.addDeviceList}" />
+    <div class="slds-col slds-size_8-of-8">
+        <p class="lightblue-text slds-m-left_medium">Serviços selecionados: <ui:outputText value="{!v.sessao.tipoPortabilidade.servicosSelecionados}"/></p>
+    </div>
+    <div>
+        <lightning:button label="Incluir linha" onclick="{!c.openModal}"/>
+        <aura:if isTrue="{!lessthan((v.sessao.qtdLinha - v.linhasOperadora.length - v.sessao.tipoPortabilidade.itensTipoPortabilidade.length), 1)}">
+            <ui:outputText value="Pendente: 0" class="redTextClaro" />
+        </aura:if>
+        <aura:if isTrue="{!(v.sessao.qtdLinha - v.linhasOperadora.length - v.sessao.tipoPortabilidade.itensTipoPortabilidade.length) >= 1}">
+            <ui:outputText value="{!'  Pendentes: ' + (v.sessao.qtdLinha - v.linhasOperadora.length - v.sessao.tipoPortabilidade.itensTipoPortabilidade.length)}" class="redTextClaro" />
+        </aura:if>
+    </div>
+    
+    <aura:if isTrue="{!v.showModal}">
+        <div class="c-container">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12">
+                <div class="page-section page-header">
+                	Informe o número das linhas com DDD, uma abaixo da outra:
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:layout>
+                    
+                        <div class="page-section page-right">
+                            <aura:if isTrue="{!v.msgModal != ''}">
+                                <!-- <ui:outputText value="{!v.msgModal}"/><br></br> -->
+                                <p style="{!v.msgModalStyle}">{!v.msgModal}</p>
+                            </aura:if>
+                        	<ui:inputTextArea aura:id="inputLinhas" rows="5" cols="25"/>
+                    	</div>
+                    
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="auto" padding="around-small" size="12">
+                <div class="page-footer page-section">
+                    <lightning:button label="Cancelar" onclick="{!c.closeModal}"/>
+                	<lightning:button label="Incluir linhas" onclick="{!c.incluirLinhas}"/>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+        <!--
+        <div>
+            <section role="dialog" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        Informe o número das linhas com DDD, uma abaixo da outra:
+                    </header>
+                    <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">
+                        <aura:if isTrue="{!v.msgModal != ''}">
+                        	<ui:outputText value="{!v.msgModal}"/>
+                        </aura:if>
+                        <ui:inputTextArea aura:id="inputLinhas" rows="10" cols="50"/>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button label="Cancelar" onclick="{!c.closeModal}"/>
+                        <lightning:button label="Incluir linhas" onclick="{!c.incluirLinhas}"/>
+                    </footer>
+                </div>
+            </section>
+        </div>
+		-->
+    </aura:if>
+    <aura:iteration items="{!v.linhasOperadora}" var="ln" indexVar="index">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-6">
+                <ui:outputText value="{!ln.descricao}" class="{!ln.operadora == 'CLARO'?'redTextClaro':''}"/>
+                <lightning:buttonIcon tabindex="{!index}" iconName="utility:delete" variant="bare" onclick="{!c.removerLinha}" />
+            </div>
+        </div>
+    </aura:iteration>
+    <div>
+        <tr>
+        	<td><lightning:button label="Excluír todas as linhas" onclick="{!c.removerTodasLinhas}" /></td>
+        </tr>
+    </div>
+	<br/><br/><span class="legenda">A associação do equipamento a linha é feita na mesma ordem das linhas cadastradas.</span>
+    <div class="slds-box full-width" aura:id="idDevices">
+            <c:CEC_PME_SelectDeviceColors devices="{!v.aparelhos}" tipoPlano="Portabilidade" assocAuto="{!v.assocAuto}" />
+        </div>
+    <div>
+        <table id="table-portabilidade">
+            <tr>
+                <th class="col-modelo">Modelo</th>
+                <th class="col-cor">Cor</th>
+                <th class="col-aceita">Aceita outra cor</th>
+                <th class="col-linha">Linha</th>
+                <th class="col-operadora">Operadora</th>
+                <th></th>
+            </tr>
+            <aura:iteration items="{!v.sessao.tipoPortabilidade.itensTipoPortabilidade}" var="itens" indexVar="index">
+                <tr>
+                    <td class="col-modelo"><ui:outputText value="{!itens.modelo}"/>
+                    <div id="cor-outracor-portabilidade">Cor: <ui:outputText value="{!itens.cor}"/> - Outra cor: <ui:outputText value="{!itens.outraCor}"/></div>
+                    <div id="line-operadora-portabilidade">Linha: <ui:outputText value="{!itens.linha}"/> - Operadora: <ui:outputText value="{!itens.operadora}"/></div>
+                    </td>
+                    <td class="col-cor"><ui:outputText value="{!itens.cor}"/></td>
+                    <td class="col-aceita"><ui:outputText value="{!itens.outraCor}"/></td>
+                    <td class="col-linha"><ui:outputText value="{!itens.linha}"/></td>
+                    <td class="col-operadora"><ui:outputText value="{!itens.operadora}"/></td>
+                    <td style="width: 34px;"><lightning:buttonIcon tabindex="{!index}" iconName="utility:delete" variant="bare" onclick="{!c.removerLinhaAparelho}" /></td>
+                </tr>
+            </aura:iteration>
+            <!--
+            <tr>
+                <td colspan="6"><lightning:button label="Excluír todas os aparelhos" onclick="{!c.removerTodosAparelhos}" /></td>
+            </tr>
+			-->
+        </table>
+    </div>
+</aura:component>

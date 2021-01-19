@@ -1,0 +1,38 @@
+<aura:component >
+    <aura:attribute name="endereco" type="Object" />
+    <aura:attribute name="tipoEntrega" type="String" />
+    
+    <aura:handler name="change" value="{!v.endereco}" action="{!c.onEnderecoChanged}"/>
+    
+    <div class="bloco">
+        <div class="col-w1024-1 border-b" id="cep">
+            <span class="title">CEP</span>
+            <span class="dado">{!v.endereco.cep ? v.endereco.cep : '--' }</span>
+        </div>
+        <div class="col-w1024-25 border-b" id="endereco">
+            <span class="title">Endereço</span>
+            <span class="dado">{!v.endereco.endereco ? v.endereco.endereco : '--' }</span>
+        </div>
+        <div class="col-w1024-1 border-b" id="numero">
+            <span class="title">Número</span>
+            <span class="dado">{!v.endereco.numero ? v.endereco.numero : '--' }</span>
+        </div>
+        <div class="col-w1024-1 border-b" id="complemento">
+            <span class="title">Complemento</span>
+            <span class="dado">{!v.endereco.complemento ? v.endereco.complemento : '--' }</span>
+        </div>
+        <div class="col-w1024-15 border-b" id="bairro">
+            <span class="title">Bairro</span>
+            <span class="dado">{!v.endereco.bairro ? v.endereco.bairro : '--' }</span>
+        </div>
+        <div class="col-w1024-2 border-b" id="cidade">
+            <span class="title">Cidade</span>
+            <span class="dado">{!v.endereco.cidade ? v.endereco.cidade : '--' }</span>
+        </div>
+        <div class="col-w1024-1 border-b" id="uf">
+            <span class="title">UF</span>
+            <span class="dado">{!v.endereco.uf ? v.endereco.uf : '--' }</span>
+        </div>
+    </div>
+    
+</aura:component>

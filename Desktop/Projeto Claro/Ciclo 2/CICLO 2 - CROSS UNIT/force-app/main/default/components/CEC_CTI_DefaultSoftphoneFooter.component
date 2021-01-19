@@ -1,0 +1,86 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 18/07/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 8] + [Componente com os ícones para a 
+* ir para a página inicia, agendamentos, tranferência ou conferência no softphone ]
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 18/07/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [Criação do componente e sua estrutura]
+* ---------------------------------------------------------------
+* Data: 20/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 18680 - Realizar Transferência de Chamada] Inclusão da função transferOn no icone de
+* transferencia de chamada
+* ---------------------------------------------------------------
+* Data: 12/09/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US US15416 - Realizar Conferência de Chamada] Inclusão da função openConference no icone de
+* conferencia de chamada
+-->
+
+
+<apex:component >
+
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_DefaultSoftphoneFooter/css/pageStyle.css')}"/>
+
+    
+    <div class="call-secondary-actions slds-grid">
+        <div class="div-action home inactive text-center">
+            <img title="Página inicial" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/inicio-off.svg')}"/>
+        </div>
+        <div class="div-action home active text-center display-none">
+            <img id = "homeIconActiveOn" title="Página inicial" onclick="homeOn();" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/inicio-on.svg')}"/>
+        </div>
+        <div class="div-action home current-page text-center display-none">
+            <img id = "homeIconActiveSelected" title="Página inicial" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/inicio-ativo.svg')}"/>
+        </div>
+        
+        <div class="div-action external-call inactive text-center">
+            <img title="Ligação Externa" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/discador-off.svg')}"/>
+        </div>
+        <div class="div-action external-call active text-center  display-none">
+            <img title="Ligação Externa" class="hover-active" onclick="externalCallOn();"  src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/discador-on.svg')}"/>
+        </div>
+        <div class="div-action external-call current-page text-center  display-none">
+            <img title="Ligação Externa" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/discador-ativo.svg')}"/>
+        </div>
+        
+        <div class="div-action scheduling inactive text-center">
+            <img title="Agendar retorno" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/reagendar-off.svg')}"/>
+        </div>
+        <div class="div-action scheduling active text-center  display-none">
+            <img title="Agendar retorno" class="hover-active" onclick="schedulingOn();"  src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/reagendar-on.svg')}"/>
+        </div>
+        <div class="div-action scheduling current-page text-center  display-none">
+            <img title="Agendar retorno"  src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/reagendar-ativo.svg')}"/>
+        </div>
+        
+        <div class="div-action transfer inactive text-center">
+            <img title="Transferir" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/transferir-off.svg')}"/>
+        </div>
+        <div class="div-action transfer active text-center  display-none">
+            <img title="Transferir" class="hover-active" onclick="transferOn();"  src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/transferir-on.svg')}"/>
+        </div>
+        <div class="div-action transfer current-page text-center  display-none">
+            <img title="Transferir" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/transferir-ativo.svg')}"/>
+        </div>
+        
+        <div class="div-action conference inactive text-center">
+            <img title="Conferência" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conferencia-off.svg')}"/>
+        </div>
+        <div class="div-action conference active text-center  display-none">
+            <img title="Conferência" class="hover-active" onclick="openConference();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conferencia-on.svg')}"/>
+        </div>
+        <div class="div-action conference current-page text-center  display-none">
+            <img title="Conferência" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conferencia-ativo.svg')}"/>
+        </div>
+      
+    </div>
+    
+    
+   
+
+ 
+</apex:component>

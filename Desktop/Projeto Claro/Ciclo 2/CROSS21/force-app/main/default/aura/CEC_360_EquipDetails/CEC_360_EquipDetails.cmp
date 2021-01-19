@@ -1,0 +1,41 @@
+<aura:component controller="CEC_360_EquipDetailsController" access="global"
+                implements="flexipage:availableForRecordHome,force:hasRecordId">
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="equipDetails" type="Object" />
+    <aura:attribute name="showDetail" type="Boolean" default="false" />
+    <aura:attribute name="hasSpinner" type="Boolean" default="false" />
+    
+    <div class="slds-box">
+        
+        <lightning:button variant="destructive" label="Detalhes do Aparelho" title="Detalhes do Aparelho"
+                          onclick="{!c.getDeviceDetail}" class="botao-aparelho"/>
+        
+        <aura:if isTrue="{!v.hasSpinner}">
+            <div class="demo-only demo--inverse" style="height: 6rem;">
+                <div class="slds-spinner_container slds-is-fixed">
+                    <div role="status" class="slds-spinner slds-spinner_medium">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showDetail}">   
+            <div class="c-container slds-p-top_medium">
+                <lightning:layout>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-large" class="col-60">
+                        <div class="custom-box">IMEI</div>
+                        <div class="custom-box slds-border_bottom">{!v.equipDetails.imei}</div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="horizontal-large" class="space-14">
+                        <div class="custom-box">ICCID</div>
+                        <div class="custom-box slds-border_bottom">{!v.equipDetails.iccid}</div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>      
+        </aura:if>
+    </div>
+</aura:component>

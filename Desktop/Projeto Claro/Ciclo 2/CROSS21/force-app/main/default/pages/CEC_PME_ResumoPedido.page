@@ -1,0 +1,14 @@
+<apex:page standardController="Order">
+    <apex:includeLightning />
+    <div id="resumoPedido"></div>
+    <script>
+        $Lightning.use("c:CEC_PME_ResumoPedidoApp", function() {
+            $Lightning.createComponent("c:CEC_PME_ResumoPedido",
+                    {},
+                    "resumoPedido",
+                    function(cmp) {
+                        console.log('>>>>> App is hosted');
+                    });
+        });
+    </script>
+</apex:page>

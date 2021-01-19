@@ -1,0 +1,58 @@
+{
+  "transactionId": "123456",
+  "data": {
+    "attendances": [
+      {
+        "solicitationType": "REGISTRO SISTEMICO",
+        "solicitationStatus": "Executada",
+        "solicitationDateOpening": "2019-05-10T15:43:44",
+        "solicitationDateClosing": "2019-05-10T15:43:44",
+        "protocolNumber": "100",
+        "order": "1",
+        "interactionNumber": "322722520",
+        "action": "C"
+      },
+      {
+        "solicitationType": "REGISTRO SISTEMICO",
+        "solicitationStatus": "Executada",
+        "solicitationDateOpening": "2019-05-10T15:43:44",
+        "solicitationDateClosing": "2019-05-10T15:43:44",
+        "protocolNumber": "101",
+        "order": "1",
+        "interactionNumber": "322722520",
+        "action": "C"
+      },
+      {
+        "solicitationType": "REGISTRO SISTEMICO",
+        "solicitationStatus": "Executada",
+        "solicitationDateOpening": "2019-05-10T15:43:44",
+        "solicitationDateClosing": "2019-05-10T15:43:44",
+        "protocolNumber": "102",
+        "order": "1",
+        "interactionNumber": "322722520",
+        "action": "C"
+      },
+      {
+        "solicitationType": "REGISTRO SISTEMICO",
+        "solicitationStatus": "Executada",
+        "solicitationDateOpening": "2019-05-10T15:43:44",
+        "solicitationDateClosing": "2019-05-10T15:43:44",
+        "protocolNumber": "103",
+        "order": "1",
+        "interactionNumber": "322722520",
+        "action": "C"
+      },
+      {
+        "solicitationType": "REGISTRO SISTEMICO",
+        "solicitationStatus": "Executada",
+        "solicitationDateOpening": "2019-05-10T15:43:44",
+        "solicitationDateClosing": "2019-05-10T15:43:44",
+        "protocolNumber": "104",
+        "order": "1",
+        "interactionNumber": "322722520",
+        "action": "C"
+      }
+    ]
+  },
+  "apiVersion": "1"
+}

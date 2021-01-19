@@ -1,0 +1,9 @@
+.general-content .available-for-attendance img{
+	padding-top: 110px;	
+	padding-bottom: 15px;
+}
+.general-content .available-for-attendance span{
+    color: #da291c;
+    font-size: 15px;
+    font-family: 'Salesforce Sans'
+}

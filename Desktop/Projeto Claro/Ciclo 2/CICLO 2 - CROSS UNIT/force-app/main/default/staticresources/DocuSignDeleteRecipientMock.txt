@@ -1,0 +1,19 @@
+{
+  "signers": [
+    {
+      "creationReason": "sender",
+      "recipientId": "1",
+      "routingOrder": "0",
+      "status": "deleted"
+    }
+  ],
+  "agents": [],
+  "editors": [],
+  "intermediaries": [],
+  "carbonCopies": [],
+  "certifiedDeliveries": [],
+  "inPersonSigners": [],
+  "seals": [],
+  "witnesses": [],
+  "recipientCount": "1"
+}

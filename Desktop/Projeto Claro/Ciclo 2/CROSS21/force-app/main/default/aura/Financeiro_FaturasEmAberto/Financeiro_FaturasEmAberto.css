@@ -1,0 +1,110 @@
+.THIS .custom-padding{
+    padding-top: 0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.THIS .small-header{
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 0.75rem;
+}
+
+.THIS .table thead th span{
+    background-color: #e2e1e0;
+ }
+
+ .THIS .table{
+    font-weight: 550;
+}
+
+.THIS .slds-cell-fixed{
+    background-color: #e2e1e0;
+}
+
+.THIS .slds-scrollable_x{
+    overflow-x: hidden;
+}
+
+.THIS .no-data{
+    text-align: center;
+    width: 100%;
+    display: inherit;
+    margin-top: 3%;
+    justify-content: center;
+}
+
+.THIS .no-data img{
+    width: 45%;
+    height: 45%;
+}
+
+.THIS .no-data h3{
+    font-weight: 400;
+    font-size: large;
+    padding-top: 0.75rem;
+}
+
+.THIS .custom-footer{
+	display:flex;
+	width: 100%;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.THIS .modal-buttons{
+	height: 100%;
+    width: 100%;
+    display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.THIS .modal-buttons button{
+	height: fit-content;
+}
+.THIS .modal-buttons .sendDuplicateButtons{
+	height: fit-content;
+    margin: auto;
+    align-items: center;
+    width: 5rem;
+}
+ 
+.THIS .custom-field{
+    text-align: left;
+}
+
+.THIS .middle-text{
+    text-align: left;
+    margin: auto;
+    width: 50%;
+    padding-bottom: 5px;
+}
+
+.THIS .middle-text label{
+    font-weight: 300;
+    color: #2b2b2b;
+}
+
+.THIS lightning-primitive-header-actions {
+    display: none;
+}
+
+.THIS .alignment-buttons{
+	display: flex;
+	justify-content: space-between;
+}
+
+.THIS row {
+    width: 50%;
+}
+.THIS .sendDuplicateInvoice{
+    width: 15rem;
+    margin-top: 1rem;
+}
+.THIS .fim-jornada-description textarea{
+    margin-top:1rem;
+    height:11rem;
+    width:17rem;
+}

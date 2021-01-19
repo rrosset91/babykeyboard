@@ -1,0 +1,41 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_ProtocolCodificationFlow" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="contextCase" type="Object" />
+    <aura:attribute name="decision" type="String" />
+    <aura:attribute name="acordionTitle" type="String" /> <!-- atributo preenchido pelo design:component -->
+    
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+    <!-- <aura:attribute name="reload" type="Boolean" default="false"/>  -->
+    <aura:handler name="init" value="{! this }" action="{! c.onInit }"/>
+    <aura:handler name="change" value="{!v.reload}" action="{!c.onInit}"/>       
+
+    <lightning:card class="" variant="narrow">
+        <!-- <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }"> -->
+            <!-- <lightning:accordionSection name="A" label="{!v.acordionTitle}">       -->
+                <div class="{!v.isLoading == true ? 'slds-show' : 'slds-hide'}">
+                    <lightning:spinner alternativeText="Carregando..." size="medium" variant="brand" /> 
+                </div> 
+                <div class="{!v.isLoading == false ? 'slds-show' : 'slds-hide'}">
+                    <!-- <c:Solar_Cross_ProtocolBKO recordId="{!v.recordId}" isLoading="{!v.isLoading}" contextCase="{!v.contextCase}"/> -->
+
+                    <aura:if isTrue="{!v.decision == 'firstScenario'}">
+                        <c:Solar_Cross_ProtocolN1 recordId="{!v.recordId}" isLoading="{!v.isLoading}"/>
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.decision == 'secondScenario'}">
+                        <c:Solar_Cross_ProtocolN2 recordId="{!v.recordId}" isLoading="{!v.isLoading}"/>
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.decision == 'thirdScenario'}">
+                        <c:Solar_Cross_ProtocolBKO recordId="{!v.recordId}" isLoading="{!v.isLoading}" contextCase="{!v.contextCase}"/>
+                    </aura:if>
+
+                    <aura:if isTrue="{!v.decision == 'fourthScenario'}">
+                        <c:Solar_Cross_ProtocolOpen recordId="{!v.recordId}" isLoading="{!v.isLoading}" contextCase="{!v.contextCase}"/>
+                    </aura:if>
+                </div>  
+            <!-- </lightning:accordionSection> -->
+        <!-- </lightning:accordion> -->
+    </lightning:card>
+</aura:component>

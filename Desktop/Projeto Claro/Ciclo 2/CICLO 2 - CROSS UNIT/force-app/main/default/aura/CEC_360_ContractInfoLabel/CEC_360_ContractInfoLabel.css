@@ -1,0 +1,10 @@
+.cCEC_360_ContractInfoLabel
+{
+    width: calc(100% - 130px);
+    position: relative;
+    text-align: right;
+    display: inline-block;  
+    top: 25px;
+    color: #808080;
+    
+}

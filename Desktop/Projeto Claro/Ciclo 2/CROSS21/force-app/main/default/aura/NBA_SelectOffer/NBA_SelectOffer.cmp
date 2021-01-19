@@ -1,0 +1,1023 @@
+<!--
+  @File Name          : NBA_SelectOffer.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 09/01/2020 17:19:44
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    09/01/2020   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component controller="NBA_SelectOffer_CC" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+	<aura:attribute type="Boolean" name="ShowModal" default="false" />
+	<aura:attribute type="Boolean" name="forceAdditionalMobile"/>
+	
+	<aura:attribute type="Boolean" name="desabilitarBotaoSelecionarOferta" default="false" />
+	<lightning:button variant="brand" label="Selecionar Oferta" title="Selecionar Oferta" onclick="{! c.OfferValidationController }" disabled="{! v.desabilitarBotaoSelecionarOferta }" />
+
+	<aura:attribute type="Boolean" name="isProdutoAntigo" />
+	<aura:attribute type="String" name="today" />
+	<aura:attribute type="String" name="remainingDays" />
+	<aura:attribute type="Boolean" name="showPrompt" />
+	<aura:attribute type="Boolean" name="showContent" default="false" />
+	<aura:attribute type="Boolean" name="confirmed" />
+	<aura:attribute type="Boolean" name="isRetencao" />
+	<aura:attribute type="String" name="tituloPrompt" />
+	<aura:attribute type="String" name="tema" default="warning" />
+	<aura:attribute type="String" name="conteudoPrompt" />
+	<aura:attribute type="String" name="optionTrue" default="CONFIRMAR" />
+	<aura:attribute type="String" name="optionFalse" default="VOLTAR" />
+	<aura:attribute type="String" name="action" />
+	<aura:attribute type="Object" name="ofertaSelecionada" />
+	<aura:attribute type="Object" name="produtoAntigo" />
+	<aura:attribute type="Object" name="produtoAtual" />
+	<aura:attribute type="Object" name="lstOfertas" />
+	<aura:attribute type="Object" name="tv" />
+	<aura:attribute type="String" name="formaPagamento" />
+	<aura:attribute type="String" name="formaEnvio" />
+	<aura:attribute type="Boolean" name="showSpinner" default="false" />
+	<aura:attribute type="Boolean" name="showSpinner2" default="false" />
+	<aura:attribute type="Boolean" name="isActualProduct" />
+	<aura:attribute type="String" name="hasProductsRenovation" />
+	<aura:attribute type="String" name="hasProductsPenalty" />
+	<aura:attribute type="String" name="hasProductsNoPenalty" />
+	<aura:attribute Type="Boolean" name="hasCancelamento" />
+	<aura:attribute type="Object" name="hasPenalty" />
+	<aura:attribute type="Object" name="DiscountPenalty" />
+	<aura:attribute type="Object" name="hasRenovation" />
+	<aura:attribute type="Object" name="hasFidelity" />
+	<aura:attribute type="Object" name="upgradeFee" />
+	<aura:attribute type="Object" name="membershipFee" />
+	<aura:attribute type="Object" name="feesExemptions" />
+	<aura:attribute type="Object" name="lstIsencoes" />
+	<aura:attribute type="Boolean" name="showChipMessage" default="false"/>
+	<aura:attribute type="Boolean" name="showOperatorMessage" default="false"/>
+	<lightning:workspaceAPI aura:id="workspace" />
+	<aura:registerEvent name="refresh" type="c:NBA_RefreshTabEvent" />
+	<!-- VALIDAÇÃO -->
+	<aura:attribute type="String" name="recordId" />
+	<aura:attribute type="String" name="subscriberId" />
+	<aura:attribute type="Boolean" name="OfferValidationScheduling" default="false" />
+	<aura:attribute type="String" name="OfferValidationRequest" default="" />
+	<aura:attribute type="Object" name="OfferValidationMessage"/>
+	<!-- AGENDAMENTO -->
+	<aura:attribute name="myOldDate" type="date" />
+	<aura:attribute name="myDate" type="date" />
+	<aura:attribute name="dateValidationError" type="boolean" />
+	<aura:attribute type="Boolean" name="isAgendamento" default="false" />
+	<aura:attribute type="String" name="dateMin" />
+	<aura:attribute type="String" name="dateMax" />
+	<aura:attribute type="Object" name="schedule" />
+	<aura:attribute type="String" name="description" default="" />
+	<aura:attribute type="Boolean" name="radioCheked" default="false" />
+	<aura:attribute type="Boolean" name="renderizer" default="false" />
+	<aura:attribute type="Boolean" name="hasDates" default="false" />
+	<aura:attribute type="Boolean" name="periodoChecked" default="false" />
+	<aura:attribute type="Boolean" name="listEmpty" default="false" />
+	<aura:attribute type="String" name="cityCode" default="" />
+	<aura:attribute type="Boolean" name="semDatasAgendamento" default="false" />
+	<aura:attribute type="Boolean" name="runAgendamento" default="false" />
+	<!-- NAVEGACAO MOVEL -->
+	<aura:attribute type="String" name="motherName" />
+	<aura:attribute type="String" name="numberRG" />
+	<aura:attribute type="String" name="dateExpRG" />
+	<aura:attribute type="String" name="emiterRG" />
+	<aura:attribute type="Boolean" name="isVisibleRGContact" default="false" />
+	<aura:attribute type="String" name="recordIdObj" />
+	<aura:attribute type="String" name="recordTypeIdObj" />
+	<aura:attribute name="saved" type="Boolean" default="false" />
+	<aura:attribute type="String" name="objCustom" default="Account" />
+	<aura:attribute type="Boolean" name="isAquisicao" default="false" />
+	<aura:attribute type="Boolean" name="isPurple" />
+	<aura:attribute type="Boolean" name="retencao" />
+	<aura:attribute type="Boolean" name="inadimplente" />
+	<aura:attribute type="Boolean" name="showModalAgregado" />
+	<aura:attribute type="Boolean" name="showModalBonusDesconto" />
+	<aura:attribute type="Boolean" name="componentSelectOffer" default="false" />
+	<!-- ANALISE DE CRÉDITO -->
+	<aura:attribute type="Boolean" name="isAnaliseCreditoModalOpen" default="false" />
+	<aura:attribute type="Boolean" name="hasAnalise" default="false" />
+	<aura:attribute type="Boolean" name="hasAnaliseError" default="false" />
+		
+	<!-- SPINNER -->
+	<aura:if isTrue="{! v.showSpinner }">
+		<div class="slds-spinner_container slds-is-fixed">
+			<div role="status" class="slds-spinner slds-spinner_medium">
+				<span class="slds-assistive-text">Loading</span>
+				<div class="slds-spinner__dot-a"></div>
+				<div class="slds-spinner__dot-b"></div>
+			</div>
+		</div>
+	</aura:if>
+	
+	<aura:handler value="{! v.componentSelectOffer }" name="change" action="{! c.incluirModal }" />
+	
+	<c:NBA_AgregadoInformativo showModalAgregado="{! v.showModalAgregado }" componentSelectOffer="{! v.componentSelectOffer }" ofertaSelecionada="{! v.ofertaSelecionada }" />
+	
+	<aura:if isTrue="{! v.ShowModal }">
+		<section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+			<div class="slds-modal__container">
+				
+				<header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_' + v.tema }">
+					<button onclick="{! c.fecharModal }" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+						<lightning:icon iconName="utility:close" class="slds-button__icon" variant="inverse" />
+						<span class="slds-assistive-text">Tem Certeza que deseja selecionar essa oferta ?</span>
+					</button>
+					<strong class="slds-text-heading_medium" id="prompt-heading-id">{! $Label.c.NBA_Title_Offer } </strong>
+				</header>
+				
+				<aura:if isTrue="{! v.showContent }">
+					<div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper" Style="max-height: 80%">
+						<p>{! v.conteudoPrompt }</p>
+						<div Class="slds-grid slds-wrap">
+
+							<div Class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections" Style="margin-top : 0rem">
+								<strong> {! $Label.c.NBA_Title_FROM_TO_Offer }</strong>
+							</div>
+
+							<!-- posse (de) -->
+							<div Class="slds-col slds-size_6-of-12">
+								<strong> {! $Label.c.NBA_Label_Current_Products}</strong>
+								<br />
+								
+								<!-- TV  -->
+								<strong>{! $Label.c.NBA_TV }</strong>
+								<aura:iteration items="{! v.produtoAntigo.tv[0].planTv.lstPromotions }" var="promo">
+									<p> {! promo.label }&nbsp;
+										<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+								<aura:if isTrue="{! empty(v.produtoAntigo.tv[0].planTv.lstPromotions) }">
+									<p>{! v.produtoAntigo.tv[0].planTv.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.tv[0].planTv.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<aura:iteration items="{! v.produtoAntigo.tv[0].addOptions.lstAdditionals }" var="add">
+									<aura:if isTrue="{! add.checked }">
+										<aura:if isTrue="{! add.promoSelected != '' }">
+											<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+												<aura:if isTrue="{! add.promoSelected == index + '' }">
+													<p> {! add.label }&nbsp;
+														<lightning:formattedNumber value="{! promotions.value }" style="currency" currencyCode="BRL" />
+													</p>
+												</aura:if>
+											</aura:iteration>
+										</aura:if>
+										<aura:if isTrue="{! add.promoSelected == '' }">
+											<p> {! add.label }&nbsp;
+												<lightning:formattedNumber value="{! add.value}" style="currency" currencyCode="BRL" />
+											</p>
+										</aura:if>
+									</aura:if>
+								</aura:iteration>
+								<!-- <aura:if isTrue="{! v.produtoAntigo.broadband.planBroadband.fidelity.hasFidelity }" >
+									<p><strong>FIDELIZADO</strong></p> 
+								</aura:if> -->
+								<!--	<aura:if isTrue="{! v.produtoAntigo.tv.additionalTv.value > 0 }" >
+									<p>2{! v.produtoAntigo.tv.additionalTv.label }&nbsp;<lightning:formattedNumber value="{! v.produtoAntigo.tv.additionalTv.value }" style="currency" currencyCode="BRL" /> </p>
+								</aura:if> -->
+								<!--	<aura:iteration items="{! v.produtoAntigo.tv.optionalPointsTv.lstPromotions }" var="promo" >
+									<p> {! promo.label }&nbsp;<lightning:formattedNumber value="{! promo.value}" style="currency" currencyCode="BRL" /> </p>
+								</aura:iteration> -->
+								<aura:if isTrue="{! v.produtoAntigo.tv[0].optionalPointsPromoTv.label != ' Ponto(s) Grátis' ? true : false }">
+									<p> {! v.produtoAntigo.tv[0].optionalPointsPromoTv.label } &nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.tv[0].optionalPointsPromoTv.originalValue }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<aura:if isTrue="{! v.produtoAntigo.tv[0].optionalPointsTv.value > 0 }">
+									<p>{! v.produtoAntigo.tv[0].optionalPointsTv.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.tv[0].optionalPointsTv.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<br />
+								
+								<!-- Virtua -->
+								<strong>{! $Label.c.NBA_Banda_Larga }</strong>
+								<aura:iteration items="{! v.produtoAntigo.broadband.planBroadband.lstPromotions }" var="promo">
+									<p> {! promo.label }&nbsp;
+										<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+								<aura:if isTrue="{! empty(v.produtoAntigo.broadband.planBroadband.lstPromotions) }">
+									<p>{! v.produtoAntigo.broadband.planBroadband.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.broadband.planBroadband.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<aura:iteration items="{! v.produtoAntigo.broadband.addOptions.lstAdditionals }" var="add">
+									<aura:if isTrue="{! add.checked }">
+										<aura:if isTrue="{! add.promoSelected != '' }">
+											<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+												<aura:if isTrue="{! add.promoSelected == index + '' }">
+													<p> {! add.label }&nbsp;
+														<lightning:formattedNumber value="{! promotions.value }" style="currency" currencyCode="BRL" />&nbsp;{! promotions.label } </p>
+												</aura:if>
+											</aura:iteration>
+										</aura:if>
+										<aura:if isTrue="{! add.promoSelected == '' }">
+											<p> {! add.label }&nbsp;
+												<lightning:formattedNumber value="{! add.value}" style="currency" currencyCode="BRL" />
+											</p>
+										</aura:if>
+									</aura:if>
+								</aura:iteration>
+								<aura:if isTrue="{! v.produtoAntigo.broadband.additionalBroadband.value > 0 }">
+									<p>{! v.produtoAntigo.broadband.additionalBroadband.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.broadband.additionalBroadband.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<!-- <aura:if isTrue="{! v.produtoAntigo.broadband.planBroadband.fidelity.hasFidelity }" >
+									<p><strong>FIDELIZADO</strong></p>
+								</aura:if> -->
+								<br />
+								
+								<!-- Net Fone -->
+								<strong>{! $Label.c.NBA_Net_Fone }</strong>
+								<aura:iteration items="{! v.produtoAntigo.phone.planPhone.lstPromotions }" var="promo">
+									<p> {! promo.label }&nbsp;
+										<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+								<aura:if isTrue="{! empty(v.produtoAntigo.phone.planPhone.lstPromotions) }">
+									<p>{! v.produtoAntigo.phone.planPhone.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.phone.planPhone.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<aura:iteration items="{! v.produtoAntigo.phone.additionalPhone.lstPromotions }" var="promo">
+									<p> {! promo.label }&nbsp;
+										<lightning:formattedNumber value="{! promo.value}" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+								<aura:if isTrue="{! v.produtoAntigo.phone.additionalPhone.value > 0 }">
+									<p>{! v.produtoAntigo.phone.additionalPhone.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.phone.additionalPhone.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<!-- <aura:if isTrue="{! v.produtoAntigo.phone.planPhone.fidelity.hasFidelity }" >
+									<p><strong>FIDELIZADO</strong></p>
+								</aura:if> -->
+								<br />
+								
+								<!-- NET MÓVEL -->
+								<strong>{! $Label.c.NBA_Movel }</strong>
+								<aura:iteration items="{! v.produtoAntigo.mobile.planMobile.lstPromotions }" var="promo">
+									<p> {! promo.label }&nbsp;
+										<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+
+								<aura:if isTrue="{! empty(v.produtoAntigo.mobile.planMobile.lstPromotions) }">
+									<aura:if isTrue="{! v.produtoAntigo.mobile.planMobile.label == 'NÃO POSSUI'}">
+										<p>{! v.produtoAntigo.mobile.planMobile.label }&nbsp;
+											<lightning:formattedNumber value="0" style="currency" currencyCode="BRL" />
+										</p>
+
+										<aura:set attribute="else">
+											<p>{! v.produtoAntigo.mobile.planMobile.label }&nbsp;
+												<lightning:formattedNumber value="{! v.produtoAntigo.mobile.planMobile.value }" style="currency" currencyCode="BRL" />
+											</p>
+										</aura:set>
+
+									</aura:if>
+								</aura:if>
+
+								<aura:iteration items="{! v.produtoAntigo.mobile.additionalMobile.lstPromotions }" var="add">
+									<aura:if isTrue="{! add.checked }">
+										<aura:if isTrue="{! add.promoSelected != '' }">
+											<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+												<aura:if isTrue="{! add.promoSelected == index + '' }">
+													<p> {! add.label }&nbsp;
+														<lightning:formattedNumber value="{! promotions.value}" style="currency" currencyCode="BRL" />
+													</p>
+												</aura:if>
+											</aura:iteration>
+										</aura:if>
+										<aura:if isTrue="{! add.promoSelected == '' }">
+											<p> {! add.label }&nbsp;
+												<lightning:formattedNumber value="{! add.value }" style="currency" currencyCode="BRL" />
+											</p>
+										</aura:if>
+									</aura:if>
+								</aura:iteration>
+
+								<aura:if isTrue="{! v.produtoAntigo.mobile.additionalMobile.value > 0 }">
+									<p>{! v.produtoAntigo.mobile.additionalMobile.label }&nbsp;
+										<lightning:formattedNumber value="{! v.produtoAntigo.mobile.additionalMobile.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+
+								<aura:iteration items="{! v.produtoAntigo.mobile.dependentslMobile.lstPromotions }" var="promo">
+									<p> {! promo.label }&nbsp;
+										<lightning:formattedNumber value="{! promo.value}" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+
+								<!-- dependentes mobile -->
+								<aura:if isTrue="{!not(empty(v.produtoAntigo.mobile.listaDependentesMobile))}">
+									<aura:iteration items="{!v.produtoAntigo.mobile.listaDependentesMobile}" var="dependente">
+										<aura:if isTrue="{!dependente.valorProduto>0}">
+											<p>
+												{!dependente.productName}&nbsp;
+												<lightning:formattedNumber value="{!dependente.valorProduto}" style="currency" currencyCode="BRL" />
+											</p>
+										</aura:if>
+									</aura:iteration>
+								</aura:if>
+
+								<!--					</aura:set>
+								</aura:if>  -->
+								<!-- <aura:if isTrue="{! v.produtoAntigo.mobile.planMobile.fidelity.hasFidelity }" >
+									<p><strong>FIDELIZADO</strong></p>
+								</aura:if> -->
+								<aura:if isTrue="{! v.produtoAntigo.hasDiscountAutomaticDebit }">
+									<br />
+									<p>{! $Label.c.DESCONTO_DCC }&nbsp;-
+										<lightning:formattedNumber value="{! v.produtoAntigo.automaticDebitDiscount}" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<br />
+								<p> {! $Label.c.NBA_Label_Total_Price }&nbsp;
+									<lightning:formattedNumber value="{! v.produtoAntigo.totalValue }" style="currency" currencyCode="BRL" />
+								</p>
+								<aura:iteration items="{! v.produtoAntigo.lstSteps }" var="step">
+									<p> PREÇO APÓS&nbsp;{! step.label}&nbsp;MESES:&nbsp;
+										<lightning:formattedNumber value="{! step.value }" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:iteration>
+							</div>
+
+							<!-- oferta (para) -->
+							<div Class="slds-col slds-size_6-of-12">
+								<strong> {! $Label.c.NBA_Label_Negotiated_Package } </strong>
+								<br />
+								
+								<!-- TV  -->
+								<strong>{! $Label.c.NBA_TV }</strong>
+								<aura:if isTrue="{! v.tv.planTv.label == null}">
+									<aura:iteration items="{! v.produtoAntigo.tv[0].planTv.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO </p>
+									</aura:iteration>
+									<aura:if isTrue="{! empty(v.produtoAntigo.tv[0].planTv.lstPromotions) }">
+										<p>{! v.produtoAntigo.tv[0].planTv.label }&nbsp;CANCELADO</p>
+									</aura:if>
+									<aura:iteration items="{! v.produtoAntigo.tv[0].addOptions.lstAdditionals }" var="add">
+										<aura:if isTrue="{! add.promoSelected != '' }">
+											<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+												<aura:if isTrue="{! add.promoSelected == index + '' }">
+													<p> {! add.label }&nbsp;CANCELADO</p>
+												</aura:if>
+											</aura:iteration>
+										</aura:if>
+										<aura:if isTrue="{! add.promoSelected == '' }">
+											<p> {! add.label }&nbsp;CANCELADO</p>
+										</aura:if>
+									</aura:iteration>
+									<aura:iteration items="{! v.produtoAntigo.tv[0].optionalPointsTv.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO</p>
+									</aura:iteration>
+									<aura:if isTrue="{! v.produtoAntigo.tv[0].optionalPointsTv.value > 0 }">
+										<p>{! v.produtoAntigo.tv[0].optionalPointsTv.label }&nbsp;CANCELADO</p>
+									</aura:if>
+									<br />
+								</aura:if>
+								<aura:if isTrue="{! v.tv.planTv.label != null}">
+									<aura:iteration items="{! v.tv.planTv.lstPromotions }" var="promo">
+										<p>{! promo.label }&nbsp;
+											<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentTv } </p>
+									</aura:iteration>
+									<aura:if isTrue="{! empty(v.tv.planTv.lstPromotions) }">
+										<p>{! v.tv.planTv.label }&nbsp;
+											<lightning:formattedNumber value="{! v.tv.planTv.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentTv } </p>
+									</aura:if>
+									<aura:iteration items="{! v.tv.addOptions.lstAdditionals }" var="add">
+										<aura:if isTrue="{! add.checked }">
+											<aura:if isTrue="{! add.promoSelected != '' }">
+												<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+													<aura:if isTrue="{! add.promoSelected == index + '' }">
+														<p>{! add.label }&nbsp;
+															<lightning:formattedNumber value="{! promotions.value }" style="currency" currencyCode="BRL" />
+														</p>
+													</aura:if>
+												</aura:iteration>
+											</aura:if>
+											<aura:if isTrue="{! add.promoSelected == '' }">
+												<p>{! add.label }&nbsp;
+													<lightning:formattedNumber value="{! add.value}" style="currency" currencyCode="BRL" />
+												</p>
+											</aura:if>
+										</aura:if>
+									</aura:iteration>
+									<aura:if isTrue="{! v.tv.optionalPointsPromoTv.quantity > 0 }">
+										<p> {! v.tv.optionalPointsPromoTv.label } &nbsp;
+											<lightning:formattedNumber value="{! v.tv.optionalPointsPromoTv.value }" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:if>
+									<aura:if isTrue="{! v.tv.optionalPointsTv.value > 0 }">
+										<p>{! v.tv.optionalPointsTv.label }&nbsp;
+											<lightning:formattedNumber value="{! v.tv.optionalPointsTv.value }" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:if>
+								</aura:if>
+								<br />
+								
+								<!-- Virtua -->
+								<strong>{! $Label.c.NBA_Banda_Larga }</strong>
+								<aura:if isTrue="{! v.ofertaSelecionada.broadband.planBroadband.label == null }">
+									<aura:iteration items="{! v.produtoAntigo.broadband.planBroadband.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO </p>
+									</aura:iteration>
+									<aura:if isTrue="{! empty(v.produtoAntigo.broadband.planBroadband.lstPromotions) }">
+										<p>{! v.produtoAntigo.broadband.planBroadband.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<aura:iteration items="{! v.produtoAntigo.broadband.addOptions.lstAdditionals }" var="add">
+										<aura:if isTrue="{! add.checked }">
+											<aura:if isTrue="{! add.promoSelected != '' }">
+												<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+													<aura:if isTrue="{! add.promoSelected == index + '' }">
+														<p> {! add.label }&nbsp;CANCELADO </p>
+													</aura:if>
+												</aura:iteration>
+											</aura:if>
+											<aura:if isTrue="{! add.promoSelected == '' }">
+												<p> {! add.label }&nbsp;CANCELADO </p>
+											</aura:if>
+										</aura:if>
+									</aura:iteration>
+									<aura:if isTrue="{! v.produtoAntigo.broadband.additionalBroadband.value > 0 }">
+										<p>{! v.produtoAntigo.broadband.additionalBroadband.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<br />
+								</aura:if>
+								<aura:if isTrue="{! v.ofertaSelecionada.broadband.planBroadband.label != null }">
+									<aura:iteration items="{! v.ofertaSelecionada.broadband.planBroadband.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;
+											<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentBroadband } </p>
+									</aura:iteration>
+									<aura:if isTrue="{!  empty(v.ofertaSelecionada.broadband.planBroadband.lstPromotions) }">
+										<p>{! v.ofertaSelecionada.broadband.planBroadband.label }&nbsp;
+											<lightning:formattedNumber value="{! v.ofertaSelecionada.broadband.planBroadband.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentBroadband } </p>
+									</aura:if>
+									<aura:iteration items="{! v.ofertaSelecionada.broadband.addOptions.lstAdditionals }" var="add">
+										<aura:if isTrue="{! add.checked }">
+											<aura:if isTrue="{! add.promoSelected != '' }">
+												<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+													<aura:if isTrue="{! add.promoSelected == index + '' }">
+														<p> {! add.label }&nbsp;
+															<lightning:formattedNumber value="{! promotions.value }" style="currency" currencyCode="BRL" />&nbsp;{! promotions.label } </p>
+													</aura:if>
+												</aura:iteration>
+											</aura:if>
+											<aura:if isTrue="{! add.promoSelected == '' }">
+												<p> {! add.label }&nbsp;
+													<lightning:formattedNumber value="{! add.value}" style="currency" currencyCode="BRL" />
+												</p>
+											</aura:if>
+										</aura:if>
+									</aura:iteration>
+									<aura:if isTrue="{! v.ofertaSelecionada.broadband.additionalBroadband.value > 0 }">
+										<p>{! v.ofertaSelecionada.broadband.additionalBroadband.label }&nbsp;
+											<lightning:formattedNumber value="{! v.ofertaSelecionada.broadband.additionalBroadband.value }" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:if>
+								</aura:if>
+								<br />
+								
+								<!-- Net Fone -->
+								<strong>{! $Label.c.NBA_Net_Fone }</strong>
+								<aura:if isTrue="{! v.ofertaSelecionada.phone.planPhone.label == null }">
+									<aura:iteration items="{! v.produtoAntigo.phone.planPhone.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO </p>
+									</aura:iteration>
+									<aura:if isTrue="{! empty(v.produtoAntigo.phone.planPhone.lstPromotions) }">
+										<p>{! v.produtoAntigo.phone.planPhone.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<aura:iteration items="{! v.produtoAntigo.phone.additionalPhone.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO </p>
+									</aura:iteration>
+									<aura:if isTrue="{! v.produtoAntigo.phone.additionalPhone.value > 0 }">
+										<p>{! v.produtoAntigo.phone.additionalPhone.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<br />
+								</aura:if>
+								<aura:if isTrue="{! v.ofertaSelecionada.phone.planPhone.label != null }">
+									<aura:iteration items="{! v.ofertaSelecionada.phone.planPhone.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;
+											<lightning:formattedNumber value="{! promo.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentPhone } </p>
+									</aura:iteration>
+									<aura:if isTrue="{! empty(v.ofertaSelecionada.phone.planPhone.lstPromotions) }">
+										<p>{! v.ofertaSelecionada.phone.planPhone.label }&nbsp;
+											<lightning:formattedNumber value="{! v.ofertaSelecionada.phone.planPhone.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentPhone } </p>
+									</aura:if>
+									<aura:iteration items="{! v.ofertaSelecionada.phone.additionalPhone.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;
+											<lightning:formattedNumber value="{! promo.value}" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:iteration>
+									<aura:if isTrue="{! v.ofertaSelecionada.phone.additionalPhone.value > 0 }">
+										<p>{! v.ofertaSelecionada.phone.additionalPhone.label }&nbsp;
+											<lightning:formattedNumber value="{! v.ofertaSelecionada.phone.additionalPhone.value }" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:if>
+								</aura:if>
+								<br />
+								
+								<!-- Net Móvel -->
+								<strong>{! $Label.c.NBA_Movel }</strong>
+								<aura:if isTrue="{! v.ofertaSelecionada.mobile.planMobile.label == null }">
+									<aura:iteration items="{! v.produtoAntigo.mobile.planMobile.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO </p>
+									</aura:iteration>
+									<aura:if isTrue="{! empty(v.produtoAntigo.mobile.planMobile.lstPromotions) }">
+										<p>{! v.produtoAntigo.mobile.planMobile.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<aura:iteration items="{! v.produtoAntigo.mobile.additionalMobile.lstPromotions }" var="add">
+										<aura:if isTrue="{! add.checked }">
+											<aura:if isTrue="{! add.promoSelected != '' }">
+												<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+													<aura:if isTrue="{! add.promoSelected == index + '' }">
+														<p> {! add.label }&nbsp;CANCELADO </p>
+													</aura:if>
+												</aura:iteration>
+											</aura:if>
+											<aura:if isTrue="{! add.promoSelected == '' }">
+												<p> {! add.label }&nbsp;CANCELADO </p>
+											</aura:if>
+										</aura:if>
+									</aura:iteration>
+									<aura:if isTrue="{! v.produtoAntigo.mobile.additionalMobile.value > 0 }">
+										<p>{! v.produtoAntigo.mobile.additionalMobile.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<aura:iteration items="{! v.produtoAntigo.mobile.dependentslMobile.lstPromotions }" var="promo">
+										<p> {! promo.label }&nbsp;CANCELADO </p>
+									</aura:iteration>
+									<aura:if isTrue="{! v.produtoAntigo.mobile.dependentslMobile.value > 0 }">
+										<p>{! v.produtoAntigo.mobile.dependentslMobile.label }&nbsp;CANCELADO </p>
+									</aura:if>
+									<br />
+								</aura:if>
+
+								<aura:if isTrue="{! v.ofertaSelecionada.mobile.planMobile.label != null }">
+									
+									<aura:if isTrue="{! and(v.ofertaSelecionada.mobile.bonusDependentes != '', v.ofertaSelecionada.mobile.descontoDependente != '') }">
+										<p>{! v.ofertaSelecionada.mobile.planMobile.label }&nbsp;
+											<lightning:formattedNumber value="{! v.ofertaSelecionada.mobile.planMobile.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.mobile.bonusDependentes }&nbsp;{! v.ofertaSelecionada.mobile.descontoDependente }&nbsp;{! v.ofertaSelecionada.movimentMobile } </p>
+										<aura:set attribute="else">
+											<p>{! v.ofertaSelecionada.mobile.planMobile.label }&nbsp;
+												<lightning:formattedNumber value="{! v.ofertaSelecionada.mobile.planMobile.value }" style="currency" currencyCode="BRL" />&nbsp;{! v.ofertaSelecionada.movimentMobile }</p>
+										</aura:set>
+									</aura:if>
+									
+									<aura:iteration items="{! v.ofertaSelecionada.mobile.addOptions.lstAdditionals }" var="add">
+										<aura:if isTrue="{! add.checked }">
+											<aura:if isTrue="{! add.promoSelected != '' }">
+												<aura:iteration items="{! add.lstPromotions }" var="promotions" indexVar="index">
+													<aura:if isTrue="{! add.promoSelected == index + '' }">
+														<p> {! add.label }&nbsp;
+															<lightning:formattedNumber value="{! promotions.value}" style="currency" currencyCode="BRL" />
+														</p>
+													</aura:if>
+												</aura:iteration>
+											</aura:if>
+											<aura:if isTrue="{! add.promoSelected == '' }">
+												<p> {! add.label }&nbsp;
+													<lightning:formattedNumber value="{! add.value }" style="currency" currencyCode="BRL" />
+												</p>
+											</aura:if>
+										</aura:if>
+									</aura:iteration>
+
+									<!-- dependentes -->
+									<aura:if isTrue="{!not(empty(v.produtoAntigo.mobile.listaDependentesMobile))}">
+										<aura:iteration items="{! v.produtoAntigo.mobile.listaDependentesMobile }" var="dependente">
+											<aura:if isTrue="{! dependente.valorProduto>0}">
+												<p>
+													{! dependente.productName }&nbsp;
+													<lightning:formattedNumber value="{! (v.ofertaSelecionada.mobile.planMobile.label=='NÃO POSSUI' ? 0 : dependente.valorProduto) }" style="currency" currencyCode="BRL" />
+													<aura:if isTrue="{! or( !dependente.checked, v.ofertaSelecionada.mobile.planMobile.label=='NÃO POSSUI')}">&nbsp;CANCELADO</aura:if>
+												</p>
+											</aura:if>
+										</aura:iteration>
+									</aura:if>
+
+									<aura:iteration items="{! v.ofertaSelecionada.mobile.listaDependentesMobileSelected }" var="dep">
+										<p>{! dep.promoSelected }&nbsp;
+											<lightning:formattedNumber value="{! dep.valorProduto }" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:iteration>
+									
+								</aura:if>
+
+
+								<aura:if isTrue="{! v.ofertaSelecionada.hasDiscountAutomaticDebit }">
+									<br />
+									<p>{! $Label.c.DESCONTO_DCC }&nbsp;-
+										<lightning:formattedNumber value="{! v.ofertaSelecionada.automaticDebitDiscount}" style="currency" currencyCode="BRL" />
+									</p>
+								</aura:if>
+								<br />
+								<p> {! $Label.c.NBA_Label_Total_Price_With_Discounts }&nbsp;
+									<lightning:formattedNumber value="{! v.ofertaSelecionada.totalValue }" style="currency" currencyCode="BRL" />
+								</p>
+								<p> {! $Label.c.NBA_Label_Total_Price_Without_Discounts }&nbsp;
+									<lightning:formattedNumber value="{! v.ofertaSelecionada.totalValueOriginal }" style="currency" currencyCode="BRL" />
+								</p>
+								<aura:iteration items="{! v.ofertaSelecionada.lstSteps }" var="step">
+									<aura:if isTrue="{!step.label != 0}">
+										<p> {! format($Label.c.NBA_Label_Price_After_X_Months, step.label) }
+											<lightning:formattedNumber value="{! step.value }" style="currency" currencyCode="BRL" />
+										</p>
+									</aura:if>
+								</aura:iteration>
+							</div>
+
+						</div>
+						<div class="slds-grid slds-wrap">
+							<div class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+								<strong> {! $Label.c.NBA_Title_Billing } </strong>
+							</div>
+							<div class="slds-col slds-size_12-of-12">
+								{! $Label.c.NBA_Text_Pro_Rata }
+							</div>
+						</div>
+						<div Class="slds-grid slds-wrap">
+							<div class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+								<strong> {! $Label.c.NBA_Title_Payment_Method_Invoice_IGPM } </strong>
+							</div>
+							<div Class="slds-col slds-size_3-of-12">
+								<p> {! v.formaPagamento } </p>
+							</div>
+							<div Class="slds-col slds-size_3-of-12">
+								<p> {! v.formaEnvio } </p>
+							</div>
+							<div Class="slds-col slds-size_6-of-12">
+								<p> {! $Label.c.NBA_Text_IGPM } </p>
+							</div>
+						</div>
+						<aura:if isTrue="{! v.showChipMessage }">
+							<div class="slds-grid slds-wrap">
+								<div class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+									<strong> {! $Label.c.NBA_Title_Chip_Activation_Portability } </strong>
+								</div>
+								<div class="slds-col slds-size_12-of-12">
+									<aura:unescapedHtml value="{! $Label.c.NBA_Text_Chip }"/>
+						</div>
+							</div>
+						</aura:if>
+						<aura:if isTrue="{! v.showOperatorMessage }">
+							<div class="slds-grid slds-wrap">
+								<div class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+									<strong> {! $Label.c.NBA_Title_Phone_and_Mobile } </strong>
+								</div>
+								<div class="slds-col slds-size_12-of-12">
+									{! $Label.c.NBA_Text_Phone_Mobile }"
+								</div>
+							</div>
+						</aura:if>
+						<div Class="slds-grid slds-wrap">
+							<div Class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+								<strong> {! $Label.c.NBA_Title_Tax } </strong>
+							</div>
+							<aura:if isTrue="{! v.ofertaSelecionada.productFee == 'BL ASSINATURA' }">
+								<div class="slds-col slds-size_6-of-12">
+									<p>TAXA DE UPGRADE DE BANDA LARGA:
+										<lightning:formattedNumber value="{! v.ofertaSelecionada.vlUpgradeFee }" style="currency" currencyCode="BRL" />
+									</p>
+									<aura:if isTrue="{! v.ofertaSelecionada.paymentMethodUpgrade != 'ISENTO' }">
+										<p>PAGAMENTO:
+											<lightning:formattedNumber value="{!v.ofertaSelecionada.vlUpgradeFee}" style="currency" currencyCode="BRL" /> EM {! v.ofertaSelecionada.paymentMethodUpgrade }</p>
+									</aura:if>
+								</div>
+							</aura:if>
+							<aura:iteration items="{! v.lstIsencoes }" var="taxa" indexVar="index">
+								<aura:if isTrue="{! taxa.checked }">
+									<div class="slds-col slds-size_6-of-12">
+										<p>{!taxa.label}:
+											<lightning:formattedNumber value="90" style="currency" currencyCode="BRL" />
+										</p>
+									</div>
+								</aura:if>
+							</aura:iteration>
+							<aura:if isTrue="{! !empty(v.ofertaSelecionada.lstMembershipFee) }">
+								<div class="slds-col slds-size_6-of-12">
+									<aura:if isTrue="{! v.ofertaSelecionada.paymentMethodMembership != 'ISENTO' }">
+										<p>TAXA DE ADESÃO PONTO(S) OPCIONAI(S):
+											<lightning:formattedNumber value="{!v.ofertaSelecionada.vlMembershipFee}" style="currency" currencyCode="BRL" />
+										</p>
+										<p>PAGAMENTO:
+											<lightning:formattedNumber value="{!v.ofertaSelecionada.vlMembershipFee}" style="currency" currencyCode="BRL" /> EM {! v.ofertaSelecionada.paymentMethodMembership }</p>
+									</aura:if>
+								</div>
+							</aura:if>
+							<aura:if isTrue="{! v.ofertaSelecionada.productFee == 'TV PACOTE' }">
+								<div class="slds-col slds-size_6-of-12">
+									<aura:if isTrue="{! v.ofertaSelecionada.paymentMethodUpgrade != 'ISENTO' }">
+										<p>TAXA DE UPGRADE DE TV:
+											<lightning:formattedNumber value="{!v.ofertaSelecionada.vlUpgradeFee}" style="currency" currencyCode="BRL" />
+										</p>
+										<p>PAGAMENTO:
+											<lightning:formattedNumber value="{!v.ofertaSelecionada.vlUpgradeFee}" style="currency" currencyCode="BRL" /> EM {! v.ofertaSelecionada.paymentMethodUpgrade }</p>
+									</aura:if>
+								</div>
+							</aura:if>
+							<aura:if isTrue="{! v.ofertaSelecionada.productFee == 'NET FONE' }">
+								<div class="slds-col slds-size_6-of-12">
+									<p>TAXA DE EXTENSÃO DE FONE:
+										<lightning:formattedNumber value="{!v.ofertaSelecionada.vlUpgradeFee}" style="currency" currencyCode="BRL" />
+									</p>
+									<aura:if isTrue="{! v.ofertaSelecionada.paymentMethodUpgrade != 'ISENTO' }">
+										<p>PAGAMENTO:
+											<lightning:formattedNumber value="{!v.ofertaSelecionada.vlUpgradeFee}" style="currency" currencyCode="BRL" /> EM {! v.ofertaSelecionada.paymentMethodUpgrade }</p>
+									</aura:if>
+								</div>
+							</aura:if>
+						</div>
+						<div Class="slds-grid slds-wrap">
+							<div Class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+								<strong> {! $Label.c.NBA_Title_Fines_and_Loyalty } </strong>
+							</div>
+							<aura:if isTrue="{! !v.isActualProduct }">
+								<aura:if isTrue="{! not(v.inadimplente) }">
+									<aura:if isTrue="{! or(or(v.hasPenalty.tv, v.hasPenalty.broadband), or(v.hasPenalty.phone, v.hasPenalty.mobile))}">
+										<div class="slds-col slds-size_6-of-12" Style="text-align:justify;padding-right : 1rem;">
+											<aura:if isTrue="{! v.isRetencao }">
+												<p> Sr. (a), os produtos que possui estão em período de permanência mínima de 12 meses, contando a partir da data de instalação. Ao seguir com seu pedido de cancelamento antes deste prazo, implicará na cobrança da multa fidelidade no valor de
+													<lightning:formattedNumber value="{! v.produtoAntigo.showTotalPenalty }" style="currency" currencyCode="BRL" />, referente ao período de <strong>{!v.remainingDays}</strong> dias restantes. Informo que este valor será enviado por boleto bancário. Deseja prosseguir com o pedido?</p>
+												<aura:set attribute="else">
+													<p> Sr. (a), os produtos que possui estão em período de permanência mínima de 12 meses, contando a partir da data de instalação. Ao seguir com seu pedido de cancelamento antes deste prazo, implicará na cobrança da multa fidelidade no valor de
+														<lightning:formattedNumber value="{! v.produtoAntigo.showTotalPenalty }" style="currency" currencyCode="BRL" />, referente ao período de <strong>{!v.remainingDays}</strong> dias restantes. Informo que este valor será enviado por boleto bancário. Deseja prosseguir com o pedido?</p>
+												</aura:set>
+											</aura:if>
+											<aura:if isTrue="{! and(v.hasPenalty.tv, v.produtoAntigo.tv[0].planTv.fidelity.penalty > 0) }">
+												<p><strong>Multa TV:&nbsp;</strong>
+													<lightning:formattedNumber value="{! v.produtoAntigo.tv[0].planTv.fidelity.penalty }" style="currency" currencyCode="BRL" />,<strong> Dias restantes: </strong> {!v.produtoAntigo.tv[0].planTv.fidelity.remainingDays}</p>
+											</aura:if>
+											<aura:if isTrue="{! and(v.hasPenalty.broadband, v.produtoAntigo.broadband.planBroadband.fidelity.penalty > 0) }">
+												<p><strong>Multa BL:&nbsp;</strong>
+													<lightning:formattedNumber value="{! v.produtoAntigo.broadband.planBroadband.fidelity.penalty }" style="currency" currencyCode="BRL" />,<strong> Dias restantes: </strong> {!v.produtoAntigo.broadband.planBroadband.fidelity.remainingDays}</p>
+											</aura:if>
+											<aura:if isTrue="{! and(v.hasPenalty.phone, v.produtoAntigo.phone.planPhone.fidelity.penalty > 0) }">
+												<p><strong>Multa Fone:&nbsp;</strong>
+													<lightning:formattedNumber value="{! v.produtoAntigo.phone.planPhone.fidelity.penalty }" style="currency" currencyCode="BRL" />,<strong> Dias restantes: </strong> {!v.produtoAntigo.phone.planPhone.fidelity.remainingDays}</p>
+											</aura:if>
+											<aura:if isTrue="{! and(v.hasPenalty.mobile, v.produtoAntigo.mobile.planMobile.fidelity.penalty > 0) }">
+												<p><strong>Multa Móvel:&nbsp;</strong>
+													<lightning:formattedNumber value="{! v.produtoAntigo.mobile.planMobile.fidelity.penalty }" style="currency" currencyCode="BRL" />,<strong> Dias restantes: </strong> {!v.produtoAntigo.mobile.planMobile.fidelity.remainingDays}</p>
+											</aura:if>
+										</div>
+									</aura:if>
+									<!-- CHIRLENY 11-02-2019 SPRINT 3 -->
+									<aura:if isTrue="{! v.ofertaSelecionada.mobile.listaDependentesMobile.length > 0}">
+										<aura:iteration items="{! v.ofertaSelecionada.mobile.listaDependentesMobile }" var="index">
+											<aura:if isTrue="{! index.multa > 0 }">
+												<p>Valor da Multa do Desconto: R$&nbsp;
+													<lightning:formattedNumber value="{! index.multa }" style="currency" currencyCode="BRL" />
+												</p>
+												<p>Esse valor de multa será somado a multa fidelidade móvel, para saber o valor da multa fidelidade móvel, consultar no sistema Mobile.</p>
+											</aura:if>
+										</aura:iteration>
+									</aura:if>
+									<aura:if isTrue="{! and(or(or(v.hasRenovation.tv, v.hasRenovation.broadband), or(v.hasRenovation.phone, v.hasRenovation.mobile)), !v.isProdutoAntigo)}">
+										<div class="slds-col slds-size_6-of-12">
+											<aura:unescapedHtml value="{! format($Label.c.NBA_Text_Fines_Loyalty, v.today) }"/><br></br>
+											<aura:if isTrue="{! v.isRetencao }">
+												<aura:if isTrue="{! v.hasRenovation.tv }">
+													<p><strong>Fidelidade TV - </strong>500 reais</p>
+												</aura:if>
+												<aura:if isTrue="{! v.hasRenovation.broadband }">
+													<p><strong>Fidelidade BL - </strong>300 reais</p>
+												</aura:if>
+												<aura:if isTrue="{! v.hasRenovation.phone }">
+													<p><strong>Fidelidade Fone - </strong>200 reais</p>
+												</aura:if>
+												<aura:set attribute="else">
+													<aura:if isTrue="{! v.hasRenovation.tv }">
+														<p><strong>Fidelidade TV - </strong>50 reais</p>
+													</aura:if>
+													<aura:if isTrue="{! v.hasRenovation.broadband }">
+														<p><strong>Fidelidade BL - </strong>50 reais</p>
+													</aura:if>
+													<aura:if isTrue="{! v.hasRenovation.phone }">
+														<p><strong>Fidelidade Fone - </strong>20 reais</p>
+													</aura:if>
+												</aura:set>
+											</aura:if>
+										</div>
+										<aura:set attribute="else">
+											<aura:if isTrue="{! and(and(and(!v.hasPenalty.tv, !v.hasPenalty.broadband), and(!v.hasPenalty.phone, !v.hasPenalty.mobile)), v.hasCancelamento)}">
+												<div class="slds-col slds-size_6-of-12">
+													<p>Multa de Fidelidade não aplicável. Cliente completou prazo mínimo de permanência na {! v.hasProductsNoPenalty }” </p>
+												</div>
+											</aura:if>
+										</aura:set>
+									</aura:if>
+								</aura:if>
+							</aura:if>
+							<aura:if isTrue="{!v.DiscountPenalty>0}">
+								<div class="slds-col slds-size_6-of-12" Style="text-align:justify;padding-right : 1rem;">
+									<p><strong>Valor da Multa do Desconto: </strong>
+										<lightning:formattedNumber value="{! v.DiscountPenalty }" style="currency" currencyCode="BRL" />
+									</p>
+									<p> Esse valor de multa será somado a multa fidelidade móvel, para saber o valor da multa fidelidade móvel, consultar no sistema Mobile</p>
+								</div>
+							</aura:if>
+						</div>
+						<aura:if isTrue="{! v.runAgendamento }">
+							<div Class="slds-grid slds-wrap" Style="height:10rem">
+								<div Class="slds-col slds-size_12-of-12 slds-align_absolute-center color-sections">
+									<strong> {! $Label.c.NBA_Title_Scheduling_Section } </strong>
+								</div>
+								<aura:if isTrue="{! v.renderizer }">
+									<div Class="slds-col slds-size_3-of-12" Style="margin-top:-2rem">
+										<lightning:input class="slds-dropdown-teste " type="date" label="Calendario" value="{!v.myDate}" name="date" onchange="{!c.dateUpdate}" min="{! v.dateMin }" max="{! v.dateMax }" autocomplete="off" required="{! !v.listEmpty }" disabled="{! v.listEmpty }" />
+									</div>
+									<div Class="slds-col slds-size_9-of-12">
+										<!--	<c:NBA_SchedulingCalendar/> -->
+										<aura:if isTrue="{! v.myDate == null ? false : true }">
+											<div Class="slds-grid slds-wrap" Style="display: inline-flex; margin-left:5rem;width: 85%;">
+												<aura:if isTrue="{! v.hasDates }">
+													<div Class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-border_top slds-border_bottom slds-border_left slds-border_right" Style=" background: lightgray">
+														<lightning:formattedDateTime value="{! v.myDate }" />
+													</div>
+													<div Class="slds-col slds-size_1-of-12 col-custom slds-align_absolute-center">
+													</div>
+													<div Class="slds-col slds-size_4-of-12 col-custom slds-align_absolute-center">
+														Período
+													</div>
+													<div Class="slds-col slds-size_4-of-12 col-custom slds-align_absolute-center">
+														Capacidade Disponivel
+													</div>
+													<div Class="slds-col slds-size_3-of-12 col-custom slds-align_absolute-center">
+														Data Bloqueio
+													</div>
+												</aura:if>
+												<aura:iteration items="{! v.schedule.data.schedule }" var="schedule">
+													<aura:if isTrue="{! and(v.myDate == schedule.dateSchedule, schedule.periods != null) }">
+														<aura:iteration items="{! schedule.periods }" var="periodo" indexVar="index">
+															<aura:if isTrue="{! v.hasDates }">
+																<div Class="slds-col slds-size_1-of-12 col-custom2 slds-align_absolute-center">
+																	<lightning:input type="radio" name="{!index}" value="{! periodo.description }" checked="{! periodo.cheked }" onchange="{! c.click }" required="true" />
+																</div>
+																<div Class="slds-col slds-size_4-of-12 col-custom2 slds-align_absolute-center">
+																	{! periodo.description }
+																</div>
+																<div Class="slds-col slds-size_4-of-12 col-custom2 slds-align_absolute-center">
+																	{! periodo.availableMinutes }
+																</div>
+																<div Class="slds-col slds-size_3-of-12 col-custom2 slds-align_absolute-center">
+																	<lightning:formattedDateTime value="{! schedule.dateSchedule }" />
+																</div>
+															</aura:if>
+														</aura:iteration>
+													</aura:if>
+												</aura:iteration>
+												<aura:if isTrue="{! !v.hasDates }">
+													<strong> Não existe agendamento disponivel para essa data </strong>
+												</aura:if>
+											</div>
+										</aura:if>
+									</div>
+								</aura:if>
+								<div class="{! 'slds-col slds-size_12-of-12' + if(v.renderizer, ' slds-m-top_large', '') }">
+									<aura:unescapedHtml value="{! $Label.c.NBA_Text_Scheduling }"/>
+								</div>
+								<div class="slds-col slds-size_12-of-12 slds-m-top_large">
+									<aura:unescapedHtml value="{! $Label.c.NBA_Text_Information }"/>
+								</div>
+							</div>
+						</aura:if>
+					</div>
+				</aura:if>
+				
+				<footer class="slds-modal__footer slds-theme_default">
+					<button onclick="{! c.fecharModal }" class="slds-button slds-button_neutral tam-buttom">{! v.optionFalse }</button>
+					<button onclick="{! c.salvar }" class="slds-button slds-button_brand tam-buttom">{! v.optionTrue }</button>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</aura:if>
+	
+	<aura:if isTrue="{! v.isVisibleRGContact }">
+		<section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+			<div class="slds-modal__container">
+				<header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_' + v.tema }">
+					<strong class="slds-text-heading_medium" id="prompt-heading-id">Confirmação Dados do Cliente</strong>
+				</header>
+				<div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper" Style="max-height: 80%">
+					<aura:if isTrue="{! !v.saved}">
+						<lightning:recordEditForm aura:id="editForm" onload="{!c.handleLoad}" onsuccess="{!c.handleSuccess}" recordId="{! v.recordIdObj }" recordTypeId="{! v.recordTypeIdObj }" objectApiName="{! v.objCustom }">
+							<!-- the messages component is for error messages -->
+							<lightning:messages />
+							<!-- DADOS DO RG DO CONTATO -->
+							<div class="slds-grid slds-gutters slds-p-bottom_large">
+								<div class="slds-col slds-size_1-of-2">
+									<lightning:inputField aura:id="nomeMae" fieldName="MothersName__c" onchange="{!c.myChange}" />
+									<lightning:inputField aura:id="numberRG" fieldName="RG__c" onchange="{!c.myChange}" />
+								</div>
+								<div class="slds-col slds-size_1-of-2">
+									<lightning:inputField aura:id="expedicaoRG" fieldName="RGEmitter__c" onchange="{!c.myChange}" />
+								</div>
+							</div>
+							<div class="slds-m-top_medium slds-align_absolute-center">
+								<lightning:button variant="brand" name="cancel" label="Cancelar" onclick="{! c.cancel}" />
+								<lightning:button variant="brand" type="submit" name="save" label="Confirmar" disabled="{! empty(v.myDate) }" onclick="{! c.handleSave}" />
+							</div>
+						</lightning:recordEditForm>
+						<aura:set attribute="else">
+							<p>Saved!</p>
+						</aura:set>
+					</aura:if>
+				</div>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</aura:if>
+	
+	<!-- MODAL ANALISE CRÉDITO -->
+	<aura:if isTrue="{!v.isAnaliseCreditoModalOpen}">
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+			<div class="slds-modal__container" style="max-width: 40%; !important ">
+				<!-- Modal Header -->
+				<header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+					<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Cliente com crédito Reprovado!</h2>
+					<!-- Modal Body -->
+					<div id="modal-content-id-1">
+						<lightning:layout class="slds-wrap" multipleRows="true">
+							<lightning:layoutItem size="12">
+								<div>
+									<div>
+										<aura:if isTrue="{!v.retencao}">
+											<div class=" slds-text-heading_medium slds-hyphenate slds-m-left_large slds-text-align_left '" style="font-size: 1.125rem; margin-top: 10px;">Cliente está elegível apenas para ofertas que o NBA recomendar e nas opções de Cancelamento parcial e total.</div>
+											<aura:set attribute="else">
+												<div class="slds-text-heading_medium slds-hyphenate slds-m-left_large slds-text-align_left  '" style="font-size: 1.125rem;margin-top: 10px;">Por favor, seguir com o processo de encerramento do Atendimento.</div>
+											</aura:set>
+										</aura:if>
+									</div>
+								</div>
+							</lightning:layoutItem>
+						</lightning:layout>
+					</div>
+				</header>
+				<!--Modal/Popup Box Footer Starts here-->
+				<footer class="slds-modal__footer">
+					<div class="slds-align_absolute-center slds-p-vertical_medium">
+						<aura:if isTrue="{!v.retencao}">
+							<lightning:button variant="neutral" label="Voltar" title="Voltar" onclick="{! c.closeModalAnalise }" />
+						</aura:if>
+						<lightning:button variant="brand" label="Encerramento" title="Encerramento" onclick="{! c.finalizarCaso }" />
+					</div>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open"></div>
+	</aura:if>
+
+	<!-- MODAL ANALISE CRÉDITO ERROR -->
+	<aura:if isTrue="{!v.hasAnaliseError}">
+		<div style="min-height: 40%;">
+			<section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+				<div class="slds-modal__container" style="max-width: 40%; !important">
+					<header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+						<strong class="slds-text-heading_medium" id="prompt-heading-id">
+							Não será possível realizar a movimentação devido ao sistema de crédito indisponível.
+						</strong>
+					</header>
+					<footer class="slds-modal__footer slds-theme_default">
+						<div class="slds-modal__content">
+							<div class="slds-align_absolute-center slds-p-vertical_medium">
+								<lightning:button variant="brand" label="OK" title="OK" onclick="{! c.finalizarCaso }" />
+							</div>
+						</div>
+					</footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</div>
+	</aura:if>
+
+	<aura:if isTrue="{!v.OfferValidationMessage.showModal}">
+		<div style="min-height: 40%;">
+			<section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+				<div class="slds-modal__container" style="max-width: 40%; !important">
+                    <header class="slds-modal__header slds-theme_alert-texture slds-theme_warning">
+						<strong class="slds-text-heading_medium" id="prompt-heading-id">
+							{! v.OfferValidationMessage.message }
+						</strong>
+					</header>
+                    <footer class="slds-modal__footer slds-theme_default">
+						<div class="slds-modal__content">
+							<div class="slds-align_absolute-center slds-p-vertical_medium">
+								<aura:if isTrue="{!v.OfferValidationMessage.showReturn}">
+                                    <lightning:button variant="brand" label="Voltar" title="Voltar" onclick="{!c.OfferValidationCloseMessage}" />
+								</aura:if>
+								<lightning:button variant="brand" label="Encerramento" title="Encerramento" onclick="{!c.OfferValidationEndCase}" />
+							</div>
+						</div>
+                    </footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</div>
+	</aura:if>
+	
+</aura:component>

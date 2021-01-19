@@ -1,0 +1,28 @@
+<!--CEC_360_ShowRequisitionsDetailOCs.cmp -->
+<aura:component controller="CEC_360_ShowRequisitionsController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="requisitionIn" type="object" />
+    <aura:attribute name="requisition" type="object" />
+    
+    <div class="slds-card slds-p-around_x-small" aura:id="mySpinner">
+        <lightning:spinner alternativeText="Loading" size="small" />
+    </div>
+    
+    <aura:iteration items="{!v.requisition.listConfigOrder}" var="configOrder">
+        <tr>
+            <td colspan="4" id="tdDetails">
+                <div class="details">
+                    <div class="box-sessao">Detalhes da OCs</div> 
+                    <div class="margin-16">
+                    <div class="box-sessao-dados">Número<p>{!configOrder.configurationOrderID}</p></div>
+                    <div class="box-sessao-dados-desc">Tipo de fechamento<p>{!configOrder.configurationorderTypeDescription}</p></div>
+                    <div class="box-sessao-dados">Baixa feita por<p>{!configOrder.closeUser}</p></div>
+                    <div class="box-sessao-dados">Data de termino<p>{!configOrder.terminationDate}</p></div>
+                    </div> 
+                </div>
+            </td>
+        </tr>
+    </aura:iteration>
+    
+</aura:component>

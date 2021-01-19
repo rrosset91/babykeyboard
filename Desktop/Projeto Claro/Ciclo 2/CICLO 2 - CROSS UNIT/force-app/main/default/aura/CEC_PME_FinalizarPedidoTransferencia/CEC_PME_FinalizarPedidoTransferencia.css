@@ -1,0 +1,17 @@
+.THIS button.slds-button.slds-button_icon-bare:disabled {background: #c7c6c6!important;}
+.THIS span.sem-opcao-cor {margin-top: 20px;display: block;}
+@media (max-width: 1140px) {
+.THIS span.sem-opcao-cor {margin-top: 7px;display: block;white-space: nowrap;}  
+}
+@media (max-width: 1023px) {
+.THIS span.sem-opcao-cor {margin-top: 20px;display: block;white-space: inherit;}
+}
+@media (max-width: 790px) {
+.THIS span.sem-opcao-cor {padding-right: 10px;}
+.THIS div#bloco-cores div div .slds-p-right_small {width: calc(100% - 210px);}
+}
+
+@media (max-width: 640px) {
+.THIS div#bloco-cores div div .slds-p-right_small {width: CALC(100% - 10PX) !important;}
+.THIS span.sem-opcao-cor {margin-top: 7px;display: block;white-space: nowrap;padding-right:0px;}  
+}

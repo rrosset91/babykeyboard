@@ -1,0 +1,239 @@
+<aura:component controller="CEC_360_ShowProtocolController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="protocolType" type="String"/>    
+    
+    <aura:attribute name="startDate" type="Date" />
+    <aura:attribute name="endDate" type="date" />
+    <aura:attribute name="maxDate" type="String" />
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="isDate" type="Boolean" default="false" />
+    <aura:attribute name="data" type="Object[]" />
+    <aura:attribute name="protocolsLst" type="List" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="showTable" type="Boolean" default="false" />
+    <aura:attribute name="isMov" type="Boolean" default="false" />
+    <aura:attribute name="hasValue" type="Boolean" default="false" />
+    <aura:attribute name="options" type="Object" />
+    
+    <aura:if isTrue="{!v.isMov}">
+        <div class="slds-grid slds-gutters slds-p-bottom_medium">
+            <div class="protocolo-linha">
+                <div>
+                    <span>
+                        <lightning:combobox aura:id="slds-ativos"
+                                            name="ativos"
+                                            label="Linha"
+                                            value="others"
+                                            placeholder="Selecionar"
+                                            options="{! v.options }"
+                                            onchange="{! c.makeAction }"/>
+                    </span>
+                </div>
+            </div>
+            <aura:if isTrue="{!v.hasValue}">
+                <div class="data-inicio">
+                    <div>
+                        <span>
+                            <lightning:input aura:id="startDate"
+                                             label="Data início"
+                                             type="date"
+                                             value="{!v.startDate}"
+                                             max="{!v.maxDate}"
+                                             messageWhenBadInput="Data inválida."
+                                             disabled="{!v.isDate}"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="data-fim">
+                    <div>
+                        <span>
+                            <lightning:input aura:id="endDate"
+                                             label="Data fim"
+                                             type="date"
+                                             value="{!v.endDate}"
+                                             max="{!v.maxDate}"
+                                             messageWhenBadInput="Data inválida."
+                                             disabled="{!v.isDate}"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="buscar">
+                    <div class="slds-p-top_large">
+                        <span>
+                            <lightning:button variant="destructive"
+                                              label="Buscar"
+                                              onclick="{!c.getMobileProtocols}"
+                                              class="botao-busca"/>
+                        </span>
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-grid slds-gutters slds-p-bottom_medium">
+                <div class="data-inicio">
+                    <div>
+                        <span>
+                            <lightning:input aura:id="startDate"
+                                             label="Data início"
+                                             type="date"
+                                             value="{!v.startDate}"
+                                             max="{!v.maxDate}"
+                                             messageWhenBadInput="Data inválida."
+                                             disabled="{!v.isDate}"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="data-fim">
+                    <div>
+                        <span>
+                            <lightning:input aura:id="endDate"
+                                             label="Data fim"
+                                             type="date"
+                                             value="{!v.endDate}"
+                                             max="{!v.maxDate}"
+                                             messageWhenBadInput="Data inválida."
+                                             disabled="{!v.isDate}"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="byscar">
+                    <div class="slds-p-top_large">
+                        <span>
+                            <lightning:button variant="destructive"
+                                              label="Buscar"
+                                              onclick="{!c.getResidentialProtocols}"
+                                              class="botao-busca"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showTable}">        
+        <aura:if isTrue="{!v.isMov}">
+            
+            <!-- DETALHE PROTOCOLO MÓVEL -->
+            <table class="lista-protocolos-movel slds-table slds-row-hover slds-p-bottom_medium slds-p-top_medium">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th>Protocolo</th>
+                        <th>Data Abertura</th>
+                        <th>Data Fechamento</th>
+                        <th>Motivo</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>        
+                    <aura:iteration items="{!v.protocolsLst}" var="protocol" indexVar="protocolIndex" >
+                        <tr>
+                            <td>
+                                <lightning:buttonIcon iconName="{!protocol.showDetails?'utility:chevrondown':'utility:chevronright'}"
+                                                      value="{!protocolIndex}"
+                                                      onclick="{!c.expandDetails}" />
+                                &nbsp;&nbsp;{!protocol.protocolNumber}
+                            </td>
+                            <td>{!protocol.solicitationDateOpening}</td>    
+                            <td>{!protocol.solicitationDateClosing}</td>                            
+                            <td>{!protocol.reasonCode1}</td>
+                            <td>{!protocol.situation}</td>
+                        </tr>   
+                        <aura:if isTrue="{!protocol.showDetails}">
+                            <tr>
+                                <td colspan="5" id="tdDetails">
+                                    <div class="slds-box">
+                                        <div class="slds-size_6-of-6 ">                            
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small" title="Case">Protocolo</span>
+                                            </h3>
+                                        </div>     
+                                        <div class="slds-grid slds-wrap slds-p-top_medium margin-left-11">
+                                             <div class="box-sessao-dados col-view-1120">
+                                                Motivo 1<p>{!protocol.reasonCode1}</p>
+                                            </div> 
+                                            <div class="box-sessao-dados">
+                                                Motivo 2<p>{!protocol.reasonCode2}</p>
+                                            </div>                                        
+                                            <div class="box-sessao-dados">
+                                                Motivo 3<p>{!protocol.reasonCode3}</p>
+                                            </div>
+                                            <div class="box-sessao-dados">
+                                                Motivo 4<p>{!protocol.reasonCode4}</p>
+                                            </div>
+                                        </div>
+                                        <div class="slds-size_6-of-6 ">                            
+                                            <h3 class="slds-section__title slds-theme_shade">
+                                                <span class="slds-truncate slds-p-horizontal_small" title="Case">Descrição</span>
+                                            </h3>
+                                        </div>
+                                         <div class="slds-size_6-of-6 ">
+                                             <div class="dados">{!protocol.synthesisRanking}</div>
+                                         </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </aura:if>
+                    </aura:iteration>                    
+                </tbody>
+            </table>  
+            
+            <!-- DETALHE PROTOCOLO RESIDENCIAL -->
+            <aura:set attribute="else">                   
+                <table class="lista-protocolos slds-table slds-row-hover slds-p-bottom_medium slds-p-top_medium">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th>Protocolo</th>
+                            <th>Data Abertura</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>        
+                        <aura:iteration items="{!v.protocolsLst}" var="protocol" indexVar="protocolIndex" >
+                            <tr>
+                                <td>
+                                    <lightning:buttonIcon iconName="{!protocol.showDetails?'utility:chevrondown':'utility:chevronright'}"
+                                                          value="{!protocolIndex}"
+                                                          onclick="{!c.expandDetails}" />
+                                    &nbsp;&nbsp;{!protocol.protocolNumber}
+                                </td>
+                                <td>{!protocol.solicitationDateOpening}</td>                            
+                                <td>{!protocol.solicitationStatus}</td>
+                            </tr>   
+                            <aura:if isTrue="{!protocol.showDetails}">
+                                <tr>
+                                    <td colspan="4" id="tdDetails">
+                                        <div class="slds-box">
+                                            <div class="slds-size_6-of-6 ">                            
+                                                <h3 class="slds-section__title slds-theme_shade">
+                                                    <span class="slds-truncate slds-p-horizontal_small" title="Case">Protocolo</span>
+                                                </h3>
+                                            </div>     
+                                            <div class="slds-grid slds-wrap slds-p-top_medium margin-left-11">
+                                                <div class="box-sessao-dados">
+                                                    Data de Abertura<p>{!protocol.solicitationDateOpening}</p>
+                                                </div>
+                                                <div class="box-sessao-dados">
+                                                    Data de Encerramento<p>{!protocol.solicitationDateClosing}</p>
+                                                </div>                                        
+                                                <div class="box-sessao-dados">
+                                                    Status<p>{!protocol.solicitationStatus}</p>
+                                                </div>
+                                                <div class="box-sessao-dados">
+                                                    Tipo<p>{!protocol.solicitationType}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </aura:if>
+                        </aura:iteration>                        
+                    </tbody>
+                </table>                
+            </aura:set>
+        </aura:if>
+    </aura:if>
+</aura:component>

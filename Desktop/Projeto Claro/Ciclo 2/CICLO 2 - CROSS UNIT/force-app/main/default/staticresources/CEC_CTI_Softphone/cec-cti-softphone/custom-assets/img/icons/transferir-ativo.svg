@@ -1,0 +1,7 @@
+<svg id="transferir-ativo" xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29">
+  <g id="Elipse_198" data-name="Elipse 198" fill="#da291c" stroke="#da291c" stroke-width="1.8">
+    <circle cx="14.5" cy="14.5" r="14.5" stroke="none"/>
+    <circle cx="14.5" cy="14.5" r="13.6" fill="none"/>
+  </g>
+  <path id="Caminho_533" data-name="Caminho 533" d="M349.323,417.173h-13.41l2.953-2.953a1.549,1.549,0,0,0-2.191-2.191l-5.589,5.589-.011.007c-.011.011-.014.026-.024.036a1.556,1.556,0,0,0-.307.464c-.007.016-.009.032-.015.048a1.533,1.533,0,0,0-.106.546v0h0v0a1.512,1.512,0,0,0,.106.546c.006.016.008.032.015.048a1.557,1.557,0,0,0,.307.464c.01.011.013.025.024.036l.011.007,5.589,5.589a1.549,1.549,0,0,0,2.191-2.191l-2.953-2.953h13.41a1.55,1.55,0,0,0,0-3.1Z" transform="translate(355.873 432.869) rotate(180)" fill="none" stroke="#fff" stroke-width="1"/>
+</svg>

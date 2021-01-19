@@ -1,0 +1,19 @@
+.bottomLineList {
+    border-bottom: 1px solid #E5E4E3
+}
+
+.itemRows {
+    color: var(--lwc-colorTextDefault, rgb(8, 7, 7));
+    font-weight: var(--lwc-fontWeightRegular, 400);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tableRowGroup {
+    list-style: none;
+}
+
+.box-square-corner {
+    border-radius: 0px;
+}

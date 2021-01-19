@@ -1,0 +1,125 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_ProtocolHistoryController">
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+    <aura:attribute name="data" type="Object[]"/>
+    <aura:attribute name="completeHistoryData" type="Object[]"/>
+    <aura:attribute name="exibeTituloMobile" type="Boolean" default="true"/>
+    <aura:attribute name="dataLoadSucess" type="Boolean" default="true"/>
+    <aura:attribute name="emptyData" type="Boolean" default="false"/>
+    <aura:attribute name="viewOptions" type="List" default="[
+    {'label': 'Todos', 'value': 'Todos'},
+    {'label': 'Abertos', 'value': 'Abertos'},
+    {'label': 'Fechados', 'value': 'Fechados'},
+    ]"/>
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    <aura:attribute name="viewSelected" type="String" default="Todos"/>
+    <aura:attribute name="errorMessage" type="String" default="Mensagem de erro dinâmica que exibe qual erro foi gerado na tentativa de trazer os dados"/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="pageReference" type="Object"/>
+    <aura:attribute name="url" type="String"/>
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Histórico de Demandas</b>
+        </h1>
+    </aura:attribute>
+    <aura:attribute name="accordionLabel" type="String" default="Histórico"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />  
+    
+    <lightning:card class="" variant="narrow" title="{!v.headerTitle}" iconName="standard:date_time">
+        <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+            <lightning:accordionSection name="A" label="{!v.accordionLabel}">         
+                <div class="slds-box slds-m-bottom_medium">                        
+                    <aura:if isTrue="{!v.isLoading}">
+                        <lightning:spinner alternativeText="Carregando..." size="medium" />
+
+                        <aura:set attribute="else">                            
+                            <aura:if isTrue="{!(v.emptyData)}">
+                                <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                                    {!v.errorMessage}
+                                </div>
+                                <aura:set attribute="else">      
+                                    <aura:if isTrue="{!(!v.dataLoadSucess)}">
+                                        <div class="slds-grid slds-p-horizontal_large slds-m-bottom_x-small slds-align_absolute-center">
+                                            <b>Atenção</b>       
+                                        </div>
+                                        <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                                            {!v.errorMessage}
+                                        </div>
+                                        
+                                        <div class="slds-grid slds-align_absolute-center">
+                                            <div class="slds-m-top_x-small">
+                                                <lightning:buttonIcon class="forceListViewManagerHeader" iconName="utility:refresh" alternativeText="Recarregar Informações" onclick="{!c.onInit}" />                                    
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid slds-align_absolute-center slds-m-top_x-small">
+                                            Recarregar
+                                        </div>                        
+                                        <aura:set attribute="else">
+
+                                            <div class="slds-grid slds-gutters">
+                                                <div class="slds-col slds-size_1-of-3 slds-m-left_medium slds-m-bottom_medium">
+                                                    <lightning:combobox name="progress" label="Visualizar" value="{!v.viewSelected}" options="{!v.viewOptions}" onchange="{!c.changeComboboxFilter}"/>
+                                                </div>
+                                            </div>
+
+                                            <aura:iteration items="{!v.data}" var="item">
+                                                <div class="slds-m-horizontal_small slds-grid slds-wrap">
+                                                    <div class="slds-scrollable--y">
+                                                        <table class="slds-table slds-table_fixed-layout">
+                                                            <thead class="slds-assistive-text">
+                                                                <tr>
+                                                                    <th class="slds-truncate slds-table--cell-buffer " scope="col" >
+                                                                        <div class="slds-grid slds-has-flexi-truncate">
+                                                                            <div class="slds-truncate" title="Date">Data</div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th class="slds-truncate slds-table--cell-buffer " scope="col" >
+                                                                        <div class="slds-grid slds-has-flexi-truncate">
+                                                                            <div class="slds-truncate" title="Description">Descrição</div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th class="slds-truncate slds-table--cell-buffer" scope="col">
+                                                                        <div class="slds-grid slds-has-flexi-truncate">
+                                                                            <div class="slds-truncate" title="Status">Status</div>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr class="">
+                                                                    <td data-label="Close Date">
+                                                                        <div class="slds-truncate" title="{!item.date}" style="text-align:left; width: 80px">{!item.StartDate}</div>
+                                                                    </td>
+                                                                    <td data-label="Subject" style="width: 290px;">
+                                                                        <div class="slds-truncate" title="{!item.Description}" style="text-align:left">{!item.DescriptionLabel}</div>
+                                                                    </td>
+                                                                    <td data-label="Status " >
+                                                                        <div class="slds-truncate" title="{!item.status}" style="text-align:right">{!item.Status}</div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>  
+                                                </div>
+                                            </aura:iteration>                    
+                    
+                                            <div class="slds-m-top_medium slds-align_absolute-center">
+                                                <!-- <lightning:button variant="base" label="Ver mais" title="Base action" onclick="{! c.handleClick }"/> -->
+                                                <lightning:formattedUrl value="{!'/lightning/cmp/c__Solar_Cross_ProtocolHistoryDetail?c__recordId=' + v.recordId}" 
+                                                    label="Ver mais"
+                                                    target="_self"
+                                                    tooltip="Clique aqui para o Histórico de Demandas completo"
+                                                    class="slds-m-bottom_medium"/>
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>  
+                                </aura:set>
+                            </aura:if>                      
+                        </aura:set>
+                    </aura:if>                
+                </div>   
+            </lightning:accordionSection>
+        </lightning:accordion>     
+    </lightning:card>
+</aura:component>

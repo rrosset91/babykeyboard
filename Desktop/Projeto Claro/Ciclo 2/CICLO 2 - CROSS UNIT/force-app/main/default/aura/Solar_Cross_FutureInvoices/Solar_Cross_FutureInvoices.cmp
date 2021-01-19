@@ -1,0 +1,105 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_FutureInvoiceController">
+	
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String"/>
+    <aura:attribute name="defaultSortDirection" type="String" default="asc"/>
+    <aura:attribute name="futureReleases" type="Object[]"/>
+    <aura:attribute name="hundredFutureReleases" type="Object[]"/>
+    <aura:attribute name="allFutureReleases" type="Object[]"/>
+    <aura:attribute name="totalPages" type="Integer"/>
+    <aura:attribute name="pageNumber" type="Integer"/>
+    <aura:attribute name="pageSize" type="Integer"/>
+    <aura:attribute name="contractId" type="String" />
+    <aura:attribute name="objCase" type="Case" />
+    <aura:attribute name="operatorId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="hasMoreRecords" type="Boolean" default="false"/>
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    <aura:attribute name="hasError" type="Boolean" default="false"/>
+    <aura:attribute name="isMobile" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="hasRecords" type="Boolean" default="true"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    
+    <div class="custom-padding">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="large" />
+            </aura:if>
+        
+        <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+        <lightning:accordionSection name="A" label="Lançamentos Futuros">  
+            
+                <div class="custom-padding">
+
+                <aura:if isTrue="{!and(v.hasRecords,!v.hasError)}">
+                    <lightning:datatable 	keyField="id"
+                                            columns="{!v.columns }"
+                                            data="{!v.futureReleases}"
+                                            hideCheckboxColumn="true"
+                                            sortedDirection="{!v.sortedDirection}"
+                                            defaultSortDirection="{!v.defaultSortDirection}"
+                                            sortedBy = "{!v.sortedBy}"
+                                            onsort="{!c.onSort}"                                         
+                                            />
+                    <aura:if isTrue="{!v.isMobile}">
+                        <div class="slds-float_right slds-grid slds-gutters">
+                            <div class="slds-col slds-m-top_x-small">
+                                <lightning:button label='Mostrar Mais' onclick="{!c.openModal}"/>
+                            </div>
+                        </div>
+                    </aura:if>
+                </aura:if>
+                <aura:if isTrue="{!and(!v.hasRecords,!v.hasError)}">
+                    <div class="slds-text-heading_small slds-text-align_center custom-padding-text">Não foram encontrados eventos para esse registro</div>
+                </aura:if>
+                <aura:if isTrue="{!v.hasError}">
+                    <div class="slds-text-heading_small slds-text-align_center custom-padding-text">Ocorreu um erro ao buscar as informações</div>
+                </aura:if>
+                </div> 
+        <aura:if isTrue="{and(v.hasMoreRecords,!v.isMobile)}">
+            <div class="slds-text-heading_small slds-text-align_center custom-padding-text">{!$Label.c.MoreFutureInvoices}</div>
+        </aura:if>
+            
+            </lightning:accordionSection>
+        </lightning:accordion>
+    </div>
+    <aura:if isTrue="{!v.showModal}">
+        <div class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div style="float:right;">
+                    <lightning:buttonIcon iconName="utility:close" alternativeText="Close" title="Close" onclick="{!c.handleCloseModal}" variant="bare-inverse" class="slds-float_right"/>
+                </div>
+                <div class="slds-modal__header">
+                    <h2 class="title slds-text-heading--medium">Todos os registros</h2>
+                </div>
+                    <div class="slds-modal__content slds-p-around--medium">
+                    
+                    <lightning:datatable 	keyField="id"
+                                            columns="{!v.columns }"
+                                            data="{!v.hundredFutureReleases}"
+                                            hideCheckboxColumn="true"
+                                            sortedDirection="{!v.sortedDirection}"
+                                            defaultSortDirection="{!v.defaultSortDirection}"
+                                            sortedBy = "{!v.sortedBy}"
+                                            onsort="{!c.onSort}"                                         
+                    />
+                    <div class="slds-float_right slds-grid slds-gutters">
+                        <div class="slds-col slds-m-top_x-small">
+                            <lightning:buttonIcon iconName="utility:chevronleft" onclick="{!c.handleOnPrevious}" disabled="{!v.pageNumber == 1}"/>
+                        </div>
+                        <div class="slds-col slds-m-top_small">
+                            <span>{!v.pageNumber} de {!v.totalPages}</span>
+                        </div>
+                        <div class="slds-col slds-m-top_x-small">
+                            <lightning:buttonIcon iconName="utility:chevronright" onclick="{!c.handleOnNext}" disabled="{!v.pageNumber == v.totalPages}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+</aura:component>

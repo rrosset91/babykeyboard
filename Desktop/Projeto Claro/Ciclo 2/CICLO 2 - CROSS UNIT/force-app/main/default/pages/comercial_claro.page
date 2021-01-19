@@ -1,0 +1,89 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+    <div class="vlocity via-slds" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="Simulaçãocssteste">
+        <vlocity_cmt:BusinessProcessComponent strOmniScriptType="CEC"
+            strOmniScriptSubType="Atendimiento"
+            strOmniScriptLang="Portuguese (Brazil)"
+            previewMode="{!$CurrentPage.parameters.previewEmbedded}"
+            verticalMode="{!$CurrentPage.parameters.verticalMode}"
+            strOmniScriptId="{!$CurrentPage.parameters.designerPreviewId}"
+            scriptLayout="lightning"
+            />
+        <script type="text/javascript">
+            var modules = ['vlocity-business-process'];
+            var myModule = angular.module('Simulaçãocssteste', modules);
+        </script>
+<style>
+.vlc-slds-right--panel.ng-scope {display: none;} /*remover quando for para produção*/
+
+
+.via-slds.via-omni .vlc-slds-select-control.ng-dirty.ng-valid .slds-select_container {border-color: #ccc !important;}
+
+input, select {
+    height: 41px;
+    padding: 0px;
+    margin: 0px;
+    min-height: auto;
+    font-size: 12px;
+}
+label {
+    font-size: 13px !important;
+    color: #706e6b !important;
+}
+label.slds-form-element__label.ng-binding.ng-scope {
+    font-size: 13px !important;
+    font-weight: 100 !important;
+}
+.via-slds .slds-input {
+    font-size: 12px !important;
+    color:#706e6b !important;
+}
+.via-slds .slds-icon--small {
+    width: 15px;
+    fill: #706e6b !important;
+}
+input {
+    border: solid 1px #ccc !important;
+}
+ng-form#TextBlock2 div p {
+    font-size: 16px !important;
+    color: #1f577b !important;
+}
+ng-form#LabelDatosCliente div p {
+    font-size: 16px !important;
+    color: #1f577b !important;
+}
+ng-form#TextBlock6 div p {
+    font-size: 16px !important;
+    color: #1f577b !important;
+}
+div#StepValidaçãoDadosCliente_nextBtn {background:#1f577b !important;}
+div#StepValidaçãoDadosCliente_nextBtn p {color:#ffffff !important;font-weight: bold;}
+div#StepValidaçãoDadosCliente_redirectBtn0 {background:#706e6b !important;}
+div#StepValidaçãoDadosCliente_redirectBtn0 p {color:#ffffff !important;font-weight: bold;}
+
+.ng-binding {
+    FONT-SIZE: 12px !important;
+    color: #706e6b !important;
+}
+@media (min-width: 50em) {
+.via-slds.via-omni .slds-select_container>span:first-child, .via-slds.via-omni .vlc-control-wrapper>.slds-input, .via-slds.via-omni .vlc-control-wrapper>.slds-select, .via-slds.via-omni .vlc-control-wrapper>.slds-textarea {font-size: 12px !important;
+}
+@media (min-width: 80em) {
+child.slds-size--1-of-1.slds-medium-size--1-of-12 {width:calc(20% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--2-of-12 {width:calc(20% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--3-of-12 {width:calc(20% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--4-of-12 {width:calc(40% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--6-of-12 {width:calc(40% - 10px) !important;}
+}
+@media (max-width: 48em) {
+child.slds-size--1-of-1.slds-medium-size--1-of-12 {width:calc(50% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--2-of-12 {width:calc(50% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--3-of-12 {width:calc(50% - 10px) !important;}
+child.slds-size--1-of-1.slds-medium-size--4-of-12 {width:100% !important;}
+child.slds-size--1-of-1.slds-medium-size--6-of-12 {width:100% !important;}
+}
+</style>
+    </div>
+    <vlocity_cmt:VFActionFunction />
+</apex:page>

@@ -1,0 +1,168 @@
+.THIS .generate-bill 
+{
+	display: flex;
+	width: 100%;
+	justify-content: flex-start;
+	align-items: baseline;
+	flex-wrap: wrap;
+}
+
+.THIS .generate-bill button
+{
+    height: 32px;
+    color: #da281c;
+    border: 1px #C1C1C1 solid;
+	border-radius: 4px;
+}
+
+.THIS .valorTotalFatura{
+	border-top: 1px solid #999999;
+}
+
+.THIS .generate-bill h1
+{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 15px;
+	font-weight: 300;
+}
+
+.THIS .space-above
+{
+	flex-basis: 100%;
+}
+
+.THIS .space-above button
+{
+	padding-left: 6%;
+    padding-right: 6%;
+}  
+
+.THIS .credit-options
+{
+	padding-left: 3%;
+    padding-right: 3%;
+}
+
+.THIS .selected
+{
+	background-color: rgb(221, 219, 218);
+}
+
+.THIS .custom-header
+{
+    color: #1D3861;
+    font-weight: 400;
+    font-size: x-large;
+}
+
+.THIS .custom-padding
+{
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.THIS lightning-primitive-header-actions 
+{
+    display: none;
+}
+
+.THIS .slds-grid_align-end
+{
+    justify-content: left !important; 
+}
+
+.THIS .slds-cell-fixed
+{
+    background-color: white;
+}
+
+.THIS .slds-scrollable_x
+{
+    overflow-x: hidden;
+}
+
+.THIS .detail-text
+{
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.THIS.last-row-bold table tr:last-child * 
+{
+    font-weight: 800;
+}
+
+.THIS .custom-buttons button:disabled
+{
+	border: 1px solid #999999;
+  	background-color: #cccccc;
+  	color: #666666;
+}
+
+.THIS .text-align-original
+{
+	/*text-align: center;*/
+}
+
+.THIS .valor-Original
+{
+	padding-top: 0.75rem;
+	width: 150px;
+	margin-left: -85px;
+}
+
+.THIS .valor-Corrigido
+{
+	padding-top: 0.75rem;
+	width: 150px;
+	margin-left: -80px;
+}
+
+.cFinanceiro_FormaCredito .text-align 
+{
+    /* text-align: center; */
+    margin-left: 62px; 
+}
+
+.THIS .buttonCancel 
+{
+    margin-right: 220px;
+	width: 30%;
+}
+.THIS .custom-footer{
+	display:flex;
+	width: 100%;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.THIS .modal-buttons{
+	height: 100%;
+    width: 100%;
+    display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.THIS .modal-buttons button{
+	height: fit-content;
+}
+.THIS .modal-buttons .sendDuplicateCancel{
+	height: fit-content;
+    margin: auto;
+    align-items: center;
+    width: 5rem;
+}
+.THIS .modal-buttons .sendDuplicateSubmit{
+	height: fit-content;
+    margin: auto;
+    color: #FFFFFF;
+    align-items: center;
+    width: 5rem;
+}
+
+.THIS .radioTipoReembolso{
+	padding-bottom: 0.75rem;
+}

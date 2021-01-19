@@ -1,0 +1,161 @@
+<aura:component implements="lightning:recordHomeTemplate" description="One Header, Three Columns and Four Divisions Custom Record Page" access="global">
+    
+	<aura:attribute name="top"						type="Aura.Component[]" />
+	<aura:attribute name="path"						type="Aura.Component[]" />
+    <aura:attribute name="left"						type="Aura.Component[]" />
+	<aura:attribute name="polling"					type="Aura.Component[]" />
+	<aura:attribute name="action"					type="Aura.Component[]" />
+	<aura:attribute name="offer"					type="Aura.Component[]" />
+	<aura:attribute name="ending"					type="Aura.Component[]" />
+    <aura:attribute name="right"					type="Aura.Component[]" />
+    
+	<aura:attribute name="isHeaderCollapsed"		type="Boolean" access="PRIVATE" default="false" />
+    <aura:attribute name="isSidebarLeftCollapsed"	type="Boolean" access="PRIVATE" default="true" />
+    <aura:attribute name="isSidebarRightCollapsed"	type="Boolean" access="PRIVATE" default="true" />
+	<aura:attribute name="isAllCollapsed"			type="Boolean" access="PRIVATE" default="false" />
+    <aura:attribute name="isFirstMoment"           	type="Boolean"					default="true" />
+    <aura:attribute name="isPolling"            	type="Boolean"					default="false" />
+	<aura:attribute name="isAction"            		type="Boolean"					default="false" />
+	<aura:attribute name="isOffer"            		type="Boolean"					default="false" />
+	<aura:attribute name="isEnding"            		type="Boolean"					default="false" />
+    <aura:attribute name="showPath"            		type="Boolean"					default="true" />
+	
+    <aura:attribute name="caseRecord" type="Case" />
+    <force:recordData aura:id="recordData" layoutType="FULL" recordId="{!v.recordId}" targetFields="{!v.caseRecord}"/>
+    <aura:handler value="{!v.caseRecord}" name="change" action="{!c.updateLayout}"  />
+    <aura:handler event="c:NBA_RefreshTabEvent" name="refresh"	action="{!c.updateMoment}"/>
+	
+    <div>
+        <lightning:layout multipleRows="true" class="slds-wrap">
+            
+			
+            <!-- HEADER -->
+            <lightning:layoutItem size="12" flexibility="auto" class="{! v.isHeaderCollapsed ? ' slds-hide' : '' }">
+                {! v.top }
+            </lightning:layoutItem>
+			
+			<!-- HEADER TOGGLER -->
+            <lightning:layoutItem size="12" flexibility="no-flex">
+				<div class="">
+					<lightning:buttonIcon 
+						onclick ="{! c.toggleSectionHeader }" 
+						class="toggle button-header slds-align_absolute-center slds-is-open slds-button_icon-xx-small slds-button_icon-border"
+						variant="border-filled"
+						iconName="{! v.isHeaderCollapsed ? 'utility:down' : 'utility:up' }" 
+						size="small"
+					/>
+                </div>
+            </lightning:layoutItem>
+
+
+			<!-- PATH -->
+			<lightning:layoutItem size="12" flexibility="auto" >
+				<div class="slds-grid">
+					
+					<!-- PATH BUTTONS -->
+					<aura:if isTrue="{!v.showPath}" >
+                        <div class="slds-size_11-of-12">
+                            {! v.path }
+                        </div>
+                    </aura:if>
+					
+					<!-- PATH EXPANDER -->
+					<div class="slds-size_1-of-12">
+						<lightning:buttonIcon 
+							onclick="{! c.expandContractAll }"
+							class="button-expand"
+							variant="bare"
+							iconName="{! v.isAllCollapsed ? 'utility:contract' : 'utility:expand' }" 
+							size="large"
+						/>	
+					</div>
+					
+				</div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="12" flexibility="auto" class="bottom-content" >
+                <lightning:layout>
+                    
+					
+                    <!-- SIDEBAR LEFT -->
+                    <lightning:layoutItem size="2" flexibility="auto" class="{! 'slds-box ' + (v.isSidebarLeftCollapsed ? ' slds-hide' : '') }">
+                        {! v.left }
+                    </lightning:layoutItem>
+                    
+					<!-- SIDEBAR LEFT TOGGLER -->
+                    <lightning:layoutItem flexibility="no-flex">
+                        <lightning:buttonIcon 
+							onclick ="{! c.toggleSectionSidebarLeft }"
+                            class="design-allow-interaction toggle split-toggle button-sidebar slds-split-view__toggle-button slds-is-open slds-button_icon-xx-small slds-button_icon-border cardLeft"
+                            variant="border-filled"
+                            iconName="{! v.isSidebarLeftCollapsed ? 'utility:right' : 'utility:left' }" 
+                            size="small"
+						/>
+                	</lightning:layoutItem>
+                    
+
+					<table cellspacing="0" cellpadding="0" border="0">
+					
+						<!-- POLLING -->
+						<aura:if isTrue="{!v.isPolling}" >
+							<tr><td>
+								<lightning:layoutItem size="12" flexibility="auto" class="slds-box">
+									<div style="padding-right:2rem">{! v.polling }</div>
+								</lightning:layoutItem>
+							</td></tr>
+						</aura:if>
+					
+						<!-- ACTION -->
+						<aura:if isTrue="{!v.isAction}" >
+							<tr><td>
+								<lightning:layoutItem size="12" flexibility="auto" class="slds-box">
+									<div style="padding-right:2rem">{! v.action }</div>
+								</lightning:layoutItem>
+							</td></tr>
+						</aura:if>
+
+						<!-- OFFER -->
+						<aura:if isTrue="{!v.isOffer}" >
+							<tr><td>
+								<lightning:layoutItem size="12" flexibility="auto" class="slds-box">
+									<div style="padding-right:2rem">{! v.offer }</div>
+								</lightning:layoutItem>
+							</td></tr>
+						</aura:if>
+						
+						<!-- ENDING -->
+						<aura:if isTrue="{!v.isEnding}" >
+							<tr><td>
+								<lightning:layoutItem size="12" flexibility="auto" class="slds-box">
+									<div style="padding-right:2rem">{! v.ending }</div>
+								</lightning:layoutItem>
+							</td></tr>
+						</aura:if>
+					
+					</table>
+					
+					
+					<!-- SIDEBAR RIGHT -->
+					<lightning:layoutItem flexibility="no-flex">
+						<lightning:buttonIcon 
+							onclick ="{! c.toggleSectionSidebarRight }"
+							class="design-allow-interaction toggle button-sidebar slds-split-view__toggle-button slds-is-open slds-button_icon-xx-small slds-button_icon-border cardRight"
+							variant="border-filled"
+							iconName="{! v.isSidebarRightCollapsed ? 'utility:left' : 'utility:right' }" 
+							size="small"
+						/>
+					</lightning:layoutItem>
+					
+					<!-- SIDEBAR RIGHT -->
+					<lightning:layoutItem size="3" flexibility="auto" class="{! 'slds-box ' + (v.isSidebarRightCollapsed ? ' slds-hide' : '') }">
+                        {! v.right }
+                    </lightning:layoutItem>
+					
+					
+                </lightning:layout>
+            </lightning:layoutItem>
+			
+        </lightning:layout>
+    </div>
+	
+</aura:component>

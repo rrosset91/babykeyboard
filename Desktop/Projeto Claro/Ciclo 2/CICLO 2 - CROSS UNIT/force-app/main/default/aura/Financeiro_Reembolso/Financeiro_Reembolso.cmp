@@ -1,0 +1,342 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" controller="InvoiceRefundController" extends="c:Utils">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<aura:attribute name="tipoPessoa" type="List" default="[]" />
+	<aura:attribute name="tipoConta" type="List" default="[]" />
+	<aura:attribute name="bancoReembolso" type="List" default="[]" />
+	<aura:attribute name="motivoReembolso" type="List" default="[]" />
+	<aura:attribute name="nomeCliente" type="string" default="[]" />
+	<aura:attribute name="data" type="Object" />
+	<aura:attribute name="bill" type="Object" />
+	<aura:attribute name="mocktrue" type="Boolean" default="True" />
+	<!-- layout controler -->
+	<aura:attribute name="layoutReembolsoCC" type="Boolean" default="false" />
+	<aura:attribute name="layoutTipoPessoaFisica" type="Boolean" default="false" />
+	<aura:attribute name="layoutTipoPessoaJuridica" type="Boolean" default="false" />
+	<aura:attribute name="showSecond" type="Boolean" />
+	<aura:attribute name="dialogModal" type="Boolean" default="false" />
+	<aura:attribute name="refundcc" type="Boolean" default="false" />
+
+	<!--ATRIBUTOS DO MODAL MESSAGE-->
+	<aura:attribute name="title" type="String" />
+	<aura:attribute name="typeIcon" type="String" />
+	<aura:attribute name="typeVariant" type="String" />
+	<aura:attribute name="message" type="String" />
+	<aura:attribute name="showButton1" type="Boolean" default="false" />
+	<aura:attribute name="showButton2" type="Boolean" default="true" />
+	<aura:attribute name="onClickButton1" type="string" default="{!c.closeModal}" />
+	<aura:attribute name="onClickButton2" type="string" default="{!c.closeModalFicha}" />
+	<aura:attribute name="showButtonX" type="Boolean" default="true" />
+
+	<!--VARIAVEIS DO FORMULARIO-->
+	<aura:attribute name="nomeTitular" type="String" />
+	<aura:attribute name="cpf" type="String" />
+	<aura:attribute name="cnpj" type="String" />
+	<aura:attribute name="banco" type="String" />
+	<aura:attribute name="agencia" type="Integer" />
+	<aura:attribute name="conta" type="Integer" />
+	<aura:attribute name="digito" type="Integer" />
+	<aura:attribute name="titular" type="String" />
+	<aura:attribute name="motivoReemb" type="String" />
+	<aura:attribute name="reembDobro" type="boolean" default="false" />
+	<aura:attribute name="ddd" type="String" />
+	<aura:attribute name="telefone" type="String" />
+	<aura:attribute name="ddd2" type="String" />
+	<aura:attribute name="telefone2" type="String" />
+	<aura:attribute name="dddSMS" type="String" />
+	<aura:attribute name="telefoneSMS" type="String" />
+	<aura:attribute name="descricao" type="String" />
+	<aura:attribute name="pessoa" type="String" />
+	<aura:attribute name="email" type="String" />
+	<aura:attribute name="vencimentoFatura" type="Date" />
+	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="hasAuthority" type="String" />
+	<aura:attribute name="caseId" type="String" />
+
+	<div class="container">
+		<div class="divDadosParaContato slds-p-left_xx-small">
+			<div class="slds-m-top_small">{!$Label.c.Reembolso_Titulo}</div>
+
+			<div class="slds-m-top_large">
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_x-small">{!$Label.c.Reembolso_Tipo_de_Pessoa} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+						<lightning:combobox
+							class=""
+							aura:id="field"
+							variant="label-hidden"
+							name="tipoPessoa"
+							value="{!v.pessoa}"
+							placeholder=""
+							required="true"
+							options="{!v.tipoPessoa}"
+							onchange="{!c.handleChangeTipoPessoa}"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</div>
+
+			<aura:if isTrue="{!v.refundcc}">
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_large">{!$Label.c.Reembolso_Tipo_de_Conta} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+						<lightning:combobox
+							class="slds-p-top_medium"
+							aura:id="field"
+							variant="label-hidden"
+							required="true"
+							name="tipoConta"
+							value="{!v.titular}"
+							placeholder=""
+							options="{!v.tipoConta}"
+							onchange="{!c.handleChangeTitular}"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:if>
+
+			<lightning:layout horizontalAlign="and end">
+				<div class="slds-m-top_large">{!$Label.c.Reembolso_Nome_Titular} &nbsp;</div>
+				<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="7" largeDeviceSize="7">
+					<lightning:input class="slds-p-top_medium" aura:id="field" name="nomeCliente" maxlength="65" value="{!v.nomeTitular}" required="true" variant="label-hidden" />
+				</lightning:layoutItem>
+			</lightning:layout>
+
+			<aura:if isTrue="{!v.layoutTipoPessoaFisica}">
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_large">{!$Label.c.Reembolso_CPF} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+						<lightning:input
+							class="slds-p-top_medium"
+							aura:id="field"
+							maxlength="11"
+							minlength="11"
+							type="text"
+							pattern="[0-9]{11}"
+							name="cpfCliente"
+							id="cpfCliente"
+							required="true"
+							value="{!v.cpf}"
+							variant="label-hidden"
+							message-when-pattern-mismatch="Apenas números 11 caracteres"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:if>
+
+			<aura:if isTrue="{!v.layoutTipoPessoaJuridica}">
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_large">{!$Label.c.Reembolso_CNPJ} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+						<lightning:input
+							class="slds-p-top_medium"
+							aura:id="field"
+							id="cpfCliente"
+							name="cpfCliente"
+							required="true"
+							maxlength="14"
+							minlength="14"
+							type="text"
+							pattern="[0-9]{14}"
+							value="{!v.cnpj}"
+							variant="label-hidden"
+							message-when-pattern-mismatch="Apenas números 14 caracteres"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:if>
+
+			<aura:if isTrue="{!v.refundcc}">
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_large">{!$Label.c.Reembolso_Banco} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+						<lightning:combobox
+							class="slds-p-top_medium"
+							aura:id="field"
+							name="tipoPessoa"
+							variant="label-hidden"
+							value="{!v.banco}"
+							placeholder=""
+							required="true"
+							options="{!v.bancoReembolso}"
+							onchange="{!c.handleChangeBanco}"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_large">{!$Label.c.Reembolso_Agencia} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="1" largeDeviceSize="1">
+						<lightning:input
+							class="slds-p-top_medium"
+							type="number"
+							aura:id="field"
+							name="agencia"
+							maxlength="4"
+							required="true"
+							value="{!v.agencia}"
+							variant="label-hidden"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+
+				<lightning:layout horizontalAlign="and end">
+					<div class="slds-m-top_large">{!$Label.c.Reembolso_Conta_Corrente} &nbsp;</div>
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+						<lightning:input
+							class="slds-p-top_medium"
+							aura:id="field"
+							type="number"
+							name="contaCorrente"
+							maxlength="8"
+							value="{!v.conta}"
+							required="true"
+							variant="label-hidden"
+						/> </lightning:layoutItem
+					>&nbsp; &nbsp;
+					<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="1" largeDeviceSize="1">
+						<lightning:input
+							class="slds-p-top_medium"
+							aura:id="field"
+							name="digitpContaCorrente"
+							maxlength="2"
+							required="true"
+							type="number"
+							value="{!v.digito}"
+							variant="label-hidden"
+						/>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:if>
+
+			<lightning:layout horizontalAlign="and end">
+				<div class="slds-m-top_large">{!$Label.c.Reembolso_Motivo} &nbsp;</div>
+				<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="6" largeDeviceSize="6">
+					<lightning:combobox
+						class="slds-p-top_medium"
+						aura:id="field"
+						name="tipoPessoa"
+						variant="label-hidden"
+						value="{!v.motivoReemb}"
+						required="true"
+						placeholder=""
+						options="{!v.motivoReembolso}"
+						onchange="{!c.handleChangeReason}"
+					/>
+				</lightning:layoutItem>
+			</lightning:layout>
+
+			<div class="slds-p-top_medium">{!$Label.c.Reembolso_em_Dobro}</div>
+			<lightning:layout horizontalAlign="and end">
+				<div class="slds-p-top_medium">Não &nbsp;</div>
+				<div class="slds-p-top_medium" id="idToggle">
+					<lightning:input class="inputReembolsoEmDobro" aura:id="field" type="toggle" checked="{!v.reembDobro}" variant="label-hidden" name="reembolsoEmDobro" />
+				</div>
+				<div class="slds-p-top_medium">&nbsp; Sim</div>
+			</lightning:layout>
+		</div>
+
+		<div class="divTelefones slds-p-left_xx-small">
+			<div class="slds-p-top_medium" align="left">{!$Label.c.Reembolso_Solicitar_telefones}</div>
+			<div class="slds-p-top_medium" align="left">{!$Label.c.Reembolso_Dados_Contato}</div>
+			<div class="slds-grid slds-p-top_xx-small">
+				<div class="slds-col">
+					<div class="textoTelefone">{!$Label.c.Reembolso_Tem_1}</div>
+					<lightning:layout horizontalAlign="and end">
+						<lightning:layoutItem size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="2">
+							<lightning:input aura:id="field" type="tel" name="input1" required="true" maxlength="2" minlength="2" value="{!v.ddd}" variant="label-hidden" />
+						</lightning:layoutItem>
+						<div>&nbsp;&nbsp;</div>
+						<lightning:layoutItem size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="5">
+							<lightning:input aura:id="field" type="tel" name="input1" required="true" maxlength="9" minlength="8" value="{!v.telefone}" variant="label-hidden" />
+						</lightning:layoutItem>
+					</lightning:layout>
+				</div>
+				<div class="slds-col">
+					<div class="textoTelefone">{!$Label.c.Reembolso_Tel_2}</div>
+					<lightning:layout horizontalAlign="and end">
+						<lightning:layoutItem size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="2">
+							<lightning:input aura:id="field" type="tel" name="input1" required="true" maxlength="2" minlength="2" value="{!v.ddd2}" variant="label-hidden" />
+						</lightning:layoutItem>
+						<div>&nbsp;&nbsp;</div>
+						<lightning:layoutItem size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="5">
+							<lightning:input aura:id="field" type="tel" name="input1" required="true" maxlength="9" minlength="8" value="{!v.telefone2}" variant="label-hidden" />
+						</lightning:layoutItem>
+					</lightning:layout>
+				</div>
+				<div class="slds-col">
+					<div class="textoTelefone">{!$Label.c.Reembolso_Celular}</div>
+					<lightning:layout horizontalAlign="and end">
+						<lightning:layoutItem size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="2">
+							<lightning:input aura:id="field" type="tel" name="input1" maxlength="2" minlength="2" required="true" value="{!v.dddSMS}" variant="label-hidden" />
+						</lightning:layoutItem>
+						<div>&nbsp;&nbsp;</div>
+						<lightning:layoutItem size="3" smallDeviceSize="12" mediumDeviceSize="3" largeDeviceSize="5">
+							<lightning:input aura:id="field" type="tel" name="input1" maxlength="9" minlength="8" required="true" value="{!v.telefoneSMS}" variant="label-hidden" />
+						</lightning:layoutItem>
+					</lightning:layout>
+				</div>
+			</div>
+		</div>
+		<div classe="divVencimentoEmail">
+			<div class="slds-p-top_medium slds-p-left_xx-small">{!$Label.c.Reembolso_Vencimento_Fatura}</div>
+			<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2">
+				<lightning:input
+					class="slds-p-top_medium slds-p-left_xx-small"
+					name="input1"
+					type="date"
+					aura:id="field"
+					maxlength="10"
+					required="true"
+					value="{!v.vencimentoFatura}"
+					label="{!$Label.c.Reembolso_Data_Vencimento}"
+				/>
+			</lightning:layoutItem>
+			<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="5" largeDeviceSize="5">
+				<lightning:input type="email" class="slds-p-top_medium slds-p-left_xx-small" name="input1" maxlength="45" value="{!v.email}" label="{!$Label.c.Reembolso_Email}" />
+			</lightning:layoutItem>
+			<lightning:layoutItem padding="around-none" size="12" smallDeviceSize="12" mediumDeviceSize="11" largeDeviceSize="11">
+				<lightning:textarea
+					class="slds-p-top_medium slds-p-left_xx-small"
+					aura:id="field"
+					name="input1"
+					label="{!$Label.c.Reembolso_Observacao}"
+					maxlength="140"
+					value="{!v.descricao}"
+					required="true"
+					id="textAreaObservacao"
+				/>
+			</lightning:layoutItem>
+		</div>
+		<div classe="divFooter">
+			<div class="slds-p-top_medium slds-p-left_xx-small">{!$Label.c.Reembolso_importante}</div>
+			<div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small" align="right">
+				<lightning:button
+					class="buttonGerar"
+					variant="destructive"
+					label="{!$Label.c.Reembolso_botao_Gerar}"
+					title="Destructive action"
+					type="submit"
+					onclick="{!c.handleClick}"
+				/>
+			</div>
+		</div>
+		<aura:if isTrue="{!v.dialogModal}">
+			<c:modalMessage
+				aura:id="modalMessage"
+				title="{!v.title}"
+				typeIcon="{!v.typeIcon}"
+				typeVariant="{!v.typeVariant}"
+				message="{!v.message}"
+				showButton1="false"
+				showButton2="{!v.showButton2}"
+				textbutton1="{!$Label.c.Reembolso_Botao_Fechar}"
+				textbutton2="{!$Label.c.Reembolso_Botao_Fechar_ir_Ficha}"
+				onClickButton1=""
+				onClickButton2="{!c.onClickButton2}"
+				showButtonX="{!v.showButtonX}"
+			/>
+		</aura:if>
+	</div>
+</aura:component>

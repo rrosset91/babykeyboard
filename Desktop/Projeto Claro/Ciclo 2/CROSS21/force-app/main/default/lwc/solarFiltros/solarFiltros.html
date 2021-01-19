@@ -1,0 +1,69 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 10-12-2020
+  @last modified by  : Joao Neves
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   10-12-2020   Joao Neves   Initial Version
+-->
+<template>
+	<lightning-layout>
+		<lightning-layout-item size="2">
+			<lightning-combobox label="Período" value={valuePeriod} options={optionsPeriod} onchange={handleChangePeriod}></lightning-combobox>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="2" padding="horizontal-small">
+			<span if:true={showMsisdn}>
+				<lightning-combobox
+					field-level-help="Listagem das linhas ativas do contrato"
+					label="Linha"
+					value={valueMsisdn}
+					placeholder={defaultMsisdn}
+					options={optionsMsisdn}
+					onchange={handleChangeMsisdn}
+					if:true={showMsisdn}
+				></lightning-combobox>
+			</span>
+			<span if:false={showMsisdn}>
+				<lightning-combobox
+					label="Status"
+					value={value}
+					placeholder="Todos"
+					options={optionsStatus}
+					onchange={handleChangeStatus}
+					if:false={hideStatus}
+				></lightning-combobox>
+			</span>
+		</lightning-layout-item>
+
+		<lightning-layout-item size="6"></lightning-layout-item>
+
+		<lightning-layout-item size="2">
+			<div class="search-style">
+				<div data-id="search">
+					<lightning-input label="Busca" value={valueSearch} type="search" onchange={handleChange}></lightning-input>
+				</div>
+				<div class="refresh-style" if:true={allowRefresh}>
+					<lightning-button-icon icon-name="utility:refresh" title="Atualizar" onclick={handleRefresh}></lightning-button-icon>
+				</div>
+			</div>
+		</lightning-layout-item>
+	</lightning-layout>
+
+	<template if:true={isCustomPeriod}>
+		<lightning-layout vertical-align="center">
+			<lightning-layout-item size="2">
+				<lightning-input type="date" name="startDate" label="Inicio" value={startDate} onchange={handleDateChange}></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="2" padding="horizontal-small">
+				<lightning-input type="date" name="endDate" label="Fim" value={endDate} onchange={handleDateChange}></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-item size="1" alignment-bump="top">
+				<lightning-button variant="brand" label="Confirmar" onclick={handleCustomPeriod} disabled={customPeriodButtonDisabled}></lightning-button>
+			</lightning-layout-item>
+			<lightning-layout-item size="7" padding="horizontal-small"></lightning-layout-item>
+		</lightning-layout>
+	</template>
+</template>

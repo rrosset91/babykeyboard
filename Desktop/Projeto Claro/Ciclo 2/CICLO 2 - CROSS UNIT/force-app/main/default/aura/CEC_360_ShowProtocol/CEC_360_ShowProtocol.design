@@ -1,0 +1,3 @@
+<design:component>
+    <design:attribute label="Tipo de Protocolo" name="protocolType" datasource="Móvel,Ativo,Residencial" default="Móvel"/>
+</design:component>

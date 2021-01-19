@@ -1,0 +1,17 @@
+<design:component label="One Header, Three Columns and Four Divisions Custom Record Page">
+    <flexipage:template >
+        <!-- The default width for the "left" region is "MEDIUM". In tablets, the width is "SMALL" -->
+        	<flexipage:region name="top" defaultWidth="Large" />
+            <flexipage:region name="path" defaultWidth="Small" />
+            <flexipage:region name="left" defaultWidth="Medium">
+                <flexipage:formfactor type="Medium" width="Small" />
+            </flexipage:region>
+            <flexipage:region name="polling" defaultWidth="Medium" />
+            <flexipage:region name="action" defaultWidth="Medium" />
+            <flexipage:region name="offer" defaultWidth="Medium" />
+            <flexipage:region name="ending" defaultWidth="Medium" />
+            <flexipage:region name="right"  defaultWidth="Medium">
+                <flexipage:formfactor type="Medium" width="Small" />
+            </flexipage:region>        
+       </flexipage:template>
+</design:component>

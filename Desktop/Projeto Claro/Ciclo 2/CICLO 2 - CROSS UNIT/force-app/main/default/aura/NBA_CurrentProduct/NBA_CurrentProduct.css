@@ -1,0 +1,130 @@
+.THIS .box-header{
+    margin-top      :1rem       !important;
+    padding         :0.5rem     !important; 
+    width           :100%       !important;
+}
+
+.THIS .box-content{
+    font-size       :0.625rem   !important;
+    text-align      :center     !important;
+    width           :100%       !important; 
+}
+
+.THIS .box-footer{
+    margin-top      :1rem       !important;
+    font-size       :0.75rem    !important;
+    padding         :0.5rem     !important; 
+}
+
+.THIS .striped-border {
+    border          : 0.25px dashed 1px solid rgb(221, 219, 218);
+    width           : 90%;
+    margin          : auto;
+}
+
+.THIS .text-total{
+    font-size       : 0.75rem;
+    text-align		: center;
+}
+
+.THIS .text-degrade{
+    font-size       : 0.625rem;
+    text-align		: center;
+}
+
+.THIS .slds-col{
+    padding-right	:	0.1rem;
+    padding-left	:	0.1rem;
+}
+
+.THIS .slds-tile{
+    width			:100%;
+}
+
+.THIS .six-lines{
+    height			:6rem;
+}
+
+.THIS .three-lines{
+    height			:3rem;
+}
+
+.THIS .box-total{
+    height			:3rem;
+    margin-top		:0.5rem;
+    margin-bottom	:1rem;
+    padding			:0 1rem 0 1rem;
+}
+
+.THIS .box-icon img {
+    width         	: 150%      !important;
+    max-width      	: none      !important;
+    margin-left     : -1rem     !important;
+}
+
+.THIS .tax-box {
+    display         : table     !important;
+    margin-top      : 1rem      !important;
+    font-size       : smaller   !important;
+    padding-right   : 1rem;
+}
+
+.THIS .tax-box svg{
+    margin-left     : 0     !important;
+    margin-top      : 0     !important;
+    z-index         : 0     !important;
+    display         : inline !important; 
+}
+
+.THIS .custom-icon{
+    width           :30%;
+}
+
+.THIS .tx-icon{
+    width           :8%;
+}
+
+.THIS .custom-combobox{
+    display : -webkit-inline-box;
+    width   : 50%;
+    float   : right;
+    height  : 10px;
+    background      : white !important;
+}
+
+.THIS .text-footer-dif{
+    text-align	:center;
+    height		:2rem;
+}
+.THIS .padding-product{
+    padding-left: 1rem;
+}
+.THIS .padding-price{
+    padding-right: 1rem;
+}
+.THIS .display-grid{
+    display: grid !important;
+}
+.THIS .pad-grid{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.THIS .padding-striped-line{
+    padding:0 1rem 0 1rem;
+}
+
+.THIS .box-dif{
+    margin-top      :1rem;
+    padding         :0.5rem;
+    font-size       :0.75rem    !important;
+    width           :100%;
+    height			:3rem;
+}
+.THIS .selected {
+    border-color: rgba(0, 157, 227, 1) !important;
+    background  : rgb(229, 245, 252)   !important;
+}
+.THIS .cNBA_OfferComparator .selected{
+    background : none !important;
+}

@@ -1,0 +1,13 @@
+.THIS .full-width{
+	width: 100%;
+}
+
+.THIS #first-button{
+	width: 100%;
+	padding: 0 !important;
+}
+
+.THIS #first-button button{
+	width: 100% !important;
+    box-shadow: var(--lwc-cardShadow,0 2px 2px 0 rgba(0, 0, 0, 0.10));
+}

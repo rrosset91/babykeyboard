@@ -1,0 +1,125 @@
+.THIS .custom-padding {
+	padding-left: 0.75rem;
+	padding-right: 0.75rem;
+}
+
+.THIS .small-header {
+	color: #1d3861;
+	font-weight: 400;
+	font-size: large;
+	padding-top: 0.75rem;
+}
+
+.THIS .slds-cell-fixed {
+	background-color: white;
+}
+
+.THIS .slds-scrollable_x {
+	overflow-x: hidden;
+}
+
+.THIS .no-data {
+	text-align: center;
+	width: 100%;
+	display: inherit;
+	margin-top: 3%;
+	justify-content: center;
+}
+
+.THIS .no-data img {
+	width: 45%;
+	height: 45%;
+}
+
+.THIS .no-data h3 {
+	font-weight: 400;
+	font-size: large;
+	padding-top: 0.75rem;
+}
+
+.THIS .custom-footer {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	padding-top: 10px;
+}
+
+.THIS .modal-buttons {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.THIS .modal-buttons button {
+	height: fit-content;
+}
+
+.THIS .custom-field {
+	text-align: left;
+}
+
+.THIS .middle-text {
+	text-align: left;
+	margin: auto;
+	width: 50%;
+	padding-bottom: 5px;
+}
+
+.THIS .middle-text label {
+	font-weight: 300;
+	color: #2b2b2b;
+}
+
+.THIS .footer-wrapper {
+	width: 100%;
+}
+
+.THIS lightning-primitive-header-actions {
+	display: none;
+}
+
+.THIS .slds-docked-form-footer.slds-is-absolute {
+	z-index: 9;
+}
+
+.THIS .credit-options {
+	padding-left: 3%;
+	padding-right: 3%;
+}
+
+.THIS .generate-bill h1 {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 15px;
+	font-weight: 300;
+}
+
+.THIS .button-options button {
+	cursor: pointer;
+	font-weight: 300;
+	color: #ffffff;
+	background-color: #da281c;
+	font-size: 14px;
+	height: 32px;
+	width: 100px;
+	border: 1px #da281c solid;
+	border-radius: 4px;
+}
+
+.THIS .button-options button:hover {
+	color: #ffffff;
+	border: 1px #8a110a solid;
+	background-color: #8a110a;
+}
+
+.THIS .button-options button:focus {
+	color: white;
+	border: 1px #8a110a solid;
+	background-color: #8a110a;
+}
+
+.THIS .disable-contestation {
+	display: none;
+}

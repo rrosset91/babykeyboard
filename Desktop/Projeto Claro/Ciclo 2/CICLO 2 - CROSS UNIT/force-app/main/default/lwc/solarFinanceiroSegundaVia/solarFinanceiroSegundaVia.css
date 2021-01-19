@@ -1,0 +1,8 @@
+.slds-modal {
+	width: 20% !important;
+	min-width: 0 !important;
+}
+
+.modal_body {
+	height: 160px !important;
+}

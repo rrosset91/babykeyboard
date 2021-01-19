@@ -1,0 +1,6 @@
+.THIS .box-sessao-dados-desc {width:300px;display: inline-block;padding-right: 40px;vertical-align: top;color: #707070;}
+.THIS .box-sessao-dados-desc p {color: #404040;font-size: 13px;padding: 8px 0;}
+
+@media (max-width:767px) {
+    .THIS .box-sessao-dados-desc {width:auto;}
+}

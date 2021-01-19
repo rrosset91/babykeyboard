@@ -1,0 +1,57 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-18-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   01-18-2021   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+	<div style="background-color: white">
+		<template if:true={passoNegociacaoFaturas}>
+				<lightning-spinner if:true={isLoading} size="medium"></lightning-spinner>
+				<lightning-tabset>
+					<lightning-tab label="Negociação">
+					<c-solar-financeiro-inadimplente   
+							base-attributes={baseAttributes}
+							base-detail={baseDetail}
+							onopensimulacao={handleOpensimulacao}>
+					</c-solar-financeiro-inadimplente>
+						</lightning-tab>
+				</lightning-tabset>
+		</template>
+
+		<template if:true={passoSimulacao}>
+			<div class="padding-content">
+				<c-solar-financeiro-parcelamento
+					base-attributes={baseAttributes}
+					base-detail={baseDetail}
+					onopennegociacao={handleOpenNegociacao}
+					onopenresumonegociacao={handleOpenSubmitNegotiation}>
+				</c-solar-financeiro-parcelamento> 
+			</div>
+		</template>
+ 
+		<!-- <template if:true={passoResumoNegociacao}>
+			<div class="padding-content">
+				<c-solar-financeiro-nomeDoLwc
+						base-attributes={baseAttributes}
+						base-detail={baseDetail}
+						back-page={handleBackSimulation}
+						next-page={submitResumo}>
+				</solar-financeiro-nomeDoLwc>
+			</div>
+		</template>
+
+		<template if:true={passoConfirmacaoNegociacao}>
+			<lightning-spinner if:true={isLoading} size="medium"></lightning-spinner>
+			
+			<c-solar-financeiro-nomeDoLwc
+				base-attributes={baseAttributes}
+				base-detail={baseDetail}>
+			</c-solar-financeiro-nomeDoLwc>
+		</template> -->
+	</div>
+</template>

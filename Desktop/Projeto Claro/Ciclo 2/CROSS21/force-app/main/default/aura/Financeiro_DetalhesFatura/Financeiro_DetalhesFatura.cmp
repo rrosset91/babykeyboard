@@ -1,0 +1,480 @@
+<aura:component
+	extends="c:Utils"
+	implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+	access="global"
+	controller="InvoiceDetailsController"
+>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:attribute name="columns" type="List" />
+	<aura:attribute name="columnsDetails" type="List" />
+	<aura:attribute name="invoiceItens" type="Object[]" />
+	<aura:attribute name="selectedItens" type="Object[]" />
+	<aura:attribute name="maxRowSelection" type="Integer" default="20" />
+	<aura:attribute name="isLoading" type="Boolean" default="false" />
+	<aura:attribute name="disabledContest" type="Boolean" default="true" />
+	<aura:attribute name="showFirst" type="Boolean" default="true" />
+	<aura:attribute name="showSecond" type="Boolean" default="true" />
+	<aura:attribute name="showBtnPDF" type="Boolean" default="true" />
+	<aura:attribute name="errorOnCall" type="Boolean" default="false" />
+	<aura:attribute name="showButtons" type="Boolean" default="true" />
+	<aura:attribute name="selectedRows" type="List" />
+	<aura:attribute name="currentStep" type="Integer" default="0" />
+	<aura:attribute name="previousLabel" type="String" default="Voltar" />
+	<aura:attribute name="nextLabel" type="String" default="Contestar" />
+	<aura:attribute name="title" type="String" default="Detalhes da Fatura" />
+	<aura:attribute name="notificationMethod" type="String" />
+	<aura:attribute name="selectedBill" type="Object" />
+	<aura:attribute name="alreadyContested" type="Boolean" default="false" />
+	<aura:attribute name="hasAuthority" type="Boolean" default="false" />
+	<aura:attribute name="sortedBy" type="String" />
+	<aura:attribute name="sortedDirection" type="String" />
+	<aura:attribute name="defaultSortDirection" type="String" />
+	<aura:attribute name="selectedReturnMethod" type="String" />
+	<aura:attribute name="selectedRecalculationMethod" type="String" />
+	<aura:attribute name="isLoadingItemDetail" type="Boolean" default="false" />
+	<aura:attribute name="detailItem" type="String" />
+	<aura:attribute name="contestationObservation" type="String" default="" />
+	<aura:attribute name="disabledRecalculation" type="Boolean" />
+	<aura:attribute name="disabledCredit" type="Boolean" />
+	<aura:attribute name="isN2Contestation" type="Boolean" default="false" />
+	<aura:attribute name="caseId" type="String" />
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="choosedDuplicate" type="Object" />
+	<aura:attribute name="tableTitle" type="String" default="Title Empty" />
+	<aura:attribute name="tableItems" type="Map" />
+
+	<!--Status Fatura e Nível do Usuário-->
+	<aura:attribute name="invoicesStatus" type="List" />
+	<aura:attribute name="isBackOfficeN2" type="Boolean" />
+	<aura:attribute name="isInvoiceCase" type="String" />
+
+	<!--Modal Message-->
+	<aura:attribute name="dialogModal" type="Boolean" />
+	<aura:attribute name="titleMessage" type="string" default="Título" />
+	<aura:attribute name="typeIcon" type="string" default="utility:success" />
+	<aura:attribute name="typeVariant" type="string" default="success" />
+	<aura:attribute name="message" type="string" default="Mensagem" />
+	<aura:attribute name="textButton1" type="string" default="Fechar" />
+	<aura:attribute name="textButton2" type="string" default="Fechar e ir para Ficha Financeira" />
+	<aura:attribute name="onClickButton1" type="string" default="{!c.closeModalMessage}" />
+	<aura:attribute name="onClickButton2" type="string" default="{!c.afterMessage}" />
+	<aura:attribute name="showButton1" type="Boolean" default="false" />
+	<aura:attribute name="showButton2" type="Boolean" default="true" />
+	<aura:attribute name="showButtonX" type="Boolean" default="true" />
+	<aura:attribute name="afterMessage" type="string" />
+
+	<!-- @note 93624 Agrupamento de itens por produto dentro da tela "Fatura" -->
+	<aura:attribute name="lstTelevisao" type="Object[]" />
+	<aura:attribute name="lstInternet" type="Object[]" />
+	<aura:attribute name="lstTelefone" type="List" />
+	<aura:attribute name="lstMovel" type="Object[]" />
+	<aura:attribute name="lstItensEventuais" type="Object[]" />
+	<aura:attribute name="lstOutros" type="Object[]" />
+	<aura:attribute name="objetosTotais" type="Object" />
+
+	<lightning:workspaceAPI aura:id="workspace" />
+	<aura:registerEvent name="Financeiro_ComponentEvent" type="c:Financeiro_ComponentEvent" />
+
+	<div>
+		<aura:if isTrue="{!v.isLoading}">
+			<lightning:spinner alternativeText="Carregando..." size="large" />
+		</aura:if>
+
+		<div class="slds-text-heading_large custom-header">{!v.title}</div>
+
+		<!-- Header -->
+		<div class="headerTitle">
+			<lightning:layout horizontalAlign="space" multipleRows="false" class="custom-bg">
+				<lightning:layoutItem padding="around-small">
+					<div class="header-column">
+						<p class="field-title" title="Field 1">{!$Label.c.Fin_DetalhesFatura_Header_DataVencimento}</p>
+						<p><lightning:formattedText value="{!v.selectedBill.dataVencimento}" class="valueHeader" /></p>
+					</div>
+				</lightning:layoutItem>
+				<lightning:layoutItem padding="around-small">
+					<div class="header-column">
+						<p class="field-title" title="Field 2">{!$Label.c.Fin_DetalhesFatura_Header_Valor}</p>
+						<p><lightning:formattedText value="{!v.selectedBill.valor}" class="valueHeader" /></p>
+					</div>
+				</lightning:layoutItem>
+				<lightning:layoutItem padding="around-small">
+					<div class="header-column">
+						<p class="field-title" title="Field 3">{!$Label.c.Fin_DetalhesFatura_Header_Situacao}</p>
+						<p><lightning:formattedText value="{!v.selectedBill.status}" class="valueHeader" /></p>
+					</div>
+				</lightning:layoutItem>
+				<lightning:layoutItem padding="around-small">
+					<div class="header-column">
+						<p class="field-title" title="Field 4">{!$Label.c.Fin_DetalhesFatura_Header_FormaPagamento}</p>
+						<p class="valueHeader">{!v.selectedBill.formaPagamento}</p>
+					</div>
+				</lightning:layoutItem>
+				<lightning:layoutItem padding="around-small">
+					<div class="header-column">
+						<p class="field-title" title="Field 5">{!$Label.c.Fin_DetalhesFatura_Header_FormaEnvio}</p>
+						<p class="valueHeader">{!v.selectedBill.modoRecebimento}</p>
+					</div>
+				</lightning:layoutItem>
+				<lightning:layoutItem padding="around-small">
+					<div class="header-columnAdress">
+						<p class="field-title" title="Field 6">{!$Label.c.Fin_DetalhesFatura_Header_EnderecoCobranca}</p>
+						<p class="valueHeader">{!v.selectedBill.endereco}</p>
+					</div>
+				</lightning:layoutItem>
+			</lightning:layout>
+		</div>
+		<!-- Header -->
+
+		<div style="padding-top: 10px"></div>
+
+		<!-- Body -->
+		<div class="slds-text-heading_large small-header custom-padding">{!v.tableTitle}</div>
+		<aura:if isTrue="{!v.currentStep == 0}">
+			<div class="custom-padding" aura:id="allItems">
+				<lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true">
+					<aura:if isTrue="{!not(empty(v.lstTelevisao))}">
+						<lightning:accordionSection
+							name="accordionTelevisao"
+							label="{!  $Label.c.Fin_DetalhesFatura_Accordion_Tv +' - '+ v.objetosTotais.Televisao}"
+							class="accordion"
+						>
+							<lightning:datatable
+								aura:id="televisao"
+								class="cols table"
+								columns="{!v.columns}"
+								data="{!v.lstTelevisao}"
+								keyField="idItem"
+								maxRowSelection="{!v.maxRowSelection}"
+								onrowselection="{!c.handleSelectedItem}"
+								resizeColumnDisabled="true"
+								selectedRows="{!v.selectedRows}"
+								sortedBy="{!v.sortedBy}"
+								sortedDirection="{!v.sortedDirection}"
+								defaultSortDirection="{!v.defaultSortDirection}"
+								onsort="{!c.onSort}"
+								onrowaction="{!c.handleRowAction}"
+							/>
+						</lightning:accordionSection>
+					</aura:if>
+
+					<aura:if isTrue="{!not(empty(v.lstInternet))}">
+						<lightning:accordionSection name="accordionInternet" label="{!$Label.c.Fin_DetalhesFatura_Accordion_Internet +' - '+ v.objetosTotais.Internet}">
+							<lightning:datatable
+								aura:id="internet"
+								class="cols table"
+								columns="{!v.columns}"
+								data="{!v.lstInternet}"
+								keyField="idItem"
+								maxRowSelection="{!v.maxRowSelection}"
+								onrowselection="{!c.handleSelectedItem}"
+								resizeColumnDisabled="true"
+								selectedRows="{!v.selectedRows}"
+								sortedBy="{!v.sortedBy}"
+								sortedDirection="{!v.sortedDirection}"
+								defaultSortDirection="{!v.defaultSortDirection}"
+								onsort="{!c.onSort}"
+								onrowaction="{!c.handleRowAction}"
+							/>
+						</lightning:accordionSection>
+					</aura:if>
+
+					<aura:if isTrue="{!not(empty(v.lstTelefone))}">
+						<lightning:accordionSection name="accordionTelefone" label="{!$Label.c.Fin_DetalhesFatura_Accordion_TelefoneFixo +' - '+ v.objetosTotais.Telefone}">
+							<!-- <lightning:datatable
+								aura:id="telefone"
+								class="cols table"
+								columns="{!v.columns}"
+								data="{!v.lstTelefone}"
+								keyField="idItem"
+								maxRowSelection="{!v.maxRowSelection}"
+								onrowselection="{!c.handleSelectedItem}"
+								resizeColumnDisabled="true"
+								selectedRows="{!v.selectedRows}"
+								sortedBy="{!v.sortedBy}"
+								sortedDirection="{!v.sortedDirection}"
+								defaultSortDirection="{!v.defaultSortDirection}"
+								onsort="{!c.onSort}"
+								onrowaction="{!c.handleRowAction}"
+							/>
+							 -->
+
+							<!-- @note : 100089 - Visualizar na fatura detalhes do produto Embratel -->
+							<lightning:accordion aura:id="accordionTelefones" allowMultipleSectionsOpen="true">
+								<aura:iteration items="{!v.lstTelefone}" var="items" indexVar="key">
+									<lightning:accordionSection name="{!items.key}" label="{!items.key  +' - '+ items.totalValue}">
+										<lightning:datatable
+											aura:id="telefones"
+											class="cols table"
+											columns="{!v.columnsDetails}"
+											data="{!items.value}"
+											keyField="idItem"
+											maxRowSelection="{!v.maxRowSelection}"
+											onrowselection="{!c.handleSelectedItem}"
+											resizeColumnDisabled="true"
+											selectedRows="{!v.selectedRows}"
+											sortedBy="{!v.sortedBy}"
+											sortedDirection="{!v.sortedDirection}"
+											defaultSortDirection="{!v.defaultSortDirection}"
+											onsort="{!c.onSort}"
+											onrowaction="{!c.handleRowAction}"
+										/>
+									</lightning:accordionSection>
+								</aura:iteration>
+							</lightning:accordion>
+						</lightning:accordionSection>
+					</aura:if>
+
+					<aura:if isTrue="{!not(empty(v.lstMovel))}">
+						<lightning:accordionSection name="accordionMovel" label="{!$Label.c.Fin_DetalhesFatura_Accordion_Movel +' - '+ v.objetosTotais.Movel}">
+							<lightning:datatable
+								aura:id="movel"
+								class="cols table"
+								columns="{!v.columns}"
+								data="{!v.lstMovel}"
+								keyField="idItem"
+								maxRowSelection="{!v.maxRowSelection}"
+								onrowselection="{!c.handleSelectedItem}"
+								resizeColumnDisabled="true"
+								selectedRows="{!v.selectedRows}"
+								sortedBy="{!v.sortedBy}"
+								sortedDirection="{!v.sortedDirection}"
+								defaultSortDirection="{!v.defaultSortDirection}"
+								onsort="{!c.onSort}"
+								onrowaction="{!c.handleRowAction}"
+							/>
+						</lightning:accordionSection>
+					</aura:if>
+
+					<aura:if isTrue="{!not(empty(v.lstItensEventuais))}">
+						<lightning:accordionSection
+							name="accordionMovelItensEventuais"
+							label="{!$Label.c.Fin_DetalhesFatura_Accordion_ItensEventuais +' - '+ v.objetosTotais.Eventuais}"
+						>
+							<lightning:datatable
+								aura:id="itens-eventuais"
+								class="cols table"
+								columns="{!v.columns}"
+								data="{!v.lstItensEventuais}"
+								keyField="idItem"
+								maxRowSelection="{!v.maxRowSelection}"
+								onrowselection="{!c.handleSelectedItem}"
+								resizeColumnDisabled="true"
+								selectedRows="{!v.selectedRows}"
+								sortedBy="{!v.sortedBy}"
+								sortedDirection="{!v.sortedDirection}"
+								defaultSortDirection="{!v.defaultSortDirection}"
+								onsort="{!c.onSort}"
+								onrowaction="{!c.handleRowAction}"
+							/>
+						</lightning:accordionSection>
+					</aura:if>
+
+					<aura:if isTrue="{!not(empty(v.lstOutros))}">
+						<lightning:accordionSection name="accordionOutros" label="{!$Label.c.Fin_DetalhesFatura_Accordion_Outros +' - '+ v.objetosTotais.Outros}">
+							<lightning:datatable
+								aura:id="outros"
+								class="cols table"
+								columns="{!v.columns}"
+								data="{!v.lstOutros}"
+								keyField="idItem"
+								maxRowSelection="{!v.maxRowSelection}"
+								onrowselection="{!c.handleSelectedItem}"
+								resizeColumnDisabled="true"
+								selectedRows="{!v.selectedRows}"
+								sortedBy="{!v.sortedBy}"
+								sortedDirection="{!v.sortedDirection}"
+								defaultSortDirection="{!v.defaultSortDirection}"
+								onsort="{!c.onSort}"
+								onrowaction="{!c.handleRowAction}"
+							/>
+						</lightning:accordionSection>
+					</aura:if>
+				</lightning:accordion>
+				<!-- <lightning:datatable
+					class="cols table"
+					columns="{!v.columns}"
+					data="{!v.invoiceItens}"
+					keyField="idItem"
+					maxRowSelection="{!v.maxRowSelection}"
+					onrowselection="{!c.handleSelectedItem}"
+					resizeColumnDisabled="true"
+					selectedRows="{!v.selectedRows}"
+					sortedBy="{!v.sortedBy}"
+					sortedDirection="{!v.sortedDirection}"
+					defaultSortDirection="{!v.defaultSortDirection}"
+					onsort="{!c.onSort}"
+					onrowaction="{!c.handleRowAction}"
+				/> -->
+			</div>
+		</aura:if>
+
+		<aura:if isTrue="{!v.currentStep == 1}">
+			<div class="custom-padding" aura:id="selectedItems">
+				<c:Financeiro_ItensSelecionadosContestar
+					invoiceItens="{!v.selectedItens}"
+					selectedRows="{!v.selectedRows}"
+					contestationObservation="{!v.contestationObservation}"
+					invoicesStatus="{!v.invoicesStatus}"
+					isBackOfficeN2="{!v.isBackOfficeN2}"
+				/>
+			</div>
+		</aura:if>
+
+		<aura:if isTrue="{!v.currentStep == 2}">
+			<div class="custom-padding" aura:id="creditReturn">
+				<c:Financeiro_FormaCredito
+					bill="{!v.selectedBill}"
+					invoiceItens="{!v.selectedItens}"
+					allItems="{!v.invoiceItens}"
+					selectedRows="{!v.selectedRows}"
+					showSecond="{!v.showSecond}"
+					onSelectReturnMethod="{!c.onSelectReturnMethod}"
+					selectedReturnMethod="{!v.selectedReturnMethod}"
+					selectedRecalculationMethod="{!v.selectedRecalculationMethod}"
+					disabledRecalculation="{!v.disabledRecalculation}"
+					disabledCredit="{!v.disabledCredit}"
+					operatorId="{!v.operatorId}"
+					contractId="{!v.contractId}"
+					recordId="{!v.recordId}"
+					choosedDuplicate="{!v.choosedDuplicate}"
+					hasAuthority="{!v.hasAuthority}"
+					caseId="{!v.recordId}"
+				/>
+			</div>
+		</aura:if>
+
+		<aura:if isTrue="{!v.currentStep == 3}">
+			<div class="custom-padding" aura:id="clientReturn">
+				<c:Financeiro_RetornoCliente onSelectNotification="{!c.clickNext}" notificationMethod="{!v.notificationMethod}" />
+			</div>
+		</aura:if>
+
+		<div class="custom-footer custom-padding align-buttons padding-end">
+			<aura:if isTrue="{!and(v.showButtons, and(v.isN2Contestation, v.currentStep == 1))}">
+				<aura:if isTrue="{!v.isBackOfficeN2 == false}">
+					<c:Financeiro_ActionButtons
+						showFirst="{!v.showFirst}"
+						showSecond="{!v.showSecond}"
+						onClickFirst="{!c.clickBack}"
+						onClickSecond="{!c.clickNext}"
+						disabledFirst="false"
+						disabledSecond="true"
+						labelFirst="{!v.previousLabel}"
+						labelSecond="Continuar para confirmação da contestação"
+					/>
+				</aura:if>
+				<aura:if isTrue="{!v.isBackOfficeN2}">
+					<div style="width: 100%; display: flex; justify-content: flex-end">
+						<lightning:button label="Ir Para Fatura Completa" onclick="{!c.clickBack}" class="generate-bill-n2" />
+						<lightning:button label="Reprovar Contestação" onclick="{!c.denyContestation}" class="generate-bill-n2" />
+						<span id="second-button" style="padding-left: 5px; float: right">
+							<lightning:button label="Aprovar Contestação" onclick="{!c.clickNext}" class="generate-bill-n2" />
+						</span>
+					</div>
+				</aura:if>
+			</aura:if>
+
+			<aura:if isTrue="{!and(v.showButtons, or(and(v.isN2Contestation, v.currentStep != 1), not(v.isN2Contestation)) )}">
+				<c:Financeiro_ActionButtons
+					showFirst="{!v.showFirst}"
+					showSecond="{!v.showSecond}"
+					showBtnPDF="{!v.showBtnPDF}"
+					onClickFirst="{!c.clickBack}"
+					onClickSecond="{!c.clickNext}"
+					onClickPDF="{!c.clickPDF}"
+					disabledFirst="false"
+					disabledSecond="{!v.disabledContest}"
+					labelFirst="{!v.previousLabel}"
+					labelSecond="{!v.nextLabel}"
+				/>
+			</aura:if>
+		</div>
+		<!-- Body -->
+
+		<!-- Modal Details -->
+		<c:UiModal aura:id="itemDetail" title="Detalhes do Item" size="x-small">
+			<aura:set attribute="content">
+				<aura:if isTrue="{!v.isLoadingItemDetail}">
+					<lightning:spinner alternativeText="Carregando..." size="large" />
+				</aura:if>
+
+				<lightning:layout horizontalAlign="space" multipleRows="true">
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Item de Extrato</label>
+							<p><lightning:formattedText value="{!v.detailItem.descricao}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Parceiro</label>
+							<p><lightning:formattedText value="{!v.detailItem.parceiro}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Produto</label>
+							<p><lightning:formattedText value="{!v.detailItem.descricaoProduto}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Data de Lançamento</label>
+							<p><lightning:formattedText value="{!v.detailItem.dataLancamento}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Data de Vencimento</label>
+							<p><lightning:formattedText value="{!v.detailItem.dataVencimento}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Data Início Proporcionalidade</label>
+							<p><lightning:formattedText value="{!v.detailItem.dataProporcionalidade}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Total de Parcelas</label>
+							<p><lightning:formattedText value="{!v.detailItem.totalParcela}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6">
+						<div class="middle-text">
+							<label>Número da Parcela</label>
+							<p><lightning:formattedText value="{!v.detailItem.numeroParcela}" /></p>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="horizontal-medium" size="6"> </lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+			<aura:set attribute="footer">
+				<div class="modal-buttons">
+					<lightning:button variant="brand" label="Fechar" onclick="{!c.closeModal}" />
+				</div>
+			</aura:set>
+		</c:UiModal>
+		<!-- Modal MEssage -->
+		<aura:if isTrue="{!v.dialogModal}">
+			<c:modalMessage
+				aura:id="modalMessage"
+				title="{!v.titleMessage}"
+				typeIcon="{!v.typeIcon}"
+				typeVariant="{!v.typeVariant}"
+				message="{!v.message}"
+				textbutton1="{!v.textButton1}"
+				textbutton2="{!v.textButton2}"
+				showButton1="{!v.showButton1}"
+				showButton2="{!v.showButton2}"
+				showButtonX="{!v.showButtonX}"
+				onClickButton1="{!v.onClickButton1}"
+				onClickButton2="{!v.onClickButton2}"
+			/>
+		</aura:if>
+	</div>
+</aura:component>

@@ -1,0 +1,21 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 01-14-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  @last modified on  : 01-14-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   28-10-2020   Joao Neves   Initial Version
+  1.0   28-10-2020   Vini D       Foi adicionado if:true{isActive}
+-->
+<template>
+  <template if:true={isActive}>
+	  <div>
+      <button class="slds-button slds-button_neutral" onclick={handleNavigateNegotiation}>Negociação(Teste)</button>
+      <button class="slds-button slds-button_neutral" onclick={handleNavigate} >{componentStep}</button>
+    </div>
+  </template>
+</template>

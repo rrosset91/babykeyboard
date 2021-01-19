@@ -1,0 +1,18 @@
+<aura:component implements="lightning:homeTemplate" description="Template de página inicial utilizado pelo PME">
+    <aura:attribute name="center" type="Aura.Component[]" />
+    <aura:attribute name="left" type="Aura.Component[]" />
+    <aura:attribute name="right" type="Aura.Component[]" />
+    <div class="c-container">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12">
+                <span>{!v.center}</span>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="9">
+            	<span>{!v.left}</span>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="3">
+            	<span>{!v.right}</span>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

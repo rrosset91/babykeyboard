@@ -1,0 +1,338 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="AdicionarAparelho" event="c:CEC_PME_AdicionarAparelho" action="{!c.aparelhoAdicionado}" />
+    <aura:handler name="change" value="{!v.lineList}" action="{!c.lineListChanged}" />
+    
+    <!-- Usado para alterar o valor da associação pendente -->
+    <aura:attribute name="idElementoAssociacao" type="String"/>
+    <aura:registerEvent name="AssociacaoPendente" type="c:CEC_PME_AssociacaoPendente"/>
+    <aura:handler event="force:refreshView" action="{!c.changeAssocPendente}" /> 
+    
+    <aura:attribute name="sessao" type="Object" />
+    
+    <aura:attribute name="deviceList" type="List" />
+    <aura:attribute name="deviceOptions" type="List" />
+    <aura:attribute name="deviceSelected" type="Object" />
+    
+    <aura:attribute name="donatorName" type="String" />
+    <aura:attribute name="donatorCpf" type="String" />
+    <aura:attribute name="donatorPhone" type="String" />
+    <aura:attribute name="donatorEmail" type="String" />
+    <aura:attribute name="donatorNameRaw" type="String" />
+    <aura:attribute name="donatorCpfRaw" type="String" />
+    <aura:attribute name="donatorPhoneRaw" type="String" />
+    <aura:attribute name="donatorEmailRaw" type="String" />
+    <aura:attribute name="donatorList" type="List" />
+    
+    <aura:attribute name="disableEditButton" type="Boolean" default="false" />
+    
+    <aura:attribute name="totalAddedLines" type="Integer" default="{!v.sessao.qtdLinha}"/>
+    <aura:attribute name="qtdLinhaInicial" type="Integer" default="0"/>
+    
+    <aura:attribute name="lineNumber" type="String" />
+    <aura:attribute name="lineICCID" type="String" />
+    <aura:attribute name="lineIMEI" type="String" />
+    
+    <aura:attribute name="lineNumberMax" type="Integer" default="11" />
+    <aura:attribute name="lineICCIDMax" type="Integer" default="20" />
+    <aura:attribute name="lineIMEIMax" type="Integer" default="15"/>
+    
+    <aura:attribute name="lineNumberLogisticaRaw" type="String" />
+    <aura:attribute name="lineNumberLocalRaw" type="String" />
+    <aura:attribute name="lineNumberRaw" type="String" />
+    <aura:attribute name="lineICCIDRaw" type="String" />
+    <aura:attribute name="lineIMEIRaw" type="String" />
+    
+    <aura:attribute name="lineList" type="List" default="[]"/>
+    
+    <aura:attribute name="showModalError" type="Boolean" default="false"/>
+    <aura:attribute name="msgModalError" type="String" default=" "/>
+    
+    <aura:if isTrue="{!v.showModalError}">
+        <div>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__content slds-p-around_small" id="modal-content-id-1">
+                    <ui:outputText value="{!v.msgModalError}"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button label="Fechar" onclick="{!c.closeModalError}"/>
+                </footer>
+                </div>
+            </section>
+        </div>
+    </aura:if>
+    
+    <div class="slds-col slds-size_8-of-8">
+        <p class="lightblue-text slds-m-left_medium">Serviços selecionados: <ui:outputText value="{!v.sessao.tipoTransferencia.servicosSelecionados}"/></p>
+    </div>
+    
+    <!-- DONATOR div -->
+    <div class="slds-grid slds-gutters" id="bloco-doador-completo" >
+        <div class="slds-col" >
+            <div class="slds-grid_vertical">
+                <div class="title-transferencia-block"><p id="title-transferencia">Doador</p></div>
+                    <div class="margin-top-10" id="nome-doador">
+                        <label for="donatorName">Nome do Doador</label>
+                        <lightning:input name="donatorName"
+                                         type="text"
+                                         aura:id="donatorName"
+                                         required="false" 
+                                         value="{!v.donatorName}"
+                                         label="Nome do Doador" 
+                                         variant="label-hidden"
+                                         maxlength="60" 
+                                         onblur="{!c.validateDonatorFields}"/>
+                    </div>
+                    <div class="margin-top-10" id="cpf">
+                        <label for="donatorCpf">CPF</label>
+                        <lightning:input name="donatorCpf"
+                                         type="text"
+                                         aura:id="donatorCpf"
+                                         required="false" 
+                                         value="{!v.donatorCpf}"
+                                         label="CPF" 
+                                         variant="label-hidden"
+                                         maxlength="11" 
+                                         onblur="{!c.validateDonatorFields}"/>
+                    </div>
+                    <div class="margin-top-10" id="telefone">
+                        <label for="donatorPhone">Celular</label>
+                        <lightning:input name="donatorPhone"
+                                         type="text"
+                                         aura:id="donatorPhone"
+                                         required="false" 
+                                         value="{!v.donatorPhone}"
+                                         label="Telefone" 
+                                         variant="label-hidden"
+                                         maxlength="11"
+                                         onblur="{!c.validateDonatorFields}"
+                                         onfocus="{!c.onLineNumberFocus}"
+                                         />
+                    </div>
+                    <div class="margin-top-10" id="email">
+                        <label for="donatorEmail">E-mail</label>
+                        <lightning:input name="donatorEmail"
+                                         type="email"
+                                         aura:id="donatorEmail"
+                                         required="false" 
+                                         value="{!v.donatorEmail}"
+                                         label="E-mail" 
+                                         variant="label-hidden"
+                                         maxlength="60"
+                                         onblur="{!c.validateDonatorFields}"/>
+                    </div>
+               
+            </div>
+        </div>
+        
+        <div class="slds-col slds-size_4-of-7" id="bloco-linhas-completo">
+            <div class="slds-grid_vertical">
+                <div class="title-transferencia-block"><p id="title-transferencia">Linha</p></div>
+                <div class="slds-grid slds-gutters" id="bloco-linhas">
+                    <div class="slds-col slds-size_4-of-7 margin-top-10">
+                        <label class="lineNumberLogistica" for="lineNumber">
+                            Número da linha: <span class="pendente">Pendente: <ui:outputText value="{!v.totalAddedLines}" /></span>
+                        </label>
+                        <lightning:input name="lineNumber"
+                                         type="text"
+                                         aura:id="lineNumber"
+                                         required="false" 
+                                         value="{!v.lineNumber}"
+                                         variant="label-hidden"
+                                         maxlength="{!v.lineNumberMax}" 
+                                         onblur="{!c.validateLineFields}"
+                                         onfocus="{!c.onLineNumberFocus}"
+                                         />
+                    </div>
+                    <div class="slds-col slds-size_2-of-7 margin-top-10 margin-top-10"  id="bloco-iccid">
+                        <label for="lineICCIDLogistica">ICCID</label>
+                        <lightning:input name="lineICCIDLogistica"
+                                         type="text"
+                                         aura:id="lineICCIDLogistica"
+                                         required="false" 
+                                         value="{!v.lineICCID}"
+                                         label="ICCID" 
+                                         variant="label-hidden"
+                                         maxlength="{!v.lineICCIDMax}" 
+                                         onblur="{!c.validateLineFields}"/>
+                    </div>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                        <div class="slds-col slds-size_2-of-7 margin-top-10" id="bloco-imei">
+                            <label for="lineIMEI">IMEI</label>
+                            <lightning:input name="lineIMEI"
+                                             type="text"
+                                             aura:id="lineIMEI"
+                                             required="false" 
+                                             value="{!v.lineIMEI}"
+                                             label="IMEI"
+                                             variant="label-hidden"
+                                             maxlength="{!v.lineIMEIMax}" 
+                                             onblur="{!c.validateLineFields}"/>
+                        </div>
+                    </aura:if>
+                </div>
+                <div class="slds-grid slds-gutters margin-top-10" id="bloco-cores">
+                    <div class="slds-col slds-size_7-of-7">
+                        <c:CEC_PME_SelectDeviceColors devices="{!v.sessao.lstAparelhos}" aura:id="seletorDeCores"
+                                                      tipoEntrega="{!v.sessao.tipoTransferencia.tipoEntrega}" tipoPlano="Transferencia" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Devices table -->
+    
+    <aura:if isTrue="{!v.lineList.length > 0}" >
+        <table class="all-table" id="table-transferencia">
+            <tr>
+                <th>Linha</th>
+                <th>ICCID</th>
+                <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                    <th>IMEI</th>
+                </aura:if>
+                <th>Modelo</th>
+                <th>Cor</th>
+                <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega != 'Local'}" >
+                    <th>Aceita outra cor</th>
+                </aura:if>
+                <th>&nbsp;</th>
+                <th class="transferencia-lista">Aparelhos</th>
+            </tr>
+            <aura:iteration items="{!v.lineList}" var="line">
+                <tr>
+                    <td>{!line.Linha}</td>
+                    <td>{!line.ICCID}</td>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                        <td>{!line.IMEI}</td>
+                    </aura:if>
+                    <td>{!line.Modelo}</td>
+                    <td>{!line.Cor}</td>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega != 'Local'}" >
+                        <td>{!line.Cores}</td>
+                    </aura:if>
+                    <td>
+                        <lightning:buttonIcon aura:id="deleteButton"
+                                              iconName="utility:delete" 
+                                              variant="bare"
+                                              onclick="{!c.removeDevice}"
+                                              value="{!line}"
+                                              alternativeText="Remover" />
+                    </td>
+                    <td class="transferencia-lista">
+                    <div><span>Linha:</span> {!line.Linha}</div>
+                    <div><span>ICCID:</span> {!line.ICCID}</div>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                    <div><span>IMEI:</span> {!line.IMEI}</div>
+                    </aura:if>
+                    <br/>
+                    <div><span>Aparelho:</span> {!line.Modelo}</div>
+                    <div><span>Cor:</span> {!line.Cor}</div>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega != 'Local'}" >
+                    <div><span>Aceita outra cor:</span> {!line.Cores}</div>
+                    </aura:if>
+                    <lightning:buttonIcon aura:id="deleteButton" iconName="utility:delete"  variant="bare" onclick="{!c.removeDevice}" value="{!line}" alternativeText="Remover" />
+                    </td>
+                </tr>
+            </aura:iteration>
+        </table>
+        <center>
+            <lightning:button name="addDonatorTableButton"
+                              aura:id="addDonatorTableButton"
+                              label="Incluir doador"
+                              onclick="{!c.addDonatorTableButtonClicked}"
+                              />
+        </center>
+    </aura:if>
+    
+    <br/>
+    <!-- Generated DONATORS list div -->
+    <aura:if isTrue="{!v.donatorList.length > 0}">
+        <span class="doadores-inclusos">Doadores inclusos:</span>
+        <span class="doadores-regras">Se a inclusão de dados estiver ativa, você não poderá editar o doador.</span>
+        <aura:iteration items="{!v.donatorList}" var="donatorItem" >
+            <div aura:id="donatorHeader" id="donatorHeader" style="display:inline;">
+                <table class="table-doador">
+                    <tr>
+                        <th>
+                            <div>Doador: <ui:outputText value="{!donatorItem.name}" class="donatorTitleSpacing" /></div>
+                            <div>CPF: <ui:outputText value="{!donatorItem.cpf}" class="donatorTitleSpacing" /></div>
+                            <div>Celular: <ui:outputText value="{!donatorItem.phone}" class="donatorTitleSpacing" /></div>
+                            <div>E-mail: <ui:outputText value="{!donatorItem.email}" class="donatorTitleSpacing" /></div>
+                            <div class="remove-doador-line"><lightning:buttonIcon aura:id="editButton" iconName="utility:edit"
+                              variant="bare"
+                              onclick="{!c.editarDoador}"
+                              value="{!donatorItem}"
+                              alternativeText="Editar" />
+                            <lightning:buttonIcon aura:id="donatorDeleteButton"
+                              iconName="utility:delete"
+                              variant="bare"
+                              onclick="{!c.removeDonator}"
+                              value="{!donatorItem}"
+                              alternativeText="Remover" />
+                            </div>
+                        </th>
+                        <th>
+                            <lightning:buttonIcon aura:id="editButton" iconName="utility:edit"
+                                                  variant="bare"
+                                                  onclick="{!c.editarDoador}"
+                                                  value="{!donatorItem}"
+                                                  disabled="{!v.disableEditButton}"
+                                                  alternativeText="Editar" />
+                            <lightning:buttonIcon aura:id="donatorDeleteButton"
+                                                  iconName="utility:delete"
+                                                  variant="bare"
+                                                  onclick="{!c.removeDonator}"
+                                                  value="{!donatorItem}"
+                                                  alternativeText="Remover" />
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <table class="all-table" id="table-transferencia">
+                <tr>
+                    <th>Linha</th>
+                    <th>ICCID</th>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                        <th>IMEI</th>
+                    </aura:if>
+                    <th>Modelo</th>
+                    <th>Cor</th>
+                    <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega != 'Local'}" >
+                        <th>Aceita outra cor</th>
+                    </aura:if>
+                    <th class="transferencia-lista">Aparelhos</th>
+                </tr>
+                <aura:iteration items="{!donatorItem.lineList}" var="lineItem" >
+                    <tr>
+                        <td>{!lineItem.Linha}</td>
+                        <td>{!lineItem.ICCID}</td>
+                        <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                            <td>{!lineItem.IMEI}</td>
+                        </aura:if>
+                        <td>{!lineItem.Modelo}</td> 
+                        <td>{!lineItem.Cor}</td>
+                        <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega != 'Local'}" >
+                            <td style="text-align: left;">{!lineItem.Cores}</td>
+                        </aura:if>
+                        <td class="transferencia-lista">
+                        <div><span>Linha:</span> {!lineItem.Linha}</div>
+                        <div><span>ICCID:</span> {!lineItem.ICCID}</div>
+                        <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega == 'Local'}" >
+                        <div><span>- IMEI:</span> {!lineItem.IMEI}</div>
+                        </aura:if>
+                        <br/><div><span>Aparelho:</span> {!lineItem.Modelo}</div>
+                        <div><span>Cor:</span> {!lineItem.Cor}</div>
+                        <aura:if isTrue="{!v.sessao.tipoTransferencia.tipoEntrega != 'Local'}" >
+                        <div><span> Aceita outra cor:</span> {!lineItem.Cores}</div>
+                        </aura:if>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </table>
+        </aura:iteration>
+        
+    </aura:if>
+   
+</aura:component>

@@ -1,0 +1,66 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="NBA_AgregadoInformativo_CC" >
+
+	<!-- Atributos -->
+	<aura:attribute type="Boolean"  name="showModalAgregado" />
+	<aura:attribute type="String"   name="tema" default="warning" />
+	<aura:attribute type="Boolean"  name="showSpinner" default="false" />
+	<aura:attribute type="Object"   name="retorno" />
+	<aura:attribute type="Boolean"  name="componentSelectOffer" />
+	<aura:attribute type="Object"   name="ofertaSelecionada" />
+	<aura:attribute type="String"   name="orgaoEmissor" />
+	<aura:attribute type="Boolean"   name="numeroRg" />
+
+	<!-- Handler -->
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+	 <!-- SPINNER -->
+    <aura:if isTrue="{! v.showSpinner }">
+        <div class="slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_medium">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+
+
+	<aura:if isTrue="{! v.showModalAgregado }" >   
+			<section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt " aria-modal="true">
+				<div class="slds-modal__container Section-format">
+					<header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_' + v.tema }">
+						<strong class="slds-text-heading_medium" id="prompt-heading-id">Tela de Informações de cadastro do Cliente</strong>
+					</header>
+					<div class="slds-grid slds-wrap conteiner-grid" >
+						<div class="slds-col slds-size_7-of-12 input-format">
+							<lightning:input aura:id="nomeDaMae" required="true" label="Nome da Mãe" value="{! v.retorno.nomeDaMae }" onchange="{! c.maskNomeDaMae }"  />
+						</div>
+						<div class="slds-col slds-size_5-of-12 input-format2">
+							 <lightning:input aura:id="rg" required="true" maxlength="13" label="RG" value="{! v.retorno.numeroDoRG}" onchange="{! c.maskRG }" />
+						</div>
+						<div class="slds-col slds-size_3-of-12 input-format">
+						<lightning:input aura:id="dataEmissaoDoRG" required="true" class="data-picker data" value="{! v.retorno.dataEmissaoDoRG}" type="date" label="Data de Emissão do RG"  autocomplete="off" />
+						</div>
+						<div class="slds-col slds-size_5-of-12 input-format">
+							<lightning:select aura:id="orgaoEmissorRG" required="true" label="Órgão Emissor do RG" value="{! v.retorno.orgaoEmissorRG }" >
+								<option value="{! v.retorno.orgaoEmissorRG }" text="{! v.retorno.orgaoEmissorRG }"></option>
+								<aura:iteration items="{! v.retorno.orgaosEmissores }" var="OEM" >
+									<option value="{! OEM.Label }" text="{! OEM.Label }"></option>						
+								</aura:iteration>						
+							</lightning:select>
+						</div>
+						<div class="slds-col slds-size_4-of-12 input-format">
+							<lightning:input aura:id="dataeNascimentodoTitular" required="true" class="data-picker data2" value="{! v.retorno.dataeNascimentodoTitular }" type="date" label="Data de Nascimento" autocomplete="off" />
+						</div>
+						<div class="slds-m-top_medium slds-align_absolute-center" Style="padding:0.5rem 0rem 1rem 0rem">
+							<lightning:button variant="brand" name="cancel" label="Cancelar" onclick="{! c.cancel}" />
+							<lightning:button variant="brand" type="submit" name="save" label="Confirmar" onclick="{! c.handleSave}" />								
+						</div>
+					</div>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+	</aura:if>
+	
+</aura:component>

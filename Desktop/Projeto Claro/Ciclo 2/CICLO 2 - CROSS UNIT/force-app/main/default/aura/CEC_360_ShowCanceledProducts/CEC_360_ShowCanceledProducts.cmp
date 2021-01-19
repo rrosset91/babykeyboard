@@ -1,0 +1,54 @@
+<aura:component controller="CEC_360_ShowCanceledProductsController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="hasSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="hasCancel" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />     
+    
+    <!-- Attributes Cancelados Tab -->
+    <aura:attribute name="cancProducts" type="List"/>
+    <aura:attribute name="startDate" type="String"/>
+    <aura:attribute name="endDate" type="String"/>
+    <aura:attribute name="contractNumber" type="String"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="maxDate" type="String"/>
+    <aura:attribute name="minDate" type="String"/>    
+    
+    <aura:if isTrue="{! and(v.hasCancel == false)}">
+        <div class="slds-box">
+            <lightning:layout>
+                <lightning:layoutItem size="10">
+                    <div class="slds-text-heading_medium" contenteditable="false"><span class="vermelho">Atenção:</span> Este contrato não possui produtos cancelados.</div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        <aura:set attribute="else">  
+            
+            <div class="slds-p-top_small">          
+                <table class="slds-table slds-row-hover lista-produtos-cancelados">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th>Produto</th>
+                                <th>Plano</th>
+                                <th>Linha</th>
+                                <th>Unidade</th>
+                                <th>Cancelado em</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <aura:iteration items="{!v.cancProducts}" var="cont" indexVar="contIndex">
+                                <tr class="slds-hint-parent">
+                                    <td>{!cont.Product}</td>
+                                    <td class="col-break">{!cont.Name}</td>
+                                    <td>{!cont.msisdn}</td>
+                                    <td>{!cont.bu}</td>
+                                    <td><lightning:formattedDateTime value="{!cont.endDate}" year="numeric" month="numeric" day="numeric" /></td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+            </div>  
+        </aura:set>
+    </aura:if>   
+    
+</aura:component>

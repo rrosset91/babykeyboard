@@ -1,0 +1,24 @@
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th {font-weight: normal;border-bottom: solid 1px #dbdada;height:43px;line-height:43px;}
+.THIS .box-icon-product {width:72px;text-align:center;color:#da291c;padding-top:10px;font-size:16px;}
+
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.linha-produto:last-child {border-bottom: 0px;}
+
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.linha-produto {border-bottom: solid 1px #dbdada;min-height: 59px;font-size: 13px;padding:10px 0px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.linha-produto img {padding-right: 9px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.linha-produto a {color:#da291c;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.linha-produto:last-child {border-bottom: 0px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.sub-produto {border-bottom: solid 1px #dbdada;height: 34px;line-height: 34px;font-size: 12px;padding-left: 22px;color:#707070;}
+
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th:nth-child(1) {width:100px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th:nth-child(2) {width:320px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th:nth-child(3) {width:150px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th:nth-child(4) {width:120px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th:nth-child(5) {width:calc(100% - 560px);}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td div.sub-produto:last-child {border-bottom: 0px;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts th {font-weight:normal;height:43px;border-bottom:solid 1px #dbdada;}
+table.lista-contrato-produtos-ativos.cCEC_360_ShowContracts td {font-weight:normal;border-bottom:solid 1px #dbdada;vertical-align:top;}
+
+
+.THIS .left-0 {padding-left:0px !important;}
+.THIS .vermelho {font-size: 14px;  color:#da291c;font-weight:normal;}
+.THIS .slds-text-heading_medium {font-size: 14px;color: #434444;font-weight:normal;}

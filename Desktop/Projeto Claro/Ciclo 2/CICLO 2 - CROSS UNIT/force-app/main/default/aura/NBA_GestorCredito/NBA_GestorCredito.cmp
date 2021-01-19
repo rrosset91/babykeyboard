@@ -1,0 +1,21 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+
+	<lightning:layout class="slds-wrap" multipleRows="true">
+		<lightning:layoutItem size="12">
+			<div>
+				<div>
+					<div class="slds-m-around_large slds-m-bottom_x-small slds-text-align_center slds-text-heading_large">Cliente com crédito </div>
+					<div class="slds-m-around_large slds-m-bottom_medium slds-m-left_large slds-text-align_left" style="font-size: 1.125rem;">Por favor, seguir com o processo de encerramento do Atendimento</div>
+				</div>
+			</div>
+		</lightning:layoutItem>
+	</lightning:layout>
+
+	<lightning:layout class="slds-m-top_xx-large" horizontalAlign="end" verticalAlign="start">
+		<lightning:layoutItem>
+			<lightning:button class="slds-theme_brand" variant="brand" label="Avançar"></lightning:button>
+		</lightning:layoutItem>
+		<lightning:layoutItem></lightning:layoutItem>
+	</lightning:layout>
+
+</aura:component>

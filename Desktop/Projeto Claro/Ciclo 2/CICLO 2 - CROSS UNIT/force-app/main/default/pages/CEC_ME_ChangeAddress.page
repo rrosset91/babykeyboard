@@ -1,0 +1,17 @@
+<apex:page title="Atendimento ME" standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0">
+	<div class="vlocity via-slds" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="CECMEChangeAddress">
+		<script src="https://js.arcgis.com/3.29/"></script>
+		<vlocity_cmt:BusinessProcessComponent strOmniScriptType="ChangeAddress"
+			strOmniScriptSubType="ChangeAddress"
+			strOmniScriptLang="Portuguese (Brazil)"
+			previewMode="{!$CurrentPage.parameters.previewEmbedded}"
+			scriptLayout="lightning"
+			ContextId="{!$CurrentPage.parameters.ContextId}"
+			/>
+
+		<script type="text/javascript">
+			var modules = ['vlocity-business-process'];
+			var myModule = angular.module('CECMEChangeAddress', modules);
+		</script>
+	</div>
+</apex:page>

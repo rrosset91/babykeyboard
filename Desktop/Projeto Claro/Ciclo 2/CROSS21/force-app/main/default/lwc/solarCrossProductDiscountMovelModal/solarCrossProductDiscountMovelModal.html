@@ -1,0 +1,152 @@
+<template>
+    <section id ="modal-fade-in-open" role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container">
+                <div style="float:right;">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close" onclick={handleCloseModal} variant="bare-inverse" style="float:right;"></lightning-button-icon>
+                </div>
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Promoções e Descontos</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_large">
+                <h1 class="slds-m-bottom_medium slds-m-left_xx-large slds-text-heading_medium custom-box"><strong>{offer.name}</strong></h1>
+                <lightning-layout vertical-align="start">
+                    <lightning-layout-item size="3" class="slds-p-top_large slds-p-bottom_small slds-m-left_xx-large">
+                        <span class="slds-text-align_left slds-text-title">Efetivação</span>
+                        <div class="slds-text-heading_large slds-text-align_center slds-box">
+                            <lightning-formatted-date-time value={offer.effectiveDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" class="slds-p-top_large slds-p-bottom_small slds-m-left_xx-large">
+                        <span class="slds-text-align_left slds-text-title">Expiração</span>
+                        <div class="slds-text-heading_large  slds-text-align_center slds-box">
+                            <lightning-formatted-date-time value={offer.expirationDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" class="slds-p-top_large slds-p-bottom_small slds-m-left_xx-large">
+                        <span class="slds-text-align_left slds-text-title">Valor da Assinatura</span>
+                        <div class="slds-text-heading_large  slds-text-align_center slds-box">
+                            <p><lightning-formatted-number value={offer.signatureValue} format-style="currency"></lightning-formatted-number></p>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout vertical-align="center">
+                    <lightning-layout-item size="3" class="slds-p-top_large slds-p-bottom_large slds-m-left_xx-large">
+                        <span class="slds-text-align_left slds-text-title">Valor do Desconto da Assinatura</span>
+                        <div class="slds-text-heading_large slds-text-align_center slds-box custom-box">
+                            <strong><lightning-formatted-number value={offer.valueDiscountSubscription} format-style="currency"></lightning-formatted-number></strong>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" class="slds-p-top_large slds-p-bottom_large slds-m-left_xx-large">
+                        <span class="slds-text-align_left slds-text-title">Valor do Desconto Fidelidade</span>
+                        <div class="slds-text-heading_large  slds-text-align_center slds-box custom-box">
+                            <strong><lightning-formatted-number value={offer.valueDiscountLoyalty} format-style="currency"></lightning-formatted-number></strong>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="slds-p-top_large slds-p-bottom_large slds-m-left_small">
+                        <div class="slds-text-heading_large  slds-text-align_center">
+                            <span class="slds-m-left_xx-small">=</span>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="3" class="slds-p-top_large slds-p-bottom_large slds-m-left_medium">
+                        <span class="slds-text-align_left slds-text-title">Valor do Desconto Total</span>
+                        <div class="slds-text-heading_large  slds-text-align_center slds-box custom-box">
+                            <strong><lightning-formatted-number value={offer.totalDiscount} format-style="currency"></lightning-formatted-number></strong>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout vertical-align="stretch">
+                    <lightning-layout-item size="2" class="slds-p-top_large slds-p-bottom_x-small slds-m-left_large">
+                        <span class="slds-text-align_left slds-text-title">Tipo</span>
+                        <div class="slds-text-align_left ">
+                            <p>{offer.type}</p>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2" class="slds-p-top_large slds-p-bottom_x-small">
+                        <span class="slds-text-align_left slds-text-title">Nivel</span>
+                        <div class="slds-text-align_left ">
+                            <p>{offer.level}</p>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2" class="slds-p-top_large slds-p-bottom_x-small">
+                        <span class="slds-text-align_left slds-text-title">Situação</span>
+                        <div class="slds-text-align_left ">
+                            <p>{offer.situation}</p>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2" class="slds-p-top_large slds-p-bottom_x-small">
+                        <span class="slds-text-align_left slds-text-title">Aceitação</span>
+                        <div class="slds-text-align_left ">
+                            <lightning-formatted-date-time value={offer.dateSituation} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2" class="slds-p-top_large slds-p-bottom_x-small">
+                        <span class="slds-text-align_left slds-text-title">Início de Carencia</span>
+                        <div class="slds-text-align_left ">
+                            <lightning-formatted-date-time value={offer.needStartDate} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="2" class="slds-p-top_large slds-p-bottom_x-small">
+                        <span class="slds-text-align_left slds-text-title">Prazo de Carência</span>
+                        <div class="slds-text-align_left ">
+                            <p>{offer.gracePeriod}</p>
+                        </div>
+                    </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout vertical-align="stretch">
+                <lightning-layout-item size="2" class="slds-p-bottom_large slds-m-left_large">
+                    <span class="slds-text-align_left slds-text-title">Ativação</span>
+                    <div class="slds-text-align_left ">
+                        <lightning-formatted-date-time value={offer.activationDate} year="numeric" month="numeric" day="numeric" hour="2-digit"
+                        minute="2-digit"></lightning-formatted-date-time>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" class="slds-p-bottom_large">
+                    <span class="slds-text-align_left slds-text-title">Franquia de dados</span>
+                    <div class="slds-text-align_left ">
+                        <p></p>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="slds-border_bottom"></div>
+                    <lightning-accordion allow-multiple-sections-open="true"  active-section-name={activeSections}>
+                        <lightning-accordion-section label='Descontos' name="A">
+                            <lightning-datatable key-field="id"
+                            data={discounts}
+                            columns={columns}
+                            hide-checkbox-column = 'true'
+                            default-sort-direction="asc"
+                            sorted-direction={sortDirectionDiscount}
+                            sorted-by={sortedByDiscount}
+                            onsort={onHandleSortDiscount}
+                            >
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section label="Serviço de Valor Agregado" name="B">
+                            <lightning-datatable key-field="id"
+                            data={svas}
+                            columns={columns}
+                            hide-checkbox-column = 'true'
+                            default-sort-direction={defaultSortDirection}
+                            sorted-direction={sortDirectionSVA}
+                            sorted-by={sortedBySVA}
+                            >
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                        <lightning-accordion-section label="Outros" name="C">
+                            <lightning-datatable key-field="id"
+                            data={others}
+                            columns={columns}
+                            hide-checkbox-column = 'true'
+                            default-sort-direction={defaultSortDirection}
+                            sorted-direction={sortDirectionOthers}
+                            sorted-by={sortedByOthers}
+                            onsort={onHandleSortOther}
+                            >
+                            </lightning-datatable>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </div>
+            </div>
+        </section>
+        <div id="modal-backdrop" class="slds-backdrop slds-backdrop_open"></div>
+    </template>

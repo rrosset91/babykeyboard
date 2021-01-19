@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17.02" height="20.875" viewBox="0 0 17.02 20.875">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="17.02" height="20.875" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="cti-trash" clip-path="url(#clip-path)">
+    <path id="Caminho_44" data-name="Caminho 44" d="M176.415,247.509a.5.5,0,0,0,.529.464h13.433a.5.5,0,0,0,.529-.464V232.487H176.415v15.022Zm10.222-12.466h1.984v10.108h-1.984Zm-3.969,0h1.984v10.108h-1.984Zm-3.969,0h1.984v10.108H178.7Z" transform="translate(-175.151 -227.098)" fill="#da291c"/>
+    <path id="Caminho_45" data-name="Caminho 45" d="M134.752,2.131V.464A.493.493,0,0,0,134.234,0h-7.7a.493.493,0,0,0-.518.464V2.71h-3.623a.493.493,0,0,0-.518.464V4.346a.493.493,0,0,0,.518.464h15.983a.493.493,0,0,0,.518-.464V3.174a.493.493,0,0,0-.518-.464h-3.623v-.58Zm-1.944.484h-4.85V1.739h4.85v.876Z" transform="translate(-121.874)" fill="#da291c"/>
+  </g>
+</svg>

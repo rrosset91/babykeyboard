@@ -1,0 +1,156 @@
+<aura:component>
+
+    <aura:attribute type="Object"	name="oferta1" />
+    <aura:attribute type="Object"	name="oferta2" />
+    <aura:attribute type="Object"	name="oferta3" />
+	<aura:attribute type="Object"	name="produtoAtual" />
+    <aura:attribute type="Object" 	name="oferta" />
+    <aura:attribute type="Boolean"	name="disabledBroadband" />
+	<aura:attribute type="string"	name="protecaoDigitalAtual" />
+    <aura:attribute type="Boolean"	name="showAdditionalBroadband" default="false" />
+    <aura:attribute type="Boolean"	name="sellProtecaoDigital"  />
+    <aura:attribute type="Boolean"	name="sellMonitoramento"  />
+    <aura:attribute type="Boolean"	name="sellAutomacao"  />
+	<aura:attribute type="String"   name="monitoramentoAtual" />
+	<aura:attribute type="String"   name="automacaoAtual" />
+	<aura:attribute type="Object[]" name="listAutomacao" />
+	<aura:attribute type="Object[]" name="listaMonitoramento" />
+	<aura:attribute type="Boolean"  name="fristCall" />
+	<aura:attribute type="String"   name="typeModal" />
+	<aura:attribute type="Object[]" name="lstPontuacao" />
+	<aura:attribute type="Boolean" name="calculate" />
+    <!--<aura:attribute type="Object[]" name="protecaoDigital" default="[{'label':'1 por R$ 19,90', value:'1'},{'label':'2 por R$ 39,80',value:'2'},{'label':'3 por R$ 59,70', value:'3'}]" />
+    <aura:attribute type="Object[]" name="monitoramento" default="[{'label':'Tudo: Monitoramento + 4 Câmeras', 'value':'0'}, {'label':'1 Câmera', 'value':'1'},{'label':'2 Câmeras', 'value':'2'},{'label':'3 Câmeras', 'value':'3'}]" />
+    <aura:attribute type="Object[]" name="automacao" default="[{'label':'Tudo: Automação + 2 Câmeras', 'value':'0'}, {'label':'1 Câmera', 'value':'1'}, {'label':'2 Câmeras', 'value':'2'}]" />
+-->
+
+	<aura:method name="callUpdateAditionalsBroadband" action="{! c.updateAdditionalsBroadband }" />
+
+    <!-- BOTÃO ADICIONAIS BANDA LARGA -->
+    <div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+   <!--     <div class="slds-col slds-size_3-of-12 box-oferta"></div> -->
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable ' + (v.disabledBroadband ? ' disableSection' : ' ' )  }" style="margin-left:0.5rem"
+            onclick="{! c.incluirAdicionaisBroadband }"></div>
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable ' + (v.disabledBroadband ? ' disableSection' : ' ')  }"
+            onclick="{! c.incluirAdicionaisBroadband }">{! $Label.c.OFERTA_ADICIONAIS_DE_BANDA_LARGA }</div>
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable ' + (v.disabledBroadband ? ' disableSection' : ' ')  }" style="margin-right:0.5rem"
+            onclick="{! c.incluirAdicionaisBroadband }">
+            <div class="down-arrow alim-icon-add">
+               <!-- <lightning:icon iconName="utility:down" size="x-small" alternativeText="Detalhar" /> -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAIS BANDA LARGA -->
+    <aura:if isTrue="{! v.showAdditionalBroadband }">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+            class="slds-modal slds-fade-in-open" Style="position: fixed;">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                        onclick="{! c.closeAdicionalBroadband }">
+                        <lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{! $Label.c.OFERTA_ADICIONAIS_DE_BANDA_LARGA }</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_7-of-12">
+                            <div class="slds-grid" style="display:block">
+                                <div class="slds-size_1-of-1" style="padding-bottom:1rem">
+                                    <strong>{! $Label.c.OFERTA_SERVICOS_AVANCADOS }</strong>
+                                </div>
+                                <aura:iteration items="{! v.oferta.broadband.addOptions.lstAdditionals }" var="additional"
+                                    indexVar="indexAdd">
+                                    <div class=" slds-col slds-size_2-of-2 check">
+                                        <div class=" slds-col slds-size_7-of-12  check" style="display:-webkit-inline-box">
+                                            <!--<div class="slds-size_3-of-3 slds-p-top_small check">-->
+                                            <lightning:input type="checkbox" label="" name="{! indexAdd }" checked="{! additional.checked }" />{!
+                                            additional.label + ' - ' }
+                                            <lightning:formattedNumber value="{! additional.value }" style="currency" currencyCode="BRL" />
+                                        </div>
+                                        <div class="slds-col slds-size_5-of-12  check" style="padding-left: 1.5rem">
+                                            <aura:if isTrue="{! not(empty(additional.lstPromotions)) }">
+                                                <select class="slds-select" value="" disabled="" onchange="{! c.updatePromoAdd }" 
+														style="margin: 0rem 0rem 0rem 0rem; width:13rem; floa:right; height:20px ">
+                                                    <aura:iteration items="{! additional.lstPromotions }" var="pro" indexVar="indexPromo">
+                                                        <option value="{! indexAdd + '#' + indexPromo }" selected="{! equals(indexPromo + '', additional.promoSelected) }">{! pro.label }</option>
+                                                    </aura:iteration>
+                                                </select>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </aura:iteration>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_5-of-12" style="margin-right:1rem; margin-top:2rem">
+                            <div class="slds-grid" style="display:contents">
+                                <div class="slds-col slds-size_1-of-1 alim-select">
+                                    <lightning:input type="checkbox" label="Proteção Digital" onchange="{! c.hasProtecaoDigital }" 
+                                        checked="{! not(empty(v.oferta.broadband.addOptions.protecaoDigitalSelected)) }" />
+										<!--<aura:iteration items="{! v.oferta.broadband.addOptions.lstProtecaoDigital }" var="ex" indexVar="index">
+											<aura:if isTrue="{! ex.value == v.oferta.broadband.addOptions.protecaoDigitalSelected }">
+												<strong> Atual: {! ex.label } </strong>
+											</aura:if>
+										</aura:iteration> -->
+                                    <select class="slds-select custom-combobox" id="idProtecaoDigital" disabled="{! v.sellProtecaoDigital }" onchange="{! c.updateProtecaoDigital }" >
+                                        <option value="">Selecione</option>
+                                        <aura:iteration items="{! v.oferta.broadband.addOptions.lstProtecaoDigital }" var="ex" indexVar="index">
+                                            <option value="{! ex.value }"  >{! ex.label }</option>
+<!--selected="{ equals(ex.value, v.oferta.broadband.addOptions.protecaoDigitalSelected) }"-->
+                                        </aura:iteration>
+                                    </select>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 alim-select">
+                                    <lightning:input type="checkbox" label="Smart Home - Monitoramento (Cancelamento)" onchange="{! c.hasMonitoramento }"
+                                        checked="{! not(empty(v.oferta.broadband.addOptions.smartHomeMonitorSelected)) }" />
+										<!--<aura:iteration items="{! v.oferta.broadband.addOptions.lstSmartHomeMonitor }" var="ex" indexVar="index"> 
+											<aura:if isTrue="{! ex.value == v.oferta.broadband.addOptions.smartHomeMonitorSelected }">
+												<p>Atual: {! ex.label } </p>
+											</aura:if>
+										</aura:iteration>-->
+										<aura:if isTrue="{! !v.sellMonitoramento }">
+												<p>Atual: {! v.monitoramentoAtual } </p>
+										</aura:if>
+                                    <select class="slds-select custom-combobox" id="idMonitoramento" Disabled="{! v.sellMonitoramento }" onchange="{! c.updateSmartHomeMonitor }" >
+                                        <option value="">Selecione</option>
+                                        <aura:iteration items="{! v.listaMonitoramento }" var="mo" indexVar="indexMo">
+                                            <option value="{! mo.value }"  >{! mo.label }</option>
+<!--selected="{ equals(mo.value, v.oferta.broadband.addOptions.smartHomeMonitorSelected) }"-->
+                                        </aura:iteration>
+                                    </select>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 alim-select">
+                                    <lightning:input type="checkbox" label="Smart Home - Automação (Cancelamento)" onchange="{! c.hasAutomacao }"
+                                        checked="{! not(empty(v.oferta.broadband.addOptions.smartHomeAutomacaoSelected)) }" />
+										<!--<aura:iteration items="{!  v.oferta.broadband.addOptions.lstSmartHomeAutomacao }" var="ex" indexVar="index">
+											<aura:if isTrue="{! ex.value == v.oferta.broadband.addOptions.smartHomeAutomacaoSelected }">
+												<p >Atual: {! ex.label } </p>
+											</aura:if>
+										</aura:iteration> -->
+										<aura:if isTrue="{! !v.sellAutomacao }">
+												<p>Atual: {! v.automacaoAtual } </p>
+										</aura:if>
+                                    <select class="slds-select custom-combobox" id="idAutomacao" Disabled="{! v.sellAutomacao }" onchange="{! c.updateSmartAutomacao }" >
+                                        <option value="">Selecione</option>
+                                        <aura:iteration items="{! v.listAutomacao }" var="au" indexVar="indexAu">
+                                            <option value="{! au.value }"  >{! au.label }</option>
+<!--selected="{ au.value === v.oferta.broadband.addOptions.smartHomeAutomacaoSelected }"-->
+                                        </aura:iteration>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_brand" onclick="{! c.updateAdditionalsBroadband }" >Atualizar</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" Style="position: fixed;"></div>
+    </aura:if>
+</aura:component>

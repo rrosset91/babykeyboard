@@ -1,0 +1,530 @@
+<aura:component controller="CEC_360_showProductsController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="noAsset" type="Boolean" default="false"/>
+    <aura:attribute name="noAssetPre" type="Boolean" default="false"/>
+    <aura:attribute name="contSize" type="Integer"/>
+    <aura:attribute name="preSize" type="Integer"/>
+    <aura:attribute name="hasSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="hasSpinner2" type="Boolean" default="false"/>
+    <aura:attribute name="hasCancel" type="Boolean" default="false"/>
+    <aura:attribute name="actContracts" type = "List"/>
+    <aura:attribute name="tvList" type="List"/>
+    <aura:attribute name="tvSubList" type="List"/>
+    <aura:attribute name="tellList" type="List"/>
+    <aura:attribute name="tellSubList" type="List"/>
+    <aura:attribute name="netList" type="List"/>
+    <aura:attribute name="netSubList" type="List"/>
+    <aura:attribute name="movList" type="List"/>
+    <aura:attribute name="movSubList" type="List"/>
+    <aura:attribute name="movpreList" type="List"/>
+    <aura:attribute name="movpreSubList" type="List"/>
+    <aura:attribute name="hasTV" type="Boolean"/>
+    <aura:attribute name="hasSubTV" type="Boolean" default="true" />
+    <aura:attribute name="hasTell" type="Boolean"/>
+    <aura:attribute name="hasSubTell" type="Boolean"/>
+    <aura:attribute name="hasNet" type="Boolean"/>
+    <aura:attribute name="hasSubNet" type="Boolean"/>
+    <aura:attribute name="hasMov" type="Boolean"/>
+    <aura:attribute name="hasSubMov" type="Boolean"/>
+    <aura:attribute name="hasMovPre" type="Boolean"/>
+    <aura:attribute name="hasSubMovPre" type="Boolean"/>
+    <aura:attribute name="recordList" type="List"/>
+    <aura:attribute name="recordId" type="String" /> 
+    
+    
+    <!-- Attributes Cancelados Tab -->
+    <aura:attribute name="cancContracts" type="List"/>
+    <aura:attribute name="startDate" type="Date"/>
+    <aura:attribute name="endDate" type="Date"/>
+    <aura:attribute name="contractNumber" type="String" default="Ver Todos"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="maxDate" type="Date"/>
+    <aura:attribute name="minDate" type="Date"/>
+    <aura:attribute name="sortField" type="String" />     
+    <aura:attribute name="sortAsc" type="String" />
+    
+    
+    <lightning:tabset selectedTabId="Ativos">
+        <lightning:tab label="Ativos" id="Ativos">
+            <aura:if isTrue="{!and(v.noAsset, v.noAssetPre)}">
+                <div class="slds-box">
+                    <lightning:layout>
+                        <lightning:layoutItem size="2"><img src="/resource/cec_identidade/images-upload/cec-produto/icon-sem-produto.png" style="background-color:#ffffff; height:35px"></img>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="10">
+                            <div class="slds-text-heading_medium" contenteditable="false"><span class="vermelho">Atenção:</span> O cliente não possui contratos.</div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+                <aura:set attribute="else">
+                    <table>
+                        <tbody>
+                            <aura:iteration items="{!v.actContracts}" var="cont"  indexVar="contIndex">
+                                <tr>
+                                    <td class="padding-bottom-10">
+                                        <div class="slds-box slds-box_xx-small box-contrato">
+                                            <div class="slds-grid slds-gutters margin-left-5">
+                                                <div><lightning:buttonIcon aura:id="buttonIcon" value="{!contIndex}" size="x-small" onclick="{!c.expandTable}" iconName="{!cont.isExpandable?'utility:chevrondown':'utility:chevronright'}"/>
+                                                </div>
+                                                <div>
+                                                    <span class="size-12">Contrato:</span>&nbsp; {!cont.contractNumber}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <aura:if isTrue="{!cont.isExpandable}">
+                                            <div class="slds-p-left_xx-small">
+                                                <aura:if isTrue="{!v.hasSpinner}">
+                                                    <lightning:spinner  size="small"/>
+                                                    <aura:set attribute="else"> 
+                                                        <table class="lista-produtos-contrato">
+                                                            <thead>
+                                                                <th>Produto</th>
+                                                                <th>Plano</th>
+                                                                <th>Linha</th>
+                                                                <th>Preço</th>
+                                                                <th>Status</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <aura:if isTrue="{!v.hasTV}">
+                                                                    <tr class="slds-border_bottom">
+                                                                        <td>
+                                                                            <div class="box-icon-product">
+                                                                                <img src = "{!$Resource.iconTv}"></img><br></br>
+                                                                                TV
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tvList}" var="objTv" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    <aura:if isTrue="{!objTv.isExpandable}">
+                                                                                        <img src="{!$Resource.v360IconeMenos}" data-ex="{!contSubIndex}" onclick="{!c.expandTVSubTable}"/>
+                                                                                        <aura:set attribute="else">
+                                                                                            <img src="{!$Resource.v360IconeMais}" data-ex="{!contSubIndex}" onclick="{!c.expandTVSubTable}"/>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                    <a data-id="{!objTv.Id}" onclick="{!c.openDetailPage}">{!objTv.Name}</a>
+                                                                                </div>
+                                                                                
+                                                                                <aura:if isTrue="{!objTv.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubTV}">
+                                                                                        <aura:iteration items="{!v.tvSubList}" var="objSubTv" >
+                                                                                            <div class="sub-produto">{!objSubTv.Name}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                                
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tvList}" var="objTv" >
+                                                                                <div class="linha-produto">{!objTv.msisdn}</div>   
+                                                                                <aura:if isTrue="{!objTv.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubTV}">
+                                                                                        <aura:iteration items="{!v.tvSubList}" var="objSubTv" >
+                                                                                            <div class="sub-produto left-0">{!objSubTv.Msisdn__c}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tvList}" var="objTv" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">{!objTv.Preco}</div>
+                                                                                <aura:if isTrue="{!objTv.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubTV}">
+                                                                                        <aura:iteration items="{!v.tvSubList}" var="objSubTv" >
+                                                                                            <div class="sub-produto left-0">{!objSubTv.PriceDec__c}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tvList}" var="objTv" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">{!objTv.status}</div>
+                                                                                <aura:if isTrue="{!objTv.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubTV}">
+                                                                                        <aura:iteration items="{!v.tvSubList}" var="objSubTv" >
+                                                                                            <div class="sub-produto left-0">{!objSubTv.Status}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                    </tr>
+                                                                </aura:if>
+                                                                <!-- Telefone Fixo -->
+                                                                <aura:if isTrue="{!v.hasTell}">
+                                                                    <tr class="slds-border_bottom">
+                                                                        <td>
+                                                                            <div class="box-icon-product">
+                                                                                <img src = "{!$Resource.iconPhone}"></img><br></br>Fixo
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tellList}" var="objTell" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    <aura:if isTrue="{!objTell.isExpandable}">
+                                                                                        <img src="{!$Resource.v360IconeMenos}" data-ex="{!contSubIndex}" onclick="{!c.expandTellSubTable}"/>
+                                                                                        <aura:set attribute="else">
+                                                                                            <img src="{!$Resource.v360IconeMais}" data-ex="{!contSubIndex}" onclick="{!c.expandTellSubTable}"/>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                    <a data-id="{!objTell.Id}" onclick="{!c.openDetailPage}">{!objTell.Name}</a>
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objTell.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubTell}">
+                                                                                        <aura:iteration items="{!v.tellSubList}" var="objSubTell" >
+                                                                                            <div class="linha-produto">{!objSubTell.Name}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tellList}" var="objTell">
+                                                                                <div class="linha-produto">
+                                                                                    {!objTell.msisdn}
+                                                                                </div>     
+                                                                                <aura:if isTrue="{!objTell.isExpandable}" >
+                                                                                    <aura:if isTrue="{!v.hasSubTell}">
+                                                                                        <aura:iteration items="{!v.tellSubList}" var="objSubTell" >
+                                                                                            <div class="linha-produto">{!objSubTell.Msisdn__c}</div>                                                                                            
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>      
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tellList}" var="objTell" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objTell.Preco}
+                                                                                    <aura:if isTrue="{!objTell.isExpandable}">
+                                                                                        <aura:if isTrue="{!v.hasSubTell}">
+                                                                                            <aura:iteration items="{!v.tellSubList}" var="objSubTell" >
+                                                                                                <div class="sub-produto left-0">{!objSubTell.PriceDec__c}</div>
+                                                                                            </aura:iteration>
+                                                                                        </aura:if>
+                                                                                    </aura:if>
+                                                                                </div>
+                                                                            </aura:iteration>                                                                            
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.tellList}" var="objTell" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objTell.status}
+                                                                                    <aura:if isTrue="{!objTell.isExpandable}">
+                                                                                        <aura:if isTrue="{!v.hasSubTell}">
+                                                                                            <aura:iteration items="{!v.tellSubList}" var="objSubTell" >
+                                                                                                <div class="sub-produto left-0">{!objSubTell.Status}</div>
+                                                                                            </aura:iteration>
+                                                                                        </aura:if>
+                                                                                    </aura:if>
+                                                                                </div>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </td>
+                                                                    </tr>
+                                                                </aura:if>
+                                                                <!-- Internet -->
+                                                                
+                                                                <aura:if isTrue="{!v.hasNet}">
+                                                                    
+                                                                    <tr class="slds-border_bottom">
+                                                                        <td>
+                                                                            <div class="box-icon-product">
+                                                                                <img src = "{!$Resource.iconNet}"></img><br></br>Internet
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.netList}" var="objNet" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    <aura:if isTrue="{!objNet.isExpandable}">
+                                                                                        <img src="{!$Resource.v360IconeMenos}" data-ex="{!contSubIndex}" onclick="{!c.expandNetSubTable}"/>
+                                                                                        <aura:set attribute="else">
+                                                                                            <img src="{!$Resource.v360IconeMais}" data-ex="{!contSubIndex}" onclick="{!c.expandNetSubTable}"/>
+                                                                                        </aura:set>
+                                                                                    </aura:if>
+                                                                                    <a data-id="{!objNet.Id}" onclick="{!c.openDetailPage}">{!objNet.Name}</a>
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objNet.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubNet}">
+                                                                                        <aura:iteration items="{!v.netSubList}" var="objNetTell" >
+                                                                                            <div class="sub-produto">{!objNetTell.Name}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </td>
+                                                                        <td>
+                                                                            <aura:iteration items="{!v.netList}" var="objNet" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objNet.msisdn}
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objNet.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubNet}">
+                                                                                        <aura:iteration items="{!v.netSubList}" var="objNetTell" >
+                                                                                            <div class="sub-produto">{!objNetTell.Msisdn__c}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                                
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.netList}" var="objNet" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objNet.Preco}
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objNet.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubNet}">
+                                                                                        <aura:iteration items="{!v.netSubList}" var="objNetTell" >
+                                                                                            <div class="sub-produto left-0">{!objNetTell.PriceDec__c}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.netList}" var="objNet" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objNet.status}
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objNet.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubNet}">
+                                                                                        <aura:iteration items="{!v.netSubList}" var="objNetTell" >
+                                                                                            <div class="sub-produto left-0">{!objNetTell.Status}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                        </td>
+                                                                    </tr>
+                                                                </aura:if>
+                                                                <!--Celular -->
+                                                                <aura:if isTrue="{!v.hasMov}">
+                                                                    
+                                                                    <tr class="slds-border_bottom">
+                                                                        <td>
+                                                                            <div class="box-icon-product">
+                                                                                <img src ="{!$Resource.iconMovel}"></img><br></br>
+                                                                                Móvel
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.movList}" var="objMov" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    <aura:if isTrue="{!objMov.isExpandable}">
+                                                                                        <img src="{!$Resource.v360IconeMenos}" data-ex="{!contSubIndex}" onclick="{!c.expandMovSubTable}"/>
+                                                                                        <aura:set attribute="else">
+                                                                                            <img src="{!$Resource.v360IconeMais}" data-ex="{!contSubIndex}" onclick="{!c.expandMovSubTable}"/>
+                                                                                        </aura:set>
+                                                                                    </aura:if> 
+                                                                                    <a data-id="{!objMov.Id}" onclick="{!c.openDetailPage}">{!objMov.Name}</a>
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objMov.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubMov}">
+                                                                                        <aura:iteration items="{!v.movSubList}" var="objMov" >
+                                                                                            <div class="sub-produto">{!objMov.Name}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.movList}" var="objMov" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objMov.msisdn}
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objMov.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubMov}">
+                                                                                        <aura:iteration items="{!v.movSubList}" var="objMov" >
+                                                                                            <div class="sub-produto">{!objMov.Msisdn__c}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.movList}" var="objMov" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objMov.Preco}
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objMov.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubMov}">
+                                                                                        <aura:iteration items="{!v.movSubList}" var="objMov" >
+                                                                                            <div class="sub-produto left-0">{!objMov.PriceDec__c}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </td>
+                                                                        <td>
+                                                                            
+                                                                            <aura:iteration items="{!v.movList}" var="objMov" indexVar="contSubIndex" >
+                                                                                <div class="linha-produto">
+                                                                                    {!objMov.status}
+                                                                                </div>
+                                                                                <aura:if isTrue="{!objMov.isExpandable}">
+                                                                                    <aura:if isTrue="{!v.hasSubMov}">
+                                                                                        <aura:iteration items="{!v.movSubList}" var="objMov" >
+                                                                                            <div class="sub-produto left-0">{!objMov.Status}</div>
+                                                                                        </aura:iteration>
+                                                                                    </aura:if>
+                                                                                </aura:if>
+                                                                            </aura:iteration>
+                                                                            
+                                                                        </td>
+                                                                    </tr>
+                                                                </aura:if>
+                                                                
+                                                                
+                                                            </tbody>
+                                                            
+                                                        </table>
+                                                        
+                                                    </aura:set>
+                                                </aura:if>
+                                            </div>
+                                        </aura:if>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                    <!-- pre -->
+                    <aura:if isTrue="{!v.hasMovPre}">
+                        <div class="slds-box slds-m-top_x-small top-0">
+                            <table class="lista-produtos-contrato width-90">
+                                <thead>
+                                    <th>Produto</th>
+                                    <th>Plano</th>
+                                    <th>Linha</th>
+                                    <th>Preço</th>
+                                    <th>Status</th>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>
+                                            <div class="box-icon-product">
+                                                <img src = "{!$Resource.iconMovel}"></img><br></br>Pré Movel
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <aura:iteration items="{!v.movpreList}" var="Pre" indexVar="contSubIndex" >
+                                                <div class="linha-produto">
+                                                    <a data-id="{!Pre.Id}" onclick="{!c.openDetailPage}">{!Pre.Name}</a>
+                                                </div>
+                                            </aura:iteration>
+                                        </td>
+                                        <td>
+                                            <aura:iteration items="{!v.movpreList}" var="Pre" indexVar="contSubIndex" >
+                                                <div class="linha-produto">{!Pre.MSISDN__c}</div>
+                                            </aura:iteration>
+                                        </td>
+                                        <td>
+                                            <aura:iteration items="{!v.movpreList}" var="Pre" indexVar="contSubIndex" >
+                                                <div class="linha-produto">{!Pre.Preco}</div>
+                                            </aura:iteration>
+                                        </td>
+                                        <td>
+                                            <aura:iteration items="{!v.movpreList}" var="Pre" indexVar="contSubIndex" >
+                                                <div class="linha-produto">{!Pre.Status}</div>
+                                            </aura:iteration>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </aura:if>
+                </aura:set>
+            </aura:if>
+        </lightning:tab>
+        <lightning:tab label="Cancelados" id="Cancelados" >
+            <div class="slds-grid slds-gutters">
+                
+                
+                
+                <div class="data-inicio">
+                    <lightning:input aura:id="startDate" label="Data início" type="date" value="{!v.startDate}" max="{!v.maxDate}"
+                                     messageWhenBadInput="Data inválida." disabled="{!v.isDate}"
+                                     />
+                </div>
+                <div class="data-fim">
+                    <lightning:input aura:id="startDate" label="Data fim" type="date" value="{!v.endDate}" max="{!v.maxDate}" 
+                                     messageWhenBadInput="Data inválida."  disabled="{!v.isDate}" />
+                </div>
+                <div class ="contratos">
+                    <lightning:combobox label="Contratos"  aura:id="cmbContract" value="{!v.contractNumber}" 
+                                        options="{!v.options}"
+                                        />
+                    
+                </div>
+                
+                <div class="busca">
+                    <div class="slds-text-body_regular slds-p-left_none slds-p-top_large slds-float_left">
+                        <lightning:button label="Buscar" onclick="{!c.getCancelAssets}" class="botao-busca" ></lightning:button>
+                    </div>
+                </div>
+                
+            </div>
+            <aura:if isTrue="{!v.hasSpinner2}" >
+                <lightning:spinner variant="brand" size="small"/>
+            </aura:if>
+            
+            <aura:if isTrue="{!v.hasCancel}">           
+                <div class="slds-p-top_small">          
+                    <table class="slds-table slds-row-hover lista-produtos-cancelados">
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th>Produto</th>
+                                <th>Pacote</th>
+                                <th>Linha</th>
+                                <th>Contrato</th>
+                                <th>Endereço</th>
+                                <th onclick="{!c.sortByDate}">Cancelado em
+                                    <span>
+                                        <aura:if isTrue="{!or(v.sortField == 'Cancelado em', v.sortField == '' )}" >
+                                            <aura:if isTrue="{! v.sortAsc}">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                                <aura:set attribute="else">
+                                                    <lightning:icon iconName="utility:arrowdown"  size="xx-small" />
+                                                </aura:set>
+                                            </aura:if>
+                                            <aura:set attribute="else">
+                                                <lightning:icon iconName="utility:arrowup"  size="xx-small" />
+                                            </aura:set>
+                                        </aura:if>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.cancContracts}" var="cont"  indexVar="contIndex">
+                                <tr class="slds-hint-parent">
+                                    <td>{!cont.record}</td>
+                                    <td>{!cont.Name}</td>
+                                    <td>{!cont.msisdn}</td>
+                                    <td>{!cont.contractNumber}</td>
+                                    <td>{!cont.addres}</td>
+                                    <td>{!cont.dateMod}</td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>  
+            </aura:if>
+        </lightning:tab>
+    </lightning:tabset>
+</aura:component>

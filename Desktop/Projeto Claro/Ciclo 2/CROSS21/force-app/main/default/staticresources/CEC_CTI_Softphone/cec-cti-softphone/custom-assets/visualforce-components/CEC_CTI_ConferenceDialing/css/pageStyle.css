@@ -1,0 +1,47 @@
+.conference-dialing.actions-change-call{
+    padding-top: 10px;
+}
+
+.conference-dialing.actions-change-call .active .persons-icon{
+    width: 65%;
+    padding-top: 7px;
+}
+
+.conference-dialing.actions-change-call .inactive .persons-icon{
+    width: 65%;
+    padding-top: 7px;
+}
+
+.conference-dialing.actions-change-call .persons-icon{
+    padding-bottom: 3px;
+}
+
+.conference-dialing .phone-icon{
+    padding-top: 5px;
+}
+
+.conference-dialing .phone-icon.customer-hold{
+    width: 80%;
+    margin-top: 4px;
+    padding-top: 10px;
+}
+
+.conference-dialing .online-number{
+    color: #DA291C;
+}
+
+.conference-dialing .hold-number{
+    color: #ABABAF;
+    line-height: 14px;
+    font-size: 14px;
+}
+
+.conference-dialing .merge-calls{
+    padding-top: 10px;
+    color: #ABABAF;
+}
+
+.conference-dialing .merge-calls img{
+    width: 37%;
+    padding-bottom: 6px;
+}

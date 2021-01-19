@@ -1,0 +1,40 @@
+.THIS button.slds-button.slds-button_icon.slds-button_icon-x-small.slds-button_icon-border {border: 0px;margin-top: -3px;}
+.THIS .margin-left-5 {margin-left: 5px;}
+.THIS .box-contrato {background: #F1F0F0;border-radius: 5px 5px 0px 0px;height: 40px;line-height: 28px;}
+.THIS table.lista-produtos-contrato th {font-weight:normal;height:43px;border-bottom:solid 1px #dbdada;}
+.THIS table.lista-produtos-contrato td {font-weight:normal;border-bottom:solid 1px #dbdada;vertical-align:top;}
+.THIS table.lista-produtos-contrato th:nth-child(1) {width:100px;}
+.THIS table.lista-produtos-contrato th:nth-child(2) {width:320px;}
+.THIS table.lista-produtos-contrato th:nth-child(3) {width:120px;}
+.THIS table.lista-produtos-contrato th:nth-child(4) {width:120px;}
+.THIS table.lista-produtos-contrato th:nth-child(5) {width:calc(100% - 560px);}
+.THIS table.lista-produtos-contrato td div.linha-produto:last-child {border-bottom: 0px;}
+.THIS table.lista-produtos-contrato td div.sub-produto:last-child {border-bottom: 0px;}
+.THIS table.lista-produtos-contrato.width-90 th:nth-child(1) {width:90px;}
+.THIS table.lista-produtos-contrato.width-90 td:nth-child(1) {width:90px;}
+.THIS .box-icon-product {width:72px;text-align:center;color:#da291c;padding-top:10px;font-size:16px;}
+.THIS .linha-produto {border-bottom: solid 1px #dbdada;height: 43px;line-height: 43px;font-size: 13px;}
+.THIS .linha-produto img {padding-right: 9px;}
+.THIS .linha-produto a {color:#da291c;}
+.THIS .sub-produto {border-bottom: solid 1px #dbdada;height: 34px;line-height: 34px;font-size: 12px;padding-left: 22px;color:#707070;}
+.THIS .left-0 {padding-left:0px;}
+.THIS .padding-bottom-10 {padding-bottom:10px;}
+.THIS .size-12 {font-size:12px;}
+.THIS button {outline:none;}
+.THIS button:focus {outline:none;}
+.THIS button:focus { outline:0 !important;}
+.THIS .top-0 {padding-top:0px;}
+.THIS button.slds-button.slds-button_neutral.buscar {background: #da291c;color: #ffffff;min-width: 100px;}
+.THIS table.lista-produtos-cancelados {border: solid 1px #dbdada;line-height: 43px;}
+.THIS table.lista-produtos-cancelados th {font-weight: normal;text-transform: none;letter-spacing: initial;height: 43px;border-bottom: solid 1px #dbdada;}
+.THIS table.lista-produtos-cancelados td {font-weight: normal;text-transform: none;letter-spacing: initial;height: 43px;border-bottom: solid 1px #dbdada;}
+.THIS table.lista-produtos-cancelados td:last-child {width: 100%;}
+.THIS table.lista-produtos-cancelados th:last-child {width: 100%;}
+.THIS table.lista-produtos-cancelados td {width: fit-content;padding-right: 40px;}
+.THIS .vermelho {color:#da291c;}
+.THIS button.slds-button.slds-button_icon.slds-button_icon-x-small.slds-button_icon-border:focus {box-shadow: none;}
+.THIS .busca {width:100px;}
+.THIS .data-inicio {width:160px;padding-right:20px;margin-left:10px;}
+.THIS .data-fim {width:160px;padding-right:20px;}
+.THIS .contratos {width:220px;padding-right:20px;}
+.THIS .botao-busca {background:#da291c;color:#ffffff;width:100px;}

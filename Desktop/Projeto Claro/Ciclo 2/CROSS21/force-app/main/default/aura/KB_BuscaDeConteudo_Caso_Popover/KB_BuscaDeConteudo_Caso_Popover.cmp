@@ -1,0 +1,88 @@
+<aura:component>
+    <aura:attribute name="article" type="Object" default="{}" />
+    <aura:attribute name="activeSections" type="List" default="[]" />
+    <lightning:overlayLibrary aura:id="overlayLib1" />
+    <!-- Content -->
+    <div class="slds-box slds-p-top_large PopoverClass">
+        <div class="slds-page-header slds-page-header_record-home no-border no-box-shadow">
+            <button class="slds-button slds-button--icon-inverse slds-popover__close" onclick="{!c.hidePopover}">
+                <lightning:icon iconName="utility:close" alternativeText="Fechar" title="Fechar" size="xx-small"/>
+            </button>
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="standard:knowledge" alternativeText="knowledge" title="knowledge" />
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <a href="javascript:void(0);" onclick="{!c.goToArticle}" title="{!v.article.titulo}" style="color:black;">
+                                        <span class="slds-page-header__title slds-truncate" title="{!v.article.titulo}"><u>{!v.article.titulo}</u></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__row slds-page-header__row_gutters">
+                <div class="slds-page-header__col-details">
+                    <ul class="slds-page-header__detail-row">
+                        <li class="slds-page-header__detail-item">
+                            <div class="slds-text-title" title="RecordTypeId">Tipo de artigo</div>
+                            <div class="slds-truncate slds-text-color_weak" title="Tipo de artigo">
+                                {!v.article.tipoArtigo}</div>
+                        </li>
+                        <li class="slds-page-header__detail-item">
+                            <div class="slds-text-title" title="LastPublishedDate">Última modificação</div>
+                            <div class="slds-truncate slds-text-color_weak" title="Última modificação">
+                                {!v.article.ultimaPublicacao}</div>
+                        </li>
+                    </ul>
+                    <ul class="slds-page-header__detail-row">
+                        <li class="slds-page-header__detail-item">
+                            <div class="slds-text-title" title="UrlName">URL</div>
+                            <div class="slds-truncate slds-text-color_weak" title="Url">
+                                {!v.article.urlArtigo}</div>
+                            <!-- Colocar a URL Name -->
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <aura:if isTrue="{!v.article.artigoWatson}">
+            <div class="slds-border_top">
+                <p class="slds-p-around_x-small" title="SearchSnippet">Resumo</p>
+                <p class="slds-p-around_x-small slds-text-color_weak">{!v.article.resumo}</p>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!not(empty(v.article.termosPromovidos))}">
+            <div class="slds-box no-padding">
+                <p class="slds-p-around_x-small" title="SearchPromotionRule">Palavras-chave</p>
+                <p class="slds-p-around_x-small">
+                    <aura:iteration items="{!v.article.termosPromovidos}" var="termo">
+                        <lightning:badge class="slds-badge slds-badge_lightest slds-m-bottom_x-small" style="color:#da291c" label="{!termo}" />
+                    </aura:iteration>
+                </p>
+            </div>
+        </aura:if>
+        <div class="slds-box no-padding slds-scrollable_y">
+            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" activeSectionName="{!v.activeSections}">
+                <lightning:accordionSection class="padding2px slds-section__title" name="entenda" label="Entenda">
+                    <lightning:formattedRichText value="{!v.article.entenda}" />
+                </lightning:accordionSection>
+                <aura:if isTrue="{!not(empty(v.article.comoFunciona))}">
+                    <lightning:accordionSection class="padding2px slds-section__title" name="comoFunciona" label="Como funciona">
+                        <lightning:formattedRichText value="{!v.article.comoFunciona}" />
+                    </lightning:accordionSection>
+                </aura:if>
+                <aura:if isTrue="{!not(empty(v.article.saibaMais))}">
+                    <lightning:accordionSection class="padding2px slds-section__title" name="saibaMais" label="Saiba mais">
+                        <lightning:formattedRichText value="{!v.article.saibaMais}" />
+                    </lightning:accordionSection>
+                </aura:if>
+            </lightning:accordion>
+        </div>
+    </div>
+</aura:component>

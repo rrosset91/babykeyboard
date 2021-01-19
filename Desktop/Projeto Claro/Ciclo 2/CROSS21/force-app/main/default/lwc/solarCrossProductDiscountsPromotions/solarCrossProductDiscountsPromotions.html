@@ -1,0 +1,87 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-07-2021
+  @last modified by  : lucas.soldi@ibm.com
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   12-07-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+        <lightning-card  variant="Narrow"  title="Produtos, promoções e descontos" icon-name="standard:quotes">
+            <lightning-layout class="slds-m-top_large">
+                <lightning-layout-item class="slds-m-left_medium" size='1'>
+                    <lightning-icon icon-name="custom:custom100" size='small'></lightning-icon>
+                </lightning-layout-item>
+                <lightning-layout-item size='11' class="slds-m-left_xx-small">
+                    <div class="slds-text-title_bold">{title}</div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <template if:true={success}>
+                    <template for:each={sumsList} for:item="sum">
+                        <lightning-layout class="slds-m-top_medium slds-m-left_large" key={sum.typeProduct}>
+                            <lightning-layout-item class="" size='7'>
+                                <div class="slds-text-title_bold">{sum.typeProduct} </div>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout class="slds-m-top_xx-small slds-m-left_large" key={sum.typeProduct}>
+                            <lightning-layout-item class="" size='7'>
+                                <div class="slds-text-color_error">Promoções: </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size='5' class="slds-m-left_xx-large">
+                                <lightning-formatted-number value={sum.sumPromo} format-style="currency" class="slds-text-color_error"></lightning-formatted-number>
+                                <!--<div class="slds-text-color_error">{sum.sumPromo}</div>-->
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        <lightning-layout class="slds-m-top_xx-small slds-m-left_large" key={sum.typeProduct}>
+                            <lightning-layout-item class="" size='7' >
+                                <div class="slds-text-color_error">Descontos: </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size='5' class="slds-m-left_xx-large">
+                                <lightning-formatted-number value={sum.sumDisc} format-style="currency" class="slds-text-color_error"></lightning-formatted-number>
+                                <!--<div class="slds-text-color_error">{sum.sumDisc}</div>-->
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                <div class="slds-box slds-box_small slds-m-top_large">
+                    <lightning-layout class="slds-m-top_x-small">
+                        <lightning-layout-item class="slds-m-top_xx-small" size='7' >
+                            <div class="slds-text-color_error">Promoções: </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size='5' class="slds-m-left_xx-large">
+                            <lightning-formatted-number value={totalSumPromo} format-style="currency" class="slds-text-color_error">{totalSumPromo}</lightning-formatted-number>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <lightning-layout class="" >
+                        <lightning-layout-item class="" size='7'>
+                            <div class="slds-text-color_error">Descontos: </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item  size='5' class="slds-m-left_xx-large">
+                            <lightning-formatted-number value={totalSumDisc} format-style="currency" class="slds-text-color_error"></lightning-formatted-number>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <lightning-layout class="">
+                        <lightning-layout-item class="slds-m-top_xx-small" size='7'>
+                            <div class="slds-text-title_bold">Total: </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size='5' class="slds-m-left_xx-large">
+                            <lightning-formatted-number value={total} format-style="currency" class="slds-text-title_bold"></lightning-formatted-number>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </template>
+            <template if:false={success}>
+                <p class="slds-m-left_large slds-m-top_medium">{message}</p>
+            </template>
+            <div slot="footer">
+                <lightning-button label="Ver Mais" onclick={openModalDisc} disabled={disableButton}></lightning-button>
+            </div>
+        </lightning-card>
+    <template if:true={openModal}>
+       <c-solar-cross-promotions-discounts-modal onclose={closeModal} discounts={completeListDiscounts} promotions={completeListPromotions}></c-solar-cross-promotions-discounts-modal>  
+    </template>
+    <template if:true={openModalMovel}>
+        <c-solar-cross-product-discount-movel-modal onclose={closeModal} discounts={discountsMovel} others={othersMovel} svas={svaMovel} offer={offerMovel}></c-solar-cross-product-discount-movel-modal>  
+     </template>
+</template>

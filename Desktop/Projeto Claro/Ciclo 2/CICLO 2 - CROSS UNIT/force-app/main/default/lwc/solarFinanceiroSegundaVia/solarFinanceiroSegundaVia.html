@@ -1,0 +1,70 @@
+<!--
+  @description       : Tela de envio da segunda via (SMS/E-mail/Correios)
+  @author            : Ricardo Alves
+  @group             : Squad Financeiro
+  @last modified on  : 11-03-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   10-23-2020   Ricardo Alves   Initial Version
+-->
+<template>
+  <c-solar-modal size="small" header="Enviar segunda via">
+    <div slot="content" class="modal_body">
+      <lightning-combobox
+        name="envioSegundaVia"
+        label="Tipo de Envio:"
+        value={dispatchType}
+        placeholder="Escolha um tipo de envio"
+        options={options}
+        onchange={handleChange}
+        required
+      ></lightning-combobox>
+      <!-- Campo email (Se escolhido) -->
+      <div if:true={isEmailSelected}>
+        <div>
+          <lightning-input
+            data-id="emailField"
+            type="email"
+            label="E-mail:"
+            maxlength="256"
+            placeholder="Informe o endereço de e-mail"
+            onblur={validateFields}
+            required
+          >
+          </lightning-input>
+        </div>
+      </div>
+      <!-- Campo SMS (Se escolhido) -->
+      <div if:true={isSmsSelected}>
+        <div>
+          <lightning-input
+            data-id="phoneField"
+            type="tel"
+            label="Telefone:"
+            maxlength="15"
+            placeholder="(11)99999-9999"
+            message-when-value-missing="Campo obrigatório"
+            onkeyup={applyPhoneMask}
+            onblur={validateFields}
+            required
+          ></lightning-input>
+        </div>
+      </div>
+    </div>
+    <div slot="footer" class="slds-clearfix">
+      <lightning-button
+        label="Cancelar"
+        onclick={close}
+        class="slds-float_left"
+      ></lightning-button>
+      <lightning-button
+        variant="brand"
+        label="Enviar"
+        disabled={disabledSaveCondition}
+        onclick={save}
+        class="slds-float_right"
+      ></lightning-button>
+    </div>
+  </c-solar-modal>
+</template>

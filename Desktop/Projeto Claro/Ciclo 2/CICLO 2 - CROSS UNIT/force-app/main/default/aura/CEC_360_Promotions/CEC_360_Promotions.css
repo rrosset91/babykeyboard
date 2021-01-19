@@ -1,0 +1,32 @@
+.title-section.cCEC_360_Promotions {font-size: 16px;color: #da291c;font-weight: 400;border-bottom: solid 1px #dbdada;}
+.THIS .title-section {font-size: 16px;color: #da291c;font-weight: 400;border-bottom: solid 1px #dbdada;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th {height: 34px;line-height: 34px;font-weight: normal;padding-left: 0px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas {border: solid 1px #dbdada;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas td {padding: 10px 0px;vertical-align:top;border-top:solid 1px #dbdada;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th:first-child {padding-left: 10px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas td:first-child {padding-left: 10px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao th {height: 34px;line-height: 34px;font-weight: normal;padding-left: 0px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao {border: solid 1px #dbdada;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao td {padding: 10px 0px;vertical-align:top;border-top:solid 1px #dbdada;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao th:first-child {padding-left: 10px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao td:first-child {padding-left: 10px;}
+
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th:nth-child(1) {min-width: 320px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th:nth-child(2) {min-width: 160px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th:nth-child(3) {min-width: 170px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th:nth-child(4) {min-width: 200px;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-promocoes-ativas th:last-child {width: 100%;}
+
+.cCEC_360_Promotions table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao th:nth-child(1) {min-width: 320px;}
+.cCEC_360_Promotions table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao th:nth-child(2) {min-width: 260px;}
+.cCEC_360_Promotions table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao th:last-child {width: 100%;}
+.THIS table.slds-table.slds-table_cell-buffer.slds-table_bordered.lista-historico-promocao th:last-child {width: 100%;}
+
+.THIS .slds-grid.slds-gutters.slds-p-top_medium.data-block {display: block;margin-left:0px;margin-bottom:10px;}
+.THIS .data-inicio {width:160px;margin-right:20px;display:inline-block;}
+.THIS .data-fim {width:160px;margin-right:20px;display:inline-block;}
+.THIS .buscar {width:100px;margin-right:20px;display:inline-block;}
+.THIS .buscar button {width:100px;}
+.THIS button.slds-button.slds-button_destructive.botao-buscar {background: #da291c;}
+.THIS .vermelho {font-size: 14px;  color:#da291c;font-weight:normal;}
+.THIS .slds-text-heading_medium {font-size: 12px;color: #434444;font-weight:normal; }

@@ -1,0 +1,347 @@
+<!-- CEC_360_Balance Component -->
+<!-- Autor: Danilo Fucuhara e Leticia Freitas - Deloitte -->
+<!-- Criação: 12/2018 -->
+<!-- Descrição: Componente de balances -->
+<!-- Nome do projeto/ID: CEC FASE - Time: SQUAD 360 -->
+<!-- Alterações: US17541(17/05/19) -->
+<!-- Alterações: Ajuste do botao aparecer para asset NET(12/06/19) -->
+
+<aura:component controller="CEC_360_BalanceController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="showModalExtratos" type="Boolean"/>
+    <aura:attribute name="showTable" type="Boolean"/>
+    <aura:attribute name="showModalSaldos" type="Boolean"/>
+    <aura:attribute name="dataStartValue" type="Date"/>
+    <aura:attribute name="dataEndValue" type="Date"/>
+    <aura:attribute name="minData" type="Date"/>
+    <aura:attribute name="maxData" type="Date"/>
+    <aura:attribute name="showButtonDevice" type="Boolean" default="false"/>
+    <aura:attribute name="showAdditional" type="Boolean" default="false"/>
+    <aura:attribute name="dataTransactions" type="Object[]"/>
+    <aura:attribute name="paginationList" type="Object[]"/>
+    <aura:attribute name="pageSize" type="Integer" default="5"/>
+    <aura:attribute name="totalSize" type="Integer" default="0"/>
+    <aura:attribute name="start" type="Integer" default="0"/>
+    <aura:attribute name="end" type="Integer" default="0"/>
+    <aura:attribute name="showSpinner1" type="Boolean"/>
+    <aura:attribute name="device" type="Object[]"/>
+    <aura:attribute name="tipo" type="List"/>
+    <aura:attribute name="subTipo" type="List"/>
+    <aura:attribute name="tipoValue" type="String"/>
+    <aura:attribute name="subTipoValue" type="String"/>
+    <aura:attribute name="dataAccumulators" type="CEC_RestObjects.Accumulators"/>
+    <aura:attribute name="dataPromotional" type="CEC_RestObjects.PromotionalBalances"/>
+    <aura:attribute name="showSpinnerSaldos" type="Boolean"/>
+    <aura:attribute name="balance" type="CEC_RestObjects.BalancesMain"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <div class="slds-box slds-theme_default">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-orders">
+                            <img src ="/resource/cec_identidade/images-upload/cec-produto/cec-icon-produtos-celular.png" style="background-color:#ffffff; height:40px"></img>
+                        </span>
+                    </div>
+                    <div class="slds-media__body slds-p-top_xx-small">
+                        <span class="slds-truncate" style="font-size:13px">Produto</span>
+                        <span class="slds-page-header__title slds-truncate" title="{!v.record.Account.Name}" style="color:#000000; font-size:17px">{!v.record.Account.Name}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <div class="slds-grid">
+                            <div class="slds-col">
+                                <aura:if isTrue="{!v.showAdditional}">
+                                    <button class="slds-button slds-button_brand" onclick="{!c.handleShowModalSubscriber}">Ver dados adicionais</button>
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!v.showButtonDevice}">
+                                            <button class="slds-button slds-button_brand" onclick="{!c.handleShowModal}">Dados do aparelho</button>
+                                        </aura:if>
+                                        <button class="slds-button slds-button_brand" onclick="{!c.handleShowModalSubscriber}">Ver dados adicionais</button>
+                                        <button class="slds-button slds-button_brand" onclick="{!c.openModal}">Ver extrato</button>
+                                        <button class="slds-button slds-button_brand" onclick="{!c.openOtherBalances}">Ver saldos</button>
+                                    </aura:set>
+                                </aura:if>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Modal start -->
+    <aura:if isTrue="{!v.showModalExtratos}">
+        <div style="height: 240px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close">
+                            <lightning:icon iconName="utility:close" size="small" variant="inverse" onclick="{!c.closeModal}" />
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-text-heading_small slds-m-left_small">Pesquisa de extratos</div>
+                        
+                        <div class="slds-m-around_small" style="border-bottom: 1px solid #dddbda;"></div>
+                        
+                        <div class="slds-grid slds-gutters slds-m-bottom_medium slds-m-left_xx-small">
+                            <div class="slds-col slds-size_2-of-12">
+                                <div class="slds-m-vertical_small">
+                                    <lightning:input aura:id="startDate" type="date" label="Data início: " value="{!v.dataStartValue}" required="true" max="{!v.maxData}"
+                                                     min="{!v.minData}" messageWhenBadInput="Sua entrada não corresponde ao formato permitido dd/mm/aaaa." />
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_2-of-12">
+                                <div class="slds-m-vertical_small">
+                                    <lightning:input aura:id="endDate" type="date" label="Data fim: " value="{!v.dataEndValue}" required="true" max="{!v.maxData}" 
+                                                     min="{!v.minData}" messageWhenBadInput="Sua entrada não corresponde ao formato permitido dd/mm/aaaa." />
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_3-of-12">
+                                <div class="slds-m-vertical_small">
+                                    <lightning:combobox aura:id="cmbTipo" label="Tipo" placeholder="Selecione um tipo"
+                                                        options="{!v.tipo}" value="{!v.tipoValue}" onchange="{!c.populateCmbsubTipo}" />
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_3-of-12">
+                                <div class="slds-m-vertical_small">
+                                    <lightning:combobox aura:id="cmbSubTipo" placeholder="Selecione um subtipo"
+                                                        label="Subtipo" value="{!v.subTipoValue}" options="{!v.subTipo}" />
+                                </div>
+                            </div>
+                            <div class="slds-col">
+                                <div class="slds-align_absolute-center" style="height: 5rem;">
+                                    <div class="slds-m-top_large ">
+                                        <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                                          variant="brand" onclick="{!c.buscarHandler}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <aura:if isTrue="{!v.showSpinner1}">
+                            <section role="dialog" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_small">
+                                <div class="slds-modal__container" style="width: 25%;">
+                                    <header class="slds-modal__header slds-modal__header_empty"/>
+                                    <div class="slds-modal__content slds-p-around_medium">
+                                        <div class="slds-grid slds-gutters">
+                                            <div class="slds-col slds-size_3-of-3">
+                                                <div class="slds-clearfix">
+                                                    <div class="slds-align_absolute-center">
+                                                        <div style="position: relative; display: inline-block; height: 80px;">
+                                                            <lightning:spinner alternativeText="Loading" size="medium" variant="brand"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </aura:if>
+                        
+                        <aura:if isTrue="{!v.showTable}">
+                            <div class="slds-m-bottom_medium">
+                                <div class="slds-scrollable_y" style="height: 15rem;">
+                                    <table class="slds-table slds-table_fixed-layout">
+                                        <thead>
+                                            <tr class="slds-text-title_caps">
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DATA</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">ORIGEM</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DESTINO</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">NÚM. CHAMADO</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DURAÇÃO(MIN)</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DESCRIÇÃO</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">VALOR</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">SALDO ANTES</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">SALDO DEPOIS</span></th>
+                                                <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">SALDO PROMO.</span></th>
+                                            </tr>
+                                        </thead>
+                                        <aura:iteration items="{!v.paginationList}" var="item" indexVar="itemIndex">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.eventDate}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.areaOrigin}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.areaDestiny}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.telephoneNumberDestiny}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.eventDuration}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.eventDescription}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.eventAmount}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.balancePrincipalBefore}</td>
+                                                    <td class="slds-cell-wrap slds-text-align_center">{!item.balancePrincipalAfter}</td>
+                                                    <td>
+                                                        <lightning:buttonIcon onclick="{!c.handlePromotionalAfter}"
+                                                                              value="{!itemIndex}" class="slds-align_absolute-center"
+                                                                              iconName="{!item.expanded?'utility:chevrondown':'utility:chevronleft'}"
+                                                                              size="small" />
+                                                    </td>
+                                                </tr>
+                                                <aura:if isTrue="{!item.expanded}">
+                                                    <tr style="background-color: #fafaf9;">
+                                                        <td colspan="10">
+                                                            <table class="slds-table">
+                                                                <thead>
+                                                                    <tr class="slds-text-title_caps">
+                                                                        <th scope="col" class="slds-text-align_center"><span class="slds-truncate">DESCRIÇÃO DO SALDO PROMOCIONAL</span></th>
+                                                                        <th scope="col" class="slds-text-align_center"><span class="slds-truncate">SALDO PROMOCIONAL ANTES</span></th>
+                                                                        <th scope="col" class="slds-text-align_center"><span class="slds-truncate">SALDO PROMOCIONAL DEPOIS</span></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <aura:iteration items="{!item.usagePromotionalBalances}" var="subItem">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="slds-text-align_center">{!subItem.descriptionbalancePromotional}</td>
+                                                                            <td class="slds-text-align_center">{!subItem.balancePromotionalBefore}</td>
+                                                                            <td class="slds-text-align_center">{!subItem.balancePromotionalAfter}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </aura:iteration>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </aura:if>
+                                            </tbody>
+                                        </aura:iteration>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="slds-text-align_center slds-m-around_small">
+                                <lightning:button iconName="utility:chevronleft" iconPosition="left" label="Anterior" disabled="{!v.start == 0}" onclick="{!c.anteriorHandler}" />
+                                <lightning:button iconName="utility:chevronright" iconPosition="right" label="Próximo" disabled="{!v.end >= v.totalSize}" onclick="{!c.proximoHandler}" />
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!--Modal end -->
+    
+    <!--Modal Start Other_Balances -->
+    <aura:if isTrue="{!v.showModalSaldos}">
+        <div style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close">
+                            <lightning:icon iconName="utility:close" size="small" variant="inverse" onclick="{!c.closeOtherBalances}" />
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-text-heading_small slds-m-left_small">Saldos</div>
+                        <lightning:tabset selectedTabId="saldo_principal">
+                            <lightning:tab label="Saldo principal" onactive="{!c.handleSaldoPrincipal}" id="saldo_principal">
+                                <aura:if isTrue="{!v.showSpinnerSaldos}">
+                                    <div class="slds-text-align_center">
+                                        <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                                            <lightning:spinner alternativeText="Loading" size="medium" />
+                                        </div>
+                                    </div>
+                                    <aura:set attribute="else">
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning:input class="slds-m-horizontal_small slds-m-bottom_small" value="{!v.balance.data.balances.principalBalanceAmount}" disabled="true" label="Saldo"/>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning:input class="slds-m-horizontal_small slds-m-bottom_small" value="{!v.balance.data.balances.principalDateExpirationBalance}" disabled="true" label="Data de vencimento dos créditos"/>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning:input class="slds-m-horizontal_small slds-m-bottom_small" value="{!v.balance.data.balances.principalExpirationDateCredit}" disabled="true" label="Data de expiração dos créditos (ZB1)"/>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning:input class="slds-m-horizontal_small slds-m-bottom_small" value="{!v.balance.data.balances.principalDateBlockingCalls}" disabled="true" label="Data do bloqueio de chamadas (ZB2)"/>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning:input class="slds-m-horizontal_small" value="{!v.balance.data.balances.principalDateExpirationService}" disabled="true" label="Data de expiração do serviço"/>
+                                            </div>
+                                            <div class="slds-col slds-size_1-of-2">
+                                                <lightning:input class="slds-m-horizontal_small" value="{!v.balance.data.balances.principalDateExpirationPhone}" disabled="true" label="Data de expiração do telefone"/>
+                                            </div>
+                                        </div>
+                                    </aura:set>
+                                </aura:if>
+                            </lightning:tab>
+                            <lightning:tab label="Saldos acumuladores" onactive="{!c.handleSaldosAcumuladores}" id="saldos_acumuladores">
+                                <div class="slds-m-bottom_medium">
+                                    <div class="slds-scrollable_y" style="height: 10rem;">
+                                        <table class="slds-table">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th scope="col" class="slds-text-align_left"><span class="slds-truncate">Descrição</span></th>
+                                                    <th scope="col" class="slds-text-align_left"><span class="slds-truncate">Saldo</span></th>
+                                                    <th scope="col" class="slds-text-align_left"><span class="slds-truncate">Data de término da validade</span></th>
+                                                    <th scope="col" class="slds-text-align_left"><span class="slds-truncate">Unidade</span></th>
+                                                </tr>
+                                            </thead>
+                                            <aura:iteration items="{!v.dataAccumulators}" var="Accumulators">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="slds-text-align_left">{!Accumulators.accumulatorBusinessDescription}</td>
+                                                        <td class="slds-text-align_left">{!Accumulators.accumulatorBalance}</td>
+                                                        <td class="slds-text-align_left">{!Accumulators.accumulatorDateAux}</td>
+                                                        <td class="slds-text-align_left">{!Accumulators.accumulatorMeasurementUnit}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </aura:iteration>
+                                        </table>
+                                        <aura:if isTrue="{!v.showSpinnerSaldos}">
+                                            <div class="slds-text-align_center">
+                                                <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                                                    <lightning:spinner alternativeText="Loading" size="medium" />
+                                                </div>
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </lightning:tab>
+                            <lightning:tab label="Saldos promocionais" onactive="{!c.handleSaldosPromocionais}" id="saldos_promocionais">
+                                <div class="slds-m-bottom_medium">
+                                    <div class="slds-scrollable_y" style="height: 10rem;">
+                                        <table class="slds-table">
+                                            <thead>
+                                                <tr class="slds-text-title_caps">
+                                                    <th scope="col" class="slds-text-align_left"><span class="slds-truncate">Descrição</span></th>
+                                                    <th scope="col" class="slds-text-align_left"><span class="slds-truncate">Saldo</span></th>
+                                                    <th scope="col" class="slds-text-align_center"><span class="slds-truncate">Unidade</span></th>
+                                                </tr>
+                                            </thead>
+                                            <aura:iteration items="{!v.dataPromotional}" var="PromotionalBalances">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="slds-text-align_left">{!PromotionalBalances.description}</td>
+                                                        <td class="slds-text-align_left">{!PromotionalBalances.balance}</td>
+                                                        <td class="slds-text-align_left">{!PromotionalBalances.measurementUnit}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </aura:iteration>
+                                        </table>
+                                        <aura:if isTrue="{!v.showSpinnerSaldos}">
+                                            <div class="slds-text-align_center">
+                                                <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                                                    <lightning:spinner alternativeText="Loading" size="medium" />
+                                                </div>
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                            </lightning:tab>
+                        </lightning:tabset>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!--Modal End -->
+</aura:component>

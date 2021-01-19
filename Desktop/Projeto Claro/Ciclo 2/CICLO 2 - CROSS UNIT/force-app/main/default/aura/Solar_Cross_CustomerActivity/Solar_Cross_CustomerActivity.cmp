@@ -1,0 +1,92 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_CustomerActivityController">
+
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="dayMessageString" type="String"/>
+    <aura:attribute name="frequenceString" type="String"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="dataLoadSucess" type="Boolean" default="true"/>
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    <aura:attribute name="emptyData" type="Boolean" default="false"/>
+    <aura:attribute name="viewSelected" type="String" default="Todos"/>
+    <aura:attribute name="errorMessage" type="String" default="Mensagem de erro dinâmica que exibe qual erro foi gerado na tentativa de trazer os dados"/>
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Resumo de Atividades</b>
+        </h1>
+    </aura:attribute>
+    <aura:attribute name="accordionLabel" type="String" default="Atividades Recentes"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />  
+    
+    <lightning:card class="" variant="narrow" title="{!v.headerTitle}" iconName="standard:action_list_component">
+        <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+            <lightning:accordionSection name="A" label="{!v.accordionLabel}">         
+                <div class="slds-box slds-m-bottom_medium">                        
+                    <aura:if isTrue="{!v.isLoading}">
+                        <lightning:spinner alternativeText="Carregando..." size="medium" />
+
+                        <aura:set attribute="else">                            
+                            <aura:if isTrue="{!(v.emptyData)}">
+                                <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                                    {!v.errorMessage}
+                                </div>
+                                <aura:set attribute="else">      
+                                    <aura:if isTrue="{!(!v.dataLoadSucess)}">
+                                        <div class="slds-grid slds-p-horizontal_large slds-m-bottom_x-small slds-align_absolute-center">
+                                            <b>Atenção</b>       
+                                        </div>
+                                        <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                                            {!v.errorMessage}
+                                        </div>
+                                        
+                                        <div class="slds-grid slds-align_absolute-center">
+                                            <div class="slds-m-top_x-small">
+                                                <lightning:buttonIcon class="forceListViewManagerHeader" iconName="utility:refresh" alternativeText="Recarregar Informações" onclick="{!c.onInit}" />                                    
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid slds-align_absolute-center slds-m-top_x-small">
+                                            Recarregar
+                                        </div>                        
+                                        <aura:set attribute="else">    
+                                            <!-- TRECHO ABAIXO COMENTADO ENQUANTO O CAMPO "ATIVO DESDE" DO OBJETO ACCOUNT, NÃO ESTIVER SENDO POPULADO CORRETAMENTE -->
+                                            
+                                            <!-- <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-text-heading_small">Ativo desde:</div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <p><lightning:formattedDateTime value="{!v.data.ActivityDate}" year="numeric" month="long" day="numeric" timeZone="UTC"/></p>                              
+                                                </div>
+                                            </div> -->
+                                            <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-text-heading_small">Último contato:</div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <p>
+                                                        <lightning:formattedDateTime value="{!v.data.LastContact}" year="numeric" month="long" day="numeric" timeZone="UTC"/> 
+                                                        {!v.dayMessageString}
+                                                    </p>                              
+                                                </div>
+                                            </div>
+                                            <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <div class="slds-text-heading_small">Registros Sistêmicos:</div>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1">
+                                                    <p>
+                                                        {!v.frequenceString}
+                                                    </p>                              
+                                                </div>
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>  
+                                </aura:set>
+                            </aura:if>                      
+                        </aura:set>
+                    </aura:if>                
+                </div>   
+            </lightning:accordionSection>
+        </lightning:accordion>     
+    </lightning:card>
+</aura:component>

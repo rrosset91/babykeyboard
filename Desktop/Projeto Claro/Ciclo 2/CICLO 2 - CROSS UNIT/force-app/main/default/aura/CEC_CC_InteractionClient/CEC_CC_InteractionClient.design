@@ -1,0 +1,4 @@
+<design:component>    
+    <design:attribute label="Tipo de Interação" name="interactionType" datasource="Cliente,Interna" default="Cliente"/>
+    <design:attribute label="Filtro de Interação" name="filterInteraction" datasource="Cliente,Interna" default="Cliente"/>	
+</design:component>

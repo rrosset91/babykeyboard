@@ -1,0 +1,141 @@
+<aura:component controller="CEC_360_BalanceController" implements="flexipage:availableForRecordHome,force:hasRecordId" >
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="dataStartValue" type="Date"/>
+    <aura:attribute name="dataEndValue" type="Date"/>
+    <aura:attribute name="minData" type="Date"/>
+    <aura:attribute name="maxData" type="Date"/>
+    <aura:attribute name="showTable" type="Boolean"/>
+    
+    <aura:attribute name="tipo" type="List"/>
+    <aura:attribute name="auxtipo" type="String"/>
+    <aura:attribute name="subTipo" type="List"/>
+    <aura:attribute name="auxSubTipo" type="String"/>
+    <aura:attribute name="tipoValue" type="String"/>
+    <aura:attribute name="subTipoValue" type="String"/>
+    <aura:attribute name="dataTransactions" type="Object[]"/>
+    <aura:attribute name="paginationList" type="Object[]"/>
+    <aura:attribute name="pageSize" type="Integer" default="5"/>
+    <aura:attribute name="totalSize" type="Integer" default="0"/>
+    <aura:attribute name="start" type="Integer" default="0"/>
+    <aura:attribute name="end" type="Integer" default="0"/>
+
+  
+      
+    <div class="slds-grid slds-gutters slds-m-bottom_medium slds-m-left_xx-small" >
+        <div class="slds-col slds-size_2-of-12">
+            <div class="slds-m-vertical_small">
+                <lightning:input aura:id="startDate" type="date" label="Data início: " value="{!v.dataStartValue}" required="true" max="{!v.maxData}"
+                                    min="{!v.minData}" messageWhenBadInput="Sua entrada não corresponde ao formato permitido dd/mm/aaaa." />
+            </div>
+        </div>
+        <div class="slds-col slds-size_2-of-12">
+            <div class="slds-m-vertical_small">
+                <lightning:input aura:id="endDate" type="date" label="Data fim: " value="{!v.dataEndValue}" required="true" max="{!v.maxData}" 
+                                    min="{!v.minData}" messageWhenBadInput="Sua entrada não corresponde ao formato permitido dd/mm/aaaa." />
+            </div>
+        </div>
+        <div class="slds-col slds-size_3-of-12">
+            <div class="slds-m-vertical_small">
+                <lightning:combobox aura:id="cmbTipo" label="Tipo" placeholder="Selecione um tipo"
+                                    options="{!v.tipo}" value="{!v.tipoValue}" onchange="{!c.populateCmbsubTipo}" />
+            </div>
+        </div>
+        <div class="slds-col slds-size_3-of-12">
+            <div class="slds-m-vertical_small">
+                <lightning:combobox aura:id="cmbSubTipo" placeholder="Selecione um subtipo"
+                                    label="Subtipo" value="{!v.subTipoValue}" options="{!v.subTipo}" onchange="{!c.handleSubTipo}"  />
+            </div>
+        </div>
+        <div class="slds-col">
+            <div class="slds-align_absolute-center" style="height: 5rem;">
+                <div class="slds-m-top_large ">
+                    <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                        variant="brand" onclick="{!c.buscarHandler}" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slds-m-around_small" style="border-bottom: 1px solid #dddbda; margin-top: -15px;"></div>
+    
+    <div class="slds-grid slds-gutters slds-p-bottom_small">
+        <div class="slds-col slds-size_2-of-12">
+            <span>Tipo: <b style="color: red">&nbsp;<lightning:formattedText value="{!v.auxtipo}" /></b></span>
+        </div>
+        <div class="slds-col slds-size_3-of-12">
+            <span>Sub-tipo: <b style="color: red">&nbsp;{!v.auxSubTipo}</b></span>
+        </div>
+        <div class="slds-col slds-size_4-of-12">
+            <span>Período: <b style="color: red">&nbsp;<lightning:formattedDateTime value="{!v.dataStartValue}"/> a <lightning:formattedDateTime value="{!v.dataEndValue}"/> </b> </span>
+        </div>
+    </div>
+        
+    <div class="slds-m-bottom_medium">
+        <div class="slds-scrollable_y" style="height: 15rem;">
+            <table class="slds-table slds-table_fixed-layout">
+                <thead>
+                    <tr class="slds-text-title_caps">
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DATA</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">ORIGEM</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DESTINO</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">NÚM. CHAMADO</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DURAÇÃO(MIN)</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">DESCRIÇÃO</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">VALOR</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">SALDO ANTERIOR</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">SALDO POSTERIOR</span></th>
+                        <th scope="col" class="slds-cell-wrap slds-text-align_center"><span class="slds-truncate">SALDO PROMOCIONAL</span></th>
+                    </tr>
+                </thead>
+                <aura:iteration items="{!v.paginationList}" var="item" indexVar="itemIndex">
+                    <tbody>
+                        <tr>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.eventDate}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.areaOrigin}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.areaDestiny}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.telephoneNumberDestiny}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.eventDuration}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.eventDescription}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.eventAmount}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.balancePrincipalBefore}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">{!item.balancePrincipalAfter}</td>
+                            <td class="slds-cell-wrap slds-text-align_center">&nbsp;</td>
+                            
+                        </tr>
+                        <aura:if isTrue="{!item.expanded}">
+                            <tr style="background-color: #fafaf9;">
+                                <td colspan="10">
+                                    <table class="slds-table">
+                                        <thead>
+                                            <tr class="slds-text-title_caps">
+                                                <th scope="col" class="slds-text-align_center"><span class="slds-truncate">DESCRIÇÃO DO SALDO PROMOCIONAL</span></th>
+                                                <th scope="col" class="slds-text-align_center"><span class="slds-truncate">SALDO PROMOCIONAL ANTES</span></th>
+                                                <th scope="col" class="slds-text-align_center"><span class="slds-truncate">SALDO PROMOCIONAL DEPOIS</span></th>
+                                            </tr>
+                                        </thead>
+                                        <aura:iteration items="{!item.usagePromotionalBalances}" var="subItem">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="slds-text-align_center">{!subItem.descriptionbalancePromotional}</td>
+                                                    <td class="slds-text-align_center">{!subItem.balancePromotionalBefore}</td>
+                                                    <td class="slds-text-align_center">{!subItem.balancePromotionalAfter}</td>
+                                                </tr>
+                                            </tbody>
+                                        </aura:iteration>
+                                    </table>
+                                </td>
+                            </tr>
+                        </aura:if>
+                    </tbody>
+                </aura:iteration>
+            </table>
+        </div>
+        </div>
+        <div class="slds-text-align_center slds-m-around_small">
+            <lightning:button iconName="utility:chevronleft" iconPosition="left" label="Anterior" disabled="{!v.start == 0}" onclick="{!c.anteriorHandler}" />
+            <lightning:button iconName="utility:chevronright" iconPosition="right" label="Próximo" disabled="{!v.end >= v.totalSize}" onclick="{!c.proximoHandler}" />
+        </div>
+    
+</aura:component>

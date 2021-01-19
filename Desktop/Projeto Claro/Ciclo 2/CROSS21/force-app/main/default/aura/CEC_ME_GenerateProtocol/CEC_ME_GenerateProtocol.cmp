@@ -1,0 +1,6 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="recordId" type="String"/>
+    
+    <lightning:button label="Atendimento ME" onclick="{!c.openOmniScript}" />
+  
+</aura:component>

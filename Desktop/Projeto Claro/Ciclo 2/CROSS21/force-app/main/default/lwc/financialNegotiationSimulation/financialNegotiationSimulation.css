@@ -1,0 +1,61 @@
+.headerTitle
+{
+    font-size: 20px;
+    padding: 10px 0;  
+    font-weight: bold;
+    color: red;
+}
+
+.title-table  
+{
+    font-size: 16px;
+    font-weight: bold;
+    padding: 9px 0;  
+}
+
+template lightning-datatable
+{ 
+    text-decoration: none;
+    content: counter(row-number);
+    display: none;
+}
+ 
+.slds-button__icon 
+{
+    display: none;
+    fill: currentColor;
+}
+
+.slds-button_icon-bare 
+{
+    display: none;
+}
+
+.slds-card 
+{   
+    height: 8rem;
+}
+
+lightning-card:hover
+{
+    border: 5px solid red;
+}
+
+.parcelas li 
+{
+	display: inline-block;
+	text-align: center;
+	width: 14%;
+	vertical-align: top;
+	margin: 0 1.5%;
+	padding: 30px 20px;
+	box-sizing: border-box;
+	border: 1px solid rgb(175, 170, 170);
+	border-radius: 10px;
+}
+
+.parcelas li:hover
+{
+    border: 2px solid;
+    border-color: red;
+}

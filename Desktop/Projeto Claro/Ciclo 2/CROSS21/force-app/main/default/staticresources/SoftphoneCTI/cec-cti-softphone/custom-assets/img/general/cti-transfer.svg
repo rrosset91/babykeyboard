@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="29" viewBox="0 0 29 29">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.14" y1="0.122" x2="0.879" y2="0.799" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d52b1e"/>
+      <stop offset="1" stop-color="#009ed3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.089" y1="0.14" x2="0.849" y2="0.756" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="transferir-on" transform="translate(-151 -450)">
+    <path id="Caminho_96" data-name="Caminho 96" d="M341.153,404.388a14.5,14.5,0,1,0,14.5,14.5A14.5,14.5,0,0,0,341.153,404.388Zm0,27.984a13.484,13.484,0,1,1,13.484-13.484A13.484,13.484,0,0,1,341.153,432.372Z" transform="translate(-175.653 45.612)" fill="url(#linear-gradient)"/>
+    <path id="Caminho_99" data-name="Caminho 99" d="M349.323,417.173h-13.41l2.953-2.953a1.549,1.549,0,0,0-2.191-2.191l-5.589,5.589-.011.007c-.011.011-.014.026-.024.036a1.556,1.556,0,0,0-.307.464c-.007.016-.009.032-.015.048a1.533,1.533,0,0,0-.106.546v0h0v0a1.512,1.512,0,0,0,.106.546c.006.016.008.032.015.048a1.557,1.557,0,0,0,.307.464c.01.011.013.025.024.036l.011.007,5.589,5.589a1.549,1.549,0,0,0,2.191-2.191l-2.953-2.953h13.41a1.55,1.55,0,0,0,0-3.1Z" transform="translate(507.873 882.869) rotate(180)" fill="url(#linear-gradient-2)"/>
+  </g>
+</svg>

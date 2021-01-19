@@ -1,0 +1,35 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+	<aura:handler name="init" value="{!this }" action="{!c.doInit }"/>
+    <aura:attribute name="optionsTipoReembolso" type="List" default="[{'label': 'Conta Corrente', 'value': 'true'},{'label': 'Ordem de pagamento', 'value': 'false'}]"/>
+	<aura:attribute name="valueTipoReembolso" type="Boolean" default=""/>
+	<aura:attribute name="openReembolso" type="Boolean" default="false"/>	
+
+			<c:UiModal aura:id="tipoReembolso" title="Forma de Reembolso" size="dialog-m">
+				<aura:set attribute="content">
+					<div>
+						<lightning:radioGroup name="radioTipoReembolso"
+                          label="Crédito para o Cliente"
+                          options="{! v.optionsTipoReembolso }"
+                          value="{! v.valueTipoReembolso }"
+                          type="radio"
+                          required="true"/>
+					</div>
+				</aura:set>		
+				<aura:set attribute="footer">
+					<div class="modal-buttons">
+						<lightning:layout horizontalAlign="spread">
+							<div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small" >
+							<lightning:button variant="brand-outline" label="Cancelar" onclick="{!v.onClickButton1}" />
+							</div>
+							<div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small">
+								<lightning:button variant="brand" label="Continuar para Reembolso" onclick="{!c.openReembolso}"/>
+							</div>
+						</lightning:layout>
+					</div>
+				</aura:set>
+			</c:UiModal>
+			<aura:if isTrue="{!v.openReembolso}">
+				<c:Financeiro_Reembolso 
+					layoutReembolsoCC="{!v.valueTipoReembolso}"/>
+			</aura:if>
+</aura:component>

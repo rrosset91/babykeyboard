@@ -1,0 +1,35 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 15/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 8] + [Componente com as ações de callback]
+* Controle de Versão
+-->
+<apex:component >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_Callback/css/pageStyle.css')}"/>
+    
+    <div class="in-attendance">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_12-of-12 text-center">
+                <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/retornar-chamada.svg')}"/>  
+            </div>
+            <!--
+                <div class="slds-col slds-size_6-of-12 text-left">
+                <h1 class="cont-regressive">5</h1>
+            </div>
+            -->
+            <div class="slds-col slds-size_12-of-12 text-center text-call-down">
+                <h2>
+                    Queda de chamada<br/>Retorne em até 7 segundos
+                </h2>
+            </div>
+            
+            <div class="slds-col slds-size_12-of-12 text-center">
+                <button type="button" onclick="startCallBack();" class="cti-button-transparent">Retornar</button>
+            </div>
+            
+        </div>
+    </div>  
+
+
+</apex:component>

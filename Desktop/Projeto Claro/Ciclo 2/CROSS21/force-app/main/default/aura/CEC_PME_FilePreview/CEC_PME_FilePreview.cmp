@@ -1,0 +1,15 @@
+<!-- CEC_PME_FilePreview -->
+<aura:component controller="CEC_PME_FilePreviewController" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:handler event="c:CEC_PME_MobileButtonEvt" action="{!c.doInit}"/>
+    
+    <aura:attribute name="contVersion" type="ContentVersion[]"/>
+    <aura:attribute name="lstTipoAnexo" type="List"/>
+    
+    <aura:handler event="c:CEC_PME_RefreshFiles" action="{!c.doInit}"/>    
+    <div class="slds-grid slds-wrap">
+        <aura:iteration items="{!v.contVersion}" var="cv" indexVar="index">
+            <c:CEC_PME_FilePreviewParent contVersion="{!cv}" lstTipoAnexo="{!v.lstTipoAnexo}" orderId="{!v.recordId}" />
+        </aura:iteration>
+    </div>
+</aura:component>

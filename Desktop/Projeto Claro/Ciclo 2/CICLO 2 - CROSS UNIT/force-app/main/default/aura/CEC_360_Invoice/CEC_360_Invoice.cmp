@@ -1,0 +1,142 @@
+<!--- Letícia Freitas - 18/01/2018 -->
+
+<aura:component controller="CEC_360_InvoiceController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+    <aura:attribute name="isShow" type = "Boolean"/>
+    <aura:attribute name="drawnTable" type="Boolean"/>
+    <aura:attribute name="record" type="String"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="data" type="Object[]"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="minDate" type="Date"/>
+    <aura:attribute name="maxDate" type="date"/>
+    <aura:attribute name="dataInValue" type="date"/>
+    <aura:attribute name="dataEndValue" type="date"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="link" type="String"/>
+    <aura:attribute name="showSpinner" type="boolean"/>
+  
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-orders">
+                            <lightning:icon iconName="custom:custom17" size="large"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span>Produto</span>
+                                    <span class="slds-page-header__title slds-truncate" title="{!v.record}" style="color:#009ed3;">{!v.record}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-page-header__name" >
+                 <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <div class="slds-page-header__control">
+                            <ul class="slds-button-group-list">
+                                <li>
+                                    <lightning:button label="Ver faturas" iconPosition="left" onclick="{!c.openInvoice}">
+                                    </lightning:button>
+                                </li>                            
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Start-->
+    <aura:if isTrue="{!v.isShow}">
+        <div style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close">
+                            <lightning:icon iconName="utility:close" size="small" variant="inverse" onclick="{!c.closeInvoiceView}"/>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-text-heading_small slds-m-left_small">Pesquisa de faturas</div>
+                        
+                        <div class="slds-m-around_small" style="border-bottom: 1px solid #dddbda;"></div>  
+                        
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_3-of-12">
+                                <div class="slds-p-left_xx-small" >
+                                    
+                                    <lightning:input  aura:id="startDate" type="date" max="{!v.maxDate}" min="{!v.minDate}" 
+                                                     required="true" fieldName="startDate" label="Data de início"
+                                                     value="{!v.dataInValue}" messageWhenBadInput="Sua entrada não corresponde ao formato permitido dd/mm/aaaa."
+                                                     messageWhenRangeOverflow="A data limite para busca é hoje." 
+                                                     messageWhenRangeUnderflow="A data inserida é anterior há 5 anos."/>
+                                </div>
+                                
+                            </div>
+                            
+                            
+                            <div class="slds-col slds-size_3-of-12">
+                            <lightning:input aura:id="endDate" type="date" max="{!v.maxDate}" min="{!v.minDate}"
+                                                     required="true" fieldName="EndDate" label="Data fim"
+                                                     value="{!v.dataEndValue}" messageWhenBadInput="Sua entrada não corresponde ao formato permitido dd/mm/aaaa."
+                                                     messageWhenRangeOverflow="A data limite para busca é hoje." 
+                                             messageWhenRangeUnderflow="A data inserida é anterior há 5 anos."/>
+                                            
+                            </div>
+                            
+                            <div class ="slds-col slds-size_8-of-12">
+                                <div class="slds-text-body_regular slds-p-left_none slds-p-top_large slds-float_left">
+                                    <lightning:button label="Buscar" iconName="utility:search" iconPosition="left" onclick="{!c.retInvoiceData}">
+                                    </lightning:button>
+                                </div>  
+                            </div>
+                        </div>
+                        <p></p>
+                        <lightning:layout multipleRows="true" horizontalAlign="center">
+                            <aura:if isTrue="{!v.drawnTable}">
+                                <table class="slds-m-top_small slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer slds-table_fixed-layout">
+                                    <thead>
+                                        <tr class="slds-text-heading_label">
+                                            <th scope="col"><div class="slds-truncate" title="status">Status</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="Valor">Valor (R$) </div></th>
+                                            <th scope="col"><div class="slds-truncate" title="ID">Data de vencimento</div></th>
+                                            <th scope="col"><div class="slds-truncate" title="download">Fatura para download</div></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Use the Apex model and controller to fetch server side data -->
+                                        <aura:iteration items="{!v.data}" var="invoice">
+                                            <tr>
+                                                <td><div class="slds-truncate" >{!invoice.statusInvoiceDescription}</div></td>
+                                                <td><div class="slsd-truncate">{!invoice.invoiceAmount_aux}</div></td>
+                                                <td><div class="slsd-truncate">{!invoice.dueDate_aux}</div></td>
+                                                <td><a data-end="{!invoice.dueDate_aux}" onclick="{!c.pdfInvoice}"><lightning:icon class="slds-align_absolute-center" iconName="doctype:pdf" size="small" /></a></td>
+                                            </tr>   
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </aura:if>
+                            <aura:if isTrue="{!v.showSpinner}">
+                                <div class="slds-text-align_center">
+                                    <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                                        <lightning:spinner alternativeText="Loading" size="medium"/>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </lightning:layout>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!--modal_end-->
+</aura:component>

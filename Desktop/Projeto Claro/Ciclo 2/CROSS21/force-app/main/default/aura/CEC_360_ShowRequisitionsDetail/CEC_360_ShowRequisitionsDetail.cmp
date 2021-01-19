@@ -1,0 +1,25 @@
+<!--CEC_360_ShowRequisitionsDetail.cmp -->
+<aura:component controller="CEC_360_ShowRequisitionsController">    
+    <aura:attribute name="requisition" type="object" />
+    
+    <tr>
+        <td colspan="4" id="tdDetails">
+            <div class="details">
+                <div class="box-sessao">Solicitação</div>
+                <div class="margin-16">
+                <div class="box-sessao-dados">Número da Solicitação<p>{!v.requisition.orderRequest.requestID}</p></div>
+                <div class="box-sessao-dados">Tipo<p>{!v.requisition.orderRequest.requestTypeDescription}</p></div>
+                <div class="box-sessao-dados">Fechamento<p>{!v.requisition.orderRequest.closeDate}</p></div>
+                <div class="box-sessao-dados">Status<p>{!v.requisition.orderRequest.statusDescription}</p></div>
+                <div class="box-sessao-dados">Criado por<p>{!v.requisition.orderRequest.openUser}</p></div>
+                </div>
+                <div class="box-sessao">Observações da solicitação</div>
+                <div class="dados">{!v.requisition.orderRequest.obs}</div>
+            </div>
+        </td>
+    </tr>
+    
+    <c:CEC_360_ShowRequisitionsDetailOSs requisitionIn="{!v.requisition}" />
+    <c:CEC_360_ShowRequisitionsDetailOCs requisitionIn="{!v.requisition}" />
+
+</aura:component>

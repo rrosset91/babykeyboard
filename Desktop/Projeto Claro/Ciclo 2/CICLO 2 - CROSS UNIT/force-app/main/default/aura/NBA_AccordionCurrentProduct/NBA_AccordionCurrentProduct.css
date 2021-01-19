@@ -1,0 +1,26 @@
+.THIS {
+    
+    background-color: white;
+  height: 100%;
+    
+}
+.THIS.slds-box {
+    padding: 1rem;
+    border-radius: .25rem;
+    border: 0px !important;
+}
+.THIS .margin-name-price{
+    text-align: right;
+    padding-right: 2rem;
+    
+}
+.THIS .slds-accordion__section {
+    padding: 0% !important;
+}
+.THIS .tam-font{
+    font-size: x-small;
+    padding-bottom: .5%!important;
+}
+.THIS .tam-font-section{
+    font-size: smaller;
+}

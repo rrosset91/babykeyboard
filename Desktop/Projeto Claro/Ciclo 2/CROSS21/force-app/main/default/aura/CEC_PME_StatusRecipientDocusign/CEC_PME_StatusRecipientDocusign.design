@@ -1,0 +1,3 @@
+<design:component>
+	<design:attribute name="isQuickAction" label="isQuickAction" description="API name of the field you want to auto search." />
+</design:component>

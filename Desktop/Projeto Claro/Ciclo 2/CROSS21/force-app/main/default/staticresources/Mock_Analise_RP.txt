@@ -1,0 +1,19 @@
+{
+  "apiVersion" : "1;2018-12-06",
+  "transactionId" : "Id-345e1a5d85458ce4a0396b09",
+  "data" : {
+    "creditSituation" : {
+      "status" : "REPROVADO",
+      "date" : null,
+      "policy" : "PF_CONTROLE_12",
+      "report" : null,
+      "typeDecision" : null,
+      "limit" : "1.0",
+      "dataPolicy" : "% ",
+      "messages" : [ {
+        "identifier" : "0",
+        "note" : "CREDITO APROVADO PELA POLITICA DE CREDITO EM VIGOR             LIMITE SUGERIDO: R$ 1,00"
+      } ]
+    }
+  }
+}

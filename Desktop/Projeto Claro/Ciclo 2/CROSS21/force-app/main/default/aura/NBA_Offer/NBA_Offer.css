@@ -1,0 +1,165 @@
+.THIS .box-header{
+    margin-top      :1rem       !important;
+    padding         :0.5rem     !important; 
+}
+
+.THIS .box-content{
+    margin-top      :1rem       !important;
+    font-size       :0.625rem   !important;
+    padding         :1rem       !important;
+    text-align      :center     !important;
+}
+
+.THIS .box-footer{
+    margin-top      :1rem       !important;
+    font-size       :0.75rem    !important;
+    padding         :0.5rem     !important; 
+}
+
+.THIS .striped-border {
+    border          : 0.25px dashed 1px solid rgb(221, 219, 218);
+    width           : 90%;
+    margin          : auto;
+}
+
+.THIS .text-total{
+    font-size       : 0.75rem;
+}
+
+.THIS .text-degrade{
+    font-size       : 0.625rem;
+}
+
+.THIS .slds-col{
+    padding-right	:	0.1rem;
+    padding-left	:	0.1rem;
+}
+
+.THIS .slds-tile{
+    width			:100%;
+}
+
+.THIS .six-lines{
+    height			:6rem;
+}
+
+.THIS .three-lines{
+    height			:3rem;
+}
+
+.THIS .box-total{
+    height			:3rem;
+    margin-top		:0.5rem;
+}
+
+.THIS .box-icon img {
+    display         : table     !important;
+    margin-left     : -400%     !important;
+    margin-top      : -1.5rem   !important;
+    z-index         : -1        !important; 
+}
+
+.THIS .tax-box {
+    display         : table     !important;
+    margin-top      : 1rem      !important;
+    font-size       : smaller   !important;
+    padding-right   : 1rem;
+}
+
+.THIS .tax-box svg{
+    margin-left     : 0     !important;
+    margin-top      : 0     !important;
+    z-index         : 0     !important;
+    display         : inline !important; 
+}
+
+.THIS .custom-icon{
+    width           :20%;
+}
+
+.THIS .tx-icon{
+    width           :15%;
+}
+
+.THIS .custom-combobox{
+    height  		: 20px;
+    width			: 100%;
+    float			: right;
+    margin-bottom	: 0.25rem;
+    border-radius	: .25rem;
+    border			: 1px solid rgb(221, 219, 218);
+}
+
+.THIS .box-taxes {
+    background	: unset		!important;
+    border		: unset		!important;
+    font-size	: 0.615rem;
+}
+
+.THIS .down-arrow svg{
+    margin-left	: 1rem;
+    float		: right;
+    width		: 1rem;
+}
+
+.THIS .text-footer-dif{
+    text-align	:center;
+    height		:2rem;
+}
+
+.THIS .box-dif-detail{
+    background		: unset					!important;
+    border-color	: rgb(221, 219, 218) 	!important;
+    font-size		: 0.615rem;
+    padding-bottom	: 0;
+}
+
+.THIS .border-add{
+    border-bottom   : 1px dashed rgb(221, 219, 218) !important;
+    background		: white					!important;
+}
+/* teste */
+/* .THIS .w3-button {
+    border: none;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.THIS .w3-dropdown-content {
+    cursor: auto;
+    color: #000;
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+.THIS .w3-dropdown-content {
+    cursor: auto;
+    color: #000;
+    background-color: #fff;
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+.THIS .w3-animate-zoom {
+    animation: animatezoom 4s;
+}
+.THIS .w3-card-4{
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 4px 20px 0 rgba(0,0,0,0.19);
+}
+.THIS .w3-show {
+    display: block!important;
+} */

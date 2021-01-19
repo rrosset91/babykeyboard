@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="252.816" height="236.176" viewBox="0 0 252.816 236.176">
+    <defs>
+        <style>
+            .cls-8{fill:#fff}.cls-7{stroke:#da281c}.cls-13{fill-rule:evenodd}.cls-13,.cls-5{fill:#fae0de}.cls-7{fill:none;stroke-width:6px}
+        </style>
+    </defs>
+    <g id="Illustration---no-data" transform="translate(0 -5.763)">
+        <g id="Group-3">
+            <g id="Group-6" opacity="0.703" transform="translate(0 35.348)">
+                <ellipse id="Oval-115" cx="7.831" cy="7.855" fill="#fff" stroke="#da281c" stroke-dasharray="2 7" stroke-linecap="round" stroke-width="4px" rx="7.831" ry="7.855" transform="translate(24.276 69.638)"/>
+                <path id="Oval-115-2" fill="#fff" fill-rule="evenodd" stroke="#da281c" stroke-dasharray="2 7" stroke-linecap="round" stroke-width="4px" d="M124.572 85.349a7.855 7.855 0 1 0-7.831-7.855 7.843 7.843 0 0 0 7.831 7.855z" data-name="Oval-115"/>
+                <path id="Combined-Shape" fill="#fff" fill-rule="evenodd" stroke="#da281c" stroke-dasharray="3 10" stroke-linecap="round" stroke-width="4px" d="M72.147 43.859a28.783 28.783 0 0 1 12.311.1 96.135 96.135 0 0 1 2.286-11.027C92.138 12.807 102.7-1.853 110.327.192s9.445 20.019 4.051 40.148a82.734 82.734 0 0 1-9.278 22.191 28.609 28.609 0 1 1-53.895-.494 83.557 83.557 0 0 1-8.967-21.7C36.848 20.211 38.662 2.236 46.293.192s18.189 12.615 23.583 32.743a96.21 96.21 0 0 1 2.271 10.924z"/>
+                <rect id="Rectangle-1576" width="140.958" height="6.284" class="cls-5" rx="2" transform="translate(7.831 200.307)"/>
+                <g id="Rectangle-493">
+                    <rect id="Rectangle_635" width="109.634" height="109.972" fill="#da281c" data-name="Rectangle 635" opacity="0.2" rx="6" transform="translate(23.493 93.476)"/>
+                    <rect id="Rectangle_636" width="103.634" height="103.972" class="cls-7" data-name="Rectangle 636" rx="2" transform="translate(26.493 96.476)"/>
+                </g>
+                <g id="Rectangle-493-2" data-name="Rectangle-493">
+                    <rect id="Rectangle_637" width="109.634" height="31.421" class="cls-8" data-name="Rectangle 637" rx="8" transform="translate(23.493 92.691)"/>
+                    <rect id="Rectangle_638" width="103.634" height="25.421" class="cls-7" data-name="Rectangle 638" rx="2" transform="translate(26.493 95.691)"/>
+                </g>
+                <path id="Rectangle-493-3" fill="#fff" d="M0 0H23.493V71.624H0z" data-name="Rectangle-493" opacity="0.8" transform="translate(46.986 124.112)"/>
+                <g id="Rectangle-493-4" data-name="Rectangle-493">
+                    <rect id="Rectangle_639" width="156.62" height="20.423" fill="#eef1f6" data-name="Rectangle 639" rx="2" transform="translate(0 76.981)"/>
+                    <rect id="Rectangle_640" width="156.62" height="20.423" class="cls-8" data-name="Rectangle 640" rx="2" transform="translate(0 76.981)"/>
+                    <rect id="Rectangle_641" width="150.62" height="14.423" class="cls-7" data-name="Rectangle 641" rx="2" transform="translate(3 79.981)"/>
+                </g>
+                <g id="Group-10">
+                    <g id="Rectangle-1399">
+                        <rect id="Rectangle_642" width="17.228" height="157.104" class="cls-5" data-name="Rectangle 642" rx="2" transform="rotate(135 101.901 111.524)"/>
+                        <rect id="Rectangle_643" width="17.228" height="157.104" class="cls-5" data-name="Rectangle 643" rx="4" transform="rotate(135 101.901 111.524)"/>
+                        <rect id="Rectangle_644" width="11.228" height="151.104" fill="none" stroke="#da281c" stroke-width="6px" data-name="Rectangle 644" rx="2" transform="rotate(135 99.78 110.646)"/>
+                    </g>
+                    <path id="Rectangle-1400" d="M0 0H5.831V31.421H0z" class="cls-8" transform="rotate(135 73.998 52.22)"/>
+                    <path id="Rectangle-1400-2" fill="#e4675f" d="M0 0H5.831V4.713H0z" data-name="Rectangle-1400" transform="rotate(135 74.975 54.577)"/>
+                </g>
+            </g>
+            <path id="Star-17" d="M125.3 27.487l-13.855 6.026 6.017-13.875-6.02-13.875 13.858 6.026 13.855-6.026-6.017 13.875 6.017 13.875z" class="cls-13"/>
+            <path id="Star-17-Copy" d="M156.62 40.843l-8.313 3.616 3.61-8.325-3.61-8.325 8.313 3.616 8.313-3.616-3.61 8.325 3.61 8.325z" class="cls-13"/>
+            <path id="Star-17-Copy-2" d="M129.995 70.694l-5.542 2.41 2.407-5.55L124.453 62l5.542 2.41 5.542-2.41-2.407 5.55 2.407 5.55z" class="cls-13"/>
+        </g>
+    </g>
+</svg>

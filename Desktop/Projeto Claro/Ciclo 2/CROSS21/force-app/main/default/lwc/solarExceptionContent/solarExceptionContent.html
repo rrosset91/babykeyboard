@@ -1,0 +1,24 @@
+<template>
+	<div class="custom-padding">
+		<template if:true={showEmpty}>
+			<div class="no-data">
+				<div>
+					<img src="/img/chatter/Desert.svg" class="slds-illustration__svg" />
+				</div>
+				<div>
+					<h3>{emptyMessage}</h3>
+				</div>
+			</div>
+		</template>
+		<template if:true={showError}>
+			<div class="no-data">
+				<div>
+					<img src="/resource/axe" class="slds-illustration__svg" />
+				</div>
+				<div>
+					<h3>{errorMessage}</h3>
+				</div>
+			</div>
+		</template>
+	</div>
+</template>

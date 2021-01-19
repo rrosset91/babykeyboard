@@ -1,0 +1,99 @@
+.THIS .custom-padding{
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.THIS .slds-scrollable_x{
+    overflow-x: hidden;
+}
+
+.THIS .no-data{
+    text-align: center;
+    width: 100%;
+    display: inherit;
+    margin-top: 3%;
+    justify-content: center;
+}
+
+.THIS .no-data img{
+    width: 45%;
+    height: 45%;
+}
+
+.THIS .custom-footer{
+	display:flex;
+	width: 100%;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.THIS .modal-buttons{
+	height: 100%;
+    width: 100%;
+    display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.THIS .modal-buttons button{
+	height: fit-content;
+}
+.THIS .modal-buttons .sendDuplicateButtons{
+	height: fit-content;
+    margin: auto;
+    align-items: center;
+    width: 5rem;
+}
+ 
+.THIS .custom-field{
+    text-align: left;
+}
+
+.THIS .middle-text{
+    text-align: left;
+    margin: auto;
+    width: 50%;
+    padding-bottom: 5px;
+}
+
+.THIS .middle-text label{
+    font-weight: 300;
+    color: #2b2b2b;
+}
+
+.THIS lightning-primitive-header-actions {
+    display: none;
+}
+
+.THIS .alignment-buttons{
+	display: flex;
+	justify-content: space-between;
+}
+
+.THIS row {
+    width: 50%;
+}
+.THIS .sendDuplicateInvoice{
+    width: 15rem;
+    margin-top: 1rem;
+}.THIS .success svg{
+    fill: green;
+}
+
+.THIS .warning svg{
+    fill: #ffb75d;
+}
+
+.THIS .error svg{
+    fill: #c23934;
+}.THIS .success svg{
+    fill: green;
+}
+
+.THIS .warning svg{
+    fill: #ffb75d;
+}
+
+.THIS .error svg{
+    fill: #c23934;
+}

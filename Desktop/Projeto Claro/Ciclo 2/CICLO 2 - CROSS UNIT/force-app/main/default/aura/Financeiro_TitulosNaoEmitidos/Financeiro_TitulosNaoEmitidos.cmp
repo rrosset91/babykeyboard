@@ -1,0 +1,155 @@
+<aura:component extends="c:Utils" implements="force:appHostable,flexipage:availableForRecordHome,force:lightningQuickAction,lightning:isUrlAddressable" access="global" controller="FinancialBondsNotIssued">
+
+    <!-- parametros ficha financeira -->
+    <aura:attribute name="contractId" type="String" />
+    <aura:attribute name="operatorId" type="String" />
+
+    <!-- dados de controle -->
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="selectedEvents" type="Object[]" />
+    <aura:attribute name="maxRowSelection" type="Integer" default="1"/>
+    <aura:attribute name="periodFilters" type="List" default="[]"/>
+	<aura:attribute name="statusFilters" type="List" default="[]"/>
+	<aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String"/>
+    <aura:attribute name="defaultSortDirection" type="String"/>
+
+    <!-- controles de exibicao na tela -->
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="showDetail" type="Boolean" default="false"/>
+    <aura:attribute name="errorOnCall" type="Boolean" default="false"/>
+    <aura:attribute name="disabledBack" type="Boolean" default="false"/>
+    <aura:attribute name="disabledView" type="Boolean" default="true"/>
+    
+
+    <!-- chamada de acao ao carregar o component -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="wrapper" type="FinancialBondsNotIssued.ResponseWrapper" />
+    <aura:attribute name="wrapperDetail" type="FinancialBondsNotIssued.BillDebtsWrapper" />
+	
+    <div>
+        <div class="custom-padding">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="large" />
+            </aura:if>
+            
+            <aura:if isTrue="{!not(v.showDetail)}">
+                <!--<div class="slds-text-heading_large small-header custom-padding">Filtrar Títulos Não Emitidos</div>-->
+                
+                <lightning:layout horizontalAlign="space" multipleRows="true">
+                    <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+                    </lightning:layoutItem>
+                    <lightning:layoutItem padding="around-small" size="7" smallDeviceSize="12"  mediumDeviceSize="7" largeDeviceSize="7">
+                    </lightning:layoutItem>
+                    <lightning:layoutItem padding="around-small" size="3" smallDeviceSize="12"  mediumDeviceSize="3" largeDeviceSize="3">
+                        <!-- <lightning:input label="" placeholder="Pesquisa" type="search" /> -->
+                    </lightning:layoutItem>
+                </lightning:layout>
+                
+                <div class="custom-padding">
+                   
+
+                    <aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.wrapper.groupDebts)))}">
+                        <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true">
+                            <aura:iteration items="{!v.wrapper.groupDebts}" var="item">
+                                <lightning:accordionSection name="{!item.groupId}" label="{!item.groupDescription}">
+                                    <lightning:datatable columns="{!v.columns}"
+                                        hideCheckboxColumn="true"
+                                        data="{!item.debts}" 
+                                        keyField="idEvent" 
+                                        maxRowSelection="{!v.maxRowSelection}"
+                                        onrowaction="{! c.handleRowAction }"
+                                        resizeColumnDisabled="true"
+                                        sortedBy="{!v.sortedBy}"
+                                        sortedDirection="{!v.sortedDirection}"
+                                        defaultSortDirection="{!v.defaultSortDirection}"
+                                        onsort="{!c.onSort}"/>
+                                </lightning:accordionSection>
+                            </aura:iteration>
+                        </lightning:accordion>
+                    </aura:if>
+
+
+                    <aura:if isTrue="{!and(empty(v.wrapper.groupDebts), not(v.errorOnCall))}">
+                        <c:ExceptionContent showNoData="true" 
+                                            noDataText1="Não há titulos disponíveis para este contrato" />
+                    </aura:if>
+                    <aura:if isTrue="{!v.errorOnCall}">
+                        <c:ExceptionContent showError="true" 
+                                            errorText1="Ops, parece que algo deu errado!"
+                                            errorText2="Por favor, tente novamente mais tarde."/>
+                    </aura:if>
+                </div>
+                
+            </aura:if>
+        </div>
+    </div>
+           
+<!--Modal de detalhes da fatura-->
+   <c:UiModal aura:id="detailModal" title="Titulo não Emitido" size="x-large">
+        <aura:set attribute="content">
+            <aura:if isTrue="{!v.isLoadingModal}">
+                <lightning:spinner alternativeText="Carregando..." size="large" />
+            </aura:if>
+            <lightning:layout horizontalAlign="space" multipleRows="true">
+                <lightning:layoutItem padding="horizontal-medium" size="6" >
+                    <div class="middle-text">
+                        <label>Data de Vencimento do Item</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.dueDate}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Produto</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.productDescription}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Item de extrato</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.itemDescription}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Numero da Parcela</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.installmentNumber}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Data de Lancamento do Item</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.entryDate}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Parceiro</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.partnerId}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Total de Parcelas</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.totalInstallments}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                    <div class="middle-text">
+                        <label>Data de Inicio da Proporcionalidade</label>
+                        <p><lightning:formattedText value="{!v.wrapperDetail.proportionalityEntryDate}" /></p>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-medium" size="6">
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:set> 
+        <aura:set attribute="footer">
+            <div class="modal-buttons">
+                <lightning:button variant="brand" label="Fechar" onclick="{!c.closeModal}" />
+            </div>
+        </aura:set>
+    </c:UiModal>
+
+    
+</aura:component>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+  <g id="schedule-clear" transform="translate(-276 -124)">
+    <g id="schedule-clear-2" data-name="schedule-clear" transform="translate(276 124)" fill="#da291c" stroke="#DA291C" stroke-width="1">
+      <rect width="28" height="28" rx="14" stroke="none"/>
+      <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="none"/>
+    </g>
+    <path id="União_4" data-name="União 4" d="M-1942-1631a2,2,0,0,1-2-2v-5h-5a2,2,0,0,1-2-2v-1a2,2,0,0,1,2-2h5v-5a2,2,0,0,1,2-2h1a2,2,0,0,1,2,2v5h5a2,2,0,0,1,2,2v1a2,2,0,0,1-2,2h-5v5a2,2,0,0,1-2,2Z" transform="translate(503.339 2671.356) rotate(45)" fill="#fff"/>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+.THIS .button-redirect {
+ cursor: pointer;
+}
+
+.THIS .button-redirect svg:hover{
+    fill: gray;
+}
+
+.THIS .button-redirect svg{
+    fill: #005FB2;
+}
+
+.THIS .text-center{
+    text-align: center;
+}
+
+.THIS .btn-icon-label label{
+    font-size: 11px;
+    color: #005FB2;
+}
+
+.THIS .label-size-bloco-nota label {
+    font-size: 9px;
+    color: #005FB2;
+}
+
+.THIS .space-header {
+    background-color:#005FB2;
+}
+.THIS .header-font {
+    font-weight: bold
+}

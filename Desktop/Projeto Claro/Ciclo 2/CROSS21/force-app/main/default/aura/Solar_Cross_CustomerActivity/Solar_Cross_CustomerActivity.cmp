@@ -1,0 +1,102 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+
+  @last modified on  : 12-10-2020
+
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   11-09-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_CustomerActivityController">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="CEMComponentTitle" type="String" default="Nível de experiência de cliente"/>
+    <aura:attribute name="showCEMExperience" type="Boolean" default="false"/>
+    <aura:attribute name="dayMessageString" type="String"/>
+    <aura:attribute name="frequenceString" type="String"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="dataLoadSucess" type="Boolean" default="true"/>
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    <aura:attribute name="emptyData" type="Boolean" default="false"/>
+    <aura:attribute name="viewSelected" type="String" default="Todos"/>
+    <aura:attribute name="errorMessage" type="String" default="Mensagem de erro dinâmica que exibe qual erro foi gerado na tentativa de trazer os dados"/>
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Qualidade do serviço</b>
+        </h1>
+    </aura:attribute>
+    <aura:attribute name="accordionLabel" type="String" default="Atividades Recentes"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />  
+    <lightning:card class="" variant="narrow" title="{!v.headerTitle}" iconName="standard:opportunity">
+        <div class="slds-m-bottom_medium slds-m-horizontal_small">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="medium" />
+                <aura:set attribute="else">                            
+                    <aura:if isTrue="{!(v.emptyData)}">
+                        <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                            {!v.errorMessage}
+                        </div>
+                        <aura:set attribute="else">      
+                            <aura:if isTrue="{!(!v.dataLoadSucess)}">
+                                <div class="slds-grid slds-p-horizontal_large slds-m-bottom_x-small slds-align_absolute-center">
+                                    <b>Atenção</b>       
+                                </div>
+                                <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+                                    {!v.errorMessage}
+                                </div>
+                                <div class="slds-grid slds-align_absolute-center">
+                                    <div class="slds-m-top_x-small">
+                                        <lightning:buttonIcon class="forceListViewManagerHeader" iconName="utility:refresh" alternativeText="Recarregar Informações" onclick="{!c.onInit}" />                                    
+                                    </div>
+                                </div>
+                                <div class="slds-grid slds-align_absolute-center slds-m-top_x-small">
+                                    Recarregar
+                                </div>                        
+                                <aura:set attribute="else">    
+                                    <!-- TRECHO ABAIXO COMENTADO ENQUANTO O CAMPO "ATIVO DESDE" DO OBJETO ACCOUNT, NÃO ESTIVER SENDO POPULADO CORRETAMENTE -->
+                                    <!-- <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <div class="slds-text-heading_small">Ativo desde:</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <p><lightning:formattedDateTime value="{!v.data.ActivityDate}" year="numeric" month="long" day="numeric" timeZone="UTC"/></p>                              
+                                        </div>
+                                    </div> -->
+                                    <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <div class="slds-text-heading_small">Último contato:</div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1">
+                                            <p>
+                                                <lightning:formattedDateTime value="{!v.data.LastContact}" year="numeric" month="long" day="numeric" timeZone="UTC"/> 
+                                                {!v.dayMessageString}
+                                            </p>                              
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                        <div class="slds-col slds-size_3-of-12">
+                                            <div class="slds-text-heading_small">Registros:</div>
+                                        </div>
+                                        <div class="slds-col slds-size_9-of-12">
+                                            <p>
+                                                <strong>{!v.frequenceString}</strong>
+                                            </p>                              
+                                        </div>
+                                    </div>
+                                </aura:set>
+                            </aura:if>  
+                        </aura:set>
+                    </aura:if> 
+                    <!-- trecho de código comentado para poder subir junto com a TU97, porque está dando um erro no deploy das flexipages da TU97, já que não é possível remover o atributo CEMComponentTitle do design desse componente -->
+                    <!-- <aura:if isTrue="{!v.showCEMExperience}">
+                        <c:Solar_Cross_CEMUserExperience CEMComponentTitle="{!v.CEMComponentTitle}"/>    
+                    </aura:if> -->
+                </aura:set>
+            </aura:if>
+            <c:Solar_Cross_CustomerOutage recordId = "{!v.recordId}"/>
+        </div>
+    </lightning:card>
+</aura:component>

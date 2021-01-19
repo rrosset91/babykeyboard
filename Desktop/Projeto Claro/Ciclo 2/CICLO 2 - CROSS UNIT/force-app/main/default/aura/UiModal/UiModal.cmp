@@ -1,0 +1,38 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+
+    <aura:attribute name="title" type="String" default="" />
+    <aura:attribute name="content" type="Aura.Component[]" />
+    <aura:attribute name="footer" type="Aura.Component[]" />
+    <aura:attribute name="fullWidthRow" type="boolean" default="false" />
+    <aura:attribute name="class" type="String" default="disposed" />
+    <aura:attribute name="size" type="String" default="large" />
+
+	<aura:attribute name="onOpen" type="Aura.Action" />
+	<aura:attribute name="onClose" type="Aura.Action" />
+
+    <aura:method name="open" action="{!c.handleOpen}" />
+    <aura:method name="close" action="{!c.handleClose}" />
+
+    <aura:attribute name="showButtonX" type="boolean" default="true" />
+
+    <section id="wrapper" class="{!v.class}">
+        <div id="modal" class="{!v.size}">
+            <header id="header">
+                <aura:if isTrue="{!v.showButtonX}">
+                    <lightning:button aura:id="closeButton" class="button" label="x" onclick="{!c.handleClose}" />
+                </aura:if>
+                <ui:outputText value="{!v.title}" class="title" />
+            </header>
+            <section id="body">
+                <aura:iteration items="{!v.content}" var="component">
+                    {!component}
+                </aura:iteration>
+            </section>
+            <footer id="footer" class="{! 'slds-form-element ' + (v.fullWidthRow ? 'arc-divide' : 'arc-1-of-1')}">
+                <aura:iteration items="{!v.footer}" var="component">
+                    {!component}
+                </aura:iteration>
+            </footer>
+        </div>
+    </section>
+</aura:component>

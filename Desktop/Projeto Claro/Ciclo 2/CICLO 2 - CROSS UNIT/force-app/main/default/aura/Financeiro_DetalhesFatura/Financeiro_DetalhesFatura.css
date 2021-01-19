@@ -1,0 +1,151 @@
+.THIS .custom-header{
+    color: #DA281C;
+    font-weight: 400;
+    font-size: x-large;
+    font-weight: bold;
+    padding-top: 0.75rem;
+}
+
+.THIS .headerTitle{
+    padding-top: 0.75rem;
+}
+
+.THIS .valueHeader{
+    font-weight: bold;
+}
+
+.THIS .small-header{
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 0.75rem;
+}
+
+.THIS .table thead th span{
+    background-color: #F3F2F2;
+    color: black;
+    font-weight: normal;
+}
+
+.THIS .table{
+    font-weight: bold;
+}
+
+.THIS .slds-cell-fixed {
+    background-color: #F3F2F2 !important;
+}
+
+.THIS .slds-checkbox_faux {
+
+}
+
+.THIS .headerTitle{
+    padding-top: 0.75rem;
+}
+
+.THIS .field-title{
+    font-weight: bold;
+    color: darkgray;
+}
+
+.THIS .custom-padding{
+    padding-top: 0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.THIS .custom-footer{
+	display:flex;
+	width: 100%;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.THIS .header-columnAdress{
+    white-space: normal;
+    word-wrap: break-word;
+    width: 250px;
+}
+
+.THIS .animation{
+	animation: fadeInFromNone 1.2s ease-out;
+}
+
+@keyframes fadeInFromNone {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: block;
+        opacity: 0;
+    }
+
+    100% {
+        display: block;
+        opacity: 1;
+    }
+}
+
+.THIS lightning-primitive-header-actions {
+    display: none;
+}
+
+.THIS .align-buttons{
+	justify-content: space-between;
+}
+
+.THIS .modal-buttons{
+	height: 100%;
+    width: 100%;
+    display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.THIS .modal-buttons button{
+	height: fit-content;
+}
+
+.THIS .custom-field{
+    text-align: left;
+}
+
+.THIS .middle-text{
+	min-width: 20px;
+    text-align: left;
+    padding-bottom: 5px;
+}
+
+.THIS .middle-text label{
+    font-weight: 300;
+    color: #2b2b2b;
+}
+
+.THIS .slds-cell-fixed{
+    background-color: white;
+}
+
+.THIS .slds-scrollable_x{
+    overflow-x: hidden;
+}
+
+.THIS .padding-end{
+	padding-bottom: 15px;
+}
+
+.THIS .custom-bg{
+	background-color: #F3F2F2;
+}
+
+.THIS .slds-docked-form-footer.slds-is-absolute{
+	z-index: 9;
+}
+
+.THIS .generate-bill-n2{
+    height: 32px;
+    font: 13pt;
+    color: #da281c;
+    border: 1px #eff2f7 solid;
+    border-radius: 4px;
+}

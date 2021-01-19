@@ -1,0 +1,77 @@
+<aura:component >
+
+<aura:attribute type="Object" name="ContractViabilidade" />
+	
+<div class="slds-grid slds-wrap slds-box" style="height: 11.4rem;margin-top: 0.5rem;" >
+	<div class="slds-col slds-size_1-of-2">
+		<strong>{! $Label.c.STATUS_ANALOGICO } <!--Status PTV Analógico --></strong>
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<aura:if isTrue="{! v.ContractViabilidade.PTV}" >
+			<span Style="color: green">LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! and(!v.ContractViabilidade.PTV, v.ContractViabilidade.PTV != undefined)}" >
+			<span Style="color: red">NÃO LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! v.ContractViabilidade.PTV == undefined}" >
+			<span>INDISPONIVEL</span>
+		</aura:if>		
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<strong>{! $Label.c.STATUS_DIGITAL } <!--Status PTV Digital--></strong>
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<aura:if isTrue="{! v.ContractViabilidade.DIGITAL}" >
+			<span Style="color: green">LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! and(!v.ContractViabilidade.DIGITAL, v.ContractViabilidade.DIGITAL != undefined)}" >
+			<span Style="color: red">NÃO LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! v.ContractViabilidade.DIGITAL == undefined}" >
+			<span>INDISPONIVEL</span>
+		</aura:if>		
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<strong>{! $Label.c.STATUS_VIRTUA } <!--Status Virtua--></strong>
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<aura:if isTrue="{! v.ContractViabilidade.VIRTUA}" >
+			<span Style="color: green">LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! and(!v.ContractViabilidade.VIRTUA, v.ContractViabilidade.VIRTUA != undefined) }" >
+			<span Style="color: red">NÃO LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! v.ContractViabilidade.VIRTUA == undefined}" >
+			<span>INDISPONIVEL</span>
+		</aura:if>		
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<strong>{! $Label.c.STATUS_VOIP } <!--Status Voip--></strong>
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<aura:if isTrue="{! v.ContractViabilidade.VOIP}" >
+			<span Style="color: green">LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! and(!v.ContractViabilidade.VOIP, v.ContractViabilidade.VOIP != undefined)}" >
+			<span Style="color: red">NÃO LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! v.ContractViabilidade.VOIP == undefined}" >
+			<span>INDISPONIVEL</span>
+		</aura:if>		
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<strong>{! $Label.c.STATUS_VOD } <!--Status VOD--></strong>
+	</div>
+	<div class="slds-col slds-size_1-of-2">
+		<aura:if isTrue="{! v.ContractViabilidade.VOD}" >
+			<span Style="color: green">LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! and(!v.ContractViabilidade.VOD, v.ContractViabilidade.VOD != undefined)}" >
+			<span Style="color: red">NÃO LIBERADO</span>
+		</aura:if>
+		<aura:if isTrue="{! v.ContractViabilidade.VOD == undefined}" >
+			<span>INDISPONIVEL</span>
+		</aura:if>		
+	</div>
+</div>
+</aura:component>

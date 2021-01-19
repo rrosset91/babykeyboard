@@ -1,0 +1,40 @@
+<!--CEC_360_ShowRequisitionsDetailOSs.cmp -->
+<aura:component controller="CEC_360_ShowRequisitionsController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="requisitionIn" type="object" />
+    <aura:attribute name="requisition" type="object" />
+    
+    <div class="slds-card slds-p-around_x-small" aura:id="mySpinner">
+        <lightning:spinner  alternativeText="Loading" size="small" />
+    </div>
+    
+    <aura:iteration items="{!v.requisition.listWorkOrder}" var="workOrder">
+        <tr>
+            <td colspan="4" id="tdDetails">
+                <div class="details">
+                    <div class="box-sessao">Detalhes da OSs</div> 
+                    <div class="margin-16">
+                        <div class="box-sessao-dados">Numero da Ordem de serviço<p>{!workOrder.workOrderID}</p></div>
+                        
+                        <div class="box-sessao-dados">Tipo da OS<p>{!workOrder.workorderTypeDescription}</p></div>
+                        <div class="box-sessao-dados">Status<p>{!workOrder.statusDescription}</p></div>
+                        <div class="box-sessao-dados">Baixada
+                            <aura:if isTrue="{!workOrder.terminationDate == null}">
+                                <p>Não</p>
+                                <aura:set attribute="else">
+                                    <p>Sim</p>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                        <div class="box-sessao-dados">Data do Fechamento<p>{!workOrder.terminationDate}</p></div>
+                        <div class="box-sessao-dados">Data do Atendimento<p>{!workOrder.attendanceDate}</p></div>
+                    </div>
+                    <div class="box-sessao">Observações da solicitação</div>
+                    <div class="dados">{!workOrder.note}</div>
+                </div>
+            </td>
+        </tr>
+    </aura:iteration>
+    
+</aura:component>

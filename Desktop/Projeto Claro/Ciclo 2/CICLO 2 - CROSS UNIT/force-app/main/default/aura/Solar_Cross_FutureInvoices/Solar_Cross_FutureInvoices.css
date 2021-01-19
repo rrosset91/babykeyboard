@@ -1,0 +1,23 @@
+.THIS {
+}
+
+.THIS lightning-primitive-header-actions {
+    display: none;
+}
+
+.THIS .custom-padding{
+    padding-left: 1.25rem ;
+    padding-right: 0.75rem;
+}
+
+.THIS .small-header{
+    color: #1D3861;
+    font-weight: 400;
+    font-size: large;
+    padding-top: 0.75rem;
+    
+}
+
+.THIS .custom-padding-text{
+    padding-top: 1.5rem;
+}

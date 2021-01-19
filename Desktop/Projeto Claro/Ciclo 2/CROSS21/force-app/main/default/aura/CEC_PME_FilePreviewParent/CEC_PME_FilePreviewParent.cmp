@@ -1,0 +1,42 @@
+<!-- CEC_PME_FilePreviewParent -->
+<aura:component controller="CEC_PME_FilePreviewController">
+    <aura:attribute name="contVersion" type="ContentVersion"/>
+    <aura:attribute name="lstTipoAnexo" type="List"/>
+    <aura:attribute name="orderId" type="String"/>
+    
+    <div class="slds-col slds-small-size_1-of-1 slds-medium-size_1-of-2">
+        <div class="slds-m-around_x-small">
+            <lightning:card>
+                
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-m-around_x-small">
+                            <p class="slds-has-flexi-truncate">
+                                <lightning:icon iconName="utility:attach" alternativeText="attach" size="x-small" class="slds-m-right_xx-small" variant="{!v.contVersion.CEC_Tipo_de_Anexo__c == null ? 'warning' : 'success'}"/>
+                                {!v.contVersion.ContentDocument.Title}
+                            </p>	
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-1">
+                        <div align="center" class="slds-m-around_x-small">
+                            <lightning:fileCard fileId="{!v.contVersion.ContentDocumentId}" description="{!v.contVersion.PathOnClient}"/>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-m-around_x-small">
+                                <lightning:select aura:id="select" label="{!$Label.c.CEC_PME_FilePreviewParent_1}" onchange="{!c.onChange}">
+                                <aura:iteration items="{!v.lstTipoAnexo}" var="item">
+                                    <option text="{!item}" value="{!item}" selected="{!v.contVersion.CEC_Tipo_de_Anexo__c == item}"/>
+                                </aura:iteration>
+                            </lightning:select>	
+                        </div>
+                    </div>
+                </div>
+            </lightning:card>
+        </div>
+    </div>
+    
+    
+</aura:component>

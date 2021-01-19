@@ -1,0 +1,60 @@
+<aura:component controller="CEC_PME_ListarEndereco" implements="force:lightningQuickAction,force:appHostable,force:hasRecordId" access="global">
+    <aura:attribute name="tipoBusca" type="String"/>
+    <aura:attribute name="acc" type="Account"/>
+    <aura:attribute name="cep" type="String"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <!--Formulario de Cobrança-->
+    <aura:attribute name="cepCob" type="String"/>
+    <aura:attribute name="disableEnderecoCob" type="Boolean" default="true"/>
+    <aura:attribute name="disableNumeroCob" type="Boolean" default="true"/>
+    <aura:attribute name="disableComplementoCob" type="Boolean" default="true"/>
+    <aura:attribute name="disableBairroCob" type="Boolean" default="true"/>
+    <aura:attribute name="disableCidadeCob" type="Boolean" default="true"/>
+    <aura:attribute name="disableEstadoCob" type="Boolean" default="true"/>
+    <aura:attribute name="disableCountryCob" type="Boolean" default="true"/>
+    
+    <!--Formulario de Entrega-->
+    <aura:attribute name="cepEnt" type="String"/>
+    <aura:attribute name="disableEnderecoEnt" type="Boolean" default="true"/>
+    <aura:attribute name="disableNumeroEnt" type="Boolean" default="true"/>
+    <aura:attribute name="disableComplementoEnt" type="Boolean" default="true"/>
+    <aura:attribute name="disableBairroEnt" type="Boolean" default="true"/>
+    <aura:attribute name="disableCidadeEnt" type="Boolean" default="true"/>
+    <aura:attribute name="disableEstadoEnt" type="Boolean" default="true"/>
+    <aura:attribute name="disableCountryEnt" type="Boolean" default="true"/>
+    
+    <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap">
+  		<div class="slds-panel__section">
+            <div class="slds-text-heading_medium">Endereço Principal</div>
+    		<ui:inputText label="CEP" class="slds-input" value="{!v.cepEnt}"></ui:inputText>
+            <lightning:button label="Buscar" onclick="{!c.buscarCepEnt}"/>
+            <ui:inputText label="Endereço" class="slds-input" value="{!v.acc.ShippingStreet}" disabled="{!v.disableEnderecoEnt}"></ui:inputText>
+            <ui:inputText label="Número" class="slds-input" value="{!v.acc.CEC_ShippingNumber__c}"></ui:inputText>
+            <ui:inputText label="Complemento" class="slds-input" value="{!v.acc.CEC_ShippingComplement__c}"></ui:inputText>
+            <ui:inputText label="Bairro" class="slds-input" value="{!v.acc.CEC_ShippingNeighborhood__c}" disabled="{!v.disableBairroEnt}"></ui:inputText>
+            <ui:inputText label="Cidade" class="slds-input" value="{!v.acc.ShippingCity}" disabled="{!v.disableCidadeEnt}"></ui:inputText>
+            <ui:inputText label="Estado" class="slds-input" value="{!v.acc.ShippingState}" disabled="{!v.disableEstadoEnt}"></ui:inputText>
+            <ui:inputText label="País" class="slds-input" value="{!v.acc.ShippingCountry}" disabled="{!v.disableCountryEnt}"></ui:inputText>
+        </div>
+  	</div>
+    <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap">
+  		<div class="slds-panel__section">
+            <div class="slds-text-heading_medium">Endereço De Cobrança</div>
+    		<ui:inputText label="CEP" class="slds-input" value="{!v.cepCob}"></ui:inputText>
+    		<lightning:button label="Buscar" onclick="{!c.buscarCepCob}"/>
+            <ui:inputText label="Endereço" class="slds-input" value="{!v.acc.BillingStreet}" disabled="{!v.disableEnderecoCob}"></ui:inputText>
+            <ui:inputText label="Número" class="slds-input" value="{!v.acc.CEC_BillingNumber__c}"></ui:inputText>
+            <ui:inputText label="Complemento" class="slds-input" value="{!v.acc.CEC_BillingComplement__c}"></ui:inputText>
+            <ui:inputText label="Bairro" class="slds-input" value="{!v.acc.CEC_BillingNeighborhood__c}" disabled="{!v.disableBairroCob}"></ui:inputText>
+            <ui:inputText label="Cidade" class="slds-input" value="{!v.acc.BillingCity}" disabled="{!v.disableCidadeCob}"></ui:inputText>
+            <ui:inputText label="Estado" class="slds-input" value="{!v.acc.BillingState}" disabled="{!v.disableEstadoCob}"></ui:inputText>
+            <ui:inputText label="País" class="slds-input" value="{!v.acc.BillingCountry}" disabled="{!v.disableCountryCob}"></ui:inputText>
+        </div>
+  	</div>
+    <div class="slds-panel slds-grid slds-grid--vertical slds-nowrap">
+  		<div class="slds-panel__section">
+			<lightning:button label="Salvar" onclick="{!c.save}"/>
+        </div>
+    </div>
+</aura:component>

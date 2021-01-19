@@ -1,0 +1,61 @@
+{
+  "apiVersion": "1;2018-12-17",
+  "transactionId": "Id-2d0384f0823434",
+  "data": {
+    "contracts": [
+      {
+        "cpfcnpj": "12345678900",
+        "docType": "CPF",
+        "firstName": "MARIA",
+        "lastName": "SILVA",
+        "companyName": "EMPRESA LTDA",
+        "partyRoleId": "1234567",
+        "operatorCityCode": "84816",
+        "operatorCode": "003",
+        "operatorPartyId": "1234",
+        "customerAccountId": "003123456789",
+        "contractId": "123456789",
+        "creationDate": "2015-08-06T00:00:00.000-03:00",
+        "accountType": "1",
+        "statusCode": "23",
+        "status": "CONECTADO",
+        "financialStatus": "ADIMPLENTE",
+        "personTypeCode": "1",
+        "personType": "FISICA",
+        "segmentCode": "5",
+        "segment": "BLACK",
+        "birthDate": "1995-03-18-03:00",
+        "openingDate": "1995-03-18-03:00",
+        "emailAddress": "customer@teste.com.br",
+        "paymentDayDue": "5",
+        "paymentMethodCode": "2",
+        "paymentMethod": "DEBITO EM CONTA",
+        "profileCode": "2415",
+        "profileName": "COMBO 1540",
+        "installAddressId": "4053466",
+        "postCode": "13385014",
+        "propertyHpId": "701988596",
+        "propertyCode": "701988595",
+        "networkNodeCode": "NO007",
+        "isEncoded": true,
+        "networkCellCode": "Z",
+        "isJuridicalSegment": true,
+        "hasAnalogicalPayTV": true,
+        "hasDigitalPayTV": true,
+        "hasInternet": true,
+        "hasNetFone": true,
+        "hasCloud": true,
+        "isAllowedPPVPurchase": true,
+        "cdBase": "BRA",
+        "phones": [
+          {
+            "telephoneNumber": "922223333",
+            "areaCode": "11",
+            "internationalCode": "55",
+            "contactMediumRole": "Home Phone"
+          }
+        ]
+      }
+    ]
+  }
+}

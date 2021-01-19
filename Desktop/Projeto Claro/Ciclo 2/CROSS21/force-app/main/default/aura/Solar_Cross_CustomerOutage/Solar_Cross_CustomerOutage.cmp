@@ -1,0 +1,130 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-10-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   11-09-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<aura:component implements="force:hasRecordId" controller="Solar_Cross_CustomerActivityController">
+    <aura:attribute name='iconUsed' type='String' default='utility:clear'/>
+    <aura:attribute name='variantUsed' type='String' default='error'/>
+    <aura:attribute name='hasError' type='boolean'/>
+    <aura:attribute name='isResidential' type='boolean'/>
+    <aura:attribute name='messageError' type='String' />
+    <aura:attribute name='openModal' type='Boolean' default='false'/>
+    <aura:attribute name="outages" type="Solar_Cross_OutageResidential.DataFields[]" default="[]"/>
+    <aura:attribute name="outagesFirst" type="Solar_Cross_OutageResidential.DataFields[]" default="[]"/>
+    <aura:attribute name="mobilePrevisionDate" type="Datetime"/>
+    <aura:attribute name="mobileOutageBol" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:icon iconName="{!v.iconUsed}" size="small" variant="{!v.variantUsed}" />
+            </div>
+            <div class="slds-col slds-size_11-of-12 slds-m-left_x-small">
+                <h3>Residencial</h3>
+            </div>
+        </div>
+    </aura:attribute>
+    <aura:if isTrue="{!v.isResidential}">
+        <div class="slds-border_bottom slds-border_top">
+            <div class="slds-m-top_small slds-text-heading_small">Status dos serviços contratados</div>
+            <lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="A">
+                <lightning:accordionSection label="{!v.headerTitle}" name="A">
+                    <aura:if isTrue="{! !v.hasError}">
+                        <aura:iteration items="{!v.outagesFirst}" var="item">
+                            <div class="slds-grid slds-gutters slds-m-top_medium slds-m-left_x-large">
+                                <div class="slds-col slds-size_1-of-12 ">
+                                    <lightning:icon iconName="{!item.iconUsed}" size="x-small" variant="{!item.variantIcon}" />
+                                </div>
+                                <div class="slds-col slds-size_11-of-12 slds-m-left_x-small">
+                                    <p><strong>{!item.affectedServices}</strong></p>
+                                </div>
+                            </div>
+                            <aura:if isTrue="{!item.showMoreInfo}">
+                                <div class="slds-grid slds-gutters slds-m-top_medium slds-m-left_x-large">
+                                    <div class="slds-col slds-size_6-of-12 ">
+                                        <p class="slds-text-title">Inicio do problema</p>
+                                        <lightning:formattedDateTime value="{!item.StartDate}" year="numeric" month="2-digit" day="2-digit" />
+                                    </div>
+                                    <div class="slds-col slds-size_6-of-12 ">
+                                        <p class="slds-text-title">Previsão de Normalidade</p>
+                                        <lightning:formattedDateTime value="{!item.PrevisionDate}" year="numeric" month="2-digit" day="2-digit" />
+                                    </div>
+                                </div>
+                                <div class="slds-grid slds-gutters slds-m-top_medium slds-m-left_x-large">
+                                    <div class="slds-col slds-size_6-of-12 ">
+                                        <p class="slds-text-title">Observação</p>
+                                        <p>{!item.coverage}</p>
+                                    </div>
+                                </div>
+                            </aura:if>
+                        </aura:iteration>
+                        <aura:set attribute='else'>
+                                <p>{!v.messageError}</p>
+                        </aura:set>
+                    </aura:if>
+                   <!-- <div class="slds-grid slds-gutters slds-m-top_medium slds-m-left_x-large">
+                        <div class="slds-col slds-size_1-of-12 ">
+                            <lightning:icon iconName="{!v.iconUsed}" size="x-small" variant="{!v.variantUsed}" />
+                        </div>
+                        <div class="slds-col slds-size_11-of-12 slds-m-left_x-small">
+                            <p><strong>NOW</strong></p>
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-gutters slds-m-top_medium slds-m-left_x-large">
+                        <div class="slds-col slds-size_1-of-12 ">
+                            <lightning:icon iconName="{!v.iconUsed}" size="x-small" variant="{!v.variantUsed}" />
+                        </div>
+                        <div class="slds-col slds-size_11-of-12 slds-m-left_x-small">
+                            <p><strong>CLARO NET</strong></p>
+                        </div>
+                    </div>  -->         
+                </lightning:accordionSection>
+            </lightning:accordion>
+        </div>
+        <div class="slds-text-align_center slds-m-top_small">
+            <lightning:button label="Ver mais" onclick="{!c.openMoreInfo}"/>
+        </div>
+        <aura:if isTrue="{!v.openModal}">
+            <c:Solar_Cross_CustomerOutageInfo allOutages="{!v.outages}" openModal="{!v.openModal}" recordId="{!v.recordId}"/>
+        </aura:if>
+        
+        <aura:set attribute="else">
+                <div class="slds-border_bottom slds-border_top">
+                    <div class="slds-col slds-size_1-of-1 slds-m-bottom_medium">
+                        <div class="slds-text-heading_small slds-m-top_small">Status de serviço Móvel</div>
+                    </div>
+                    <aura:if isTrue="{! !v.hasError}">
+                        <div class="slds-grid slds-wrap slds-m-bottom_small">
+                            <div class="slds-col slds-size_4-of-10">
+                                <lightning:icon iconName="{!v.iconUsed}" size="small" variant="{!v.variantUsed}" />
+                            </div>
+                            <div class="slds-col slds-size_4-of-10">
+                                <div class="slds-m-left_x-small slds-text-title_bold">Móvel</div>
+                            </div>
+                        </div>
+                        <aura:if isTrue="{!v.mobileOutageBol}">
+                            <div class="slds-grid slds-gutters slds-m-top_small slds-m-left_large slds-m-bottom_small">
+                                <div class="slds-col slds-size_6-of-12 ">
+                                    <p class="slds-text-title">Previsão de normalidade</p>
+                                    <lightning:formattedDateTime value="{!v.mobilePrevisionDate}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                    minute="2-digit" hour12="false"/>                    
+                                </div>
+                            </div>    
+                        </aura:if>  
+                        <aura:set attribute='else'>
+                            <div class="slds-m-bottom_medium">
+                                <p>{!v.messageError}</p>
+                            </div>
+                        </aura:set>
+                    </aura:if>          
+                </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

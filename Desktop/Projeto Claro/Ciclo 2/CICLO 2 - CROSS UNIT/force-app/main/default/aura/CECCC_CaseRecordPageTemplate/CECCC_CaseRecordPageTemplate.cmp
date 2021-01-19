@@ -1,0 +1,42 @@
+<aura:component implements="lightning:recordHomeTemplate" description="CEC CC - Record Page Case">
+    <aura:attribute name="left"   type="Aura.component[]" />
+    <aura:attribute name="center"  type="Aura.component[]" />
+    <aura:attribute name="right" type="Aura.component[]" />
+    
+    <aura:attribute name="isSidebarCollapsed" type="Boolean" access="PRIVATE" Default="false" />
+      <aura:attribute name="isSidebarCollapsed2" type="Boolean" access="PRIVATE" Default="false" />
+    
+    <div>
+        <lightning:layout>
+            <lightning:layoutItem size="3" flexibility="auto" class="{!v.isSidebarCollapsed ? ' slds-hide' : ''}">
+                {!v.left}
+            </lightning:layoutItem>
+          <lightning:layoutItem flexibility="no-flex">
+                <lightning:buttonIcon onclick ="{!c.toggleSection}"
+                                      class="design-allow-interaction toggle split-toggle slds-split-view__toggle-button slds-is-open slds-button_icon-xx-small slds-button_icon-border cardLeft"
+                                      variant="border-filled"
+                                      iconName="{! v.isSidebarCollapsed ? 'utility:right' : 'utility:left' }" 
+                                      alternativeText="{! v.isSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar' }" 
+                                      size="small"/>
+            </lightning:layoutItem>
+           <lightning:layoutItem size="auto" flexibility="auto">
+                {!v.center}
+            </lightning:layoutItem> 
+             
+               <lightning:layoutItem flexibility="no-flex">
+                <lightning:buttonIcon onclick="{!c.toggleSection2}"
+                                      class="design-allow-interaction toggle split-toggle slds-split-view__toggle-button slds-is-open slds-button_icon-xx-small slds-button_icon-border cardLeft"
+                                      variant="border-filled"
+                                      iconName="{! v.isSidebarCollapsed2 ? 'utility:left' : 'utility:right'}" 
+                                      alternativeText="{! v.isSidebarCollapsed2 ? 'Expand Sidebar' : 'Collapse Sidebar' }" 
+                                      size="small"/>
+            </lightning:layoutItem> 
+
+            <lightning:layoutItem size="3" flexibility="auto" class="{!v.isSidebarCollapsed2 ? ' slds-hide' : ''}">
+                {!v.right}
+            </lightning:layoutItem>
+                      
+            
+        </lightning:layout>      
+    </div>
+</aura:component>

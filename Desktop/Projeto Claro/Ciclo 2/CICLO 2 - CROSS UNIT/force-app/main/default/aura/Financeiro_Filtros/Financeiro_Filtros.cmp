@@ -1,0 +1,66 @@
+<aura:component>
+	<aura:attribute name="FilterStartDate" type="Date" default=""/>
+    <aura:attribute name="FilterEndDate" type="Date" default=""/>
+    <aura:attribute name="PeriodoCustomizado" type="Boolean" default="false"/>
+    <aura:attribute name="periodFilters" type="List" default="[]"/>
+    <aura:attribute name="productFilters" type="List" default="[]"/>
+    <aura:attribute name="statusFilters" type="List" default="[]"/>
+    <aura:attribute name="onClickFiltrarPeriodo" type="Aura.Action"/>
+    <aura:attribute name="ButtonFilterdisabled" type="Boolean" default="true"/>
+    <aura:attribute name="updateOn" type="String"/>
+    <aura:attribute name="period" type="String"/>
+    <aura:attribute name="handlePeriodFilter" type="Aura.Action"/>
+    <aura:attribute name="status" type="String"/>
+    <aura:attribute name="invoices" type="Object[]" />
+    <aura:attribute name="showStatusFilter" type="Boolean" default="true"/>
+    <aura:attribute name="showPesquisar" type="Boolean" default="true"/>
+           
+    
+    <aura:handler name="change" value="{!v.FilterStartDate}" action="{!c.handleDateFilter}"/>
+    <aura:handler name="change" value="{!v.FilterEndDate}" action="{!c.handleDateFilter}"/>
+    <aura:handler name="change" value="{!v.updateOn}" action="{!c.handleDateFilter}"/>
+   
+    
+    <!-- <aura:registerEvent name="dateStartChange" type="{!c:ChangeEvent}"/>
+         <aura:registerEvent name="dateEndChange" type="{!c:ChangeEvent}"/>  -->
+    
+    
+        
+    <lightning:layout horizontalAlign="space" multipleRows="false">
+	    <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+		    <div class="custom-box">
+		        <lightning:combobox aura:id="PeriodSelected" label="{!$Label.c.Fin_Filtros_Periodo}" value="{!v.period}" options="{!v.periodFilters}" onchange="{!c.handlePeriodFilter}"/>
+			</div>
+		</lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+			<div class="custom-box">
+                <aura:if isTrue="{!v.showStatusFilter}">
+			        <lightning:combobox label="Status" value="{!v.status}" options="{!v.statusFilters}" onchange="{!c.handleStatusFilter}" />
+                </aura:if>
+                <!-- <lightning:combobox label="Produto" value="all" options="{!v.productFilters}" onchange="{!c.handleProductFilter}" /> -->
+		    </div>
+		</lightning:layoutItem>
+	    <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+	    </lightning:layoutItem>
+	    <lightning:layoutItem padding="around-small" size="3" smallDeviceSize="12"  mediumDeviceSize="3" largeDeviceSize="3">
+	    </lightning:layoutItem>
+		<lightning:layoutItem padding="around-small" size="3" smallDeviceSize="12"  mediumDeviceSize="3" largeDeviceSize="3">
+            <aura:if isTrue="{!v.showPesquisar}">
+        		<lightning:input label="" placeholder="Pesquisa" type="search" />
+            </aura:if>
+	    </lightning:layoutItem>
+    </lightning:layout>
+           <lightning:layout horizontalAlign="space" multipleRows="false">        
+               <aura:if isTrue="{!v.PeriodoCustomizado}">
+                   <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+                       <ui:inputDate aura:id="expdate" label="Data Inicio" class="field" value="{!v.FilterStartDate}" displayDatePicker="true" updateOn="change"/>
+                   </lightning:layoutItem>
+                   <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+                       <ui:inputDate aura:id="expdate" label="Data Fim" class="field" value="{!v.FilterEndDate}" displayDatePicker="true" updateOn="change"/>
+                   </lightning:layoutItem>
+                   <lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2" alignmentBump="right">
+                       <lightning:button aura:id="FiltrarPeriodo" disabled="{!v.ButtonFilterdisabled}" variant="brand" label="Filtrar" onclick="{!c.onClickFiltrarPeriodo}" class="view-bill"/>
+                   </lightning:layoutItem>
+               </aura:if>              
+	       </lightning:layout>
+</aura:component>

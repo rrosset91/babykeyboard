@@ -1,0 +1,438 @@
+<!-- 
+  @description       : Componente responsável por criar o formulário e agrupar os dados para reembolso
+  @author            : Caio Cesar Leite de Oliveira
+  @group             : Financeiro
+  @last modified on  : 01-11-2020
+  @last modified by  : Caio Cesar Leite de Oliveira
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   01-11-2020   Caio Cesar    Initial Version -->
+
+<template>
+    <div class="container">
+		<div class="divDadosParaContato slds-p-left_xx-small">
+			<div class="slds-m-top_small"></div>
+
+			<div class="slds-m-top_large">
+				<div>INFORME AO CLIENTE QUE O PEDIDO SERÁ ANALISADO PELA ÁREA FINANCEIRA E ELE RECEBERÁ UM SMS INFORMANDO SOBRE A ANÁLISE &nbsp;</div>
+				
+				<lightning-layout class="slds-m-top_small">
+					<div class="slds-p-top_x-small">Tipo de Reembolso: &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-combobox
+							class="tipoSolicitacao"
+							variant="label-hidden"
+							value={tipoReembolso}
+							placeholder=""
+							options={reembolso}
+							required
+							message-when-value-missing="Campo Obrigatório" 
+							onchange={getTipoReembolso}
+                        ></lightning-combobox>
+					</lightning-layout-item>
+				</lightning-layout>
+
+				<lightning-layout class="slds-m-top_small">
+					<div class="slds-p-top_x-small">Tipo de Solicitação: &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-combobox
+							class="tipoSolicitacao"
+							variant="label-hidden"
+							value={tipoSolicitacaoSel}
+							placeholder=""
+							options={tipoSolicitacao}
+							required
+							message-when-value-missing="Campo Obrigatório" 
+							onchange={getValueTipoSolicitacao}
+                        ></lightning-combobox>
+					</lightning-layout-item>
+				</lightning-layout>
+			
+				<lightning-layout >
+					<div class="slds-m-top_large">Número da BAN/Conta: &nbsp;</div>
+					<lightning-layout-Item>
+						<lightning-input teste-data
+							type="text"
+							name="numBanConta"
+							class="slds-p-top_medium numBanConta"
+							maxlength="9"
+							minlength="9"  
+							required
+							value={numBanContaSel}
+							variant="label-hidden"
+							message-when-too-short="Informar 9 dígitos"
+							message-when-value-missing="Campo Obrigatório"
+							onkeyup={somenteNumeros}
+							onchange={getValueNumBanConta}
+						></lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+
+				<lightning-layout >
+					<div class="slds-m-top_large">O reembolso será para um contrato pessoa física ou jurídica &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-combobox
+							class="slds-p-top_medium tipoPessoa"
+							variant="label-hidden"
+							name="tipoPessoa"
+							value="tipoPessoaSel"
+							placeholder=""
+							options={tipoPessoa}
+							onchange={handleChangeTipoPessoa}
+							required
+							message-when-value-missing="Campo Obrigatório"
+                        ></lightning-combobox>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+
+			<!--AURAIF-->
+				<lightning-layout >
+					<div class="slds-m-top_large">O reembolso será do Cliente ou Terceiro? &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-combobox
+							class="slds-p-top_medium tipoConta"
+							variant="label-hidden"
+							required="true"
+							name="tipoConta"
+							value="tipoContaSel"
+							placeholder=""
+							options={claroOuTerceiro}
+							message-when-value-missing="Campo Obrigatório"
+							onchange={getValueTipoConta}
+                        ></lightning-combobox>
+					</lightning-layout-item>
+				</lightning-layout>
+			
+
+			<lightning-layout >
+				<div class="slds-m-top_large">Confirme o nome completo do titular da conta: &nbsp;</div>
+				<lightning-layout-Item padding="around-none">
+					<lightning-input
+						class="slds-p-top_medium nomeCliente" 
+						name="nomeCliente" 
+						maxlength="65" 
+						value={nomeClienteSel}
+						required="true" 
+						variant="label-hidden"
+						message-when-value-missing="Campo Obrigatório"
+						onchange={getValueNomeCliente}
+					></lightning-input>
+				</lightning-layout-item>
+			</lightning-layout>
+
+			<lightning-layout >
+				<div class="slds-m-top_large">Valor: &nbsp;</div>
+				<lightning-layout-Item padding="around-none">
+					<lightning-input
+						type="number" 
+						class="slds-p-top_medium valor" 
+						name="valor"
+						maxlength="10" 
+						value={valorSel} 
+						variant="label-hidden" 
+						onchange={getValueValor}
+					></lightning-input>
+				</lightning-layout-item>
+			</lightning-layout>
+
+			<div if:true={layoutPessoaFisica}>
+				<lightning-layout multiple-rows="true">
+					<div class="slds-m-top_large">Confirme o CPF do titular da conta: &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-input
+							class="slds-p-top_medium cpfCliente"
+							maxlength="11"
+							minlength="11"
+							name="cpfCliente"
+							id="cpfCliente"
+							required="true"
+							value={cpfCnpjSel}
+							variant="label-hidden"
+							message-when-too-long="Número de CPF inválido!"
+							message-when-too-short="Número de CPF inválido!"
+							message-when-value-missing="Campo Obrigatório"
+							onblur={validaCPF}
+							onkeyup={somenteNumeros}
+							onchange={getValueCpfCnpj}
+						></lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+
+			<div if:true={layoutPessoaJuridica}>
+				<lightning-layout multiple-rows="true">
+					<div class="slds-m-top_large">Confirme o CNPJ do titular do contrato: &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-input
+							class="slds-p-top_medium cnpjCliente"
+							name="cnpjCliente"
+							required="true"
+							maxlength="14"
+							minlength="14"
+							value={cpfCnpjSel}
+							variant="label-hidden"
+							message-when-too-long="Número de CNPJ inválido!"
+							message-when-too-short="Número de CNPJ inválido!"
+							message-when-value-missing="Número de CNPJ inválido!"
+							onblur={validaCNPJ}
+							onkeyup={somenteNumeros}
+							onchange={getValueCpfCnpj}
+						></lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+
+			<!--AURAIF-->
+				<lightning-layout multiple-rows="true">
+					<div class="slds-m-top_large">Banco em que será feito o reembolso: &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-combobox
+							class="slds-p-top_medium banco"
+							name="banco"
+							variant="label-hidden"
+							value={bancoSel}
+							placeholder=""
+							required="true"
+							options={bancos}
+							message-when-value-missing="Campo Obrigatório"
+							onchange={getValueBanco}
+                        ></lightning-combobox>
+					</lightning-layout-item>
+				</lightning-layout>
+
+				<lightning-layout multiple-rows="true">
+					<div class="slds-m-top_large">Agência de origem do débito (sem digitos): &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-input
+							type="text"
+							class="slds-p-top_medium agencia"
+							name="agencia"
+							maxlength="4"
+							minlength="4"
+							value={agenciaSel}
+							variant="label-hidden"
+							message-when-too-short="Informar 4 dígitos"
+							message-when-value-missing="Campo obrigatório"
+							required
+							onkeyup={somenteNumeros}
+							onchange={getValueAgencia}
+                        ></lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+
+				<lightning-layout multiple-rows="true">
+					<div class="slds-m-top_large">Conta corrente de origem do débito: &nbsp;</div>
+					<lightning-layout-Item padding="around-none">
+						<lightning-input
+							type="text"
+							class="slds-p-top_medium contaCorrente"
+							name="contaCorrente"
+							maxlength="12"
+							value={contaCorrenteSel}
+							variant="label-hidden"
+							message-when-value-missing="Campo Obrigatório"
+							required
+							onkeyup={somenteNumeros}
+							onchange={getValueContaCorrente}
+                        ></lightning-input>
+                    </lightning-layout-Item>
+                    &nbsp; &nbsp;
+					<lightning-layout-Item padding="around-none">
+						<lightning-input
+							type="text"
+							class="slds-p-top_medium digitoContaCorrente"
+							name="digitoContaCorrente"
+							maxlength="2"
+							value={digitoContaSel}
+							variant="label-hidden"
+							message-when-value-missing="Campo Obrigatório"
+							required
+							onkeyup={somenteNumeros}
+							onchange={getValueDigitoConta}
+                        ></lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+			
+
+			<lightning-layout multiple-rows="true">
+				<div class="slds-m-top_large">Motivo do reembolso: &nbsp;</div>
+				<lightning-layout-Item padding="around-none">
+					<lightning-combobox
+						class="slds-p-top_medium motivoReembolso"
+						name="motivoReembolso"
+						variant="label-hidden"
+						value={motivoSel}
+						required="true"
+						placeholder=""
+						options={motivos}
+						message-when-value-missing="Campo Obrigatório"
+						onchange={handleChangeMotivoReembolso}
+                    ></lightning-combobox>
+				</lightning-layout-item>
+			</lightning-layout>
+
+			<div class="slds-p-top_medium">Reembolso em dobro?</div>
+			<lightning-layout multiple-rows="true">
+				<div class="slds-p-top_medium">Não &nbsp;</div>
+				<div class="slds-p-top_medium" id="idToggle">
+					<lightning-input
+						class="reembolsoEmDobro" 
+						type="toggle" 
+						variant="label-hidden" 
+						name="reembolsoEmDobro"
+						checked={reembolsoEmDobroSel}
+						disabled={toggleDisabled} 
+						message-toggle-active=""
+						message-toggle-inactive=""
+						onchange={getValueReembolsoEmDobro}
+					></lightning-input>
+				</div>
+				<div class="slds-p-top_medium">&nbsp;&nbsp; Sim</div>
+			</lightning-layout>
+		</div>
+
+		<div class="divTelefones slds-p-left_xx-small">
+			<div class="slds-p-top_medium" align="left">SOLICITAR AO ASSINANTE TELEFONES PARA RETORNO DA SOLICITAÇÃO DE REEMBOLSO</div>
+			<div class="slds-p-top_medium" align="left">DADOS PARA CONTATO</div>
+			<div class="slds-grid slds-p-top_xx-small">
+				<div class="slds-col">
+					<div class="textoTelefone">1º DDD/Fone</div>
+					<lightning-layout multiple-rows="true">
+						<lightning-layout-Item>
+							<lightning-input 
+								class="ddd1"
+								type="text" 
+								name="ddd1" 
+								required="true" 
+								maxlength="2" 
+								minlength="2"
+								value={ddd1Sel} 
+								variant="label-hidden"
+								message-when-too-short="Informar 2 dígitos" 
+								message-when-value-missing="Preencha este campo"
+								onkeyup={somenteNumeros}
+								onchange={getValueDdd1}
+							></lightning-input>
+						</lightning-layout-item>
+						<div>&nbsp;&nbsp;&nbsp;</div>
+						<lightning-layout-Item>
+							<lightning-input
+								class="tel1" 
+								type="text" 
+								name="tel1" 
+								required="true" 
+								maxlength="9" 
+								minlength="8"
+								value={tel1Sel}
+								variant="label-hidden" 
+								message-when-too-short="Informar ao menos 8 dígitos" 
+								message-when-value-missing="Campo Obrigatório"
+								onkeyup={somenteNumeros}
+								onchange={getValueTel1}
+							></lightning-input>
+						</lightning-layout-item>
+					</lightning-layout>
+				</div>
+				<div class="slds-col">
+					<div class="textoTelefone">2º DDD/Fone</div>
+					<lightning-layout multiple-rows="true">
+						<lightning-layout-Item>
+							<lightning-input
+								type="text"  
+								class="ddd2"
+								name="ddd2" 
+								maxlength="2" 
+								minlength="2"
+								value={ddd2Sel}
+								variant="label-hidden" 
+								message-when-too-short="Informar 2 dígitos" 
+								message-when-value-missing="Preencha este campo"
+								required
+								onkeyup={somenteNumeros}
+								onchange={getValueDdd2}
+							></lightning-input>
+						</lightning-layout-item>
+						<div>&nbsp;&nbsp;&nbsp;</div>
+						<lightning-layout-Item>
+							<lightning-input
+								type="text"
+								class="tel2" 
+								name="tel2" 
+								required="true" 
+								maxlength="9" 
+								minlength="8"
+								value={tel2Sel} 
+								variant="label-hidden"
+								message-when-too-short="Informar ao menos 8 dígitos" 
+								message-when-value-missing="Campo Obrigatório"
+								onkeyup={somenteNumeros}
+								onchange={getValueTel2}
+							></lightning-input>
+						</lightning-layout-item>
+					</lightning-layout>
+				</div>
+			</div>
+		</div>
+
+		<div class="divEmailObs">
+			<lightning-layout-Item padding="around-none">
+				<lightning-input 
+					type="email" 
+					class="slds-p-top_medium slds-p-left_xx-small email" 
+					name="email" 
+					maxlength="45" 
+					value={emailSel} 
+					label="E-mail do Assinante" 
+					onchange={getValueEmail}
+				></lightning-input>
+			</lightning-layout-item>
+			<lightning-layout-Item padding="around-none" class="teste">
+				<lightning-textarea
+					class="slds-p-top_medium slds-p-left_xx-small observacao"
+					name="obs"
+					label="Observação (Max. 140 caracteres)"
+					maxlength="140"
+					value={observacaoSel}
+					required="true"
+					id="textAreaObservacao"
+					message-when-value-missing="Campo Obrigatório"
+					onchange={getValueObservacao}
+				></lightning-textarea>
+			</lightning-layout-item>
+		</div>
+
+		<div class="divFooter">
+			<div class="slds-p-top_medium slds-p-left_xx-small">IMPORTANTE: Certifique se o saldo já esta disponível para reembolso antes de abrir o protocolo no PSB</div>
+			<lightning-layout horizontal-align="spread">
+				<lightning-layout-Item>
+					<div class="slds-p-top_medium slds-p-left_xx-small slds-p-bottom_xx-small">
+						<lightning-button
+							class="buttonGerar"
+							variant="destructive-text"
+							label="Voltar"
+							title="Destructive action"
+							type="submit"
+							onclick={naoImplementado}
+						></lightning-button>
+					</div>
+				</lightning-layout-Item>
+				<lightning-layout-Item padding="right">
+					<div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small" align="right">
+						<lightning-button
+							class="buttonGerar"
+							variant="destructive"
+							label="Solicitar Reembolso"
+							title="Destructive action"
+							type="submit"
+							onclick={handleClick}
+						></lightning-button>
+					</div>
+				</lightning-layout-Item>
+			</lightning-layout>
+		</div>
+		<!--aura if-->
+            <!--Modalmessage-->
+		
+	</div>
+</template>

@@ -1,0 +1,43 @@
+<!--CEC_PME_MobileButtonsResendRequest.cmp -->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="CEC_PME_MobileButtonsController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    <aura:registerEvent name="CEC_PME_MobileButtonEvt" type="c:CEC_PME_MobileButtonEvt"/>
+    
+    <aura:attribute name="contactsTableColumns" type="List"/>
+    <aura:attribute name="contactsTableData" type="Object"/>
+    <aura:attribute name="contactsTableErrors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="selectedContact" type="AccountContactRelation" />
+    <aura:attribute name="isQuickAction" type="Boolean" default="true" required="true"/>
+    
+    <lightning:card title="{!$Label.c.CEC_PME_MobileButtonsResendRequest_1}" class="slds-p-around_medium">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1" aura:id="myResend">
+                <div class="slds-m-around_x-small">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:button variant="neutral" label="{!$Label.c.CEC_PME_MobileButtonsResendRequest_2}" onclick="{!c.closeAction}" class="slds-button_stretch"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning:button variant="brand" label="{!$Label.c.CEC_PME_MobileButtonsResendRequest_3}" onclick="{!c.reSendEnvelope}" class="slds-button_stretch"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-1">
+                <lightning:spinner aura:id="mySpinner" alternativeText="Loading" size="large" />
+                <lightning:datatable
+                                     hideCheckboxColumn="true"
+                                     showRowNumberColumn="false"
+                                     columns= "{!v.contactsTableColumns}"
+                                     data="{!v.contactsTableData}"
+                                     keyField="Id"
+                                     errors="{!v.contactsTableErrors}"
+                                     draftValues="{!v.draftValues}"
+                                     onsave="{!c.handleSaveTableEdit}"
+                                     />
+            </div>
+        </div>        
+    </lightning:card>    
+</aura:component>

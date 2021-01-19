@@ -1,0 +1,31 @@
+.THIS .conteiner-grid {
+     background : white;
+   }
+
+.THIS .input-format {
+      padding : 0.5rem 1rem 0rem 1rem;
+   }
+
+.THIS .input-format2 {
+      padding-right : 1rem;
+      padding-top : 0.5rem;
+   } 
+  
+.THIS .Section-format {
+      max-width : 60% !important;
+   }
+
+.THIS .data-picker {
+     z-index:1;
+     padding-right: 0.5rem !important;
+     position: absolute;
+     table-layout: fixed;    
+   }
+
+.THIS .data {
+     width: 24% !important;
+   }
+
+.THIS .data2 {
+     width: 30% !important;
+   }

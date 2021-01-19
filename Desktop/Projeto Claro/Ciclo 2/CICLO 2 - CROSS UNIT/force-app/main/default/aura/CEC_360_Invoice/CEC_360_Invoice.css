@@ -1,0 +1,18 @@
+setWhite.THIS svg {
+    fill : red;
+    background-color:yellow;
+}
+
+.THIS input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+.THIS input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}

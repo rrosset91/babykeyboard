@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34" height="34" viewBox="0 0 34 34">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.281" y1="0.142" x2="0.946" y2="0.666" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d52b1e"/>
+      <stop offset="1" stop-color="#009ed3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="0.14" y1="0.122" x2="0.879" y2="0.799" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="chamada-mudo" transform="translate(-259 -370)">
+    <g id="microphone-black-shape" transform="translate(193.474 375.161)">
+      <g id="Grupo_82" data-name="Grupo 82" transform="translate(73.087)">
+        <path id="Caminho_89" data-name="Caminho 89" d="M91.133,183.027a1.019,1.019,0,0,0-1.736.717v2.039a7.136,7.136,0,0,1-14.272,0v-2.039a1.019,1.019,0,0,0-2.039,0v2.039a9.174,9.174,0,0,0,8.155,9.111V197H77.165a1.02,1.02,0,0,0,0,2.039H87.358a1.02,1.02,0,0,0,0-2.039H83.281v-2.1a9.175,9.175,0,0,0,8.155-9.111v-2.039A.979.979,0,0,0,91.133,183.027Z" transform="translate(-73.087 -174.53)" fill="url(#linear-gradient)"/>
+        <g id="Grupo_84" data-name="Grupo 84" transform="translate(-161.558 -408.163)">
+          <path id="Caminho_102" data-name="Caminho 102" d="M175,408.858c-.1-.119-.188-.249-.3-.358a5.075,5.075,0,0,0-7.178-.021l-.022.021a4.909,4.909,0,0,0-1.5,3.6v5.759Z" fill="url(#linear-gradient)"/>
+          <path id="Caminho_103" data-name="Caminho 103" d="M166.064,420.909a5.094,5.094,0,0,0,5.033,4.446v-.006a5.111,5.111,0,0,0,5.1-5.1V412.1a4.864,4.864,0,0,0-.143-1.181Z" fill="url(#linear-gradient)"/>
+        </g>
+      </g>
+    </g>
+    <path id="Caminho_101" data-name="Caminho 101" d="M343.653,404.388a17,17,0,1,0,17,17A17,17,0,0,0,343.653,404.388Zm0,32.809a15.809,15.809,0,1,1,15.809-15.809A15.809,15.809,0,0,1,343.653,437.2Z" transform="translate(-67.653 -34.388)" fill="url(#linear-gradient-4)"/>
+  </g>
+</svg>

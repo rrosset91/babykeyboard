@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="44.207" height="27.915" viewBox="0 0 44.207 27.915">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.19" y1="0.114" x2="0.845" y2="0.872" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#DA291C"/>
+      <stop offset="1" stop-color="#DA291C"/>
+    </linearGradient>
+  </defs>
+  <g id="reuniao-chamando" transform="translate(-245.964 -183.5)">
+    <path id="Caminho_54" data-name="Caminho 54" d="M219.876,166.537a.281.281,0,0,0-.3-.106,2.672,2.672,0,0,0-2.049,3.138c.412,2.708,5.466,9.586,11.349,10.491a.3.3,0,0,0,.066,0,2.476,2.476,0,0,0,2.3-2.175.278.278,0,0,0-.133-.277l-3.26-1.991a.282.282,0,0,0-.253-.021l-1.85.753a.281.281,0,0,1-.267-.029,15.821,15.821,0,0,1-4.214-4.313.283.283,0,0,1,0-.282l.953-1.705a.282.282,0,0,0-.018-.3Z" transform="translate(35.541 24.288)" fill="none" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Caminho_95" data-name="Caminho 95" d="M234.364,389.057a13.957,13.957,0,1,0,13.958,13.958A13.958,13.958,0,0,0,234.364,389.057Zm0,26.938a12.98,12.98,0,1,1,12.981-12.98A12.981,12.981,0,0,1,234.364,415.995Z" transform="translate(25.557 -205.557)" fill="url(#linear-gradient)"/>
+    <path id="Caminho_12" data-name="Caminho 12" d="M635.2,525.349s4.315,5.457,0,10.914" transform="translate(-357.983 -333.505)" fill="none" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Caminho_13" data-name="Caminho 13" d="M643.126,521.47s5.813,8,0,15.991" transform="translate(-361.952 -332.165)" fill="none" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Caminho_14" data-name="Caminho 14" d="M650.263,515.265s8.566,12.057,0,24.114" transform="translate(-364.418 -330.021)" fill="none" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  </g>
+</svg>

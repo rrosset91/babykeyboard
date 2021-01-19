@@ -1,0 +1,294 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 20/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 10] + [Componente com as ações de transferencia
+* de chamada]
+* Controle de Versão
+-->
+
+
+<apex:component >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_TransferCall/css/pageStyle.css')}"/>
+
+    
+    <style>
+        
+        
+    
+        .jstree-node.tree-not-selectable.jstree-closed>.jstree-ocl{
+        	background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/images/transferencia-closed.svg')}");
+        	background-position: 9px 6px;
+        }
+        
+        .jstree-node.tree-not-selectable .jstree-default .jstree-anchor{
+        	color: #da291c !important;
+        }
+    
+        .tree-selectable .jstree-icon:empty,
+        .jstree-default .jstree-icon:empty{
+        	background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/images/transferencia-closed.svg')}");
+       		background-position: 9px 6px;
+        }
+        
+        .tree-selectable .jstree-anchor.jstree-clicked{
+        	color: #fff !important;
+        }
+        
+        .tree-selectable .jstree-anchor.jstree-clicked .jstree-icon{
+        	background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/images/transferencia-selecao-final.svg')}");
+       		background-position: 5px 8px;
+        }
+        
+        .jstree-wholerow.jstree-wholerow-clicked {
+    		background: #f3f3f4;
+		}
+        
+        /*
+        .tree-not-selectable.jstree-open .jstree-anchor{
+        	color: #d7372b !important;
+        }
+        */
+        /*
+        a.jstree-anchor.jstree-clicked {
+            color: #fff !important;
+        }
+        */
+        
+
+        .tree-selectable .jstree-wholerow.jstree-wholerow-clicked{
+        	background: #d52b1e;
+        }
+        
+        /*
+        .tree-selectable a.jstree-anchor{
+        	color: #fff !important;
+        }
+        
+        
+        .jstree-node.tree-not-selectable.jstree-open a.jstree-anchor.anchor-opened {
+            color: #DA291C !important;
+        }
+       	
+        .jstree-anchor.jstree-clicked{
+            color: #DA291C !important;
+        }
+*/
+
+        /* PRIMEIRO NIVEL */
+        .jstree-node.tree-not-selectable.jstree-open a.jstree-anchor{
+            color: #DA291C !important;
+        }
+
+        /* SEGUNDO NIVEL */
+        .jstree-node.tree-not-selectable.jstree-open .jstree-closed a.jstree-anchor{
+            color: #707070 !important;
+        }
+
+        .jstree-node.tree-not-selectable.jstree-open .jstree-open a.jstree-anchor{
+            color: #DA291C !important;
+        }
+
+        .jstree-node.tree-not-selectable.jstree-open .tree-not-selectable.jstree-closed a.jstree-anchor.jstree-clicked{
+            color: #707070 !important;
+        }
+
+        .jstree-node.tree-not-selectable.jstree-open .jstree-closed a.jstree-anchor.jstree-clicked{
+            color: #fff !important;
+        }
+        
+        /* TERCEIRO NIVEL*/
+        .jstree-node.tree-not-selectable.jstree-open .jstree-open .jstree-closed a.jstree-anchor{
+            color: #707070 !important;
+        }
+        .jstree-node.tree-not-selectable.jstree-open .jstree-open .jstree-closed a.jstree-anchor.jstree-clicked{
+            color: #fff !important;
+        }
+
+    </style>
+    
+    <!--JSTREE -->
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/jstree.min.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jsTree/style.min.css')}"/>
+
+    <div class="in-attendance">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_12-of-12 text-left">
+                <h2>Selecione o motivo</h2>
+            </div>
+            
+            <div class="topics">
+                
+                <div class="css-scrollbar">
+                    
+                    <div id="tree">tree loading</div>
+                    <div class="error-messages" id="log"></div>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="slds-grid actions-page">
+                
+                <!--
+                <div class="slds-col slds-size_2-of-12 img-actions back-action" onclick="backToAttendance();">
+                    <img class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/general/cti-arrow.svg')}"/>    
+                </div>
+				<div class="slds-col slds-size_3-of-12"></div>
+                -->
+                
+                <!--
+                <div class="slds-col slds-size_4-of-12  image-group transfer-action inactive">
+                    <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/general/cti-transfer-off.svg')}"/>      
+                    <label>Transferir</label>
+                </div>
+				-->                
+                
+                <div class="slds-col slds-size_5-of-12 hover-active image-group transfer-action active display-none" onclick="startTransfer(finalVDN);">
+                    <!--<img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/general/cti-transfer.svg')}"/>      
+                    <label class="hover-active">Transferir</label>-->
+                    
+                    <a class="cti-button-red btn-link-red text-center" reRender="none">Transferir</a>
+                </div>
+              
+            </div>
+            
+        </div>
+    </div>  
+    
+    
+    <script>
+    
+        $('#tree .jstree-container-ul.jstree-children.jstree-no-dots.jstree-no-icons.jstree-wholerow-ul').remove();
+        
+        var $tree = $('#tree');
+        var resetting = false;
+        
+        $('#tree').on('select_node.jstree', function (e, data) {
+            data.instance.toggle_node(data.node);
+        });
+        
+        $('#tree').on('open_node.jstree', function (e, data) {
+            
+            var nodesToKeepOpen = [];
+            
+            // get all parent nodes to keep open
+            $('#'+data.node.id).parents('.jstree-node').each(function() {
+                nodesToKeepOpen.push(this.id);
+            });
+            
+            // add current node to keep open
+            nodesToKeepOpen.push( data.node.id );
+            
+            // close all other nodes
+            $('.jstree-node').each( function() {
+                if( nodesToKeepOpen.indexOf(this.id) === -1 ) {
+                    $("#tree").jstree().close_node(this.id);
+                }
+            });
+        });
+        
+        $('#tree').jstree({
+            "core": {
+                "data": jsonToTree,
+                
+                "themes" : { 
+                    "icons":false,
+                    "dots": false
+                }
+            },
+            'checkbox': {
+                three_state: false,
+                cascade: 'none'
+            },
+                        
+            "plugins": [
+                "sort",
+                "types",
+                "themes",
+                "wholerow",
+                "checkbox" 
+            ]
+            
+            
+
+        });
+    
+    	insertTreeLevel();
+                
+        $('#tree').on('changed.jstree', function (e, data) {
+            if (resetting) //ignoring the changed event
+            {
+                resetting = false;
+                return;
+            }
+            
+            if (!$("#multiselect").is(':checked') && data.selected.length > 1) {
+                resetting = true; //ignore next changed event
+                data.instance.uncheck_all(); //will invoke the changed event once
+                data.instance.check_node(data.node/*currently selected node*/);
+                return;
+            }
+            
+            selectedId = [];
+            for(var i = 0; i < data.selected.length; i++) {
+                //selectedId.push(data.instance.get_node(data.selected[i]).id);
+                selectedId = data.instance.get_node(data.selected[i]).id;
+            }
+            //$("#log").append("Selected nodes: " + selectedId+ "<br />");
+            
+            console.log('nó selecionado = ' + selectedId);
+            
+            var checkVDN = selectedId.includes("VDNTC-");
+            if (checkVDN == true){
+                finalVDN = selectedId.split("VDNTC-").pop();
+                
+                //$('.transfer-action.inactive').addClass('display-none');
+                $('.transfer-action.active').removeClass('display-none');
+                
+                console.log('contém VDN - ' + checkVDN);
+                console.log('antes subs = ' + selectedId);
+                console.log('depois subs = ' + selectedId.substring(0,6));
+                console.log('finalVDN subs = ' + finalVDN);
+            } else {
+                //$('.transfer-action.inactive').removeClass('display-none');
+                $('.transfer-action.active').addClass('display-none');
+            }
+                        
+            insertTreeLevel();
+            
+        });
+    
+    
+    function insertTreeLevel(){
+        
+        var idNodeTree;
+        
+        $(".jstree-node" ).each(function(index) {
+            
+            idNodeTree = $(this).attr('id');
+            
+            if(idNodeTree.indexOf('VDNTC-') > -1){
+                $(this).addClass('tree-selectable');
+            } else {
+                $(this).addClass('tree-not-selectable');
+            }
+        });
+    }
+
+
+    $('.tree-selectable').click(function() {
+
+        var idTreeSelectable = $(this).attr('id');
+        var ariaValue = document.getElementById(idTreeSelectable).getAttribute('aria-level');
+
+        if (ariaValue == '1'){
+            $("#tree").jstree('close_all');
+        }
+    });
+
+
+    </script>
+    
+    
+</apex:component>

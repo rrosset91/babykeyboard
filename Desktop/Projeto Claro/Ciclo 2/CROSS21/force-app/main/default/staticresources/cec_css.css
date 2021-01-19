@@ -1,0 +1,27 @@
+$azul:#009de3;
+$cinza:#706e6b;
+$borda:#dddbda;
+$bar-cinza:#a8a8a8;
+$bc:#ffffff;
+$bgtd:#f8f8f7;
+$texto:#2b2826;
+$vermelho:#d52b1e;
+$verde:#6fb353;
+$fundo-page:#f5f6f5;
+$lh:34px;
+
+.pd-l-10 {padding-left:10px;}
+.pd-r-10 {padding-right:10px;}
+.bd-top {border:solid 1px $borda;}
+
+.lista-consuming {width:auto !important;}
+.lista-consuming td, .lista-plano th {font-weight: normal;line-height:$lh;font-size:13px;}
+.bar-consuming {border-radius:12px;height:24px;width:200px;background:$bar-cinza;}
+
+
+/*titulos*/
+.contrato-detalhe {width: 100%;border-radius: 3px;border: solid 1px $borda;padding: 10px;font-size: 23px;color:$cinza;margin-bottom: 20px;}
+.fatura-topico {color: $cinza;font-size: 12px;}
+.fatura-topico-azul {color: $azul;font-size: 12px;}
+.fatura-dados {color: $texto;font-size: 14px;}
+.azul {color:$azul;}

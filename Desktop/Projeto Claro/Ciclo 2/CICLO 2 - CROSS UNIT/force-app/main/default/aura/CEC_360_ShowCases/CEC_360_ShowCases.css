@@ -1,0 +1,13 @@
+.THIS .campo-data-inicio {width:160px;margin-right:20px;display:inline-block;}
+.THIS .campo-data-fim {width:160px;margin-right:20px;display:inline-block;}
+.THIS .campo-selecao {width:300px;margin-right:20px;display:inline-block;}
+.THIS .campo-buscar {width:100px;margin-right:20px;display:inline-block;}
+.THIS .campo-buscar button {width:100px;}
+.THIS .campo-criarcaso {width:calc(100% - 810px);text-align:right;padding-right:10px;display:inline-block;}
+.THIS .campo-criarcaso button {width:100px;}       
+.slds-grid.slds-gutters.cCEC_360_ShowCases.block-cases {display: block;margin-left:10px;}
+.THIS .protocolo-linha {width: 160px;padding-right: 10px;margin-left: 10px;}       
+.THIS .margin-left-10 {margin-left:10px;}        
+@media (max-width:1420px) {
+            .THIS .campo-criarcaso {width:100px;}            
+        }

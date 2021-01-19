@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="33.758" height="34" viewBox="0 0 33.758 34">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.603" y1="-0.213" x2="1.403" y2="0.705" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d52b1e"/>
+      <stop offset="1" stop-color="#009ed3"/>
+    </linearGradient>
+  </defs>
+  <g id="chamada-pausar" transform="translate(-39 -370)">
+    <line id="Linha_81" data-name="Linha 81" y2="6" transform="translate(56.5 372.5)" fill="none" stroke="#bd3833" stroke-linecap="round" stroke-width="1.5"/>
+    <line id="Linha_82" data-name="Linha 82" x1="5" transform="translate(65.5 387.5)" fill="none" stroke="#477796" stroke-linecap="round" stroke-width="1.5"/>
+    <g id="Grupo_122" data-name="Grupo 122" transform="translate(-154.904 -33.691)">
+      <path id="Caminho_177" data-name="Caminho 177" d="M213.579,429.724c-3.025-2.431-3.871-1.236-5.244.136-.958.958-3.382-1.042-5.477-3.137s-4.095-4.518-3.137-5.477c1.372-1.373,2.568-2.219.135-5.243s-4.051-.7-5.38.626c-1.536,1.535-.082,7.253,5.57,12.905s11.371,7.1,12.9,5.571C214.28,433.776,216.6,432.156,213.579,429.724Z" transform="translate(0 2.013)" fill="url(#linear-gradient)"/>
+      <path id="Caminho_178" data-name="Caminho 178" d="M210.619,403.691A16.992,16.992,0,0,0,194.137,416.6h1.227a15.8,15.8,0,1,1,20.5,19v1.265a17,17,0,0,0-5.244-33.167Z" transform="translate(0.043 0)" fill="url(#linear-gradient)"/>
+      <path id="Caminho_179" data-name="Caminho 179" d="M208.411,423.075a1.392,1.392,0,0,0,.521-.205l7.57-4.463a.832.832,0,1,0-.846-1.433l-6.426,3.789-4.862-5.477a1.387,1.387,0,1,0-2.074,1.841l4.88,5.5A1.386,1.386,0,0,0,208.411,423.075Z" transform="translate(1.495 2.069)" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+</svg>

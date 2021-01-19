@@ -1,0 +1,363 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForRecordHome,force:lightningQuickAction"
+                controller="CEC_CC_QuestionCaseController" access="global" >
+    
+    <!-- ************************************************************** -->
+    <!-- *************************** Handler ************************** -->
+    <!-- ************************************************************** -->
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>	
+    
+    <!-- ************************************************************** -->
+    <!-- ************************* Attributes ************************* -->
+    <!-- ************************************************************** -->    
+    <aura:attribute name="disableBtnCadastrar" type="Boolean" default="false" />
+    <aura:attribute name="dependentRecTypeMap" type="Map"/>
+    <aura:attribute name="parentCase" type="String" default="Case" access="global"/> 
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="enableReopenCase" type="Boolean" default="false" />    
+    <aura:attribute name="bDisabledDependentFld" type="boolean" default="true"/>
+    <aura:attribute name="listAreaValues" type="list" default="[]"/>
+    <aura:attribute name="listDependentValues" type="list" default="['Selecionar']"/>
+    <aura:attribute name="listBusinessUnitValues" type="list" default="[]"/>
+    <aura:attribute name="listProductValues" type="list" default="['Selecionar']"/>
+    <aura:attribute name="listCompanyValues" type="list" default="['Selecionar']"/>
+    <aura:attribute name="dependentFieldMap" type="map"/>    
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="isCaseChild" type="boolean" default="false"/>
+    <aura:attribute name="isCaseSupport" type="boolean" default="false"/>
+    <aura:attribute name="isCaseReopen" type="boolean" default="false"/>	
+    <aura:attribute name="caseSelect" type="boolean" default="false"/>
+    <aura:attribute name="productClaro" type="boolean" default="false"/>
+    <aura:attribute name="productDTH" type="boolean" default="false"/>
+    <aura:attribute name="productEmbratel" type="boolean" default="false"/>
+    <aura:attribute name="productNET" type="boolean" default="false"/>    
+    <aura:attribute name="TypePicklist" type="list" />
+    <aura:attribute name="BusinessUnit" type="String" default="BusinessUnit__c" access="global"/>
+    <aura:attribute name="listQuestion" type="list"/>  
+    <aura:attribute name="isDate" type="Boolean" default="false" />
+    <aura:attribute name="isString" type="Boolean" default="false" />
+    <aura:attribute name="isBoolean" type="Boolean" default="false" />
+    <aura:attribute name="isToShowCompany" type="Boolean" default="false" />
+    
+    <aura:attribute name="listReopenSubject" type="list" default="[]"/>
+    
+    <!-- ************************************************************** -->
+    <!-- ****************** Modal Seleção Tipo Caso ******************* -->
+    <!-- ************************************************************** -->
+    <div id="buttonNewCase" class="slds-form-element__control" style="margin-right:15px;display:inline-block;padding-top:23px;">
+        <lightning:button label="Caso Suporte" 
+                          class="slds-button slds-button_brand" 
+                          variant="brand" 
+                          onclick="{!c.openModel}"/>   
+    </div>
+	
+    <aura:if isTrue="{!v.caseSelect}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-modal--medium slds-fade-in-open" >
+            <aura:if isTrue="{!v.Spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>            
+            <div class="slds-modal__container">   
+                <div class="slds-modal__header" >
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.closeModel}">
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Criar Caso</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around_large">
+                    
+                    <ul class="slds-form-element__control slds-list_vertical"  name="tipoCaso">
+                        <legend >
+                            <span>Selecione um tipo de registro para esse Caso.</span>
+                        </legend>
+                        <br/>
+                            <li class = "slds-size_6-of-12">
+                                <span class="slds-radio">
+                                    <input type="radio" aura:id="radioChild" onclick="{!c.caseSelectChild}"
+                                           id="childRadio" name="tipoCaso" value="childRadio" />
+                                    <label class="slds-radio__label" for="childRadio">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Caso Filho</span>
+                                    </label>
+                                </span>
+                            </li>
+                            <li class = "slds-size_6-of-12">                      
+                                <span class="slds-radio">
+                                    <input type="radio" aura:id="radioSupport" onclick="{!c.caseSelectSupport}" id="supportRadio"
+                                           name="tipoCaso" value="supportRadio" />
+                                    <label class="slds-radio__label" for="supportRadio">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Caso Apoio</span>
+                                    </label>
+                                </span>
+                            </li>
+                        <aura:if isTrue="{!v.enableReopenCase}">
+                            <li class = "slds-size_6-of-12">                      
+                                <span class="slds-radio">
+                                    <input type="radio" aura:id="radioReopen" onclick="{!c.caseSelectReopen}" id="reopenRadio"
+                                           name="tipoCaso" value="reopenRadio" />
+                                    <label class="slds-radio__label" for="reopenRadio">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Reabertura Anatel</span>
+                                    </label>
+                                </span>
+                            </li>
+                        </aura:if>
+                    </ul>
+                </div>
+                <footer class="slds-modal__footer">
+                	<lightning:button class="slds-button slds-button--neutral" label="Cancelar" onclick="{!c.closeModel}"/>
+            	</footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    
+    <!-- ************************************************************** -->
+    <!-- *************** Modal utilizado para caso Filho ************** -->
+    <!-- ************************************************************** -->
+    <aura:if isTrue="{!v.isCaseChild}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-modal--medium slds-fade-in-open" >
+            <aura:if isTrue="{!v.Spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">    
+                <div class="slds-modal__header" >
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.closeModel}">
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Novo Caso: Filho</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <ui:inputtextarea aura:id="numberOrder" 
+                                        value="" 
+                                        label="Descrição da solicitação" 
+                                        maxlength="10000" 
+                                        placeholder="Escreva aqui..."/>
+                    
+                    <lightning:select aura:id="lArea"
+                                      name="controllerFld"
+                                      value=""
+                                      label="Area"
+                                      onchange="{!c.onControllerFieldChange}">
+                        <aura:iteration items="{!v.listAreaValues}" var="val">
+                            <option value="{!v.val}">{!val}</option>  
+                        </aura:iteration>   
+                    </lightning:select> 
+                    <lightning:select aura:id="lSubArea"
+                                      name="dependentFld"
+                                      value=""
+                                      label="Sub Area"
+                                      disabled="{!v.bDisabledDependentFld}"
+                                      onchange="{!c.fetchQuestion}">
+                        <aura:iteration items="{!v.listDependentValues}" var="val">
+                            <option value="{!val}">{!val}</option>  
+                        </aura:iteration> 
+                    </lightning:select>                      
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button--neutral" label="Cancelar" onclick="{!c.closeModel}"/>
+                    <lightning:button class="slds-button slds-button--neutral" label="Voltar" onclick="{!c.backModel}"/>
+                    <lightning:button class="slds-button slds-button_brand" label="Cadastrar" onclick="{!c.createCaseChild}" disabled="{!v.disableBtnCadastrar}"/>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    
+    <!-- ************************************************************** -->
+    <!-- ************ Modal utilizado para caso reabertura ************ -->
+    <!-- ************************************************************** -->
+    <aura:if isTrue="{!v.isCaseReopen}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-modal--medium slds-fade-in-open" >
+            <aura:if isTrue="{!v.Spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            <div class="slds-modal__container">    
+                <div class="slds-modal__header" >
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.closeModel}">
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Novo Caso: Reabertura Anatel</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">                  
+                    
+                    <ui:inputtextarea aura:id="numberOrder" 
+                                        value="" 
+                                        label="Descrição da solicitação" 
+                                        maxlength="10000" 
+                                        placeholder="Escreva aqui..."/>   
+                    
+                    <lightning:select aura:id="reopenSubject" name="reopenSubject" label="Motivo da Reabertura" title="Selecione o motivo da reabertura do caso anatel" required="true">
+                        <option value="">Selecionar</option>
+                        <aura:iteration items="{!v.listReopenSubject}" var="item">
+                            <option text="{!item.label}" value="{!item.value}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <ui:inputDateTime aura:id="openCriticalChannel" 
+                                      label="Abertura no canal crítico" 
+                                      class="field" 
+                                      value="" 
+                                      displayDatePicker="true"/>
+                                      
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button--neutral" label="Cancelar" onclick="{!c.closeModel}"/>
+                    <lightning:button class="slds-button slds-button--neutral" label="Voltar" onclick="{!c.backModel}"/>
+                    <lightning:button class="slds-button slds-button_brand" label="Cadastrar" onclick="{!c.createCaseReopen}" disabled="{!v.disableBtnCadastrar}"/>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+    
+    <!-- ************************************************************** -->
+    <!-- *************** Modal utilizado para Caso Apoio ************** -->
+    <!-- ************************************************************** -->
+    <aura:if isTrue="{!v.isCaseSupport}">
+        <div role="dialog" tabindex="-1" aria-labelledby="header99" class="slds-modal slds-modal--medium slds-fade-in-open" >
+            <aura:if isTrue="{!v.Spinner}">
+                <div aura:id="spinnerId" class="slds-spinner_container">
+                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+            </aura:if>
+            
+            <div class="slds-modal__container">   
+                <div class="slds-modal__header" >
+                    <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.closeModel}">
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Novo Caso: Apoio</h2>
+                </div>
+                
+                <div class="slds-modal__content slds-p-around--medium">
+
+                    <ui:inputtextarea aura:id="numberOrder" value="" 
+                                        label="Descrição da solicitação" 
+                                        maxlength="10000" 
+                                        placeholder="Escreva aqui..."/>                  
+                    
+                    <lightning:select aura:id="bUnit"
+                                      name="controllerFld"
+                                      value=""
+                                      onchange="{!c.enableField}" 
+                                      label="Unidade de Negócio" >
+                        <option value="Selecionar">Selecionar</option>
+                        <option value="Claro">Claro</option>
+                        <option value="Claro DTH">Claro DTH</option>
+                        <option value="Embratel">Embratel</option>
+                        <option value="NET">NET</option>
+                    </lightning:select>
+                    
+                    <aura:renderIf isTrue = "{!v.productClaro}">
+                        <lightning:select aura:id="productClaro" name="dependentFld" value="" label="Produto">
+                            <option value="Selecionar">Selecionar</option>
+                            <option value="Banda Larga">Claro Banda Larga</option>
+                            <option value="Controle">Claro Controle</option>
+                            <option value="Claro Flex">Claro Flex</option>
+                            <option value="Claro PME">Claro PME</option>
+                            <option value="Pós Pago">Claro Pós Pago</option>
+                            <option value="Pré">Claro Pré Pago</option>
+                            <option value="Controle Fácil">Controle Fácil</option>
+                            <option value="Sem produto">Sem produto</option>
+                        </lightning:select>
+                    </aura:renderIf>
+                    
+                    <aura:renderIf isTrue = "{!v.productDTH}">
+                        <lightning:select aura:id="productDTH" name="dependentFld" value="" label="Produto">
+                            <option value="Selecionar">Selecionar</option>
+                            <option value="Controle">Claro Controle</option>
+                            <option value="Claro Fixo">Claro Fixo</option>
+                            <option value="Claro Fone">Claro Fone</option>    
+                            <option value="Claro Internet Casa">Claro Internet Casa</option>
+                            <option value="Pós Pago">Claro Pós Pago</option>
+                            <option value="Claro TV">Claro TV</option>
+                            <option value="Claro TV Livre">Claro TV Pré Pago</option>
+                            <option value="Sem produto">Sem produto</option>
+                        </lightning:select>
+                    </aura:renderIf>
+                    
+                    <aura:renderIf isTrue = "{!v.productEmbratel}">
+                        <lightning:select aura:id="productEmbratel" name="dependentFld" value="" label="Produto">
+                            <option value="Selecionar">Selecionar</option>
+                            <option value="Grandes Empresas">Claro GE</option>
+                            <option value="Corp TB">Corp TB</option>
+                            <option value="Corp">Empresarial EBT</option>
+                            <option value="LD">LD 21</option>
+                            <option value="Sem produto">Sem produto</option>
+                            <option value="TUP">TUP</option>
+                        </lightning:select>
+                    </aura:renderIf>
+                    
+                    <aura:renderIf isTrue = "{!v.productNET}">
+                        <lightning:select aura:id="productNET" name="dependentFld" value="" label="Produto">
+                            <option value="Selecionar">Selecionar</option>
+                            <option value="Banda Larga">Claro Banda Larga</option>
+                            <option value="Controle">Claro Controle</option>
+                            <option value="Claro NET Fone">Claro NET Fone</option>
+                            <option value="Claro NET TV">Claro NET TV</option>
+                            <option value="Claro NET Vírtua">Claro NET Vírtua</option>
+                            <option value="Pós Pago">Claro Pós Pago</option>
+                            <option value="Sem produto">Sem produto</option>
+                        </lightning:select>
+                    </aura:renderIf>  
+                    
+                    <aura:if isTrue="{!v.isToShowCompany}">                   
+                        <lightning:select aura:id="company"
+                                          name="company"
+                                          value=""
+                                          label="Empresa"
+                                          onchange="{!c.fetchQuestion}">
+                            <option value="Selecionar">Selecionar</option>              
+                            <option value="Claro Celular">Claro Celular</option>
+                            <option value="Claro Fixo - Embratel">Claro Fixo - Embratel</option>
+                            <option value="Claro TV">Claro TV</option>
+                            <option value="NET">NET</option>  
+                        </lightning:select>
+                    </aura:if>
+                    
+                    <lightning:input aura:id="contract"
+                                     name="dependentFld"
+                                     value=""
+                                     label="Telefone/Contrato" >
+                    </lightning:input>
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <lightning:button class="slds-button slds-button--neutral" label="Cancelar" onclick="{!c.closeModel}"/>
+                    <lightning:button class="slds-button slds-button--neutral" label="Voltar" onclick="{!c.backModel}"/>
+                    <lightning:button class="slds-button slds-button_brand" label="Cadastrar" onclick="{!c.createCaseSupport}" disabled="{!v.disableBtnCadastrar}"/>
+                </footer>
+            </div>
+        </div>
+
+        <div class="slds-backdrop slds-backdrop--open"></div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,142 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes"
+                access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.initComponent}" />
+    <aura:handler name="change" value="{!v.devices}" action="{!c.refreshPickList}"/>
+    <!--<aura:handler name="change" value="{!v.deviceSelected}" action="{!c.deviceSelectChanged}"/>-->
+    <!-- Send device to parent component -->
+    <aura:registerEvent name="AdicionarAparelho" type="c:CEC_PME_AdicionarAparelho"/>
+    <aura:registerEvent name="AdicionarListaAparelhos" type="c:CEC_PME_AdicionarListaAparelhos" />
+    <!-- Color option list from selected device | used to generate checkbox for each color -->
+    <aura:attribute name="colorOptions" type="List" />
+    <!-- Selected color list (corresponding to color checkboxes with a check) -->
+    <aura:attribute name="colorsSelected" type="List" default="[]"/>
+    <!-- Human-readable selected colors text (String) -->
+    <aura:attribute name="colorsSelectedString" type="String" default=""/>
+    <aura:attribute name="isDesktop" type="Boolean"/>
+    <!-- Color of selected device -->
+    <aura:attribute name="deviceColor" type="String" />
+    <!-- Device options list for lightning:select -->
+    <aura:attribute name="deviceOptions" type="List" />
+    <!-- Current selected device -->
+    <aura:attribute name="deviceSelected" type="Object" default="{label: '--Selecione--', key: null}"/> 
+    <!-- Device list including model and colorlist for each device  -->
+    <aura:attribute name="devices" type="List" default="[]"/>
+    <!-- Yes/No options for acce acceptDifferentColor radioGroup -->
+    <aura:attribute name="acceptDifferentColorOptions" type="List" default="[
+                                                                                {'label': 'Não', 'value': 'false'},
+                                                                                {'label': 'Sim', 'value': 'true'}
+                                                                            ]"/>
+    <!-- Current selected option from radioGroup -->
+    <aura:attribute name="aceitaCoresOptionValue" type="Boolean" default="false"/>
+    <aura:attribute name="aceitaCoresSelected" type="Boolean" default="false"/>
+    <!-- Current Section -->
+    <aura:attribute name="sectionPickList" type="Object[]"/>
+    
+    <aura:attribute name="aparelhoValido" type="Boolean" default="false"/>
+    <aura:attribute name="showAcceptMessage" type="Boolean" default="false"/>
+    <aura:attribute name="aceitaCoresDisabled" type="Boolean" default="true"/>
+    <aura:attribute name="tipoEntrega" type="String" default="Logística"/>
+    <aura:attribute name="adicionaAparelhoButtonDisabled" type="Boolean" default="true"/>
+    <aura:attribute name="tipoPlano" type="String" default="Novo"/>
+    <aura:attribute name="assocAuto" type="Boolean" default="false"/>
+    
+    <!-- Main div of the component -->
+    <div class="slds-grid slds-wrap">
+        <aura:if isTrue="{! not(v.assocAuto)}">
+            <div class="slds-p-right_small slds-col slds-size_2-of-3 slds-medium-size_6-of-12 slds-large-size_4-of-12">
+                <span>Selecione o aparelho cadastrado: </span><span class="red-text">Pendente: {!v.deviceOptions.length}</span>
+                <lightning:select name="selectDeviceId" aura:id="selectDeviceId" value="{!v.deviceSelected}"
+                                  onchange="{!c.deviceSelectChanged}">
+                    <option text="--Selecione--" value="{label: '--Selecione--', key: null}"/>
+                    <aura:iteration items="{!v.deviceOptions}" var="option">
+                        <option text="{!option.label}" value="{!option.key}"  />
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+            <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12">
+                    <aura:if isTrue="{!v.showAcceptMessage}">
+                        <span class="sem-opcao-cor">
+                        Aparelho não possui outras cores disponíveis
+                        </span>
+                        
+                        <aura:set attribute="else">
+                            <lightning:radioGroup name="radioAcceptOtherColors"
+                                                  aura:id="radioAcceptOtherColors"
+                                                  label="Aceita outra cor"
+                                                  options="{! v.acceptDifferentColorOptions }"
+                                                  value="{! v.aceitaCoresOptionValue }"
+                                                  onchange="{!c.radioChanged}"
+                                                  disabled="{!v.aceitaCoresDisabled}"
+                                                  type="radio"/>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </aura:if>
+        </aura:if> 
+        <aura:if isTrue="{!v.assocAuto}">
+            <div class="slds-p-right_small slds-col slds-size_2-of-3 slds-medium-size_6-of-12 slds-large-size_4-of-12">
+                <span class="red-text">Pendente: Associação de {!v.deviceOptions.length} simcard. </span>
+                <span>Clique em Incluir para associação automática.</span>
+            </div>
+       </aura:if>  
+	</div>
+    <aura:if isTrue="{!and(v.aceitaCoresSelected=='true', v.colorOptions.length > 0)}">
+        <div class="slds-p-around_xx-small">
+            <span>Selecione outras cores que você aceita,</span>
+            <span>em ordem de preferência</span>
+        </div>
+    </aura:if>
+    <div class="slds-grid slds-p-top_small">
+        <div class="slds-col">
+            <!-- aura:if to hide/unhide color selection section based on radioGroup value -->
+            <aura:if isTrue="{!v.aceitaCoresSelected}">
+                <!-- Mobile -->
+                <aura:if isTrue="{! !v.isDesktop}">
+                    <div class="slds-grid slds-wrap">
+                        <aura:iteration items="{!v.colorOptions}" var="opt">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                                <lightning:input type="checkbox"
+                                                 label="{!opt}"
+                                                 value="{!opt}"
+                                                 onchange="{!c.onColorCheckboxChanged}"/>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </aura:if>
+                <!-- Desktop -->
+                <aura:if isTrue="{!v.isDesktop}">
+                    <div class="slds-grid slds-gutters">
+                        <aura:iteration items="{!v.colorOptions}" var="opt">
+                            <div class="slds-col slds-size_2-of-11">
+                                <lightning:input type="checkbox"
+                                                 label="{!opt}"
+                                                 value="{!opt}"
+                                                 onchange="{!c.onColorCheckboxChanged}"/>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </aura:if>
+                <div id="cores-selecionadas">
+                    {!v.colorsSelectedString}
+                </div>
+            </aura:if>
+            <div class="slds-col">
+                <!--<aura:if isTrue="{!v.aparelhoValido}">-->
+                <aura:if isTrue="{! !v.assocAuto}">
+                    <lightning:button aura:id="adicionaAparelhoButton"
+                                      label="Incluir"
+                                      onclick="{!c.addDevice}" 
+                                      disabled="{!v.adicionaAparelhoButtonDisabled}"/>
+                </aura:if>
+                <!--</aura:if>-->
+                <aura:if isTrue="{!and(v.assocAuto,v.tipoPlano == 'Portabilidade')}">
+                    <lightning:button aura:id="asssocAutoButton"
+                                      label="Incluir" 
+                                      onclick="{!c.assocAutoDevices}" />
+                </aura:if>
+            </div>
+        </div>
+    </div>
+    <!-- End of main div -->
+</aura:component>

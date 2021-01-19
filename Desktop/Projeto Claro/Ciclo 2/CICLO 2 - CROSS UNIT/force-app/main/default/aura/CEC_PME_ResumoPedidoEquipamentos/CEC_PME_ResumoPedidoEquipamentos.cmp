@@ -1,0 +1,103 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="index" type="Integer" />
+    <aura:attribute name="plano" type="Object" />
+    <aura:attribute name="tipoPlano" type="String" />
+    <aura:attribute name="equipTotal" type="String" />
+    <aura:attribute name="tipoEntrega" type="String" />
+    <aura:iteration items="{!v.plano.equipamentosGrupo}" var="grupo" indexVar="grupoIndex" >
+        
+        <aura:if isTrue="{!grupo.equipamentos ? true : false}" >
+            
+            <button class="accordion border-b" id="{!'headerEquipamentos' + grupoIndex + v.index}" onclick="{!c.toggleSecao}" >
+                <div class="plano-tipo"><span class="sub-title">{!v.tipoPlano}</span></div>
+					<div class="plano-regional"><span class="legenda">Regional:</span> {!grupo.regional}</div>
+                    <div class="plano-uf"><span class="legenda">UF:</span> {!grupo.uf}</div>
+					<div class="plano-grupo"><span class="legenda">Grupo:</span> {!grupo.grupo}</div>
+            </button>
+            <div class="bloco" id="{!'secaoEquipamentos' + grupoIndex + v.index}">
+                <div class="bloco-lista table-lista-plan border-b">
+                    <div class="plano-equipamento">
+                        <div class="equipamento-lista-regional"><span class="legenda">Regional:</span> {!grupo.regional}</div>
+                        <div class="equipamento-lista-uf"><span class="legenda">UF:</span> {!grupo.uf}</div> 
+                        <div class="equipamento-lista-ddd"><span class="legenda">DDD:</span> {!grupo.ddd}</div>
+                        <div class="equipamento-lista-franquia"><span class="legenda">Franquia:</span> {!grupo.franquia}</div>
+                        <div class="equipamento-lista-linhas"><span class="legenda">Qtd Linhas:</span> {!grupo.qtdLinha}</div>
+                    </div>
+                    <div class="valor-equipamento">
+                        <span class="regular">Total: <ui:outputCurrency value="{!v.plano.totalEquipamentos}"/></span>
+                    </div>
+                </div>
+                <div class="bloco-lista-device border-b" id="bloco-equipamento-desktop">
+                    <div class="col-tab-plan equipamento-linha">
+                        <span class="title-table">Linha</span>
+                    </div>
+					<div class="col-tab-plan equipamento-equipamento">
+                        <span class="title-table">Equipamento</span>
+                    </div>
+                    <div class="col-tab-plan equipamento-qtd">
+                        <span class="title-table">Quantidade</span>
+                    </div>
+                    <div class="col-tab-plan equipamento-pontos">
+                        <span class="title-table">Pontos utilizados</span>
+                    </div>
+                    <aura:if isTrue="false">
+					<div class="col-tab-plan equipamento-faixa">
+                        <span class="title-table">Faixa utilizada</span>
+                    </div>
+                    </aura:if>
+                    <div class="col-tab-plan equipamento-valor">
+                        <span class="title-table">Valor</span>
+                    </div>
+                </div>
+                <aura:iteration items="{!grupo.equipamentos}" var="equip" indexVar="equipIndex" >
+                    <div class="bloco-lista border-b" id="lista-equipamentos">
+                        <div class="col-tab-plan equipamento-linha">
+                            <span class="title-table-device">{!equip.numeroLinha}</span>
+                        </div>
+						<div class="col-tab-plan equipamento-equipamento">
+                            <span class="title-table-device">{!equip.equipamento}</span>
+                        </div>
+                        <div class="col-tab-plan-value equipamento-qtd">
+                            <span class="title-table-device">{!equip.quantidade}</span>
+                        </div>
+                        <div class="col-tab-plan-value equipamento-pontos">
+                            <span class="title-table-device">{!equip.pontosUtilizados / 100 * -1}</span>
+                        </div>
+                        <aura:if isTrue="false">
+                            <div class="col-tab-plan-value equipamento-faixa">
+                                <span class="title-table-device">{!v.tipoPlano == 'Claro Total Individual' ? equip.faixaUtilizada : ''}</span>
+                            </div>
+                        </aura:if>
+                        <div class="col-tab-plan-value equipamento-valor">
+                            <span class="title-table-device"><ui:outputCurrency value="{!equip.valor * equip.quantidade}"/></span>
+                        </div>
+                    </div>
+                    
+                    <div class="bloco-lista border-b" id="lista-equipamentos-mobile">
+                        <div class="col-tab-plan-equipamento">
+                            <span class="title-table-device">{!equip.equipamento}</span>
+                        </div>
+                        <div class="col-tab-plan-value linha">
+                            <div><span class="legenda">Linha: </span><span class="title-table-device">{!equip.numeroLinha}</span></div>
+                        </div>
+						<div class="col-tab-plan-value qtd">
+                            <div><span class="legenda">Qtd: </span><span class="title-table-device">{!equip.quantidade}</span></div>
+                        </div>
+                        <div class="col-tab-plan-value pontos">
+                            <div><span class="legenda">Pontos:</span><span class="title-table-device">{!equip.pontosUtilizados / 100 * -1}</span></div>
+                        </div>
+                        <aura:if isTrue="false">
+                            <div class="col-tab-plan-value faixa">
+                                <div><span class="legenda">Faixa:</span><span class="title-table-device">{!equip.faixaUtilizada}</span></div>
+                            </div>
+                        </aura:if>
+                        <div class="col-tab-plan-value" id="device-valor-mobile">
+                            <span class="title-table-device"><ui:outputCurrency value="{!equip.valor}"/></span>
+                        </div>
+                    </div>
+                </aura:iteration>
+            </div>
+        </aura:if>
+    </aura:iteration>
+</aura:component>

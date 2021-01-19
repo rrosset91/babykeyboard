@@ -1,0 +1,40 @@
+.THIS .cardLeft {
+    left: initial !important;
+    z-index: 3 !important;
+}
+
+.THIS .slds-popover--tooltip, .slds-popover_tooltip {background: #DA291C !important;}
+.THIS .tooltip-advanced.tooltip-body {background: #DA291C !important;}
+
+.THIS button.slds-button.slds-button_icon.design-allow-interaction.toggle.split-toggle.slds-split-view__toggle-button.slds-is-open.slds-button_icon-xx-small.slds-button_icon-border.cardLeft.slds-button_icon-small.slds-button_icon-border-filled:focus {box-shadow: none;}
+
+.THIS .oneConsoleLayoutContainer2 .split-toggle {
+    left: 325px !important;
+}
+
+.THIS .oneConsoleLayoutContainer2 .fullRight .split-toggle {
+    left: 325px !important;
+}
+
+.THIS .slds-col.slds-size_3-of-12 {width:325px !important;}
+
+
+.THIS .oneConsoleLayoutContainer2 .split-toggle { 
+	
+}
+
+.THIS .slds-no-flex { 
+	margin-left: 5px !important;
+    margin-right: 15px !important;
+}
+
+.THIS button.slds-button.design-allow-interaction.toggle.split-toggle.slds-split-view__toggle-button.slds-is-open.slds-button_icon-xx-small.slds-button_icon-border.cardLeft.slds-button_icon-small.slds-button_icon-border-filled { 
+	background: none !important;
+	border: 0px !important;
+}
+
+.THIS .slds-button_icon-xx-small .slds-button__icon, .slds-button--icon-xx-small .slds-button__icon { 
+	width: 15px !important;
+    height: 15px !important;
+    color: #DA291C !important;
+}

@@ -1,0 +1,164 @@
+<aura:component controller="CEC_360_ServiceOrdersController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="contractNumber" type="String"/>
+    <aura:attribute name="startDate" type="String"/>
+    <aura:attribute name="endDate" type="String"/>
+    <aura:attribute name="protocolNumber" type="String"/>
+    <aura:attribute name="maxDate" type="String"/>
+    <aura:attribute name="minDate" type="String"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="isDate"  type="Boolean" default="false"/>
+    <aura:attribute name="isNumber" type="Boolean" default="true"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isCheck" type="Boolean" default="true"/>
+    <aura:attribute name="showTable" type="Boolean" default="false"/>
+    <aura:attribute name="ordersItem" type="List"/>
+    <aura:attribute name="enableSearch" type="Boolean" default="true"/>
+    <aura:attribute name="isSearching" type="Boolean" default="false"/>
+    <aura:attribute name="disableContracts" type="Boolean" default="false"/>
+    
+    <div class="slds-box slds-theme_default">
+        <div class="slds-grid slds-gutters">
+            <div class ="slds-col slds-size_4-of-12">
+                <div class="slds-text-heading_small">Contrato</div>
+                <lightning:combobox disabled="{!v.disableContracts}" aura:id="cmbContract" value="{!v.contractNumber}" 
+                                    onchange="{!c.enableSearch}" placeholder="Selecione um contrato"
+                                    />
+            </div>
+            
+            <div class="slds-col  slds-size_4-of-12">
+                <span class="slds-radio">
+                    <input type="radio" aura:id="radioData" checked="true" 
+                           id="dataRadio" name="tipoBusca" value="dataRadio" onclick="{!c.enableData}" />
+                    <label class="slds-radio__label" for="dataRadio">
+                        <span class="slds-radio_faux"></span>
+                        <span class="slds-form-element__label">Por data:</span>
+                    </label>
+                </span>
+                
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning:input aura:id="startDate" type="date" value="{!v.startDate}" max="{!v.maxDate}"
+                                         messageWhenBadInput="Data inválida." disabled="{!v.isDate}"
+                                         />
+                    </div>
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning:input aura:id="startDate" type="date" value="{!v.endDate}" max="{!v.maxDate}" 
+                                         messageWhenBadInput="Data inválida."  disabled="{!v.isDate}" />
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="slds-col  slds-size_2-of-12">
+                <span class="slds-radio">
+                    <input type="radio" aura:id="radioNumber"  id="number"
+                           name="tipoBusca" value="number" onclick="{!c.enableNumber}" />
+                    <label class="slds-radio__label" for="number">
+                        <span class="slds-radio_faux"></span>
+                        <span class="slds-form-element__label">ou protocolo:</span>
+                    </label>
+                </span>
+                <lightning:input   aura:id="protocolNumber" class="tallTextArea" value="{!v.protocolNumber}" 
+                                 maxlength="20" disabled="{!v.isNumber}" />
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+                <div class="buttontopalign">
+                    <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                      disabled="{!v.enableSearch}" onclick="{!c.getOrders}" >
+                    </lightning:button>
+                </div>
+            </div>
+        </div> 
+        
+        <aura:if isTrue="{!v.isSearching}">
+            <lightning:spinner alternativeText="Loading" size="medium" />
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showTable}">
+            <div class="slds-p-top_small">
+                <table class="slds-table slds-table_fixed-layout">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th style="width: 170px;">Protocolo</th>
+                            <th style="width: 120px;">Tipo da OS</th>
+                            <th style="width: 170px;">Atendimento</th>
+                            <th style="width: 130px;">Cód.da cidade</th>
+                            <th>Status</th>
+                            <th>É isenta</th>
+                            <th><lightning:icon iconName="utility:search" size="x-small" /></th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody >
+                        <aura:iteration items="{!v.ordersItem}" var="order"  indexVar="orderIndex">
+                            
+                            <tr>
+                                <td>{!order.protocolNumber}</td>
+                                <td>{!order.orderType}</td>
+                                <td>{!order.attendenceDate}</td>
+                                <td>{!order.cityId}</td>
+                                <td>{!order.status}</td>
+                                <td><lightning:icon size="x-small" iconName="{!order.isExempt?'utility:check':'utility:close'}"/></td>
+                                <td><lightning:buttonIcon value="{!orderIndex}" onclick="{!c.expandDetails}" iconName="{!order.showDetails?'utility:chevrondown':'utility:chevronright'}"/>
+                                </td>
+                            </tr>
+                            
+                            <aura:if isTrue="{!order.showDetails}">
+                                
+                                <tr class="slds-border_top">
+                                    
+                                    <td>
+                                        <div class="slds-text-title">Data de Criação</div>
+                                        <b>{!order.eventDate}</b>
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="slds-text-title">Atendimento</div>
+                                        {!order.attendenceDate}
+                                    </td>
+                                    <td>    
+                                        <div class="slds-text-title">Baixa</div>
+                                        {!order.terminationDate}
+                                    </td>
+                                    <td>    
+                                        <div class="slds-text-title">Atendimento para:</div>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td><b>Descrição:</b>
+                                        <p>{!order.typeDescription}</p>
+                                    </td>
+                                </tr>
+                                <tr class="slds-border_bottom">
+                                    <td><b>Observação:</b>
+                                        <ul>
+                                            <li class="slds-list__item slds-m-right_large slds-grid slds-truncate_container_75">
+                                                <span class="slds-m-left_xx-small slds-truncate" title="{!order.note}">
+                                                    {!order.note}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </aura:if>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+            
+        </aura:if>
+    </div>
+    
+    
+</aura:component>

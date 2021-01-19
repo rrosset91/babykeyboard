@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21.37" height="20.339" viewBox="0 0 21.37 20.339">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="21.37" height="20.339" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="notifications-off" clip-path="url(#clip-path)">
+    <path id="Caminho_149" data-name="Caminho 149" d="M5.415,14.3,4.061,12.943A10.2,10.2,0,0,0,0,20.486H1.934A7.991,7.991,0,0,1,5.415,14.3Zm12.957,6.188h1.934a10.1,10.1,0,0,0-3.964-7.542L14.988,14.3A8.179,8.179,0,0,1,18.372,20.486Zm-1.934.483A6.222,6.222,0,0,0,11.6,14.877V14.2a1.45,1.45,0,1,0-2.9,0v.677a6.222,6.222,0,0,0-4.835,6.092v5.318L1.934,28.221v.967H18.372v-.967l-1.934-1.934Zm-6.285,11.12h.387a1.682,1.682,0,0,0,1.354-1.16,1.822,1.822,0,0,0,.193-.774H8.219A1.94,1.94,0,0,0,10.153,32.089Z" transform="translate(0.532 -12.25)" fill="none" stroke="#ababaf" stroke-width="1"/>
+  </g>
+</svg>

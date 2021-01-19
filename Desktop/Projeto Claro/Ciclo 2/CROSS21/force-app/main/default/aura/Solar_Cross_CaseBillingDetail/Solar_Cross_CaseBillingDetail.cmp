@@ -1,0 +1,102 @@
+<aura:component controller="CEC_360_AccBillingDetailsController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+
+    <!-- Case Data -->
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="wrapper" type="CEC_360_AccBillingDetailsController.SolarCaseResponseWrapper" />
+
+    <!-- Contract data -->
+    <aura:attribute name="contractNumber" type="String"/>
+    <aura:attribute name="businessUnit" type="String"/>
+
+    <!-- Layout control -->
+    <aura:attribute name="noAsset" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="showInvoice" type="Boolean" default="false"/>
+    <aura:attribute name="noInvoice" type="Boolean" default="false"/>
+    <aura:attribute name="showButtonFinace" type="Boolean" default="false"/>
+
+    <!-- Component Variables -->
+    <aura:attribute name="dataInvoice" type="Object[]" />
+<!-- 
+    <aura:attribute name="noAssetPre" type="Boolean" default="false"/>
+    <aura:attribute name="minDate" type="Date" />
+    <aura:attribute name="maxDate" type="date" />
+    <aura:attribute name="dataInValue" type="date" />
+    <aura:attribute name="dataEndValue" type="date" />
+    <aura:attribute name="cancContracts" type="List"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="drawnTable" type="Boolean"/>
+    <aura:attribute name="hasNet" type="Boolean" default="false"/>
+    <aura:attribute name="hasSpinner2" type="Boolean" default="false"/>
+    <aura:attribute name="hasCancel" type="Boolean" default="false"/>
+    <aura:attribute name="Conta" type="Account" /> -->
+
+    <!-- Action Control -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+
+    <div class="slds-section slds-is-open" aura:id="invoiceContainer">
+        <h3 class="slds-section__title">
+            <button aria-controls="invoiceList" class="slds-button slds-section__title-action">
+                <span onclick="{!c.toggleSection}" data-auraId="invoiceContainer">
+                    <lightning:icon iconName="utility:switch"
+                                    size="x-small"
+                                    class="slds-section__title-action-icon slds-button__icon_right"
+                                    alternativeText="button icon" 
+                                    />
+                </span>
+                <span class="slds-truncate" title="Faturas em aberto">Faturas em aberto</span>
+            </button>
+        </h3>
+
+        <div class="slds-section__content" id="invoiceList">
+           
+            <aura:if isTrue="{!v.showInvoice}">
+                <table  class="slds-table lista-cobranca-faturas">
+                    <thead>
+                        <tr class="slds-text-heading_label">
+                            <th>Status</th>
+                            <th>Valor (R$)</th>
+                            <th>Data de vencimento</th>
+                            <th>Fatura para download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.dataInvoice}" var="invoice">
+                            <tr>
+                                <td class="{!invoice.statusInvoiceDescription}">{!invoice.statusInvoiceDescription}</td>
+                                <td>{!invoice.invoiceAmount_aux}</td>
+                                <td>{!invoice.dueDate_aux}</td>
+                                <td>
+                                    <a data-end="{!invoice.dueDate_aux}" data-id="{!invoice.invoiceId}" onclick="{!c.onCLickPDF}">
+                                        <lightning:icon class="slds-align_absolute-center" iconName="doctype:pdf" size="small" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+                <!-- <input:button>Ficha financeira</input:button> -->
+                {!v.pdfContainer}
+            </aura:if>   
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-text-align_center">
+                    <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                        <lightning:spinner alternativeText="Loading" size="medium" />
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.noInvoice}">
+                <div class="slds-text-align_center">
+                    <h1><span class="vermelho">Atenção:</span> O cliente não possui faturas.</h1>
+                </div>  
+            </aura:if>  
+            <aura:if isTrue="{!or(v.noInvoice, v.showInvoice)}">
+                <div class="slds-text-align_center" style="margin-top: 20px;">
+                    <lightning:button variant="destructive" label="Componente Financeiro" title="Abrir Component" onclick="{!c.handleClickFinanceiro}"/>
+                </div>
+            </aura:if>
+        </div>  
+    </div>          
+    <!-- <aura:if componente financeiro    -->
+</aura:component>

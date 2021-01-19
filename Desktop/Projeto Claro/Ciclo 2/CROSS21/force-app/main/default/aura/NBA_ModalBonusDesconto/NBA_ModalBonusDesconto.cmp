@@ -1,0 +1,234 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="NBA_OfferComparator_CC">
+
+    <aura:attribute type="Boolean"  name="showModalBonusDesconto" default="false" />
+    <aura:attribute type="Boolean"  name="controleDeTela" default="true"/>
+	<aura:attribute type="String"   name="tema" default="warning" />
+    <aura:attribute type="Boolean"  name="showSpinner" default="false" />
+    <aura:attribute type="Object"	name="produtoAtual" />
+    <aura:attribute type="Object"   name="ofertaSelecionada" />
+    <aura:attribute type="Boolean"	name="disabledBonusDesconto" default="false" />
+    <aura:attribute type="String"   name="dependenteAtual" default=""/>
+    <aura:attribute type="String"   name="dependenteTitular" default=""/>
+    <aura:attribute type="String"   name="tipoAdd" default="Dependente" />
+    <aura:attribute type="String"   name="indexAtual" default="0" />
+
+    <aura:attribute type="Object[]" name="listaDesc"/>
+    <aura:attribute type="Object[]" name="listaBonus"/>
+    <aura:attribute type="Object[]" name="listaDesconto"/>
+    
+    <!-- Handler -->
+	<!--<aura:handler name="init" value="{!this}" action="{!c.doInit}"/> -->
+
+    <!-- SPINNER -->
+   <aura:if isTrue="{! v.showSpinner }">
+       <div class="slds-spinner_container slds-is-fixed">
+           <div role="status" class="slds-spinner slds-spinner_medium">
+               <span class="slds-assistive-text">Loading</span>
+               <div class="slds-spinner__dot-a"></div>
+               <div class="slds-spinner__dot-b"></div>
+           </div>
+       </div>
+   </aura:if> 
+
+   <!-- BOTÃO BONUS DESCONTO -->
+   <div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable ' + ( v.disabledBonusDesconto ? ' disableSection' : '' ) }" style="margin-left:0.5rem"
+             onclick="{! c.incluirBonusDesconto }"></div>
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable ' + ( v.disabledBonusDesconto ? ' disableSection' : '' ) }"
+             onclick="{! c.incluirBonusDesconto }">Bonus e Desconto</div>
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable ' + ( v.disabledBonusDesconto ? ' disableSection' : '' ) }" style="margin-right:0.5rem"
+             onclick="{! c.incluirBonusDesconto }">
+            <div class="down-arrow alim-icon-add">
+            </div>
+        </div>
+    </div>
+
+    <aura:if isTrue="{! v.showModalBonusDesconto }" > 
+        <aura:if isTrue="{! v.controleDeTela }" >
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+        class="slds-modal slds-fade-in-open slds-modal_large" Style="position: fixed;">
+            <div class="slds-modal__container" Style="width: 78%;">
+                <header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                            onclick="{! c.closeModal }">
+                        <lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Resumo de Descontos e Bônus</h2>
+                </header>
+                <!-- TITULAR -->
+                <!-- HEADER -->
+                <div class="slds-modal__content slds-p-around_medium slds-grid slds-wrap conteiner-grid" id="modal-content-id-1" Style="min-height: 15rem; padding-bottom:0.5rem">
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_medium">
+                       <center><strong>{! $Label.c.PRINCIPAL_MOVEL }</strong></center>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_medium" style="padding-bottom:0.5rem"> 
+                        <center><strong>Descontos</strong></center>
+                     </div>
+                     <div class="slds-col slds-size_3-of-12 slds-text-heading_medium" style="padding-bottom:0.5rem">
+                        <center><strong>Bônus</strong></center>
+                     </div>
+                     <div class="slds-col slds-size_3-of-12 slds-text-heading_medium">
+                        <center><strong></strong></center>
+                     </div>
+
+                    <!-- CONTEÚDO -->
+                    <div class=" slds-col slds-size_1-of-1 slds-box" style="display: flex;padding: unset;" >
+                    <div class="slds-col slds-size_3-of-12 slds-align_absolute-center" >
+                        <center><h2>{! v.produtoAtual.mobile.titularMobile.numeroTelefone }</h2></center>
+                    </div> 
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_small slds-align_absolute-center" >
+                        <aura:if isTrue="{! v.produtoAtual.mobile.descontTitular != 0 }">
+                            <center>Desconto&nbsp;{! v.produtoAtual.mobile.descontTitular }%</center>
+                            <aura:set attribute="else">
+                                <center><strong>-</strong></center>     
+                            </aura:set>    
+                        </aura:if>
+                    </div> 
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_small slds-align_absolute-center" >
+                        <aura:if isTrue="{! v.produtoAtual.mobile.bonusTitular != 0 }">
+                            <center>Bônus&nbsp;{! v.produtoAtual.mobile.bonusTitular }GB</center>
+                            <aura:set attribute="else">
+                                <center><strong>-</strong></center>     
+                            </aura:set>    
+                        </aura:if>
+                    </div> 
+                    <div class="slds-col slds-size_3-of-12" >
+                        <center><lightning:button variant="brand" name="cancel" label="Adicionar" onclick="{! c.addBonusDescontoTitular }"/></center>
+                    </div>
+                    </div>
+
+                    <!-- DEPENDENTES --> 
+                    <!-- HEADER -->
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_medium" style="padding:0.5rem 0rem 0.5rem 0rem">
+                        <center><strong>Dependentes</strong></center>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_medium" style="padding:0.5rem 0rem 0.5rem 0rem">
+                        <center><strong>Descontos</strong></center>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_medium" style="padding:0.5rem 0rem 0.5rem 0rem">
+                        <center><strong>Bônus</strong></center>
+                    </div>
+                    <div class="slds-col slds-size_3-of-12 slds-text-heading_medium">
+                        <center><strong></strong></center>
+                    </div>
+                    
+                    <!-- CONTEÚDO -->
+                <aura:iteration items="{! v.produtoAtual.mobile.listaDependentesMobile }" var="dependentes" indexVar="index">
+                    <div class=" slds-col slds-size_1-of-1 slds-box" style="display: flex;padding: unset;" >
+                        <div class="slds-col slds-size_3-of-12 slds-align_absolute-center">
+                            <center><h2>{! dependentes.numeroTelefone }</h2></center>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12 slds-text-heading_small slds-align_absolute-center" >
+                        <aura:if isTrue="{! dependentes.descontoDependente != 0 }">
+                            <center>Desconto&nbsp;{! dependentes.descontoDependente }%</center>
+                            <aura:set attribute="else">
+                                <center><strong>-</strong></center>     
+                            </aura:set>    
+                        </aura:if>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12 slds-text-heading_small slds-align_absolute-center" >
+                        <aura:if isTrue="{! dependentes.bonusDependente != 0 }">
+                            <center>Bônus&nbsp;{! dependentes.bonusDependente }GB</center>
+                            <aura:set attribute="else">
+                                <center><strong>-</strong></center>
+                            </aura:set>
+                        </aura:if>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12" >
+                            <center><lightning:button variant="brand" label="Adicionar" name="{! index }" title="Brand action" onclick="{! c.addBonusDesconto }" /></center>
+                        </div>
+                    </div>
+                </aura:iteration>
+                    <!-- PONTUAÇÃO -->
+                    <!-- <div class="slds-col slds-size_12-of-12 slds-text-heading_small">
+                       <h3>Resumo da Pontuação com Descontos: 20</h3>
+                    </div> -->
+                <!--</aura:iteration>-->
+                </div>
+                <footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_brand" onclick="{! c.closeModal }">Atualizar</button>
+                </footer>
+            </div>
+       </section> 
+       <div class="slds-backdrop slds-backdrop_open" Style="position: fixed;" ></div>
+    </aura:if>
+    <aura:if isTrue="{! !v.controleDeTela }" >
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+        class="slds-modal slds-fade-in-open slds-modal_large" Style="position: fixed;">
+            <div class="slds-modal__container" Style="width: 78%;">
+                <header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                            onclick="{! c.closeModal }">
+                        <lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Adicionar Bônus e Desconto</h2>
+                </header>
+        <!-- SEGUNDA TELA -->
+        <!-- HEADER -->
+        <div class="slds-modal__content slds-p-around_medium slds-grid slds-wrap conteiner-grid" id="modal-content-id-1" Style="min-height: 15rem;">
+        <div class="slds-col slds-size_4-of-12 slds-text-heading_medium">
+            <div class="slds-col slds-size_1-of-1">
+                <strong>{! v.tipoAdd }</strong>
+            </div>
+           <div class="slds-col slds-size_1-of-1">
+              <h1 style="font-size: 0.8em;">{! v.dependenteAtual }</h1>
+           </div>
+        </div>
+        <div class="slds-col slds-size_4-of-12 slds-text-heading_medium" style="padding-bottom:0.5rem">
+            <div class="slds-grid slds-wrap">
+                <!-- <div class="slds-col slds-size_1-of-3"></div>
+                <div class="slds-col slds-size_1-of-3"> -->
+                <div class="slds-col slds-size_1-of-1" style="padding-bottom: 0.8rem;">
+                   <strong>Descontos</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                    <aura:iteration items="{! v.listaDesc }" var="desc" indexVar="index">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-8">
+                                <lightning:input aura:id="desc"  type="checkbox" label="" name="{! index }" 
+                                                                                checked="{! desc.check }"
+                                                                                onchange="{! c.desabilitarCheckDesc }"/>
+                            </div>
+                            <div class="slds-col slds-size_7-of-8">
+                                <span>Desconto&nbsp;{! desc.valor }%</span>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_4-of-12 slds-text-heading_medium" style="padding-bottom:0.5rem">
+                <div class="slds-col slds-size_1-of-1" style="padding-bottom: 0.8rem;">
+                    <strong >Bônus</strong>
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                    <aura:iteration items="{! v.listaBonus }" var="bonus" indexVar="index">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-8">
+                                <lightning:input aura:id="bonus"  type="checkbox" label="" name="{! index }" 
+                                                                                checked="{! bonus.check }"
+                                                                                onchange="{! c.desabilitarCheckBonus }" />
+                            </div>
+                            <div class="slds-col slds-size_7-of-8">
+                                <span>Bônus&nbsp;{! bonus.valor }GB</span>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </div>
+        </div>
+        </div>
+    <footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+        <button class="slds-button slds-button_brand" onclick="{! c.cancelBonusDesconto }">Cancelar</button>
+        <button class="slds-button slds-button_brand" onclick="{! c.attBonusDesconto }">Atualizar</button>
+    </footer>
+</div>
+</section> 
+<div class="slds-backdrop slds-backdrop_open" Style="position: fixed;" ></div>
+    </aura:if>
+    </aura:if>
+
+
+
+</aura:component>

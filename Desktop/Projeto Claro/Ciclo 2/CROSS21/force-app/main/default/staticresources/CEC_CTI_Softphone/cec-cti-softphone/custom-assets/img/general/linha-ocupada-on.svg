@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="84.78" height="29.813" viewBox="0 0 84.78 29.813">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.19" y1="0.114" x2="0.845" y2="0.872" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#DA291C"/>
+      <stop offset="1" stop-color="#DA291C"/>
+    </linearGradient>
+  </defs>
+  <g id="linha-ocupada" transform="translate(-231 -182.598)">
+    <path id="Caminho_54" data-name="Caminho 54" d="M219.954,166.541a.29.29,0,0,0-.312-.109,2.759,2.759,0,0,0-2.116,3.24c.425,2.8,5.644,9.9,11.719,10.833a.307.307,0,0,0,.068,0,2.557,2.557,0,0,0,2.375-2.246.287.287,0,0,0-.137-.286l-3.367-2.056a.291.291,0,0,0-.262-.021l-1.911.777a.29.29,0,0,1-.276-.03,16.336,16.336,0,0,1-4.352-4.454.292.292,0,0,1,0-.291l.984-1.761a.292.292,0,0,0-.019-.314Z" transform="translate(21.264 24.079)" fill="none" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Caminho_95" data-name="Caminho 95" d="M235.111,389.057a14.705,14.705,0,1,0,14.706,14.706A14.705,14.705,0,0,0,235.111,389.057Zm0,28.381a13.676,13.676,0,1,1,13.677-13.676A13.676,13.676,0,0,1,235.111,417.438Z" transform="translate(10.593 -206.057)" fill="url(#linear-gradient)"/>
+    <g id="chamada-desligar-off-34" transform="translate(136.435 -139)">
+      <g id="Grupo_128" data-name="Grupo 128" transform="translate(151.958 335.187)">
+        <g id="Elipse_140" data-name="Elipse 140" transform="translate(16.224 16.223) rotate(180)" fill="#ababaf" stroke="#ababaf" stroke-width="1">
+          <ellipse cx="8.112" cy="8.112" rx="8.112" ry="8.112" stroke="none"/>
+          <ellipse cx="8.112" cy="8.112" rx="7.612" ry="7.612" fill="none"/>
+        </g>
+        <line id="Linha_34" data-name="Linha 34" x1="7.635" y2="7.635" transform="translate(4.533 4.533)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2"/>
+        <line id="Linha_66" data-name="Linha 66" x1="7.635" y1="7.635" transform="translate(4.533 4.533)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2"/>
+      </g>
+      <path id="Caminho_202" data-name="Caminho 202" d="M158.821,448c-4.675-3.362-22.554-6.026-32.724,1.254a.619.619,0,0,0-.1.092,5.026,5.026,0,0,0-.185,6.542.6.6,0,0,0,.614.211l7.869-1.856a.594.594,0,0,0,.411-.34l1.644-3.806a.59.59,0,0,1,.444-.347c1.441-.251,7.508-1.166,12.778.145a.593.593,0,0,1,.426.409l1.127,3.885a.593.593,0,0,0,.482.418l8.236,1.264a.6.6,0,0,0,.612-.288A5.439,5.439,0,0,0,158.821,448Z" transform="translate(17.488 -122.62)" fill="#fff" stroke="#DA291C" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8"/>
+    </g>
+  </g>
+</svg>

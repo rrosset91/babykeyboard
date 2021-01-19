@@ -1,0 +1,78 @@
+<aura:component >
+    
+    <aura:attribute type="Object"	name="oferta1" />
+    <aura:attribute type="Object"	name="oferta2" />
+    <aura:attribute type="Object"	name="oferta3" />
+	<aura:attribute type="Object"	name="produtoAtual" />
+    <aura:attribute type="Object" 	name="oferta" />
+	<aura:attribute type="Boolean"  name="disabledPhone" />
+    <aura:attribute type="Boolean"	name="showAdditionalPhone" 	default="false" />
+    <aura:attribute type="Boolean"	name="sellExtension" 		default="false" />
+    <aura:attribute type="String[]"	name="extensions" 	        default="[1,2,3,4]"	 />
+	<aura:attribute type="Object[]" name="lstPontuacao" />
+	<aura:attribute type="Boolean" name="calculate" />
+
+	<aura:method name="callUpdateAditionalsPhone" action="{! c.updateAdditionalsPhone }" />
+    
+    <!-- BOTÃO ADICIONAIS PHONE -->
+    <div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+     <!--   <div class="slds-col slds-size_3-of-12 box-oferta"></div> -->
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable' +( v.disabledPhone ? ' disableSection' : ' ') }" style="margin-left:0.5rem"
+             onclick="{! c.addAdditionalPhone }"></div>
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable ' +( v.disabledPhone ? ' disableSection' : ' ') }"
+             onclick="{! c.addAdditionalPhone }">{! $Label.c.OFERTA_ADICIONAIS_DE_FONE }</div>
+        <div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable ' +( v.disabledPhone ? ' disableSection' : ' ') }"
+             style="margin-right:0.5rem" onclick="{! c.addAdditionalPhone }">
+            <div class="down-arrow alim-icon-add">
+               <!-- <lightning:icon iconName="utility:down" size="x-small" alternativeText="Detalhar" /> -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL ADICIONAIS PHONE -->
+    <aura:if isTrue="{! v.showAdditionalPhone }">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" Style="position: fixed;">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeAdditionalPhone }" >
+                        <lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{! $Label.c.OFERTA_ADICIONAIS_DE_FONE }</h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                  <!--  <strong>{! $Label.c.OFERTA_ADICIONAIS_NET_FONE }</strong> -->
+                    <div class="slds-grid slds-wrap" style="padding:1rem ; display:inline-flex">
+                        <div class="slds-col slds-size_5-of-12" style="display:inline-flex">
+                        	<lightning:input type="checkbox" label="" checked="{! v.oferta.phone.addOptions.secondLine.checked }" />{! v.oferta.phone.addOptions.secondLine.label + ' - ' }
+                        	<lightning:formattedNumber class="color-value" value="{! v.oferta.phone.addOptions.secondLine.value }" style="currency" currencyCode="BRL" />
+                        </div>
+                        <div class="slds-col slds-size_7-of-12"></div>
+                        <div class="slds-col slds-size_5-of-12" >
+                        	<div><lightning:input type="checkbox" label="" checked="{! v.oferta.phone.addOptions.extensionPhone.checked }" onchange="{! c.hasSection }"  Style="display: inline-flex" />{! v.oferta.phone.addOptions.extensionPhone.label } </div>
+                        <!-- </div> -->
+                        <!-- <div class="slds-col slds-size_1-of-2"></div> -->
+                        <!-- <div class="slds-col slds-size_1-of-1" > -->
+                        	<select class="slds-select custom-combobox" disabled="true" id="idExtension" onchange="{! c.updateExtension }" value="" >
+                                <aura:if isTrue="{! not(v.sellExtension) }">
+									<option value="">Selecione</option>
+								</aura:if>
+                                <aura:iteration items="{! v.extensions }" var="ex"  indexVar="index">
+                                    <option value="{! ex }" selected="{! equals(ex + '' , v.oferta.phone.addOptions.quantityExtension)}" >{! ex }</option>
+                                </aura:iteration>
+                            </select>
+                            <h6 style="font-size: 0.85em; margin-top: 0.3rem"  >*Não há cobrança de mensalidade para a Extenção do Net Fone. Existe apenas um custo de R$20, referente à visita tecnica de instalação.</h6>
+                        </div>
+                        <div class="slds-col slds-size_7-of-12"></div>
+                    </div>
+                </div>
+                
+                <footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_brand" onclick="{! c.updateAdditionalsPhone }" >Atualizar</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" Style="position: fixed;"></div>
+    </aura:if>
+</aura:component>

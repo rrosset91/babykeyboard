@@ -1,0 +1,61 @@
+<!-- Autor: Danilo Fucuhara - Deloitte -->
+<!-- Criação: 06/05/2019 -->
+<!-- Descrição: Componente de custom lookup. -->
+<!-- Nome do projeto/ID: CEC FASE - Time: SQUAD 360 -->
+
+<aura:component controller="customLookUpController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="selectedRecord" type="sObject" default="{}"/>
+    <aura:attribute name="listOfSearchRecords" type="List"/>
+    <aura:attribute name="SearchKeyWord" type="String"/>
+    <aura:attribute name="objectAPIName" type="String" default=""/>
+    <aura:attribute name="IconName" type="String" default=""/>
+    <aura:attribute name="field" type="String" default=""/>
+    <aura:attribute name="label" type="String" default=""/>
+    <aura:attribute name="Message" type="String" default=""/>
+    
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+    <aura:method name="callSearch" action="{!c.callSearch}" access="PUBLIC"/> 
+    <aura:method name="clear" action="{!c.clearCalledOutside}" access="PUBLIC"/> 
+    
+    <aura:attribute name="parent" type="Aura.Component" required="true"/>
+    
+    <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+
+        <div class="slds-form-element__control">
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <lightning:icon aura:id="lookup-search" class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search"/> 
+
+                <aura:if isTrue="{!v.field == 'MasterLabel'}">
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                    <lightning:pill class="pillSize slds-m-vertical_xxx-small" label="{!v.selectedRecord.MasterLabel}" name="{!v.selectedRecord.MasterLabel}" onremove="{!c.clear}">
+                        <aura:set attribute="media">
+                            <lightning:icon iconName="{!v.IconName}" size="x-small" alternativeText="{!v.IconName}"/>
+                        </aura:set>
+                    </lightning:pill>
+                </div>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.field == 'CodigoOperadora__c'}">
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                    <lightning:pill class="pillSize slds-m-vertical_xxx-small" label="{!v.selectedRecord.CodigoOperadora__c}" name="{!v.selectedRecord.CodigoOperadora__c}" onremove="{!c.clear}">
+                        <aura:set attribute="media">
+                            <lightning:icon iconName="{!v.IconName}" size="x-small" alternativeText="{!v.IconName}"/>
+                        </aura:set>
+                    </lightning:pill>
+                </div>
+                </aura:if>
+                <div aura:id="lookupField" class="slds-show">
+                    <ui:inputText aura:id="inputext" click="{!c.onfocus}" updateOn="keyup" keyup="{!c.keyPressController}" class="slds-lookup__search-input slds-input" value="{!v.SearchKeyWord}" placeholder="Pesquisar"/>
+                </div>   
+            </div>
+        </div>
+ 
+        <ul style="min-height:40px;margin-top:0px !important" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds" role="listbox">
+            <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
+            <center> {!v.Message}</center>
+            <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                <c:customLookupResult oRecord="{!singleRec}" IconName="{!v.IconName}" field="{!v.field}"/>
+            </aura:iteration>
+        </ul>
+    </div>
+</aura:component>

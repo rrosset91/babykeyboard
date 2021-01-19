@@ -1,0 +1,77 @@
+<aura:component controller="CROSS_MobileUsageController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global">
+    
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="dataMobileUsage" type="Object[]"/>
+    <aura:attribute name="exibeTituloMobile" type="Boolean" default="true"/>
+    <aura:attribute name="selectedBill" type="Object" />
+    <aura:attribute name="mobileDataUsageReturn" type="Boolean" default="true"/>
+    <aura:attribute name="refreshData" type="Boolean" default="false"/>
+	<aura:attribute name="errorMessage" type="String" default="Erro ao carregar informações do Consumo da Franquia de Dados"/>
+	<aura:attribute name="AccordionSectionOpen" type="Boolean" default="false"/>
+	<aura:attribute name="accordionLabel" type="String" default="Consumo Atual"/>
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Consumo Franquia de Dados</b>
+        </h1>
+    </aura:attribute>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+
+	<lightning:card class="slds-text-heading_small" variant="narrow" title="{!v.headerTitle}" iconName="custom:custom28">
+		<lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }">
+			<lightning:accordionSection name="A" label="{!v.accordionLabel}">
+				<div class="slds-section slds-is-open" aura:id="containerMobile">
+					<!--section header-->
+					<div class="slds-section__content" id="lgpdList">
+						<div class="slds-m-horizontal_small slds-grid slds-wrap">
+							<aura:if isTrue="{!v.isLoading}">
+								<lightning:spinner alternativeText="Carregando..." size="medium" />
+							</aura:if>
+							<aura:if isTrue="{!v.MobileDataUsageReturn}">
+								<aura:set attribute="else">
+									<aura:iteration items="{!v.dataMobileUsage}" var="mob">
+										<div class="slds-col slds-size_4-of-8 slds-m-around_small">
+											<div class="slds-grid slds-gutters slds-m-top_xx-small slds-grid_vertical-align-end slds-col_bump-right">
+												<div class="slds-col slds-align-bottom">
+													<div class="slds-text-body_regular slds-text-title_bold" style="font-size: 21pt; width:56px">{!mob.consumedAmountGB}</div>
+												</div>
+												<div class="slds-col slds-align-bottom">
+													<div class="slds-text-body_regular" style="font-size: 21pt; width:24px">GB</div>
+												</div>
+												<div class="slds-col slds-align-middle">
+													<div class="slds-text-body_regular" style="font-size: 16pt">usados</div>
+												</div>
+											</div>
+											<div class="slds-progress-bar slds-progress-bar_circular slds-progress-bar_large" style="width:200px" aria-valuemin="0" aria-valuemax="100" aria-valuenow="90" role="progressbar">
+												<span class="slds-progress-bar__value slds-progress-bar__value_success" style="{! 'width:  ' + mob.percentage}">
+												</span>
+											</div>
+											<div class="slds-grid">
+												<p title="ClaroPlano"></p>
+												<div class="slds-text-body_regular" style="font-size: 10pt">{!mob.descriptionUsage}</div>
+											</div>
+										</div>
+									</aura:iteration>
+								</aura:set>
+							</aura:if>
+						</div>
+						<aura:if isTrue="{!v.refreshData}">
+							<div class="slds-align_absolute-center slds-p-horizontal_large">
+								{!v.errorMessage}
+							</div>
+							<div class="slds-align_absolute-center">
+								<div class="slds-m-top_x-small">
+									<lightning:buttonIcon class="forceListViewManagerHeader" iconName="utility:refresh"  alternativeText="Refresh" title="Refresh" size="large" onclick="{!c.doInit}"/>
+								</div>
+							</div>
+							<div class="slds-align_absolute-center slds-m-top_x-small">
+								Recarregar
+							</div>
+						</aura:if>
+					</div>
+				</div>
+			</lightning:accordionSection>
+		</lightning:accordion>
+	</lightning:card>
+</aura:component>

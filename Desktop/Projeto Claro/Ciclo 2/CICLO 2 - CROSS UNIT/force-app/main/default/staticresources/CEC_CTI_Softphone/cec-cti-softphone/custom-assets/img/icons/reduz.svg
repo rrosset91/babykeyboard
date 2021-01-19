@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="27.601" height="20.875" viewBox="0 0 27.601 20.875">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="27.601" height="20.875" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="reduz" clip-path="url(#clip-path)">
+    <path id="Caminho_511" data-name="Caminho 511" d="M24.292,76.5H7.729a1.99,1.99,0,0,0-1.767.994L0,86.438l5.963,8.944a2.249,2.249,0,0,0,1.767.994H24.292A2.215,2.215,0,0,0,26.5,94.167V78.708A2.215,2.215,0,0,0,24.292,76.5Z" transform="translate(0.601 -76)" fill="none" stroke="#707070" stroke-width="1"/>
+    <g id="Grupo_811" data-name="Grupo 811" transform="translate(-257.399 -58.5)">
+      <line id="Linha_158" data-name="Linha 158" x1="11.705" y2="11.705" transform="translate(267.914 63.5)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="1.5"/>
+      <line id="Linha_157" data-name="Linha 157" x2="11.705" y2="11.705" transform="translate(267.914 63.5)" fill="none" stroke="#707070" stroke-linecap="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

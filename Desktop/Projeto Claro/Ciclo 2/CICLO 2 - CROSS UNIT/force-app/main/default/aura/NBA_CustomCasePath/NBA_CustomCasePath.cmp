@@ -1,0 +1,92 @@
+<aura:component controller="NBA_CustomCasePath_CC" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <!-- ATRIBUTOS -->
+    <lightning:workspaceAPI 		aura:id="workspace"/>
+	<aura:attribute type="String"	name="recordId" />
+    <aura:attribute type="Object"   name="case" />
+    <aura:attribute	type="Object"	name="stages" />
+    <aura:attribute type="Boolean"	name="showSpinner"	default="false" />
+
+    <aura:attribute type="Boolean"	name="showModal"	default="false" />
+    <!-- EVENTS -->
+	<!-- #### REVER #### -->
+    <!--force:recordData aura:id="forceRecord" recordId="{!v.recordId}"  layoutType="FULL" targetRecord="{!v._record}"
+    	targetFields="{!v.simpleRecord}" targetError="{!v._error}" recordUpdated="{!c.recordUpdated}" /-->
+    <aura:handler value="{!this}" name="init" action="{!c.doInit}" />
+    <aura:handler event="c:NBA_PageEvent" action="{!c.handlePageEvent}"/>
+
+	<aura:registerEvent name="refresh" type="c:NBA_RefreshTabEvent"/>
+    <aura:registerEvent name="pageEvent" type="c:NBA_PageEvent"/>
+
+
+    <!-- MODAL VALIDA OFERTA SELECIONADA  -->
+    <aura:if isTrue="{! v.showModal }">
+        <div style="min-height: 40%;position:fixed;z-index:9999">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id"
+                aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt"
+                aria-modal="true">
+                <div class="slds-modal__container" style="max-width: 40%!important;">
+                    <header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+                      <strong class="slds-text-heading_medium" id="prompt-heading-id">
+                        Deseja seguir para o encerramento sem finalizar a Oferta?
+                      </strong>
+                    </header>
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <div class="slds-modal__content">
+                            <div class="slds-align_absolute-center slds-p-vertical_medium">
+                                      <lightning:button 
+													variant="brand" 
+													label="Não" 
+													title="Não"
+                                                    disabled="{! v.showSpinner }"
+													onclick="{! c.closemodal }" />
+                                      <lightning:button 
+													variant="brand" 
+													label="Sim" 
+													title="Sim"
+                                                    disabled="{! v.showSpinner }"
+													onclick="{! c.checkAction }" />
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+	</aura:if>
+
+    <!-- SPINNER -->
+    <aura:if isTrue="{! v.showSpinner }">
+        <div class="slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_medium">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+	<!-- PATH -->
+    <article class="slds-card">
+        <div class="slds-path">
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                <aura:iteration items="{!v.stages}" var="stage" indexVar="index" >
+                                    <li class="{! 'slds-path__item ' + (stage.checked ? 'slds-is-complete' : (stage.current ? 'slds-is-current slds-is-active' : 'slds-is-incomplete'))}" role="presentation">
+                                        <a aria-selected="true" class="slds-path__link" onclick="{!c.updateStage}" id="{!index}" role="option" tabindex="-1" >
+                                            <span class="slds-path__stage">
+                                                <lightning:icon iconName="utility:check" variant="bare" />
+                                            </span>
+                                            <span class="slds-path__title">{!stage.label}</span>
+                                        </a>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</aura:component>

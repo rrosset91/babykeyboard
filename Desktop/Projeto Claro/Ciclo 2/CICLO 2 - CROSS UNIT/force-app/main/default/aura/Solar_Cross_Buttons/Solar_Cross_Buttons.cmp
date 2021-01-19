@@ -1,0 +1,27 @@
+<aura:component>
+    <aura:attribute name="onClickFirst" type="Aura.Action" />
+    <aura:attribute name="onClickSecond" type="Aura.Action" />
+    <aura:attribute name="showFirst" type="Boolean" default="false"/>
+    <aura:attribute name="showSecond" type="Boolean" default="false"/>
+    <aura:attribute name="disabledFirst" type="Boolean" default="false"/>
+    <aura:attribute name="disabledSecond" type="Boolean" default="false"/>
+    <aura:attribute name="labelFirst" type="String" default="Voltar"/>
+    <aura:attribute name="labelSecond" type="String" default="Próximo"/>
+    
+    
+	<div>
+        <aura:if isTrue="{!v.showSecond}">
+			<span id="second-button">
+				<lightning:button aura:id="second-button" disabled="{!v.disabledSecond}" variant="brand" label="{!v.labelSecond}" onclick="{!c.onClickSecond}" class="view-bill"/>
+			</span>
+        </aura:if>
+    </div>
+    <div>
+        <aura:if isTrue="{!v.showFirst}">
+			<span id="first-button">
+				<lightning:button aura:id="first-button" disabled="{!v.disabledFirst}" variant="brand" label="{!v.labelFirst}" onclick="{!c.onClickFirst}" class="view-bill"/>
+			</span>
+		</aura:if>
+	</div>
+    
+</aura:component>

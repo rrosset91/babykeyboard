@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="25" height="25" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="detalhes" clip-path="url(#clip-path)">
+    <g id="Elipse_174" data-name="Elipse 174" fill="none" stroke="#DA291C" stroke-width="1">
+      <circle cx="12.5" cy="12.5" r="12.5" stroke="none"/>
+      <circle cx="12.5" cy="12.5" r="12" fill="none"/>
+    </g>
+    <g id="Retângulo_141" data-name="Retângulo 141" transform="translate(6 4)" fill="none" stroke="#DA291C" stroke-width="1">
+      <rect width="13" height="17" rx="2" stroke="none"/>
+      <rect x="0.5" y="0.5" width="12" height="16" rx="1.5" fill="none"/>
+    </g>
+    <line id="Linha_138" data-name="Linha 138" x2="8" transform="translate(8.5 8.5)" fill="none" stroke="#DA291C" stroke-width="1"/>
+    <line id="Linha_139" data-name="Linha 139" x2="8" transform="translate(8.5 11.5)" fill="none" stroke="#DA291C" stroke-width="1"/>
+    <line id="Linha_140" data-name="Linha 140" x2="8" transform="translate(8.5 14.5)" fill="none" stroke="#DA291C" stroke-width="1"/>
+    <line id="Linha_141" data-name="Linha 141" x2="8" transform="translate(8.5 17.5)" fill="none" stroke="#DA291C" stroke-width="1"/>
+  </g>
+</svg>

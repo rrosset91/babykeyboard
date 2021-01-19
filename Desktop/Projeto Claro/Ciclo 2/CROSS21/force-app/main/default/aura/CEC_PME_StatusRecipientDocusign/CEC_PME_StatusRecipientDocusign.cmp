@@ -1,0 +1,87 @@
+<!-- CEC_PME_StatusRecipientDocusign -->
+<aura:component controller="CEC_PME_StatusRecipDocusignController" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:CEC_PME_MobileButtonEvt" action="{!c.doInit}"/>
+    
+    <aura:attribute name="isQuickAction" type="Boolean" default="true" required="true"/>
+    <aura:attribute name="envelop" type="dsfs__DocuSign_Status__c" default=""/>
+    
+    <aura:if isTrue="{!not(empty(v.envelop.dsfs__R00NS0000000WUO2MAO__r.records))}">
+        <lightning:card title="{! $Label.c.CEC_PME_StatusRecipientDocusign_1 + v.envelop.dsfs__Envelope_Status__c}" iconName="standard:orders" >
+            <aura:set attribute="actions">
+                <aura:if isTrue="{!v.isQuickAction}">
+                    <lightning:button label="{!$Label.c.CEC_PME_StatusRecipientDocusign_2}" onclick="{!c.closeAction}"/>
+                </aura:if>
+            </aura:set>
+            
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-show_large" scope="col">
+                            <div class="slds-truncate" title="{!$Label.c.CEC_PME_StatusRecipientDocusign_3}">{!$Label.c.CEC_PME_StatusRecipientDocusign_3}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="{!$Label.c.CEC_PME_StatusRecipientDocusign_4}">{!$Label.c.CEC_PME_StatusRecipientDocusign_4}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="{!$Label.c.CEC_PME_StatusRecipientDocusign_5}">{!$Label.c.CEC_PME_StatusRecipientDocusign_5}</div>
+                        </th>
+                        <th class="slds-show_large" scope="col">
+                            <div class="slds-truncate" title="{!$Label.c.CEC_PME_StatusRecipientDocusign_6}">{!$Label.c.CEC_PME_StatusRecipientDocusign_6}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="{!$Label.c.CEC_PME_StatusRecipientDocusign_7}">{!$Label.c.CEC_PME_StatusRecipientDocusign_7}</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.envelop.dsfs__R00NS0000000WUO2MAO__r.records}" var="item">
+                        <tr class="slds-hint-parent">
+                            <th data-label="{!$Label.c.CEC_PME_StatusRecipientDocusign_3}" scope="row" class="slds-show_large">
+                                <div class="slds-truncate" title="{!item.dsfs__DocuSign_Routing_Order__c}">
+                                    <p>{!item.dsfs__DocuSign_Routing_Order__c}</p>
+                                </div>
+                            </th>
+                            <th data-label="{!$Label.c.CEC_PME_StatusRecipientDocusign_4}" scope="row">
+                                <div class="slds-truncate" title="{!item.Name}">
+                                    <p>{!item.Name}</p>
+                                </div>
+                            </th>
+                            <th data-label="{!$Label.c.CEC_PME_StatusRecipientDocusign_5}" scope="row">
+                                <div class="slds-truncate" title="{!item.dsfs__DocuSign_Recipient_Email__c}">
+                                    <p>{!item.dsfs__DocuSign_Recipient_Email__c}</p>
+                                </div>
+                            </th>
+                            <th data-label="{!$Label.c.CEC_PME_StatusRecipientDocusign_6}" scope="row" class="slds-show_large">
+                                <div class="slds-truncate" title="{!item.AssinaturaObrigatoria__c}">
+                                    <label class="slds-checkbox_toggle">
+                                        <input type="checkbox" name="checkbox-toggle-15" value="checkbox-toggle-15" aria-describedby="checkbox-toggle-15" checked="{!item.AssinaturaObrigatoria__c}" disabled="true"/>
+                                        <span id="checkbox-toggle-15" class="slds-checkbox_faux_container" aria-live="assertive">
+                                            <span class="slds-checkbox_faux"></span>
+                                            <span class="slds-checkbox_on">Sim</span>
+                                            <span class="slds-checkbox_off">Não</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </th>
+                            <th data-label="{!$Label.c.CEC_PME_StatusRecipientDocusign_7}" scope="row">
+                                <div class="slds-truncate" title="{!item.dsfs__Recipient_Status__c}">
+                                    <p>{!item.dsfs__Recipient_Status__c}</p>
+                                </div>
+                            </th>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            
+            
+            <aura:set attribute="footer">
+                <div class="slds-clearfix">
+                    <div class="slds-float_right slds-text-font_monospace slds-text-body_small">
+                        <p>{!$Label.c.CEC_PME_StatusRecipientDocusign_8} {!v.envelop.dsfs__DocuSign_Envelope_ID__c}</p>
+                    </div>
+                </div>
+            </aura:set>
+        </lightning:card>
+    </aura:if>
+</aura:component>

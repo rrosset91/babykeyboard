@@ -1,0 +1,186 @@
+<aura:component
+	extends="c:Utils"
+	implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+	access="global"
+	controller="LancamentosFuturosController"
+>
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:attribute name="columns" type="List" />
+	<aura:attribute name="futureReleases" type="Object[]" />
+	<aura:attribute name="selectedReleasesRow" type="Object[]" />
+	<aura:attribute name="selectedRows" type="Object[]" />
+	<aura:attribute name="selectedRelease" type="Object" />
+	<aura:attribute name="amountGroupDeparture" type="Object" />
+	<aura:attribute name="isLoading" type="Boolean" default="false" />
+	<aura:attribute name="showDetail" type="Boolean" default="false" />
+	<aura:attribute name="errorOnCall" type="Boolean" default="false" />
+	<aura:attribute name="disabledBack" type="Boolean" default="false" />
+	<aura:attribute name="disabledView" type="Boolean" default="true" />
+	<aura:attribute name="periodFilters" type="List" default="[]" />
+	<aura:attribute name="period" type="String" default="6" />
+	<aura:attribute name="status" type="String" />
+	<aura:attribute name="typeFilters" type="List" default="[]" />
+	<aura:attribute name="statusFilters" type="List" default="[]" />
+	<aura:attribute name="sortedBy" type="String" />
+	<aura:attribute name="sortedDirection" type="String" />
+	<aura:attribute name="defaultSortDirection" type="String" />
+	<aura:attribute name="filterStartDate" type="Date" default="" />
+	<aura:attribute name="filterEndDate" type="Date" default="" />
+	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="isLoadingModal" type="Boolean" default="false" />
+	<aura:attribute name="periodoCustomizado" type="Boolean" default="false" />
+
+	<!--Status Fatura e Nível do Usuário-->
+	<aura:attribute name="invoicesStatus" type="List" />
+	<aura:attribute name="isBackOfficeN2" type="Boolean" default="true" />
+
+	<!--Abrir caso do N2-->
+	<aura:attribute name="recordId" type="String" />
+
+	<aura:registerEvent name="Financeiro_ComponentEvent" type="c:Financeiro_ComponentEvent" />
+
+	<aura:method name="openDetail" action="{!c.openDetails}">
+		<aura:attribute name="recordId" type="String" />
+	</aura:method>
+
+	<div>
+		<div class="custom-padding">
+			<aura:if isTrue="{!v.isLoading}">
+				<lightning:spinner alternativeText="Carregando..." size="large" />
+			</aura:if>
+
+			<aura:if isTrue="{!not(v.showDetail)}">
+				<div class="slds-text-heading_large small-header custom-padding">Filtrar Lançamentos Futuros</div>
+				<!-- <c:Financeiro_Filtros
+					periodFilters="{!v.periodFilters}"
+					onClickFiltrarPeriodo="{!c.handlePeriodFilter}"
+					FilterStartDate="{!v.filterStartDate}"
+					FilterEndDate="{!v.filterEndDate}"
+					handlePeriodFilter="{!c.handlePeriodFilter}"
+					period="{!v.period}"
+					status="{!v.status}"
+					PeriodoCustomizado="{!v.periodoCustomizado}"
+				/> -->
+
+				<div class="custom-padding">
+					<aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.futureReleases)))}">
+						<lightning:datatable
+							columns="{!v.columns}"
+							data="{!v.futureReleases}"
+							keyField="id"
+							onrowselection="{!c.handleSelectedRelease}"
+							onrowaction="{!c.handleRowAction}"
+							resizeColumnDisabled="true"
+							sortedBy="{!v.sortedBy}"
+							sortedDirection="{!v.sortedDirection}"
+							defaultSortDirection="{!v.defaultSortDirection}"
+							selectedRows="{!v.selectedRows}"
+							onsort="{!c.onSort}"
+						/>
+					</aura:if>
+					<aura:if isTrue="{!and(empty(v.futureReleases), not(v.errorOnCall))}">
+						<c:ExceptionContent showNoData="true" noDataText1="{!$Label.c.Fin_no_futureReleases}" />
+					</aura:if>
+					<aura:if isTrue="{!v.errorOnCall}">
+						<c:ExceptionContent showError="true" errorText1="{!$Label.c.Financeiro_ErroGen1}" errorText2="{!$Label.c.Financeiro_ErroGen2}" />
+					</aura:if>
+				</div>
+
+				<div class="custom-footer">
+					<div class="footer-wrapper" style="display: flex; width: 100%; justify-content: flex-end">
+						<aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.futureReleases)))}">
+							<c:Financeiro_ActionButtons
+								showFirst="false"
+								showSecond="true"
+								onClickFirst=""
+								onClickSecond="{!c.clickViewBill}"
+								disabledFirst="{!v.disabledBack}"
+								disabledSecond="{!v.disabledView}"
+								labelFirst="Voltar"
+								labelSecond="Contestar"
+							/>
+						</aura:if>
+					</div>
+				</div>
+
+				<!--Modal de detalhes do lançamento futuro-->
+				<c:UiModal aura:id="detailModal" title="Detalhe do Lançamento" size="x2-small">
+					<aura:set attribute="content">
+						<aura:if isTrue="{!v.isLoadingModal}">
+							<lightning:spinner alternativeText="Carregando..." size="large" />
+						</aura:if>
+						<lightning:layout horizontalAlign="space" verticalAlign="space" multipleRows="true">
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Data de Vencimento</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.formattedDate}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Data de Lançamento</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.formattedBillDate}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Produto</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.description}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Item</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.extractItemTypeDescription}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Parceiro</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.partnerName}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Total de Parcelas</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.installmentsCount}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Número da Parcela</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.installmentNumber}" /></p>
+								</div>
+							</lightning:layoutItem>
+
+							<lightning:layoutItem padding="horizontal-medium" size="6">
+								<div class="middle-text">
+									<label>Valor</label>
+									<p><lightning:formattedText value="{!v.selectedRelease.amountDue}" /></p>
+								</div>
+							</lightning:layoutItem>
+						</lightning:layout>
+					</aura:set>
+					<aura:set attribute="footer">
+						<div class="modal-buttons">
+							<lightning:button variant="brand" label="Fechar" onclick="{!c.closeHistoryModal}" />
+						</div>
+					</aura:set>
+					<aura:set attribute="footer">
+						<div class="modal-buttons">
+							<lightning:button variant="brand" label="Fechar" onclick="{!c.closeModal}" />
+						</div>
+					</aura:set>
+				</c:UiModal>
+			</aura:if>
+		</div>
+	</div>
+</aura:component>

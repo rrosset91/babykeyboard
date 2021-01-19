@@ -1,0 +1,7 @@
+.THIS .content-modal .slds-modal__footer{
+    background: #f7f9fb /*#F3F2F2*/ ; 
+    border-top: 2px solid #F0F2F7;
+    padding: 10px; /* Altura do footer */
+    height: 59px; 
+    box-shadow: none;
+}

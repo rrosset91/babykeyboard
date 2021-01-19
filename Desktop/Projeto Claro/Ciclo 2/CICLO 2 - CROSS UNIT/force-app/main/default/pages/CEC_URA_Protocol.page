@@ -1,0 +1,13 @@
+<apex:page controller="CEC_ME_ProtocolController">
+    
+    <apex:form >
+		<apex:actionFunction action="{!callRedirect}" name="callApexOnload" rerender="FALSE" />
+    </apex:form>
+    
+    <script type = "text/javascript">
+    	window.onload=function()       
+    	{        
+    	    callApexOnload();
+    	};
+    </script>
+</apex:page>

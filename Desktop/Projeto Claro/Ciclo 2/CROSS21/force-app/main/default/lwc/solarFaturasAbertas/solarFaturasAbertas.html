@@ -1,0 +1,92 @@
+<!--
+  @description       :
+  @author            : Joao Neves
+  @group             :
+  @last modified on  : 10-12-2020
+  @last modified by  : Joao Neves
+  Modifications Log
+  Ver   Date         Author          Modification
+  1.0   28-10-2020   Joao Neves   Initial Version
+  1.1   27-10-2020   Diego Almeida   	Add condition to open each component
+  1.2   17-11-2020   Caio Cesar		   	Adicionando modal de detalhes
+-->
+<template>
+	<lightning-spinner size="medium" if:true={isLoading}></lightning-spinner>
+
+	<header>
+		<h3 class="header-text">Selecione a(s) fatura(s) para contestação ou comparação.</h3>
+		<div style="padding-top: 5px">
+			<c-solar-filtros onfilterchange={handleFilterNotification} onrequestrefresh={handleRefreshNotification} hide-products handle-search handle-status> </c-solar-filtros>
+		</div>
+	</header>
+
+	<div style="padding-top: 25px">
+		<template if:true={hasError}>
+			<c-solar-exception-content show-error="true"></c-solar-exception-content>
+		</template>
+		<template if:false={hasError}>
+			<template if:true={hasData}>
+				<lightning-datatable
+					key-field="noteFiscalNumber"
+					data={data}
+					columns={columns}
+					sortable="true"
+					onrowaction={handleRowAction}
+					max-row-selection="1"
+					resize-column-disabled="true"
+					onrowselection={handleRowSelection}
+					selected-rows={selectedRows}
+					sorted-direction={sortDirection}
+					onsort={handleSortData}
+					sorted-by={sortBy}
+				>
+				</lightning-datatable>
+			</template>
+			<template if:false={hasData}>
+				<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+			</template>
+		</template>
+	</div>
+
+	<footer>
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex">
+				<lightning-button variant="brand-outline" label="Enviar 2a via" class="slds-m-left_x-small" onclick={abrirModalSegundaVia} disabled={disabledSendInvoice}>
+				</lightning-button>
+			</div>
+			<div style="width: 50%; justify-content: flex-end; display: flex">
+				<lightning-button variant="brand" label="Ver itens da fatura" onclick={handleDetailsClick} class="slds-m-left_x-small" disabled={disabledDetails}>
+				</lightning-button>
+			</div>
+		</div>
+	</footer>
+
+	<c-solar-modal show-close-button="true" size="small" header="Consulta de Fatura Resumida">
+		<div slot="content">
+			<template if:false={invoiceDetailError}>
+				<div class="slds-form slds-grid slds-wrap slds-gutters">
+					<dl class="slds-size_1-of-2 slds-p-around_x-small">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Valor</dt>
+							<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.paymentValue}</dd>
+						</div>
+					</dl>
+					<dl class="slds-size_1-of-2 slds-p-around_x-small">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Data de Pagamento</dt>
+							<dd class="slds-item_detail custom-content">{modalItem.payDate}</dd>
+						</div>
+					</dl>
+				</div>
+			</template>
+			<template if:true={invoiceDetailError}>
+				<c-solar-exception-content show-error="true"></c-solar-exception-content>
+			</template>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+		</div>
+	</c-solar-modal>
+
+	<c-solar-financeiro-segunda-via envio-segunda-via={envioSegundaVia}> </c-solar-financeiro-segunda-via>
+</template>

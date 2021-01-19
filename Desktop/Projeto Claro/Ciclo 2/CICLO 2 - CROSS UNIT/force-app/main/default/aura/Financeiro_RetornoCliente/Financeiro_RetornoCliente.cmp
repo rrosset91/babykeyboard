@@ -1,0 +1,16 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" extends="c:Utils">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="onSelectNotification" type="Aura.Action" />
+	<aura:attribute name="notificationMethod" type="String" />
+    <aura:attribute name="disabledReturn" type="Boolean" default="false"/>
+    <aura:attribute name="showWarning" type="Boolean" default="true"/>
+   
+	<div class="generate-bill">
+        <h1>Selecione a opção de retorno desejado:</h1>			
+        <lightning:button aura:id="returnSMS" disabled="{!v.disabledReturn}" class="credit-options" name="sms" label="SMS" onclick="{!c.handleClick}"/>
+		<lightning:button aura:id="returnEmail" disabled="{!v.disabledReturn}" class="credit-options" name="email" label="E-mail" onclick="{!c.handleClick}"/>                       			
+		<lightning:button aura:id="returnWhatsApp" disabled="{!v.disabledReturn}" class="credit-options" name="whatsapp" label="Telefone" onclick="{!c.handleClick}"/>					 
+	</div>
+    
+</aura:component>

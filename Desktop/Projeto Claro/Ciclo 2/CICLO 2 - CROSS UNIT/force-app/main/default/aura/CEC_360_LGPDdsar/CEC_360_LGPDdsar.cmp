@@ -1,0 +1,140 @@
+<!-- CEC_360_LGPDdsar Component 
+	 Autor: Rennê Silva - Sysmap
+   	 Criação:16/06/2020
+   	 Nome do projeto/ID: LGPD - Direito do Titular
+	 Time: SQUAD CEC -->
+
+<aura:component controller="CEC_360_LGPDdsarController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="dsar"            type="CEC_LGPDdsar__mdt[]"  default='[]' />
+    <aura:attribute name="dsarAdditFields" type="CEC_LGPDdsar_AdditionalFields__mdt[]" default='[]' />
+    <aura:attribute name="cpf"             type="String"  default='' />
+    <aura:attribute name="email"           type="String"  default='' />
+    <aura:attribute name="customerType"    type="String"  default='' />
+    <aura:attribute name="selection"       type="String"  default='' />
+    <aura:attribute name="isModalOpen"     type="Boolean" default='false' />
+    <aura:attribute name="wasChanged"      type="Boolean" default='false' />
+    <aura:attribute name="isNotesVisible"  type="Boolean" default='false' />
+    <aura:attribute name="options"         type="List"    access="private" />
+    <aura:attribute name="selectedValue"   type="String"  access="private" />
+    <aura:attribute name="userLogin"       type="String"  default='' />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:card>
+        <div class="c-container">
+            <!--<lightning:layout multipleRows="true" verticalAlign="center">
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div class="fontStyle">Selecione o Tipo de Solicitação de direito:</div>
+                </lightning:layoutItem>
+            </lightning:layout>-->
+            <div class="row slds-size_6-of-7">
+        		<lightning:input type="email" aura:id="email" name="email" required="true" value="{!v.email}" label="Confirme com o cliente o e-mail para retorno da solicitação:" />
+           		<br />
+            </div>
+            <fieldset>
+                <legend class="slds-form-element__legend slds-form-element__label fontLabel">
+                    <abbr lightning-input_input="" title="required" class="slds-required">*</abbr>Selecione o tipo de solicitação de direito:
+                </legend>
+                <div class="slds-form-element__control">
+                    <aura:iteration items="{!v.dsar}" var="dsarType">
+                    	<div class="slds-visual-picker slds-visual-picker_small">
+                            <input aura:id="{!v.cpf + dsarType.rightId__c}" 
+                                   type="radio" 
+                                   id="{!v.cpf + dsarType.rightId__c}" 
+                                   value="{!v.cpf + dsarType.rightId__c}"
+                                   name="{!v.cpf + options}"
+                                   onchange="{!c.onSelection}" />
+                            <label for="{!v.cpf + dsarType.rightId__c}">
+                                <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                    <span>
+                                        <span class="slds-icon_container">
+                                            <lightning:icon iconName="{!'utility:'+dsarType.rightIcon__c}" alternativeText="{!dsarType.rightName__c}" title="{!dsarType.rightName__c}" />
+                                        </span>
+                                        <br />
+                                        <span class="slds-text-heading_x-small">{!dsarType.rightName__c}</span>
+                                    </span>
+                                </span>
+                                <span class="slds-visual-picker__body">
+                                    <!--<span class="slds-text-heading_small">Lightning Professional</span>-->
+                                    <span class="slds-text-title">{!dsarType.rightDescription__c}</span>
+                                </span>
+                                <span class="slds-icon_container slds-visual-picker__text-check">
+                                    <lightning:icon iconName="utility:check" size="x-small" variant="inverse" />
+                                </span>
+                            </label>
+                    	</div>
+                	</aura:iteration>
+                </div>
+            </fieldset>
+            <aura:if isTrue="{!v.isNotesVisible}">
+                <aura:if isTrue="{!v.options}">
+                    <div class="row slds-size_6-of-7">
+                        <lightning:select aura:id="reason" name="reason" required="true" label="Motivo:" value="{!v.selectedValue}" messageWhenValueMissing="Selecione o motivo.">
+                            <option value="">-- Selecione um dos motivos abaixo:</option>
+                            <aura:iteration items="{!v.options}" var="option">
+                                <option text="{!option.label}" value="{!option.id}" selected="{!option.selected}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>
+                    <br />
+                </aura:if>
+                <div class="row slds-size_6-of-7">
+                    <lightning:textarea aura:id="notes" name="notes" required="true" label="Observações:" placeholder="Escreva aqui..." maxlength="200" />
+                </div>
+            </aura:if>
+
+            <lightning:layout multipleRows="true" verticalAlign="center">
+                <lightning:layoutItem size="12" padding="around-small"></lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="around-small" class="formCancelButton">
+                    <!-- Brand-outline variant: Identifies the primary action in a group of buttons, but has a lighter look -->
+                    <lightning:button variant="brand-outline" label="Cancelar" title="Cancelar" onclick="{! c.handleCancelButton }" disabled="{!not(v.wasChanged)}" />
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="around-small" class="formSaveButton">
+                    <!-- Brand variant: Identifies the primary action in a group of buttons -->
+                    <lightning:button variant="brand" label="Salvar" title="Salvar" onclick="{! c.handleSaveButton }" disabled="{!not(v.wasChanged)}" />
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+        </div>
+    </lightning:card>
+    
+    <!--MODAL TO ALERT AGENT THAT DATA CHANGES WILL BE LOST-->
+    <div>
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        <aura:if isTrue="{!v.isModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">	
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">As alterações feitas na tela serão descartadas! </h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><b>Tem certeza que deseja sair sem salvar as alterações realizadas?</b></p>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Não"
+                                          title="Não"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand"
+                                          label="Sim"
+                                          title="Sim"
+                                          onclick="{!c.submitDetails}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    <!--END OF ALERT CODE--> 
+    
+</aura:component>

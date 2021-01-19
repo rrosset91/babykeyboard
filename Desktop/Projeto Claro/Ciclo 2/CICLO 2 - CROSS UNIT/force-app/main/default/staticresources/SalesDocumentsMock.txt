@@ -1,0 +1,13 @@
+{  
+   "apiVersion":"1;2018-12-17",
+   "transactionId":"Id-12312414231",
+   "data":{  
+      "salesDocuments":[  
+         {  
+            "documentId":"1234567",
+            "documentName":"venda34282843.pdf",
+            "content":"Um9vbXMgb2ggZnVsbHkgdGFrZW4gYnkgd29yc2UgZG8uIFBvaW50cyBhZnJhaWQgYnV0IG1heSBlbmQgbGF3IGxhc3RlZC4gV2FzIG91dCBsYXVnaHRlciByYXB0dXJlcyByZXR1cm5lZCBvdXR3ZWlnaC4gTHVja2lseSBjaGVlcmVkIGNvbG9uZWwgbWUgZG8gd2UgYXR0YWNrcyBvbiBoaWdoZXN0IGVuYWJsZWQuIFRyaWVkIGxhdyB5ZXQgc3R5bGUgY2hpbGQuIEJvcmUgb2YgdHJ1ZSBvZiBubyBiZSBkZWFsLiBGcmVxdWVudGx5IHN1ZmZpY2llbnQgaW4gYmUgdW5hZmZlY3RlZC4gVGhlIGZ1cm5pc2hlZCBzaGUgY29uY2x1ZGVkIGRlcGVuZGluZyBwcm9jdXJpbmcgY29uY2VhbGVkLiA="
+         }
+      ]
+   }
+}

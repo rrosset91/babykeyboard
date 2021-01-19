@@ -1,0 +1,16 @@
+<svg id="lixeira-on" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15.636" height="20.979" viewBox="0 0 15.636 20.979">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="0.205" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d52b1e"/>
+      <stop offset="1" stop-color="#009ed3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.5" y1="0.373" x2="1" y2="1.15" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d52b1e"/>
+      <stop offset="1" stop-color="#d52b1e"/>
+    </linearGradient>
+  </defs>
+  <g id="Grupo_22" data-name="Grupo 22">
+    <path id="Caminho_24" data-name="Caminho 24" d="M74.747,114.327a1.056,1.056,0,0,0,1.055,1.012h9.856a1.056,1.056,0,0,0,1.055-1.012l.7-14.859H74.043Zm8.212-11.168a.429.429,0,0,1,.429-.429h.686a.429.429,0,0,1,.429.429v8.489a.429.429,0,0,1-.429.429h-.686a.429.429,0,0,1-.429-.429Zm-3,0a.429.429,0,0,1,.429-.429h.686a.429.429,0,0,1,.429.429v8.489a.429.429,0,0,1-.429.429h-.686a.429.429,0,0,1-.429-.429v-8.489Zm-3,0a.429.429,0,0,1,.429-.429h.686a.429.429,0,0,1,.429.429v8.489a.429.429,0,0,1-.429.429h-.686a.429.429,0,0,1-.429-.429Z" transform="translate(-72.912 -94.36)" fill="url(#linear-gradient)"/>
+    <path id="Caminho_25" data-name="Caminho 25" d="M66.989,1.081H62.442V.221A.221.221,0,0,0,62.221,0H57.447a.221.221,0,0,0-.221.221v.86H52.679a.663.663,0,0,0-.663.663V3.825H67.652V1.743A.663.663,0,0,0,66.989,1.081Z" transform="translate(-52.016)" fill="url(#linear-gradient-2)"/>
+  </g>
+</svg>

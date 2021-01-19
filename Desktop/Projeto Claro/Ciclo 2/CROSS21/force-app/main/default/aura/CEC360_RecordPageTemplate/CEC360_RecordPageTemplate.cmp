@@ -1,0 +1,25 @@
+<aura:component implements="lightning:recordHomeTemplate" description="Two columns">
+    <aura:attribute name="left" type="Aura.Component[]" />
+    <aura:attribute name="right" type="Aura.Component[]" />
+    
+    <aura:attribute name="isSidebarCollapsed" type="Boolean" access="PRIVATE" default="false" />
+
+    <div>
+        <lightning:layout>
+            <lightning:layoutItem size="3" flexibility="auto" class="{! v.isSidebarCollapsed ? ' slds-hide' : '' }">
+                {!v.left}
+            </lightning:layoutItem>
+            <lightning:layoutItem flexibility="no-flex">
+                <lightning:buttonIcon onclick ="{!c.toggleSection}"
+                                      class="design-allow-interaction toggle split-toggle slds-split-view__toggle-button slds-is-open slds-button_icon-xx-small slds-button_icon-border cardLeft"
+                                      variant="border-filled"
+                                      iconName="{! v.isSidebarCollapsed ? 'utility:right' : 'utility:left' }" 
+                                      size="small"/>
+            </lightning:layoutItem>            
+            <lightning:layoutItem flexibility="auto">
+                {!v.right}
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+</aura:component>

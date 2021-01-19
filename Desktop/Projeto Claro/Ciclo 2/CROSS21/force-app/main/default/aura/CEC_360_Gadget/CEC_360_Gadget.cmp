@@ -1,0 +1,91 @@
+<!--
+* Autor: Letícia Freitas - Deloitte 
+* Criação: 15/02/2018 
+* Descrição: Nome do projeto/ID: CEC FASE - Time: SQUAD 360 -
+* USS 199 -  Componente com conteúdo de aparelho retornado pela integração. * 
+/-->
+
+<aura:component controller ="CEC_360_GadgetController" implements="flexipage:availableForRecordHome,force:hasRecordId"  >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="deviceList" type="Object[]"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="showTable" type="Boolean" />
+    <aura:attribute name="visible" type="Boolean" default="false" />
+    <aura:attribute name="contents" type="String" />
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <div class ="slds-float_right">
+        <div class ="slds-is-absolute" style="margin-top: -50px; margin-left: -5px;">
+            <lightning:buttonIcon iconName="utility:close" variant="bare-inverse" size="large" onclick="{!c.handleClose}" />
+        </div>
+    </div>
+    
+    
+    <div class="slds-media__body slds-p-top_xx-small">
+        <span class="slds-truncate" style="font-size:17px;color:#005fb2;">Aparelho</span>
+    </div>
+    
+    <div style="border-bottom: 1px solid #dddbda;"></div>  
+    <div class="slds-p-top_small ">
+        <aura:if isTrue="{!v.showSpinner}">
+            <div class="slds-text-align_center">
+                <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                    <lightning:spinner alternativeText="Loading" size="medium"/>
+                </div>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.showTable}">
+            <table class="slds-table  slds-table_header-hidden slds-table_striped slds-border_bottom slds-border_left slds-border_right">
+                <thead class = "slds-assistive-text">
+                    <tr>
+                        <th scope="col"><div class="slds-truncate" title="col1">Col1</div></th>
+                        <th scope="col"><div class="slds-truncate" title="col2">Col2</div></th>
+                        <th scope="col"><div class="slds-truncate" title="col3">Col3</div></th>
+                        <th scope="col"><div class="slds-truncate" title="col4">Col4</div></th>
+                    </tr>
+                </thead>
+                <aura:iteration items="{!v.deviceList}" var="item"> 
+                    <tbody>
+                        <tr class="slds-border_top">
+                            <td>Aparelho</td>
+                            <td><div class="slds-truncate" >{!item.imei}</div></td>
+                            <td>Situação Cemi</td>
+                            <td><div class="slds-truncate" >{!item.deviceStatus}</div></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><div class="slds-truncate" >MSISDN:</div></td>
+                            <td><div class="slds-truncate" >{!item.phoneLineNumber}</div></td>
+                            <td><div class="slds-truncate" >Data:</div></td>
+                            <td><div class="slds-truncate" >{!item.deviceStatusDate}</div></td>
+                        </tr>
+                        
+                        <tr>
+                            <td><div class="slds-truncate" >Modelo:</div></td>
+                            <td><div class="slds-truncate" >{!item.modelName}</div></td>
+                            <td><div class="slds-truncate" >ICCID:</div></td>
+                            <td><div class="slds-truncate" >{!item.iccid}</div></td>
+                        </tr> 
+                        
+                        <tr> 
+                            <td><div class="slds-truncate" >Tecnologia:</div></td>
+                            <td><div class="slds-truncate" >{!item.modelTechnology}</div></td>
+                            <td><div class="slds-truncate" >Fabricante:</div></td>
+                            <td><div class="slds-truncate" >{!item.manufacturerName}</div></td>
+                        </tr>
+                        <tr>
+                            <td><div class="slds-truncate" >Frequência:</div></td>
+                            <td><div class="slds-truncate" >{!item.frequencymodelGenerationTechnology}</div></td>
+                            <td><div class="slds-truncate" ></div></td>
+                            <td><div class="slds-truncate" ></div></td>
+                        </tr>
+                    </tbody>
+                    
+                </aura:iteration>
+            </table>
+        </aura:if>
+    </div>
+    
+    
+</aura:component>

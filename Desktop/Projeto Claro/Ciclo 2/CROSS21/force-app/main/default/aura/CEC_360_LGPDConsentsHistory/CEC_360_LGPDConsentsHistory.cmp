@@ -1,0 +1,50 @@
+<!-- CEC_360_LGPDConsentsHistory Component 
+	 Autor: Rennê Silva - Sysmap
+   	 Criação:14/08/2020
+   	 Nome do projeto/ID: LGPD - Direito do Titular
+	 Time: SQUAD CEC -->
+
+<aura:component controller="CEC_360_LGPDConsentsHistoryController" description="Table with column sorting for Consents" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+    
+    <!--aura attributes--> 
+    <aura:attribute name="consentsColumns"  type="List"   />
+    <aura:attribute name="consentsData"     type="Object" />
+    <aura:attribute name="sortBy"           type="String" />
+    <aura:attribute name="sortDirection"    type="String" />
+    <aura:attribute name="filter"           type="String" />
+    <aura:attribute name="filteredData"     type="List"   />
+    <aura:attribute name="noRecordFoundMsg" type="String" />
+    
+    <!--Page header-->
+	<div class="slds-page-header" role="banner">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="11">
+            	<lightning:input class="removeSpace" type="search" onchange="{!c.filter}" value="{!v.filter}" placeholder="Filtre os dados abaixo" aura:id="enter-search"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="1">
+            	<lightning:buttonIcon class='refreshButton' iconName="utility:refresh" alternativeText="Atualizar Dados" title="Atualizar Dados" onclick="{!c.handleReload}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+    <aura:if isTrue="{!not(empty(v.noRecordFoundMsg))}">
+        <br/>
+        <p class='slds-align_absolute-center'>{!v.noRecordFoundMsg}</p>
+        <br/>
+    	<aura:set attribute="else">
+            <!--Lightning data table markup-->
+            <lightning:datatable aura:id="consentsTable"
+                                 keyField="Id"
+                                 hideCheckboxColumn="true"
+                                 columns="{!v.consentsColumns}"
+                                 data="{!v.filteredData}"
+                                 sortedBy="{!v.sortBy}"
+                                 sortedDirection="{!v.sortDirection}"
+                                 onsort="{!c.handleSort}"
+                                 onrowaction="{!c.viewRecord}" />
+        </aura:set>
+    </aura:if>    
+
+</aura:component>

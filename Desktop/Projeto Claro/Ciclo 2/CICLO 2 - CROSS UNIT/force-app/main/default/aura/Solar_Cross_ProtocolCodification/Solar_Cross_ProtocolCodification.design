@@ -1,0 +1,3 @@
+<design:component >
+    <design:attribute name="acordionTitle" label="Título do Acordeon" description="Insira o título que será visualisado ao lado do botão de abrir e fechar o acordeon" />  
+</design:component>

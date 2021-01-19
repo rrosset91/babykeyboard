@@ -1,0 +1,16 @@
+<template>
+  <lightning-layout>
+    <div class="content-wrapper">
+      <div class="slds-form slds-grid slds-wrap slds-gutters">
+          <template for:each={modalData} for:item=data>
+            <dl key={data.label} >
+              <div>
+                <dt class="slds-item_label slds-text-color_weak slds-text-align_left">{data.label}</dt>
+                <dd class="slds-item_detail slds-text-align_left custom-content">{data.fieldName}</dd>
+              </div>
+            </dl>
+          </template>
+      </div>
+    </div>
+</lightning-layout>
+</template>

@@ -1,0 +1,14 @@
+<aura:documentation>
+	<aura:description>
+        <p><code>c:CEC_PME_OrderPathItem</code> esse componente pode ser utilizado para facilitar e otimizar a utilização do slds-path__item do LDS</p>
+        <p>type: current,lost,completed,incomplete,error</p>
+    </aura:description>
+	<aura:example name="CEC_PME_OrderPathItem" ref="c:CEC_PME_OrderPathItem" label="CEC_PME_OrderPathItem">
+        pathItem="{
+        'id' : '1',
+        'name' : 'Aguardando criação contrato',
+        'type' : 'current',
+        'isShowMedium' : false
+        }"
+	</aura:example>
+</aura:documentation>

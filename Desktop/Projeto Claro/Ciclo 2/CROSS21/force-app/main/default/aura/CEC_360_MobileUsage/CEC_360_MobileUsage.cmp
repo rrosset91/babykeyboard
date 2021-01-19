@@ -1,0 +1,51 @@
+<aura:component controller="CEC_360_MobileUsageController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="dataMobileUsage" type="Object[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-m-horizontal_small">
+        <div class="slds-grid slds-wrap">
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-col slds-size_8-of-8">
+                    <div class="slds-text-align_center">
+                        <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                            <lightning:spinner alternativeText="Loading" size="medium"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <aura:set attribute="else">
+                    <aura:iteration items="{!v.dataMobileUsage}" var="mob">                        
+                        <div class="slds-col slds-size_4-of-8">
+                            <div class="slds-m-around_small">
+                                <div class="slds-m-bottom_small">
+                                    <div class="slds-text-body_regular">{!mob.descriptionUsage}</div>
+                                    <div class="slds-text-body_regular">Renova em: {!mob.usageDateEnd}</div>
+                                </div>
+                                <div>
+                                    <div style="width:100%; height: 26px;" class="slds-progress-bar slds-progress-bar_circular slds-progress-bar_large"
+                                         aria-valuemin="0" aria-valuemax="100" aria-valuenow="{!mob.percentage}" role="progressbar">
+                                        <span class="slds-progress-bar__value" style="{! 'width:  ' + mob.percentage + '%;background-color: #f72514'}">
+                                            <span class="slds-assistive-text">{!'Progress: ' + v.value + '%'}</span>
+                                        </span>
+                                    </div>
+                                    <div class="slds-grid slds-gutters slds-m-top_xx-small">
+                                        <div class="slds-col">
+                                            <div class="slds-text-body_regular">Usados:</div>
+                                            <div class="slds-text-body_regular" style="color: #f72514">{!mob.consumedAmountGB}GB ({!mob.percentage}%)</div>
+                                        </div>
+                                        <div class="slds-col" style="text-align: right;">
+                                            <div class="slds-text-body_regular ">Saldo disponível:</div>
+                                            <div class="slds-text-body_regular">{!mob.franchiseAmountGB}GB ({!100 - mob.percentage}%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </aura:set>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

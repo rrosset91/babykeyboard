@@ -1,0 +1,11 @@
+<template>
+    <template if:true={systemURL}>
+        <div class="slds-m-around_medium">
+        
+          
+        </div>
+      </template>
+      <div if:false={systemURL} class="slds-spinner_inline spinner-padding">
+        <lightning-spinner variant="brand" alternative-text="Carregando..." size="large"></lightning-spinner>
+      </div>
+</template>

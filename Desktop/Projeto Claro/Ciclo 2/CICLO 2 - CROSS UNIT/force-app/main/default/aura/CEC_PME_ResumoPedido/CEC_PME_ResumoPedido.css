@@ -1,0 +1,714 @@
+.THIS * {font-family: 'Salesforce Sans';font-size: 13px;color: #434444;}
+.THIS div {display: inline-block;}
+.THIS input:-webkit-autofill {-webkit-animation-name: autofill;-webkit-animation-fill-mode: both;}
+.THIS button {outline: none;border:0px;}
+.THIS a {text-decoration: none;}
+.THIS .border {border: solid 1px #b3b4b4;}
+.THIS .border-b {border-bottom: solid 1px #b3b4b4 !important;}
+.THIS div[id^="secaoEquipamentos"] .bloco-lista.border-b:hover {background: rgb(241, 241, 241,0.4);}
+.THIS .bold {font-size: 15px;}
+.THIS .modal {margin: 0 auto;width: 100%;display: block;border-radius: 5px;padding: 10px 0px 10px 10px;}
+.THIS .right-0 {padding-right: 0px;}
+.THIS .top10 {padding-top: 9px;display: block;padding-right: 10px;}
+.THIS .top-15 {padding-top: 15px;}
+.THIS .left10 {padding-left: 10px;}
+.THIS .bloco {width: 100%;display: inline-table;}
+.THIS .bloco-100 {width: 100%;}
+.THIS .dado {display: block;}
+.THIS .title {display: block;}
+.THIS .dado {font-size: 12px;margin-right: 10px;line-height: 24px;}
+.THIS .title {line-height: 34px;color: #939393;padding-top: 5px;font-size: 12px;}
+.THIS .title-table {line-height: 34px;color: #434444;padding-top: 5px;padding-right: 15px;font-weight: 500;}
+.THIS .title-table-datos {line-height: 34px;color: #434444;padding-top: 5px;padding-right: 15px;font-weight: 500;}
+.THIS .title-table-plan {line-height: 34px;color: #434444;padding-top: 5px;padding-right: 15px;font-weight: 500;}
+.THIS span.title-table {font-size: 12px !important;}
+.THIS .title-table-device {padding: 5px 0px;display:-webkit-inline-box;}
+.THIS .title-table-datos {line-height: 22px;}
+.THIS .accordion-title {background: none;padding-left: 0px;}
+.THIS .accordion {width:calc(100% - 8px);}
+.THIS .accordion2 {width:calc(100% - 8px);}
+.THIS .accordion3 {width:calc(100% - 8px);}
+.THIS table.table-ddd {width:calc(100% - 8px);}
+.THIS .bloco-lista-device {width:calc(100% - 8px);}
+.THIS .bloco-lista-device div:last-child {float: right;text-align: right;}
+.THIS .bloco-lista-device div:last-child span {padding-right: 11px;}
+.THIS .bloco-lista {width:calc(100% - 8px);}
+.THIS button.accordion.active {width:calc(100% - 10px);}
+.THIS button.accordion2.active {width:calc(100% - 10px);}
+.THIS button.accordion3.active {width:calc(100% - 10px);} 
+.THIS .bloco-lista-plan {width:calc(100% - 10px);}
+.THIS .sub-section {width:calc(100% - 10px);}
+.THIS .bloco-lista-transfer-device {width:calc(100% - 10px);}
+.THIS .bloco-lista-transfer-device-portabilidade {width:calc(100% - 10px);}
+.THIS .bloco-lista-transfer-device-portabilidade-mobile {width:100%;}
+.THIS .bloco-lista-transfer-device.border div:last-child {width: auto;display: contents;}
+.THIS div#secaoAparelhosNovo .bloco-lista-transfer-device:hover {background: rgb(241, 241, 241, 0.4);}
+.THIS .bloco-lista-transfer {width:calc(100% - 10px);}
+.THIS .bloco-lista-transfer-novo {width:calc(100% - 10px);}
+.THIS .accordion {padding-top: 5px;padding-left: 20px;background: url(/resource/cec_pme_image/icones/open.png);background-repeat: no-repeat;text-align: left;border: 0px;}
+.THIS .accordion2 {padding-top: 5px;padding-left: 20px;background: url(/resource/cec_pme_image/icones/open.png);background-repeat: no-repeat;text-align: left;border: 0px;} 
+.THIS .accordion3 {padding-top: 5px;padding-left: 20px;background: url(/resource/cec_pme_image/icones/open.png);background-repeat: no-repeat;text-align: left;border: 0px;}
+.THIS button.accordion.active {background: url(/resource/cec_pme_image/icones/close.png);background-repeat: no-repeat !important;}
+.THIS button.accordion2.active {background: url(/resource/cec_pme_image/icones/close.png);background-repeat: no-repeat !important;}
+.THIS button.accordion3.active {background: url(/resource/cec_pme_image/icones/close.png);background-repeat: no-repeat !important;}
+.THIS .accordion:active {background: url(/resource/cec_pme_image/icones/close.png) top 20px left;background-repeat: no-repeat;text-align: left;border: 0px;padding-top: 5px;padding-left: 20px;}
+.THIS .accordion2:active {background: url(/resource/cec_pme_image/icones/close.png) top 20px left;background-repeat: no-repeat;text-align: left;border: 0;padding-top: 5px;padding-left: 20px;}
+.THIS .accordion3:active {background: url(/resource/cec_pme_image/icones/close.png) top 20px left;background-repeat: no-repeat;text-align: left;border: 0;padding-top: 5px;padding-left: 20px;}
+.THIS .accordion {background-position: top 18px left;}
+.THIS .accordion2 {background-position: top 18px left;}
+.THIS button.accordion.active, .THIS button.accordion2.active {background-position: top 18px left;}
+.THIS .accordion3 {background-position: top 12px left;}
+.THIS button.accordion3.active {background-position: top 13px left;}
+.THIS button.accordion.active span, .THIS button.accordion2.active span, .THIS button.accordion3.active span {color: #009ed3;}
+.THIS .bloco-lista-transfer-portabilidade, .THIS .bloco-lista-transfer-novo, .THIS .bloco-lista-transfer, .THIS .table-lista-plan, .THIS .bloco-lista-transfer-doador {background-color:#F8F8F8}
+.THIS .adicionais {background: url(/resource/cec_pme_image/icones/linha-dados.gif) #f8f8f8;padding-left:10px;}
+.THIS .bloco-lista-transfer-doador {width:calc(100% - 10px);border-bottom: 0px;padding:5px;}
+.THIS .bloco-lista-transfer-doador div {padding-right:10px;}
+.THIS .bloco-lista-transfer-device {border-top: 0px;min-height: 34px;}
+.THIS .bloco-lista-pedido {width:calc(100% - 8px);background: #F4F4F4;padding: 10px;border-top: 3px solid #009ed3;padding-bottom: 0px;}
+.THIS .bloco-lista-pontos {width:calc(100% - 8px);background: #F4F4F4;padding: 0px 10px;padding-bottom: 0px;border-top:0px;}
+.THIS .bloco-lista-associacao {width:calc(100% - 30px);background: #F4F4F4;margin-bottom: 10px;padding: 10px;}
+.THIS table.table-ddd tr td {line-height: 34px;padding-top: 5px;padding-right: 15px;padding-left: 5px;height: 34px;border-bottom: solid 1px #b3b4b4;}
+.THIS table.table-ddd tr th {color: #939393;text-align: left;font-weight: 400;padding-top: 5px;padding-left: 5px;height: 34px;padding-right: 10px;border-bottom: solid 1px #b3b4b4;white-space: nowrap;}
+.THIS table.table-ddd tr:first-child td {border-bottom: solid 1px #b3b4b4;}
+.THIS .sub-title {width: 100%;}
+.THIS .sub-title-light, .THIS .sub-title, .THIS .sub-title-ddd {line-height: 34px;font-size: 14px;padding-top: 5px;font-weight: 500;}
+.THIS .sub-title-ddd {color: #1f577b;font-size: 14px;}
+.THIS .sub-title-light {font-weight: 500;}
+.THIS .title-section, .THIS .title-section-associacao, .THIS .title-section-table {padding-right: 10px;font-size: 16px;font-weight: bold;color:#1f577b;}
+.THIS .title-block {border-bottom: solid 2px #009ed3;padding-right: 20px;font-size: 16px;font-weight: bold;}
+.THIS .table-lista {border-bottom: solid 3px #b3b4b4;}
+.THIS .bloco-lista.table-lista div span {font-size: 12px;}
+.THIS .table-dados {min-height: 28px;padding-top: 6px;}
+.THIS .col-line-10 {width: calc(100% - 2px);height: 23px;}
+.THIS .bloco-scrool {display: block;width: 100%;overflow-x: auto;}
+.THIS .col-tab-empresa  {width:calc(30% - 20px);padding-right: 10px;}
+.THIS .col-tab-empresa, .THIS .col-tab-nome-completo, .THIS .col-tab-cnpj, .THIS .col-tab-contato, .THIS .col-tab-telefone, .THIS .col-tab-celular  {display: -webkit-inline-box;vertical-align: top;}
+.THIS .col-tab-nome-completo {width:calc(35% - 10px);padding-right: 10px;padding-top:5px;}
+.THIS .col-tab-cnpj     {width:15%;padding-top:5px;}
+.THIS .col-tab-contato  {width:25%;padding-top:5px;}
+.THIS .col-tab-telefone {width:15%;padding-top:5px;}
+.THIS .col-tab-celular  {width:calc(15% - 10px);padding-top:5px;}
+.THIS div[class^="col-pedido"], .THIS .col-tab-plan, .THIS .col-tab-plan-value {width: 10%;}
+.THIS div[id^="secaoEquipamentos"] .col-tab-plan-value:last-child {float: right;text-align: right;padding-right: 10px;line-height: 31px;}
+.THIS .col-tab-plan-value:first-child {padding-left: 10px;} 
+.THIS div#bloco-servicos-adicionais .col-tab-plan-value-datos span.title-table-plan {padding-left: 10px;}
+.THIS .col-tab-plan-value-datos {width:auto;}   
+.THIS div#bloco-servicos-adicionais .col-tab-plan-datos {display: -webkit-box;}  
+.THIS div#bloco-servicos-adicionais .col-tab-plan-datos span {padding-left: 10px;}                                              
+.THIS .col-tab-plan-equipamento {width:400px;padding-left: 10px;padding-right: 10px;}
+.THIS .col-tab-plan-equipamento span {line-height: 18px;display: block;}
+.THIS .plano-equipamento, .THIS .col-tab-plan:first-child {padding-left: 10px;}
+.THIS .plano-equipamento {line-height: 34px;}
+.THIS .valor-equipamento {padding: 10px 15px;width: 160px;text-align: right;float: right;}
+.THIS .valor-aparelho {float: right;width: 150px;text-align: right;}
+.THIS .col-pedido-acumulados {min-width: 127px !important;}
+.THIS .title-mobile {display: none;}
+.THIS .bloco-recebedor {display:none;width:100%;}
+.THIS .bloco-recebedor div {padding-right:10px;}                                                                        
+.THIS .legenda {color:#009de3;padding-right:5px;}
+.THIS .legenda-2 {color:#b3b4b4;padding-right:5px;}
+.THIS .col-adm-nome {width: calc(22% - 8px);margin-right: 8px;}
+.THIS .col-adm-sexo {width: calc(9% - 8px);margin-right:8px;}
+.THIS .col-adm-nascimento {width: calc(7% - 8px);margin-right:8px;}
+.THIS .col-adm-telefone {width: calc(8% - 8px);margin-right:8px;}
+.THIS .col-adm-celular {width: calc(9% - 8px);margin-right:8px;}
+.THIS .col-adm-email {width: calc(25% - 8px);margin-right:8px;}
+.THIS .col-adm-representante {width: calc(7% - 8px);margin-right:8px;}
+.THIS .col-adm-cargo {width: calc(13% - 8px);margin-right:8px;}
+.THIS div[class^="col-adm-"] {display: inline-flex;}
+.THIS div[class^="col-adm-"] span {line-height: 16px !important;padding: 5px 0px;}
+.THIS .col-pedido-pontos span {white-space: nowrap;}
+.THIS .col-pedido-utilizados span {white-space: nowrap;}                                                                                                        
+.THIS #bloco-pontos  {display:none;}
+.THIS div#plano-qtd-linhas {min-width: 105px;}
+.THIS div#plano-kit {min-width: 100px;}
+.THIS div#plano-total {min-width: 100px;}
+.THIS div#plano-tipo {min-width: 101px;}
+.THIS div#bloco-plano-tipo-480 {display:none;}
+.THIS div#bloco-plano-tipo-580 {display:none;}
+.THIS div#equipamento-title-mobile  {display:none;}
+.THIS div#lista-equipamentos-mobile {display: none;}
+.THIS div#plano-grupo {width: auto;}
+.THIS .plano-equipamento div {display: -webkit-inline-box;padding-right: 10px;}
+.THIS .col-tab-plan-transferencia-detalhes {display:none !important;padding:0px 10px;} 
+.THIS .representante-1270 {display:none !important;}
+.THIS .padding-left-0 {padding-left:0px !important;}
+.THIS span.redTextClaro.uiOutputText {padding-left: 10px !important;color: #D52B1E !important;}
+.THIS .overflow {overflow-x: hidden;}
+.THIS div#bloco-359 {display:none;}
+.THIS button.fechar {float: right;color: #D52B1E;text-decoration: none;border:0px;background:transparent;}
+.THIS button.fechar:hover {text-decoration: none;}
+.THIS .bloco-lista-transfer div:nth-child(1) {width: 120px;}
+.THIS .bloco-lista-transfer div:nth-child(2) {min-width: 380px;padding-right:10px;}
+.THIS .bloco-lista-transfer div:nth-child(3) {width: 170px;}
+.THIS .bloco-lista-transfer div:nth-child(4) {width: 150px;}
+.THIS .bloco-lista-transfer div:nth-child(5) {width: 120px;padding-right:10px;}
+.THIS .bloco-lista-transfer div:nth-child(6) {width: auto;}
+.THIS .bloco-lista-transfer-device div:nth-child(1) {width: 120px;}
+.THIS .bloco-lista-transfer-device div:nth-child(2) {min-width: 380px;padding-right:10px;}
+.THIS .bloco-lista-transfer-device div:nth-child(3) {width: 170px;}
+.THIS .bloco-lista-transfer-device div:nth-child(4) {width: 150px;}
+.THIS .bloco-lista-transfer-device div:nth-child(5) {width: 120px;padding-right:10px;}
+.THIS .bloco-lista-transfer-device div:nth-child(6) {width: auto;}
+.THIS .border-top-0 {border-top:0px;}
+.THIS .bloco-lista-transfer-device.border div {vertical-align: top;}                                                                                                                
+.THIS .bloco-960-mobile {display:none;}
+.THIS .bloco-lista-transfer-novo div:nth-child(1) {min-width: 500px;}
+.THIS .bloco-lista-transfer-novo div:nth-child(2) {width: 170px;}
+.THIS .bloco-lista-transfer-novo div:nth-child(3) {width: 170px;}
+.THIS .bloco-lista-transfer-novo div:nth-child(4) {width: auto;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(1) {min-width: 500px;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(2) {width: 170px;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(3) {width: 170px;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(4) {width: auto;}
+.THIS .bloco-lista-transfer-device-novo.border {width: calc(100% - 10px);border-top:0px;}
+.THIS .bloco-lista-transfer-novo.border {border-top: 0px;border-bottom: 0px;}
+.THIS .bloco-lista-transfer-device-novo:last-child {border-bottom: solid 1px #b3b4b4;}
+.THIS .bloco-lista-transfer-novo.border.bloco-novo-desktop {border-bottom: solid 1px #b3b4b4;}
+.THIS .novo-transferencia-mobile {display:none;}
+.THIS button[id^="headerAparelhosNovo"] {min-height: 44px;}
+.THIS button.accordion {min-height: 44px;}
+.THIS button.accordion2 {min-height: 44px;}
+.THIS .bloco-lista-transfer-portabilidade {width: calc(100% - 10px);}
+.THIS .bloco-lista-transfer-portabilidade div:nth-child(1) {width: 120px;}
+.THIS .bloco-lista-transfer-portabilidade div:nth-child(2) {min-width: 380px;padding-right:10px;}
+.THIS .bloco-lista-transfer-portabilidade div:nth-child(3) {width:auto;min-width:170px;}
+.THIS .bloco-lista-transfer-portabilidade div:nth-child(4) {width: 150px;padding-right:10px;}
+.THIS .bloco-lista-transfer-portabilidade div:nth-child(5) {width: 190px;}
+.THIS .bloco-lista-transfer-device-portabilidade div:nth-child(1) {width: 120px;}
+.THIS .bloco-lista-transfer-device-portabilidade div:nth-child(2) {min-width: 380px;padding-right:10px;}
+.THIS .bloco-lista-transfer-device-portabilidade div:nth-child(3) {width: auto;min-width:170px;}
+.THIS .bloco-lista-transfer-device-portabilidade div:nth-child(4) {width: 150px;padding-right:10px;}
+.THIS .bloco-lista-transfer-device-portabilidade div:nth-child(5) {width: 190px;}
+.THIS .bloco-lista-transfer-device-portabilidade:last-child {border-bottom:solid 1x #b3b4b4;}
+.THIS .bloco-lista-transfer-device-portabilidade {border-top: 0px;}
+.THIS .bloco-lista-transfer-portabilidade.border {border-top: 0px;}                                                                                                                        
+.THIS .bloco-lista-transfer-device-portabilidade div {vertical-align: top;}
+.THIS button.accordion div {padding-right: 10px;}
+.THIS button.accordion2 div {padding-right: 10px;}
+.THIS .associacao-tipo {width:115px;}
+.THIS .associacao-regional {width:115px;}
+.THIS .associacao-uf {width:65px;}
+.THIS .associacao-ddd {width:68px;}
+.THIS .associacao-franquia {width:120px;}
+.THIS .associacao-qtd-linha {width:110px;}
+.THIS .associacao-pendente {width:105px;}
+.THIS .associacao-grupo {width:auto;}   
+.THIS .padding-top-10 {padding-top:10px;}
+.THIS .margin-bottom-10 {margin-bottom: 10px;}   
+.THIS .plano-tipo {width:225px;}
+.THIS .plano-tipo span {line-height: 18px;}
+.THIS .plano-regional  {width:115px;}
+.THIS .plano-uf  {width:65px;}
+.THIS .plano-grupo  {width:auto;}
+.THIS .plano-ld21  {width:120px;}
+.THIS .equipamento-linha {width:120px}
+.THIS .equipamento-equipamento {width:400px;padding-right:10px;}
+.THIS .equipamento-qtd {width:100px}
+.THIS .equipamento-grupo {width:100px}                                                                                                                        
+.THIS .equipamento-pontos {width:120px}
+.THIS .equipamento-faixa {width:120px}
+.THIS .equipamento-valor {width:auto;}
+.THIS .col-pedido-linhas {width:4% !important;float:left;}
+.THIS .col-pedido-servicos {width:7% !important;float:left;}
+.THIS .col-pedido-aparelhos {width:6% !important;float:left;}
+.THIS .col-pedido-equipamentos {width:8% !important;float:left;}
+.THIS .col-pedido-acumulados {width:11% !important;float:left;}
+.THIS .col-pedido-utilizados {width:9% !important;float:left;}
+.THIS .col-pedido-pontos {width:9% !important;float:left;}
+.THIS .col-pedido-pagamentos {width:6% !important;float:left;}
+.THIS .col-pedido-entrega {width:9% !important;float:left;}
+.THIS .col-pedido-tradeinind {width:11% !important;float:left;}
+.THIS .col-pedido-tradeincomp {width:14% !important;float:left;}                                                                                                                                
+.THIS .col-pedido-ld21 {width: calc(6% - 2px) !important;}   
+.THIS .col-pedido-linhas div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-linhas div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-linhas div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-servicos div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-servicos div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-servicos div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-aparelhos div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-aparelhos  div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-aparelhos  div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-equipamentos div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-equipamentos div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-equipamentos div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-acumulados div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-acumulados div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-acumulados div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-utilizados div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-utilizados div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-utilizados div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-pontos div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-pontos div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-pontos div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-pagamentos div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-pagamentos div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-pagamentos div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-entrega div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-entrega div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-entrega div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS .col-pedido-tradeinind div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-tradeinind div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-tradeinind div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;} 
+.THIS .col-pedido-tradeincomp div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-tradeincomp div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-tradeincomp div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}                                                                                                                                 
+.THIS .col-pedido-ld21 div {display:-webkit-box;padding:10px 0px;}
+.THIS .col-pedido-ld21 div:nth-child(1) {color:#009de3;}
+.THIS .col-pedido-ld21 div:nth-child(2) {border-top: solid 1px #b3b4b4;width: 100%;}
+.THIS div.bloco-lista div {vertical-align: top;}  
+.THIS .bloco-device-transfer div {padding-right: 10px;}  
+.THIS .bloco-1100-mobile {display:none !important;}
+.THIS .bloco-1100-mobile-portabilidade {display:none !important;}                                                                                                                  
+.THIS .bloco-1100-mobile-novo {display:none !important;}
+.THIS .bloco-lista-transfer-device-novo.border:lst-child {border-top:solid 1px #b3b4b4;}                                                                                                                         
+.THIS div#secaoRecebedor div.bloco-lista.table-dados:hover {background: rgb(241, 241, 241,0.4);}
+.THIS .bloco-lista-transfer-device:hover {background: rgb(241, 241, 241,0.4);}
+.THIS .bloco-lista-transfer-device-novo:hover {background: rgb(241, 241, 241,0.4);}
+.THIS .bloco-lista-transfer-device-portabilidade:hover {background: rgb(241, 241, 241,0.4);}                                                                                                                                        
+
+@media (max-width: 2300px) {
+.THIS .col-w1024-1, .THIS .col-w1024-15, .THIS .col-w1024-2, .THIS .col-w1024-25, .THIS .col-w1024-3, .THIS .col-w1024-4, .THIS .col-w1024-6 {margin-right: 8px;}
+.THIS .col-w1024-1 {width: calc(10% - 8px);} 
+.THIS .col-w1024-15 {width: calc(15% - 8px);}                                             
+.THIS .col-w1024-2 {width: calc(20% - 8px);} 
+.THIS .col-w1024-25 {width: calc(25% - 8px);}                                             
+.THIS .col-w1024-3 {width: calc(30% - 8px);} 
+.THIS .col-w1024-4 {width: calc(40% - 8px);} 
+.THIS .col-w1024-6 {width: calc(60% - 8px);}                                                                                                                      
+}
+
+
+@media (max-width: 1450px) { 
+.THIS div#razao-social {width: calc(32% - 8px);}                                            
+.THIS div#cnpj {width:calc(18% - 8px);margin-right:8px;}
+.THIS div#inscricao-e {width:calc(15% - 8px);margin-right:8px;}
+.THIS div#inscricao-m {width:calc(15% - 8px);margin-right:8px;}
+.THIS div#funcionarios {width: calc(16% - 8px);}
+.THIS div#tipo {width: calc(21% - 8px);}                                                                    
+.THIS div#vencimento {width: calc(12% - 8px);}                                                                    
+.THIS div#num-contrato {width: calc(15% - 8px);}
+.THIS div#seguimento  {width: calc(16% - 8px);}
+.THIS div#cep {width: calc(8% - 8px);}
+.THIS div#endereco {width: calc(30% - 8px);}
+.THIS div#bairro {width: calc(17% - 8px);}
+.THIS div#cidade {width: calc(17% - 8px);} 
+.THIS div#numero {width: calc(10% - 8px);}
+.THIS div#complemento {width: calc(11% - 8px);}
+.THIS div#uf {width: calc(7% - 8px);}                                                                                                                                                                                               
+}
+                                                                                                                                                                                        
+                                                                                                                                                                                                                                                    
+@media (max-width: 1270px) {
+.THIS .col-tab-nome-completo {width:calc(45% - 10px);padding-right: 10px;}                                                                
+.THIS div#razao-social {width: calc(38% - 8px);}
+.THIS div#cnae-s {width: calc(17% - 8px);}
+.THIS div#cnae-p {width: calc(14% - 8px);}                                                                
+.THIS div#funcionarios {width: calc(21% - 8px);} 
+.THIS div#vencimento {width: calc(20% - 8px);}
+.THIS div#tipo {width: calc(22% - 8px);}
+.THIS div#seguimento {width: calc(20% - 8px);}
+.THIS div#num-contrato {width: calc(21% - 8px);}
+.THIS div#cep {width: calc(10% - 8px);}
+.THIS div#endereco {width: calc(40% - 8px);}                                                                
+.THIS div#numero {width: calc(12% - 8px);}
+.THIS div#complemento {width: calc(13% - 8px);}
+.THIS div#bairro {width: calc(25% - 8px);}
+.THIS div#cidade {width: calc(27% - 8px);}                                                                
+.THIS div#uf {width: calc(10% - 8px);}
+.THIS div#secaoContatosAdministrador .bloco-lista.table-lista {display: none;}
+.THIS .col-adm-nome {display:none !important;}                                                               
+.THIS .col-adm-sexo {display:none !important;}
+.THIS .col-adm-nascimento {display:none !important;}
+.THIS .col-adm-telefone {display:none !important;}
+.THIS .col-adm-celular {display:none !important;}
+.THIS .col-adm-email {display:none !important;}
+.THIS .col-adm-representante {display:none !important;}
+.THIS .col-adm-cargo {display:none !important;}
+.THIS .representante-1270 {display: inline-block !important;width: 100% !important;}
+.THIS .col-adm-nome-dados.representante-1270 div {margin-right: 10px;display: grid;float: left;line-height: 16px;}
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(1) {width: 38%;overflow-x:hidden;}
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(2) {width: 140px;}
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(3) {width: 100px;}
+.THIS .col-adm-nome-dados.representante-1270 div span span {display: grid;}
+.THIS .bloco-lista-transfer div:nth-child(2) {min-width: 380px;padding-right:10px;}
+.THIS .bloco-lista-transfer-device div:nth-child(2) {min-width: 380px;padding-right:10px;}
+}
+
+@media (max-width: 1160px) {
+.THIS .col-pedido-linhas {width:20% !important;}
+.THIS .col-pedido-servicos {width:20% !important;}
+.THIS .col-pedido-aparelhos {width:20% !important;}
+.THIS .col-pedido-equipamentos {width:20% !important;}
+.THIS .col-pedido-acumulados {width:20% !important;}
+.THIS .col-pedido-utilizados {width:20% !important;border-top: solid 1px #b3b4b4;}
+.THIS .col-pedido-pontos {width:20% !important;border-top: solid 1px #b3b4b4;}
+.THIS .col-pedido-pagamentos {width:20% !important;border-top: solid 1px #b3b4b4;}
+.THIS .col-pedido-entrega {width:20% !important;border-top: solid 1px #b3b4b4;}
+.THIS .col-pedido-ld21 {width: calc(20% - 2px) !important;border-top: solid 1px #b3b4b4;} 
+}                                                                                                                                                
+
+@media (max-width: 1130px) {
+.THIS .col-adm-sexo {display:none !important;}
+.THIS .col-adm-nascimento {display:none !important;}
+.THIS .bloco-adm-540 {display:none;}
+.THIS .bloco-adm-768 {display:none;}
+.THIS .bloco-adm-1130 {display:block;}
+.THIS .col-adm-telefone {width: calc(11% - 8px);margin-right:8px;}
+.THIS .col-adm-celular {width: calc(11% - 8px);margin-right:8px;}
+.THIS .col-adm-email {width: calc(45% - 8px);margin-right:8px;}
+.THIS .col-adm-representante {width: calc(19% - 8px);margin-right:8px;}
+.THIS .col-adm-cargo {width: calc(14% - 8px);margin-right:8px;}
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(1) {width: 36%;overflow-x: hidden;}                                                                                                                                                                                                                                                
+}
+@media (max-width: 1100px) {
+.THIS .col-tab-cnpj {width: 110px;}
+.THIS .col-tab-telefone  {width: 110px;}
+.THIS .col-tab-celular  {width: 110px;}
+.THIS .equipamento-equipamento {width:295px}
+.THIS .bloco-novo-desktop {display:none;}
+.THIS .bloco-portabilidade-desktop {display:none;}
+.THIS .bloco-transferencia-desktop {display:none;}
+.THIS .bloco-1100-mobile {display: block!important;width: calc(100% - 10px);border: solid 1px #b3b4b4;line-height: 27px;}
+.THIS .bloco-1100-mobile-portabilidade {display: block!important;width: calc(100% - 10px);border:0px;line-height: 27px;}
+.THIS .bloco-1100-mobile-novo {display: block!important;width: calc(100% - 10px);border:0px;line-height: 27px;}                                                                                                                                                                                                            
+.THIS div.bloco-device-transfer {border-bottom:solid 1px #b3b4b4;width:100%;padding-left: 10px;}
+.THIS div.bloco-device-transfer:last-child {border-bottom:0px;}
+.THIS .bloco-device-transfer div {vertical-align: top;display: grid;float: left;}
+.THIS .transferencia-dado-modelo {width:100%;display: inline-block !important;}
+.THIS .transferencia-dado-cor {width:180px;}
+.THIS .transferencia-dado-outracor {width:250px;}
+.THIS .transferencia-dado-linha {width:110px;}
+.THIS .transferencia-dado-iccid {width:170px;}
+.THIS .transferencia-dado-imei {width:170px;}
+.THIS .transferencia-dado-operadora {width:auto;} 
+.THIS .bloco-lista-transfer-doador {padding:10px;}
+.THIS .associacao-ddd {width: calc(100% - 355px);}  
+.THIS span.sub-title-light {line-height: 20px !important;}
+.THIS .bloco-lista-transfer-device-portabilidade.border {width: 100%;padding: 0px 10px;}                                                                                                                                                              
+.THIS .portabilidade-dado-modelo {width:270px;}
+.THIS .portabilidade-dado-cor {width:180px;}
+.THIS .portabilidade-dado-outracor {width:250px;}
+.THIS .portabilidade-dado-linha {width:110px;}
+.THIS .portabilidade-dado-iccid {width:170px;}
+.THIS .portabilidade-dado-imei {width:170px;}
+
+.THIS .bloco-lista-transfer-device-novo-mobile.border {width: 100%;}
+                                                                                                                                                                                                                    
+.THIS .novo-dado-modelo {width:270px !important;display: grid !important;padding-right:10px;}
+.THIS .novo-dado-cor {width:180px;}
+.THIS .novo-dado-outracor {width:270px;}
+.THIS .novo-dado-linha {width:110px;}
+.THIS .novo-dado-iccid {width:170px;}
+.THIS .novo-dado-imei {width:170px;}
+                                                                                                                                                                                                                    
+.THIS .bloco-lista-transfer-device-portabilidade-mobile.border {border-bottom: 0px;padding:0px 10px;}
+.THIS .bloco-lista-transfer-device-portabilidade-mobile.border:last-child  {border-bottom: solid 1px #b3b4b4;}
+.THIS .bloco-lista-transfer-device-portabilidade-mobile.border:first-child  {border-top: 0px;}
+.THIS .bloco-lista-transfer-device-portabilidade-mobile.border div {display: grid;float: left;min-height:54px;line-height:16px;padding-top:5px;}
+
+.THIS .bloco-lista-transfer-device-novo-mobile.border {border-bottom: 0px;padding:0px 10px;}
+.THIS .bloco-lista-transfer-device-novo-mobile.border:last-child  {border-bottom: solid 1px #b3b4b4;}
+.THIS .bloco-lista-transfer-device-novo-mobile.border:first-child  {border-top: 0px;}
+.THIS .bloco-lista-transfer-device-novo-mobile.border div {display: grid;float: left;min-height:54px;line-height:16px;padding-top:5px;}
+.THIS .associacao-tipo {width:120px;}
+.THIS .associacao-qtd-linha {width:120px;}
+.THIS .associacao-uf {width:115px;}
+.THIS .associacao-regional {width: 120px;}
+.THIS .associacao-pendente {width: 114px;}
+}
+                                                            
+@media (max-width: 1023px) {
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(1) {width: 43%;overflow-x: hidden;}
+.THIS .none-mobile {display: none;}
+.THIS .mobile-contatos-administrador div.col-tab-empresa {width: 64%;display: inline-block;padding-bottom: 7px;}
+.THIS .mobile-contatos-administrador div.col-tab-cnpj {width: 34%;    display: inline-block;padding-bottom: 7px;}
+.THIS .mobile-contatos-administrador div.col-tab-contato {width: 64%;display: inline-block;padding-right: 10px;}
+.THIS .mobile-contatos-administrador div.col-tab-telefone {max-width: 110px;display: inline-block;}
+.THIS .mobile-contatos-administrador div.col-tab-celular {max-width: 110px;display: inline-block;}
+.THIS .title-mobile {display: -webkit-box;width: 100%;font-size: 11px;color: #939393;}
+.THIS .slds-modal {z-index:99999;}
+.THIS div#razao-social {width: calc(52% - 8px);}
+.THIS div#cnpj {width: calc(23% - 8px);}
+.THIS div#inscricao-e {width: calc(25% - 8px);}
+.THIS div#inscricao-m {width: calc(20% - 8px);}
+.THIS div#cnae-p {width: calc(20% - 8px);}
+.THIS div#cnae-s {width: calc(20% - 8px);}
+.THIS div#funcionarios {width: calc(40% - 8px);}
+.THIS div#tipo {width: calc(30% - 8px);}
+.THIS div#vencimento {width: calc(30% - 8px);}
+.THIS div#seguimento {width: calc(40% - 8px);}
+.THIS div#possui-servicos {width: calc(30% - 8px);}
+.THIS div#num-contrato {width: calc(30% - 8px);}
+.THIS div#cep {width: calc(20% - 8px);}
+.THIS div#endereco {width: calc(60% - 8px);}
+.THIS div#numero {width: calc(20% - 8px);}
+.THIS div#complemento {width: calc(20% - 8px);}
+.THIS div#bairro {width: calc(40% - 8px);}
+.THIS div#cidade {width: calc(40% - 8px);}
+.THIS div#uf {width: calc(20% - 8px);}
+.THIS .col-tab-nome-completo {width:calc(100% - 330px);padding-right: 10px;}
+.THIS .plano-equipamento {width: calc(100% - 160px);line-height: 20px;padding-top: 9px;}
+.THIS .col-tab-plan-value.qtd {min-width: 80px;}
+.THIS .col-tab-plan-value.linha {width: 145px;padding-left:10px;}
+.THIS .col-tab-plan-value.pontos {min-width: 85px;}
+.THIS .col-tab-plan-value.faixa {min-width: 80px;}
+.THIS div[id^="secaoEquipamentos"] .col-tab-plan-value:last-child {line-height: 24px;}                                                                                                                      
+}
+
+@media (max-width: 960px) { 
+.THIS .bloco-adm-768 {display:block;width:100%;}
+.THIS .col-adm-telefone {display:none !important;}
+.THIS .col-adm-celular {display:none !important;}
+.THIS .col-adm-email {display:none !important;}
+.THIS .col-adm-representante {width: calc(50% - 8px);margin-right:8px;}
+.THIS .col-adm-cargo {width: calc(50% - 8px);margin-right:8px;}
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(1) {width: 50%;overflow-x: hidden;}
+.THIS .bloco-960-mobile {display: block!important;width: calc(100% - 10px);border: solid 1px #b3b4b4;line-height: 27px;}
+}
+
+@media (max-width: 850px) {
+.THIS .novo-transferencia-mobile {display:block;}
+.THIS .transferencia-iccid-novo {display:none;}
+.THIS .transferencia-imei-novo {display:none;}
+.THIS .iccid-novo {display:none;}
+.THIS .imei-novo {display:none;}
+.THIS .cor-novo {display:none;}
+.THIS .outracor-novo {display:none;}
+.THIS .bloco-lista-transfer-device-novo div {vertical-align: top;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(2) div {width: auto;min-width: auto;padding-right:10px;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(2) {width: 100%;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(1) {width: 100%;}
+
+}
+
+@media (max-width: 767px) { 
+.THIS div#razao-social {width: calc(70% - 8px);}
+.THIS div#cnpj {width: calc(30% - 8px);}
+.THIS div#inscricao-e {width: calc(25% - 8px);}
+.THIS div#inscricao-m {width: calc(25% - 8px);}
+.THIS div#cnae-p {width: calc(25% - 8px);}
+.THIS div#cnae-s {width: calc(25% - 8px);}
+.THIS div#tipo {width: calc(50% - 8px);}                                                                
+.THIS div#funcionarios {width: calc(50% - 8px);}
+.THIS .bloco-resumo-767 {display:block;}
+.THIS #bloco-pontos  {display:block;}
+.THIS .col-tab-plan-transferencia-detalhes {display:block !important;}
+.THIS div#transferencia-iccid {display:none !important;}
+.THIS div#transferencia-imei {display:none !important;}
+.THIS div#transferencia-cor {display:none !important;}
+.THIS div#transferencia-outra-cor {display:none !important;}
+.THIS .col-tab-plan-equipamento {width:100%;}
+.THIS button#headerAparelhosNovo {margin-top: 3px;}
+.THIS .novo-transferencia-mobile {display: none !Important;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(1) {width:auto;min-width:auto;padding-right:10px;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(2) {width:auto;min-width:auto;padding-right:10px;}
+.THIS div#lista-equipamentos {display: none;}
+.THIS div#bloco-equipamento-desktop {display: none;}
+.THIS div#lista-equipamentos-mobile {display: block;}
+.THIS div#lista-equipamentos-mobile .col-tab-plan-equipamento {width: 100%;}
+.THIS div#lista-equipamentos-mobile .col-tab-plan-value.qtd {padding-left: 10px;height: 24px;width:80px;}
+.THIS div#lista-equipamentos-mobile #device-valor-mobile {width: 100px;}
+}
+@media (max-width: 700px) { 
+.THIS .col-pedido-linhas {width:23% !important;}
+.THIS .col-pedido-servicos {width:20% !important;}
+.THIS .col-pedido-aparelhos {width:15% !important;}
+.THIS .col-pedido-equipamentos {width:20% !important;}
+.THIS .col-pedido-acumulados {width:calc(22% - 2px) !important;}
+.THIS .col-pedido-utilizados {width:23% !important;}
+.THIS .col-pedido-pontos {width:20% !important;}
+.THIS .col-pedido-pagamentos {width:15% !important;}
+.THIS .col-pedido-entrega {width:20% !important;}
+.THIS .col-pedido-ld21 {width: calc(22% - 2px) !important;}                                                                                                                                                                                                                        
+}
+@media (max-width: 640px) { 
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(1) {width: calc(100% - 160px);overflow-x: hidden;}
+.THIS div#endereco {width: calc(80% - 8px);}
+.THIS div#complemento {width: calc(30% - 8px);}
+.THIS div#bairro {width: calc(50% - 8px);}
+.THIS div#cidade {width: calc(50% - 8px);}
+.THIS .col-tab-nome-completo {display: none;}
+.THIS .col-tab-cnpj {display: none;}
+.THIS .col-tab-telefone {display: none;}                                                                        
+.THIS .col-tab-celular {display: none;}
+.THIS .col-tab-nome-completo {width: 100%;padding-right: 0px;}
+.THIS .bloco-recebedor {display:-webkit-inline-box;} 
+.THIS .bloco-lista-transfer-device-novo div:nth-child(3) {width:auto;}                                                                       
+.THIS .col-pedido-linhas {width:28% !important;}
+.THIS .col-pedido-servicos {width:25% !important;}
+.THIS .col-pedido-aparelhos {width:25% !important;}
+.THIS .col-pedido-equipamentos {width:calc(22% - 2px) !important;}
+.THIS .col-pedido-acumulados {width:28% !important;border-top:solid 1px #b3b4b4;}
+.THIS .col-pedido-utilizados {width:25% !important;}
+.THIS .col-pedido-pontos {width:25% !important;}
+.THIS .col-pedido-pagamentos {width:calc(22% - 2px) !important;}
+.THIS .col-pedido-entrega {width:28% !important;}
+.THIS .col-pedido-ld21 {width: 72% !important;}                                                                                                                                                                                                                        
+}
+
+@media (max-width: 600px) { 
+.THIS .equipamento-lista-regional {display:none !Important;}
+.THIS .equipamento-lista-uf {display:none !Important;}
+.THIS .equipamento-lista-grupo {display:none !Important;}
+}                                                                                                                                                                                                                                    
+@media (max-width: 580px) { 
+.THIS .bloco-lista-transfer-device-portabilidade-mobile.border div {min-height: 25px !important;}
+.THIS .bloco-lista-transfer-device-novo-mobile.border div {display: grid;float: left;min-height:25px;line-height:16px;padding-top:5px;}
+.THIS .bloco-lista-transfer-device-portabilidade-mobile.border div {display: grid;float: left;min-height:25px;line-height:16px;padding-top:5px;}
+.THIS div#bloco-plano-tipo-1024 {display:none !important;}                                                                                                                                                                                                                                
+.THIS div#bloco-plano-tipo-580 {display:inline-block;width: calc(100% - 8px) !important;padding-left:20px;}
+.THIS div#bloco-plano-tipo-580 div {padding-right: 10px;padding-bottom: 7px;}
+.THIS div#razao-social {width: calc(100% - 8px);}
+.THIS div#cnpj {width: calc(33% - 8px);}
+.THIS div#inscricao-e {width: calc(33% - 8px);}
+.THIS div#inscricao-m {width: calc(34% - 8px);}
+.THIS div#cnae-p {width: calc(50% - 8px);}
+.THIS div#cnae-s {width: calc(50% - 8px);}
+.THIS div#seguimento {width: calc(50% - 8px);}
+.THIS div#possui-servicos {width: calc(50% - 8px);}
+.THIS div#num-contrato {width: calc(50% - 8px);}
+.THIS div#vencimento {width: calc(50% - 8px);}
+.THIS .plano-tipo {width: 100%;}
+.THIS .associacao-tipo {width:100%;}
+.THIS div[class^="associacao"] span.legenda {line-height: 22px;}
+.THIS .associacao-ddd {width: calc(100% - 250px);}
+.THIS .bloco-device-transfer div {vertical-align: top;display: inline-block !important;float: left;}
+.THIS .portabilidade-dado-modelo {display: -webkit-inline-box !important;}
+.THIS .portabilidade-dado-cor {display: -webkit-inline-box !important;}
+.THIS .portabilidade-dado-outracor {display: -webkit-inline-box !important;}
+.THIS .portabilidade-dado-linha {display: -webkit-inline-box !important;width:145px;}
+.THIS .portabilidade-dado-operadora {display: -webkit-inline-box !important;}
+.THIS .portabilidade-dado-iccid {display: -webkit-inline-box !important;}
+.THIS .portabilidade-dado-imei {display: -webkit-inline-box !important;}
+.THIS .novo-dado-modelo {display: -webkit-inline-box !important;}
+.THIS .novo-dado-cor {display: -webkit-inline-box !important;}
+.THIS .novo-dado-outracor {display: -webkit-inline-box !important;}
+.THIS .novo-dado-iccid {display: -webkit-inline-box !important;}
+.THIS .novo-dado-imei {display: -webkit-inline-box !important;}
+.THIS .transferencia-dado-iccid {display: -webkit-inline-box !important;}
+.THIS .transferencia-dado-linha {display: -webkit-inline-box !important;width:145px;}
+.THIS .transferencia-dado-iccid {width: 250px;}
+.THIS .novo-dado-modelo {width:100% !important;}
+.THIS .associacao-uf {width: 120px;}
+
+}
+
+@media (max-width: 540px) { 
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(5) {width: 100%;padding-bottom: 10px;}
+.THIS .col-adm-nome-dados.representante-1270 div span span {display: grid;padding-bottom: 0px;}
+.THIS .bloco-adm-540 {display:block;width:100%;}
+.THIS .col-adm-representante {display:none !important;}
+.THIS .col-adm-cargo {display:none !important;}
+.THIS div#plano-uf {max-width: 35px;}
+.THIS div#plano-grupo {max-width: 45px;}
+
+.THIS .col-pedido-linhas {width:33% !important;}
+.THIS .col-pedido-servicos {width:33% !important;}
+.THIS .col-pedido-aparelhos {width:calc(34% - 2px) !important;}
+
+.THIS .col-pedido-equipamentos {width:33% !important;border-top:solid 1px #b3b4b4;}
+.THIS .col-pedido-acumulados {width:33% !important;border-top:solid 1px #b3b4b4;}
+.THIS .col-pedido-utilizados {width:calc(34% - 2px) !important;}
+
+.THIS .col-pedido-pontos {width:33% !important;}
+.THIS .col-pedido-pagamentos {width: 33% !important;}
+.THIS .col-pedido-entrega {width:calc(34% - 2px) !important;}
+
+.THIS .col-pedido-ld21 {width: 100% !important;}                                                                                                                                                                                                                                
+
+}
+                           
+@media (max-width: 480px) { 
+.THIS .col-adm-nome-dados.representante-1270 div:nth-child(1) {width: 100%;overflow-x: hidden;}
+.THIS div#inscricao-e {width: calc(50% - 8px);}
+.THIS div#inscricao-m {width: calc(50% - 8px);}
+.THIS div#endereco {width: calc(100% - 8px);}
+.THIS div#cep {width: calc(100% - 8px);}
+.THIS div#cnpj {width: calc(100% - 8px);}
+.THIS div#vencimento {width: calc(50% - 8px);}
+.THIS div#possui-servicos {width: calc(50% - 8px);}
+.THIS div#num-contrato {width: calc(50% - 8px);}
+.THIS div#bloco-plano-tipo-480 {display:inline-block;width: calc(100% - 8px) !important;}
+.THIS div#bloco-plano-tipo-480 div {padding-right:10px;}
+.THIS #lista-equipamentos-mobile #device-valor-mobile {width: 100%!important;text-align: left;border-bottom: solid 2px #009de3;padding-left: 10px;margin-top: 1px;margin-bottom: 5px;}
+.THIS .valor-equipamento {padding: 10px;width: 100%;text-align: left;float: right;border-top: 0px;}
+.THIS .plano-equipamento {width:100%;}
+.THIS div#device-valor-mobile span span::before {content: "Valor: ";}
+.THIS .col-tab-plan-equipamento span {font-weight: 600;color: #1f577b;}
+.THIS .plano-tipo span {line-height: 25px;}
+.THIS .associacao-ddd {width: 70PX;}
+}
+                                 
+@media (max-width: 440px) { 
+.THIS div#bairro {width: calc(100% - 8px);}
+.THIS div#numero {width: calc(50% - 8px);}
+.THIS div#complemento {width: calc(50% - 8px);}
+.THIS div#cidade {width: calc(100% - 8px);}
+.THIS div#uf {width: calc(50% - 8px);}  
+.THIS .plano-equipamento {width: 100%;line-height: 20px;padding-top: 9px;}
+.THIS .bloco {width: 100%;display: block;} 
+.THIS .bloco-device-transfer div {padding-right: 10px;}
+.THIS .pedido-aparelhos {border-top: solid 1px #b3b4b4 !important;}
+.THIS .col-pedido-linhas 		{width:50% !important;}
+.THIS .col-pedido-servicos  		{width:50% !important;}
+.THIS .col-pedido-aparelhos 		{width:50% !important;border-top: solid 1px #b3b4b4;}
+.THIS .col-pedido-equipamentos  	{width:50% !important;}
+.THIS .col-pedido-acumulados  		{width:50% !important;}
+.THIS .col-pedido-utilizados  		{width:50% !important;}
+.THIS .col-pedido-pontos  			{width:50% !important;}
+.THIS .col-pedido-pagamentos  		{width:50% !important;}
+.THIS .col-pedido-entrega  			{width:50% !important;}
+.THIS .col-pedido-ld21  			{width:50% !important;}                                                          
+.THIS .bloco-lista-pedido {padding-bottom:10px;}
+.THIS .transferencia-dado-modelo {line-height: 16px;padding-top: 10px;}
+}
+                                                                                                                                                                                                        
+@media (max-width: 410px) { 
+.THIS div#funcionarios {width: calc(100% - 8px);}
+.THIS div#tipo {width: calc(100% - 8px);}                                                                
+.THIS div#inscricao-e {width: calc(50% - 8px);}
+.THIS div#inscricao-m {width: calc(50% - 8px);}
+.THIS div#cnae-p {width: calc(50% - 8px);}
+.THIS div#cnae-s {width: calc(50% - 8px);}
+.THIS div#seguimento {width: calc(100% - 8px);}
+.THIS div#possui-servicos {width: calc(100% - 8px);}
+.THIS div#vencimento {width: calc(100% - 8px);}
+.THIS div#num-contrato {width: calc(100% - 8px);}
+.THIS .bloco-lista-transfer-novo div:nth-child(1) {min-width:100%;}
+.THIS button.accordion2 span.sub-title {line-height: 18px;}
+.THIS button.accordion span.sub-title {line-height: 18px;}
+.THIS .col-tab-plan-value.linha {width: 100%;padding-left: 10px;}
+.THIS .associacao-pendente {width: 120px;}
+}
+                                                                                                                                                                                                                                                                                                                    
+@media (max-width: 374px) {
+.THIS .col-tab-plan-value.faixa div {display: grid;}
+.THIS div#device-valor-mobile {margin-top: 22px;}
+.THIS span.title-table {padding-right: 5px !important;}
+.THIS span.bloco-100.title-section {font-size: 13px;}
+
+}
+
+@media (max-width: 359px) {
+.THIS div#bloco-360 {display:none !important;}
+.THIS div#bloco-359 {display:block !important;border-bottom: 0px !important}
+.THIS span.sub-title-ddd {font-size: 12px !important;}
+}
+
+@media (max-width: 340px) {
+.THIS .bloco {width:100%;display: contents;}
+.THIS div#inscricao-e {width: calc(100% - 8px);}
+.THIS div#inscricao-m {width: calc(100% - 8px);}
+.THIS div#cnae-p {width: calc(100% - 8px);}
+.THIS div#cnae-s {width: calc(100% - 8px);}
+.THIS div#numero {width: calc(100% - 8px);}
+.THIS div#complemento {width: calc(100% - 8px);}
+.THIS div#uf {width: calc(100% - 8px);} 
+.THIS .bloco-lista-transfer-device-novo.border {border-bottom: 0;}
+.THIS .bloco-lista-transfer-device-novo:last-child {border-bottom: solid 1px #b3b4b4 !important;}
+.THIS .bloco-lista-transfer-device-novo div:nth-child(1) {padding-right: 10px;}
+.THIS span.sub-title {font-size: 12px !important;}
+}

@@ -1,0 +1,67 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+
+	<aura:attribute type="Object" name="produtoAtual" />
+	<aura:attribute type="Object" name="oferta1" />
+	<aura:attribute type="Object" name="oferta2" />
+	<aura:attribute type="Object" name="oferta3" /> 
+	<aura:attribute type="Object" name="ofertaSelecionada" />
+	<aura:attribute type="Object" name="feesExemptions" />
+	<aura:attribute type="Object" name="lstIsencaoTaxa" />
+	<aura:attribute type="Boolean"  name="disabledTaxas" />
+	<aura:attribute type="Boolean" name="showFeesExemptions" default="false" />
+	<aura:attribute type="Boolean" name="showFeesExemptionButton" default="true" />
+	
+	<!-- BOTÃO ISENÇÃO DE TAXAS -->
+	<aura:if isTrue="{! v.showFeesExemptionButton }">
+		<div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+			<!--<div class="slds-col slds-size_3-of-12 box-oferta"></div> -->
+			<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable' +( v.disabledTaxas ? ' disableSection' : ' ') }" Style="margin-left: 0.5rem;" 
+             onclick="{! c.incluirIsencaoTaxas }"></div>
+			<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable' +( v.disabledTaxas ? ' disableSection' : ' ') }" 
+				onclick="{! c.incluirIsencaoTaxas }">{! $Label.c.ISENCAO_DE_TAXAS }</div>
+			<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable' +( v.disabledTaxas ? ' disableSection' : ' ') }" 
+				onclick="{! c.incluirIsencaoTaxas }">
+				<div class="down-arrow alim-icon-add">
+					<!-- <lightning:icon iconName="utility:down" size="x-small" alternativeText="Detalhar" /> -->
+				</div>
+			</div>
+		</div>
+
+		<!-- MODAL ISENÇÃO DE TAXAS -->
+		<aura:if isTrue="{! v.showFeesExemptions }">
+			<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+				aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+				<div class="slds-modal__container">
+					<header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+						<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+							title="Close" onclick="{! c.closeFeesExemption }">
+							<lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+							<span class="slds-assistive-text">Close</span>
+						</button>
+						<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!
+							$Label.c.ISENCAO_DE_TAXAS }</h2>
+					</header>
+
+					<div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+						<div class="slds-grid slds-grid_vertical-align-center">
+							<div class="slds-col">
+								<aura:iteration items="{! v.lstIsencaoTaxa }" var="taxa" indexVar="index">
+									<div style="display:-webkit-box">
+										<lightning:input type="checkbox" checked="{! taxa.checked }"/> {!taxa.label }
+									</div>	
+								</aura:iteration>
+								
+							</div>
+						</div>
+					</div>
+
+					<footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+						<button class="slds-button slds-button_brand"
+							onclick="{! c.updateFeesExemptions }">Atualizar</button>
+					</footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</aura:if>
+	</aura:if>
+</aura:component>

@@ -1,0 +1,57 @@
+<template>
+    <lightning-card>
+        <div class="slds-p-horizontal_large">
+            <lightning-button label="Ver todas as notícias" title="Ver todas as notícias" onclick={navigateToListView} class=""></lightning-button>
+        </div>
+        <div class="slds-p-horizontal_small">
+            <ul class="">
+                <template for:each={obj} for:item="art">
+                    <li key={art.articleId} class="bottomLineList slds-p-horizontal_small slds-border_bottom" > 
+                        <a class="slds-p-around_small" >
+                            <h2><span class="slds-text-heading_small slds-m-bottom_small"><strong onclick={navigateToArticle} title={art.articleId} class="slds-text-color_default slds-text-body--small">{art.dataUltimaPubli}</strong></span></h2>
+                            <ul class=" itemRows">
+                                <li class="tableRowGroup slds-p-bottom_xx-small">
+                                    <div class="slds-list--horizontal forceListRecordItem">
+                                        <div class="recordCell slds-text-heading_medium"><strong class="slds-text-color_destructive" onclick={navigateToArticle} title={art.articleId}>{art.titulo}</strong></div>
+                                    </div>
+                                </li>
+                                <li class="tableRowGroup slds-text-color_default">
+                                    <div class="slds-list--horizontal forceListRecordItem">
+                                        <div class="slds-item--label slds-truncate recordCell" onclick={navigateToArticle} title={art.articleId}>Resumo:</div>
+                                        <div class="slds-item--detail slds-truncate recordCell"><span class="uiOutputText slds-line-clamp_x-small" onclick={navigateToArticle} title={art.articleId}>{art.resumo}</span></div>
+                                    </div>
+                                </li>                                    
+                                <li class="tableRowGroup slds-text-color_default">
+                                    <div class="slds-list--horizontal forceListRecordItem">
+                                        <div class="slds-item--label slds-truncate recordCell" onclick={navigateToArticle} title={art.articleId}>Categoria:</div>
+                                        <div class="slds-item--detail slds-truncate recordCell"><span class="uiOutputText" onclick={navigateToArticle} title={art.articleId}>{art.categorias}</span></div>
+                                    </div>
+                                </li>                                    
+                                <li class="tableRowGroup slds-text-color_default">
+                                    <div class="slds-list--horizontal forceListRecordItem">
+                                        <div class="slds-item--label slds-truncate recordCell" onclick={navigateToArticle} title={art.articleId}>Tema:</div>
+                                        <div class="slds-item--detail slds-truncate recordCell"><span  class="uiOutputText" onclick={navigateToArticle} title={art.articleId}>{art.tema}</span></div>
+                                    </div>
+                                </li>                                  
+                                <li class="tableRowGroup slds-text-color_default">
+                                    <div class="slds-list--horizontal forceListRecordItem">
+                                        <div class="slds-item--label slds-truncate recordCell" onclick={navigateToArticle} title={art.articleId}>Tipo de apoio:</div>
+                                        <div class="slds-item--detail slds-truncate recordCell"><span class="uiOutputText" onclick={navigateToArticle} title={art.articleId}>{art.tipoDeApoio}</span></div>
+                                    </div>
+                                </li>                                  
+                            </ul>
+                        </a>         
+                    </li>
+                </template>
+            </ul>
+        </div>
+        <div slot="footer">
+            <lightning-button variant="base" label="Ver mais" title="Looks like a link" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+        </div>
+        <template if:true={isLoading}>
+            <div>
+                <lightning-spinner alternative-text="loading"></lightning-spinner>
+            </div>
+        </template>
+    </lightning-card>
+</template>

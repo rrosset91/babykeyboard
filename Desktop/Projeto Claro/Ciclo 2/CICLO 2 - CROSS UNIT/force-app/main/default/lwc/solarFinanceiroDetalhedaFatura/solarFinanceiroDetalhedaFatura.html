@@ -1,0 +1,55 @@
+<!--
+  @description       : 
+  @author            : Diego Almeida
+  @group             : IBM
+  @last modified on  : 03-11-2020
+  @last modified by  : Diego Almeida
+  Modifications Log 
+  Ver   Date         Author          Modification
+  1.0   27-10-2020   Diego Almeida   Initial Version
+-->
+<template>
+    <header>
+		<h3 class="header-text">Selecione os itens da fatura para contestação.</h3>
+    </header>
+    <div style="padding-top: 25px">
+		<template if:true={hasError}>
+			<c-solar-exception-content show-error="true"></c-solar-exception-content>
+		</template>
+		<template if:false={hasError}>
+			<template if:true={hasData}>				
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections} class="accordion">                   
+					<lightning-accordion-section name="accordionMobile" label="Celular">
+						<div class="slds-p-around_medium lgc-bg">
+							<lightning-tree-grid
+								columns={data.gridColumns}
+								data={data.gridMobile}
+								expanded-rows={gridExpandedRows}
+								key-field="lineId"
+								onrowaction={handleRowAction}
+							></lightning-tree-grid>
+						</div>
+					</lightning-accordion-section>
+				</lightning-accordion>
+			</template>
+			<template if:false={hasData}>
+				<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+			</template>
+		</template>
+	</div>
+
+	<footer>
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex">
+				<lightning-button variant="brand-outline" label="Voltar" class="slds-m-left_x-small" onclick={handleVoltar}></lightning-button>
+            </div>
+            <template if:false={hasError}>
+                <div style="width: 50%; justify-content: flex-end; display: flex">
+                    <lightning-button variant="brand-outline" label="Visualizar Fatura Visão Cliente" class="slds-m-left_x-small" onclick={handleOpenPDF}></lightning-button>
+                    <lightning-button variant="brand" label="Continuar para contestação" onclick={handleContestation} class="slds-m-left_x-small" disabled={disableContestacao}></lightning-button>
+                </div>
+            </template>
+		</div>
+	</footer>
+
+</template>

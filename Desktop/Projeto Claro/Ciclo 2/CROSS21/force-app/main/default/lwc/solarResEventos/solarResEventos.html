@@ -1,0 +1,750 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 15-12-2020
+  @last modified by  : Roger Rosset
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   06-11-2020   Joao Neves   Initial Version
+-->
+<template>
+	<lightning-spinner if:true={isLoading} alternative-text="Carregando..." size="large"> </lightning-spinner>
+
+	<header>
+		<h3 class="header-text">Histórico de eventos.</h3>
+		<div style="padding-top: 5px">
+			<c-solar-filtros onfilterchange={handleFilterNotification} hide-products="true" hide-status="true"> </c-solar-filtros>
+		</div>
+	</header>
+
+	<div style="padding-top: 25px">
+		<lightning-accordion allow-multiple-sections-open onsectiontoggle={toggleSection} active-section-name={alreadyOpenedAccordions}>
+			<lightning-accordion-section name="comprasCancelamentos" label="Cancelamentos em andamento ou executados">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.comprasCancelamentos}
+					sorted-by={sortedBy.comprasCancelamentos}
+					sorted-direction={sortedDirection.comprasCancelamentos}
+					onsort={handleSortComprasCancelamentos}
+					columns={columns.general}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.comprasCancelamentos.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.comprasCancelamentos.hasError}
+					show-empty={calloutProps.comprasCancelamentos.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="comprasMovimentacoes" label="Compras/ Movimentações de Produtos e Serviços">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.comprasMovimentacoes}
+					sorted-by={sortedBy.comprasMovimentacoes}
+					sorted-direction={sortedDirection.comprasMovimentacoes}
+					onsort={handleSortComprasMovimentacoes}
+					columns={columns.general}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.comprasMovimentacoes.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.comprasMovimentacoes.hasError}
+					show-empty={calloutProps.comprasMovimentacoes.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="eventosTecnicos" label="Eventos Técnicos / Serviços">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.eventosTecnicos}
+					sorted-by={sortedBy.eventosTecnicos}
+					sorted-direction={sortedDirection.eventosTecnicos}
+					onsort={handleSortEventosTecnicos}
+					columns={columns.general}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.eventosTecnicos.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.eventosTecnicos.hasError} show-empty={calloutProps.eventosTecnicos.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="lancamentosManuais" label="Lançamentos Manuais">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.lancamentosManuais}
+					sorted-by={sortedBy.lancamentosManuais}
+					sorted-direction={sortedDirection.lancamentosManuais}
+					onsort={handleSortLancamentosManuais}
+					columns={columns.history}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.lancamentosManuais.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.lancamentosManuais.hasError} show-empty={calloutProps.lancamentosManuais.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ocorrenciasAcompanhamentos" label="Ocorrências - Acompanhamento Chamados">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ocorrenciasAcompanhamentos}
+					sorted-by={sortedBy.ocorrenciasAcompanhamentos}
+					sorted-direction={sortedDirection.ocorrenciasAcompanhamentos}
+					onsort={handleSortOcorrenciasAcompanhamentos}
+					columns={columns.ocurrence}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ocorrenciasAcompanhamentos.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.ocorrenciasAcompanhamentos.hasError}
+					show-empty={calloutProps.ocorrenciasAcompanhamentos.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ocorrenciasFinanceiras" label="Ocorrências - Financeiras">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ocorrenciasFinanceiras}
+					sorted-by={sortedBy.ocorrenciasFinanceiras}
+					sorted-direction={sortedDirection.ocorrenciasFinanceiras}
+					onsort={handleSortOcorrenciasFinanceiras}
+					columns={columns.ocurrence}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ocorrenciasFinanceiras.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.ocorrenciasFinanceiras.hasError}
+					show-empty={calloutProps.ocorrenciasFinanceiras.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ocorrenciasCancelamento" label="Ocorrências - Intenção de Cancelamento">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ocorrenciasCancelamento}
+					sorted-by={sortedBy.ocorrenciasCancelamento}
+					sorted-direction={sortedDirection.ocorrenciasCancelamento}
+					onsort={handleSortOcorrenciasCancelamento}
+					columns={columns.ocurrence}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ocorrenciasCancelamento.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.ocorrenciasCancelamento.hasError}
+					show-empty={calloutProps.ocorrenciasCancelamento.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ocorrenciasServicos" label="Ocorrências - Serviços">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ocorrenciasServicos}
+					sorted-by={sortedBy.ocorrenciasServicos}
+					sorted-direction={sortedDirection.ocorrenciasServicos}
+					onsort={handleSortOcorrenciasServicos}
+					columns={columns.ocurrence}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ocorrenciasServicos.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.ocorrenciasServicos.hasError}
+					show-empty={calloutProps.ocorrenciasServicos.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ocorrenciasSolicitacoes" label="Ocorrências - Solicitações">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ocorrenciasSolicitacoes}
+					sorted-by={sortedBy.ocorrenciasSolicitacoes}
+					sorted-direction={sortedDirection.ocorrenciasSolicitacoes}
+					onsort={handleSortOcorrenciasSolicitacoes}
+					columns={columns.ocurrence}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ocorrenciasSolicitacoes.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content
+					show-error={calloutProps.ocorrenciasSolicitacoes.hasError}
+					show-empty={calloutProps.ocorrenciasSolicitacoes.emptyData}
+				></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ocorrenciasOutras" label="Ocorrências - Outras">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ocorrenciasOutras}
+					sorted-by={sortedBy.ocorrenciasOutras}
+					sorted-direction={sortedDirection.ocorrenciasOutras}
+					onsort={handleSortOcorrenciasOutras}
+					columns={columns.ocurrence}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ocorrenciasOutras.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.ocorrenciasOutras.hasError} show-empty={calloutProps.ocorrenciasOutras.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ofertaContratada" label="Oferta Contratada">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ofertaContratada}
+					sorted-by={sortedBy.ofertaContratada}
+					sorted-direction={sortedDirection.ofertaContratada}
+					onsort={handleSortOfertaContratada}
+					columns={columns.newProducts}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ofertaContratada.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.ofertaContratada.hasError} show-empty={calloutProps.ofertaContratada.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="outage" label="Outage">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.outage}
+					sorted-by={sortedBy.outage}
+					sorted-direction={sortedDirection.outage}
+					onsort={handleSortOutage}
+					columns={columns.outage}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.outage.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.outage.hasError} show-empty={calloutProps.outage.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="ppv" label="PPV">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.ppv}
+					sorted-by={sortedBy.ppv}
+					sorted-direction={sortedDirection.ppv}
+					onsort={handleSortPpv}
+					columns={columns.ppv}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.ppv.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.ppv.hasError} show-empty={calloutProps.ppv.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="reajusteAnual" label="Reajuste Anual">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.reajusteAnual}
+					sorted-by={sortedBy.reajusteAnual}
+					sorted-direction={sortedDirection.reajusteAnual}
+					onsort={handleSortReajusteAnual}
+					columns={columns.adjustment}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.reajusteAnual.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.reajusteAnual.hasError} show-empty={calloutProps.reajusteAnual.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+
+			<lightning-accordion-section name="taxasTecnicas" label="Taxas Técnicas">
+				<lightning-datatable
+					key-field="requestID"
+					data={eventsValues.taxasTecnicas}
+					sorted-by={sortedBy.taxasTecnicas}
+					sorted-direction={sortedDirection.taxasTecnicas}
+					onsort={handleSortTaxasTecnicas}
+					columns={columns.fees}
+					resize-column-disabled="true"
+					max-row-selection="1"
+					onrowselection={handleRowSelection}
+					if:false={calloutProps.taxasTecnicas.emptyData}
+				></lightning-datatable>
+
+				<c-solar-exception-content show-error={calloutProps.taxasTecnicas.hasError} show-empty={calloutProps.taxasTecnicas.emptyData}></c-solar-exception-content>
+			</lightning-accordion-section>
+		</lightning-accordion>
+	</div>
+	
+	<c-solar-modal size="medium" header="Detalhe de Evento">
+		<div class="content" slot="content" if:true={openModal.eventsModal}>
+				<lightning-layout horizontal-align="space" multiple-rows="true">
+						<lightning-layout-item padding="around-medium" size="3" >
+							<div class="portion">
+								<label>Tipo de solicitação</label>
+								<p><lightning-formatted-text value={selectedEvent.groupType}></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="3">
+							<div class="last-portion">
+								<label>Data de fechamento</label>
+								<p><lightning-formatted-text value={selectedEvent.formattedDate}></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="6">
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="3">
+							<div class="portion">
+								<label>Usuário</label>
+								<p><lightning-formatted-text value={selectedEvent.openUser}></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="3">
+							<div class="last-portion">
+								<label>Tipo de Fechamento</label>
+								<p><lightning-formatted-text value={selectedEvent.statusDescription}></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="6">
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="12">
+							<div class="middle-text">
+								<label>Número de Solicitação</label>
+								<p><lightning-formatted-text value={selectedEvent.evId}></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-medium" size="12">
+							<div class="middle-text">
+								<label>Observação</label>
+								<p><lightning-formatted-text value={eventDetailsOrderNote}></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+					</lightning-layout>
+			<div if:true={openModal.detailsDatatable}>
+				<lightning-datatable
+					key-field="id"
+					hide-checkbox-column="true"
+					columns={columns.detail}
+					data={eventDetailsConfigurations}
+					resize-column-disabled="true"
+					sorted-by={sortedBy.details}
+					sorted-direction={sortedDirection.details}
+					onsort={handleSortDetails}
+				>
+				</lightning-datatable>
+			</div>
+		</div>		
+		<div class="content" slot="content" if:true={openModal.lancamentosManuais}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+                        <lightning-layout-item padding="around-medium" size="4" >
+							<div class="portion">
+								<label>Descrição</label>
+								<p><lightning-formatted-text value={selectedEvent.extractItemTypeDescription}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Tipo</label>
+								<p>Lançamento Manual</p>
+							</div>
+						</lightning-layout-item>
+						
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Data</label>
+								<p><lightning-formatted-text value={selectedEvent.formattedDate}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+                        
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="portion">
+								<label>Parcelas</label>
+								<p><lightning-formatted-text value={selectedEvent.installments}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+						
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Valor</label>
+								<p><lightning-formatted-text value={selectedEvent.formattedAmount}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+
+						
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Usuário</label>
+								<p><lightning-formatted-text value={selectedEvent.registrationUser}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+                        
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="portion">
+								<label>Produto</label>
+								<p><lightning-formatted-text value={selectedEvent.productDescription}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Item</label>
+								<p><lightning-formatted-text value={selectedEvent.detTypeExtractItemNote}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Parceiro</label>
+								<p><lightning-formatted-text value={selectedEvent.partnerName}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>                        
+					</lightning-layout>
+		</div>
+		<div class="content" slot="content" if:true={openModal.occurrencesModal}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="portion">
+								<label>Usuário Abertura</label>
+								<p><lightning-formatted-text value={selectedEvent.loginOpening}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+
+						
+                        <lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">  
+								<label>Usuário Fechamento</label>
+								<p><lightning-formatted-text value={selectedEvent.loginClosing}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-medium" size="4">
+							<div class="last-portion">
+								<label>Status</label>
+								<p><lightning-formatted-text value={selectedEvent.status}/></lightning-formatted-text></p>
+							</div>
+						</lightning-layout-item>
+                        
+                        <lightning-layout-item padding="around-medium" size="12">
+							<div>
+								<label>Motivo de Fechamento</label>
+								<p><lightning-formatted-text value={selectedEvent.description}/></lightning-formatted-text></p> <!--qual campo na api?-->
+							</div>
+						</lightning-layout-item>
+
+                        <lightning-layout-item padding="around-medium" size="12">
+							<div>
+								<label>Obs. Abertura</label>
+								<p><lightning-formatted-text value={selectedEvent.note}/></lightning-formatted-text></p> <!--qual campo na api?-->
+							</div>
+						</lightning-layout-item>      
+						
+						<lightning-layout-item padding="around-medium" size="12">
+							<div>
+								<label>Obs. Fechamento</label>
+								<p><lightning-formatted-text value={selectedEvent.resolutionNote}/></lightning-formatted-text></p> <!--qual campo na api?-->
+							</div>
+						</lightning-layout-item>    
+
+					</lightning-layout>
+		</div>
+ 		<div class="content" slot="content" if:true={openModal.ofertaContratada}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Tipo de Evento</label>
+						<p>Oferta Contratada</p>
+					</div>"
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Nome / Descrição</label>
+						<p><lightning-formatted-text value={selectedEvent.productDescription}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Data</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedDate}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Valor</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedAmount}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+			</lightning-layout>
+		</div>
+		<div class="content" slot="content" if:true={openModal.outage}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="portion">
+						<label>Código de retorno</label>
+						<p><lightning-formatted-text value={selectedEvent.returnCode}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Nº Outage</label>
+						<p><lightning-formatted-text value={selectedEvent.OutageNumber}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Tipo de Produto</label>
+						<p><lightning-formatted-text value={selectedEvent.productType}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Serviços Afetados</label>
+						<p><lightning-formatted-text value={selectedEvent.affectedServices}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="portion">
+						<label>Sintoma</label>
+						<p><lightning-formatted-text value={selectedEvent.symptom}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Abrangência</label>
+						<p><lightning-formatted-text value={selectedEvent.coverage}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Natureza</label>
+						<p><lightning-formatted-text value={selectedEvent.nature}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Responsável</label>
+						<p><lightning-formatted-text value={selectedEvent.responsible}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="portion">
+						<label>Data Início</label>
+						<p><lightning-formatted-text value={selectedEvent.startDate}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Data Previsão</label>
+						<p><lightning-formatted-text value={selectedEvent.previsionDate}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Data Fim</label>
+						<p><lightning-formatted-text value={selectedEvent.endDate}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="3">
+					<div class="last-portion">
+						<label>Status</label>
+						<p><lightning-formatted-text value={selectedEvent.status}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+			</lightning-layout>
+		</div>
+		<div class="content" slot="content" if:true={openModal.ppv}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Produto</label>
+						<p><lightning-formatted-text value={selectedEvent.eventName}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Data do Lançamento</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedDate}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Valor</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedPrice}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+			</lightning-layout>
+		</div>
+		<div class="content" slot="content" if:true={openModal.reajusteAnual}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Nome do Evento</label>
+						<p><lightning-formatted-text value={selectedEvent.readjustmentType}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Data do Reajuste</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedDate}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="portion">
+						<label>Tipo de Evento</label>
+						<p>Reajuste Anual</p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Produto</label>
+						<p><lightning-formatted-text value={selectedEvent.productDescription}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Percentual de Reajuste</label>
+						<p><lightning-formatted-text value={selectedEvent.percentAdjusted}/></lightning-formatted-text></p> <!--qual campo na api?-->
+					</div>
+				</lightning-layout-item>
+				
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="portion">
+						<label>Preço Anterior</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedPreviousPrice}/></lightning-formatted-text></p> <!--qual campo na api?-->
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Preço Reajustado</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedReadjustmentPrice}/></lightning-formatted-text></p> <!--qual campo na api?-->
+					</div>
+				</lightning-layout-item>      
+				
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Valor do Reajuste</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedAmount}/></lightning-formatted-text></p> <!--qual campo na api?-->
+					</div>
+				</lightning-layout-item>    
+
+			</lightning-layout>
+		</div>
+		<div class="content" slot="content" if:true={openModal.taxasTecnicas}>
+			<lightning-layout horizontal-align="space" vertical-align="space" multiple-rows="true">
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Nome do Item</label>
+						<p><lightning-formatted-text value={selectedEvent.extractItemTypeDescription}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="12">
+					<div>
+						<label>Tipo de Solicitação</label>
+						<p><lightning-formatted-text value={selectedEvent.requestTypeDescription}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="portion">
+						<label>Valor</label>
+						<p><lightning-formatted-text value={selectedEvent.formattedAmount}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+				
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Total de Parcelas</label>
+						<p><lightning-formatted-text value={selectedEvent.paymentPlanName}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Número da Parcela</label>
+						<p><lightning-formatted-text value={selectedEvent.installmentNumber}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="portion">
+						<label>Produto</label>
+						<p><lightning-formatted-text value={selectedEvent.productDescription}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Usuário Solicitação</label>
+						<p><lightning-formatted-text value={selectedEvent.requestRegistrationUser}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-medium" size="4">
+					<div class="last-portion">
+						<label>Usuário Taxa</label>
+						<p><lightning-formatted-text value={selectedEvent.itemExtractRegistrationUser}/></lightning-formatted-text></p>
+					</div>
+				</lightning-layout-item>				
+
+			</lightning-layout>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

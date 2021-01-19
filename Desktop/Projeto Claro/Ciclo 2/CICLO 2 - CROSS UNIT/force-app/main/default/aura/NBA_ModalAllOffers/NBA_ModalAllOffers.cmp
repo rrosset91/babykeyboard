@@ -1,0 +1,648 @@
+<aura:component controller="NBA_OfferComparator_CC"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute type="String" name="caseId" />
+    <aura:attribute type="String" name="searchAlikeTV" />
+    <aura:attribute type="String" name="searchAlikeVirtua" />
+    <aura:attribute type="String" name="searchAlikeMobile" />
+    <aura:attribute type="String" name="searchAlikePhone" />
+    <aura:attribute type="String" name="searchProfile" />
+    <aura:attribute type="String" name="searchType" />
+    <aura:attribute type="String" name="searchMovimentTV" />
+    <aura:attribute type="String" name="searchMovimentVirtua" />
+    <aura:attribute type="String" name="searchMovimentMobile" />
+    <aura:attribute type="String" name="searchMovimentPhone" />
+    <aura:attribute type="Object" name="newOffertas" />
+    <aura:attribute type="Object" name="offersList" />
+    <aura:attribute type="Object" name="ofertas" />
+    <aura:attribute type="Object" name="oferta1" />
+	<aura:attribute type="Object" name="oferta2" />
+	<aura:attribute type="Object" name="oferta3" />
+    <aura:attribute type="Object" name="produtoAtual" />
+    <aura:attribute type="Object" name="ofertaSelecionada" />
+    <aura:attribute type="Boolean" name="showSpinner" default="false" />
+    <aura:attribute type="Boolean" name="showAllOffers" default="false" />
+    <aura:attribute type="Boolean" name="showInput" default="false" />
+    <aura:attribute type="Boolean" name="disableAllOffers" />
+	<aura:attribute type="Boolean" name="showCancelOffers" default="false" />
+    <aura:attribute type="String" name="sortType" default="Neutral" />
+	<aura:attribute type="Boolean" name="ShowCancelamento" default="false" />
+	<aura:attribute type="Boolean" name="isRetencao" />
+	<aura:attribute type="Object[]" name="lstPontuacao" />
+    <aura:attribute name="optionsProfile" type="List" default="[
+    {'label': 'Todos', 'value': ''},
+    {'label': '1P', 'value': 'Single'},
+    {'label': '2P', 'value': 'Double'},
+    {'label': '3P', 'value': 'Triple'},
+	{'label': 'Multi', 'value': 'Combo Multi'},
+    ]" />
+    <aura:attribute name="optionsType" type="List" default="[
+    {'label': 'Todos', 'value': ''},
+    {'label': 'Padrão', 'value': 'Padrão'},
+    {'label': 'Combate', 'value': 'Combate'},
+    {'label': 'Blindagem', 'value': 'Blindagem'},
+    {'label': 'Exclusiva', 'value': 'Exclusiva'},
+    ]" />
+    <aura:attribute name="optionsMoviment" type="List" default="[
+    {'label': 'Todos', 'value': ''},
+    {'label': 'Adesão', 'value': 'a'},
+    {'label': 'Up', 'value': 'b'},
+    {'label': 'Side', 'value': 'c'},
+    {'label': 'Manter', 'value': 'c'},
+    {'label': 'Down', 'value': 'd'},
+    {'label': 'Cancelar', 'value': 'e'},
+    {'label': 'N/A', 'value': 'f'},
+    ]" />
+	<aura:attribute name="optionsPoints" type="List" default="[
+	{'label': '120', 'value': '120'},
+	{'label': '100', 'value': '100'},
+	{'label': '80', 'value': '80'},
+	{'label': '60', 'value': '60'},
+	{'label': '40', 'value': '40'},
+	{'label': '20', 'value': '20'},
+	{'label': '0', 'value': '0'},
+    ]" />
+    
+    <aura:attribute type="Object" name="hasPosse" />
+
+    <!-- BOTÃO SHOW ALL OFFERS -->
+    <div class="slds-grid" style="height:10px;padding:0 4rem 3rem 0rem">
+       <!-- <div class="slds-col slds-size_1-of-4 box-oferta"></div> -->
+        <div class="slds-col slds-size_1-of-3 box-oferta slds-align_absolute-center slds-box clickable"
+			onclick="{! c.detailTv }">
+			<strong>{! $Label.c.OFERTA_DETALHES_TV }</strong>
+		</div>
+        <div class="slds-col slds-size_1-of-3 box-oferta slds-align_absolute-center slds-box clickable"
+			onclick="{! c.detailBroadband }">
+			<strong>{! $Label.c.OFERTA_DETALHES_BANDA_LARGA }</strong>
+		</div>
+        <aura:if isTrue="{! !v.disableAllOffers}">
+            <div class="slds-col slds-size_1-of-3 box-oferta slds-align_absolute-center slds-box clickable"
+                onclick="{! c.showAllOffers }">
+                <strong>{! $Label.c.OFERTA_TODAS_AS_OFERTAS }</strong>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-col slds-size_1-of-3 box-oferta slds-align_absolute-center slds-box"
+                    style="opacity: 0.4">
+                    <strong>{! $Label.c.OFERTA_TODAS_AS_OFERTAS }</strong>
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+
+    <!-- MODAL ALL OFFERS -->
+    <aura:if isTrue="{! v.showAllOffers }">
+
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" Style="position: fixed;">
+            <div class="slds-modal__container" style="width: 96% !important">
+                <header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick="{! c.closeAllOffersModal }">
+                        <lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!
+                        $Label.c.OFERTA_TODAS_AS_OFERTAS }</h2>
+                </header>
+
+                <!-- SPINNER -->
+                <aura:if isTrue="{! v.showSpinner }">
+                    <div class="slds-spinner_container slds-is-fixed">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+
+                <div class="slds-modal__content slds-p-around_medium slds-scrollable" id="modal-content-id-1"
+                    style="min-height: 80%;">
+                    <!-- Tabela padrão -->
+                    <div style="min-height: 100%;">
+                        <table
+                            class="{! (greaterthan(v.ofertas.data.recommendations.length, 5) ? ' slds-table slds-table_cell-buffer slds-table_bordered slds-truncate ' : ' slds-table slds-table_cell-buffer slds-table_bordered slds-truncate padding-table ') }">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <button onclick="{!c.cleanFilters}" class="slds-button slds-button_brand"
+                                                variant="brand" title="Limpar filtros"
+                                                style="width: 7rem; white-space: nowrap;">Limpar filtros
+                                            </button>
+                                        </div>
+                                        <div>
+                                        </div>
+                                    </th>
+									<th class="slds-cell-wrap" scope="col">
+                                        <div tabindex="0" onclick="{!c.orderColumnByPrice}">
+                                            <div class="slds-truncate" title="Price">Preço
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_Price'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_Price'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div tabindex="0" onclick="{!c.orderColumnByExpensesVariation}">
+                                            <div class="slds-truncate" title="Expenses Variation">Variação $
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_ExpensesVariation'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_ExpensesVariation'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+									<aura:if isTrue="{! !empty(v.offersList.data.recommendations[0].rewardPoints) }">
+										<aura:if isTrue="{! v.isRetencao }" >
+										<th class="slds-cell-wrap" scope="col">
+											<div>
+                                            <lightning:combobox aura:id="searchPoints" name="type" label="Filter By Points"
+                                                variant="label-hidden" placeholder="Filtro"
+                                                options="{! v.optionsPoints }" onchange="{! c.filterBy }" style="width: 110px;" />
+                                        </div>
+											<div tabindex="0" onclick="{!c.orderColumnByPoints}">
+												<div class="slds-truncate" title="Points">Pontos
+													<aura:if isTrue="{!v.sortType == 'Ascendent_Points'}">
+														<lightning:icon iconName="utility:chevronup" size="xx-small" />
+													</aura:if>
+													<aura:if isTrue="{!v.sortType == 'Descendent_Points'}">
+														<lightning:icon iconName="utility:chevrondown" size="xx-small" />
+													</aura:if>
+												</div>
+											</div>
+										</th>
+										</aura:if>
+									</aura:if>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:input aura:id="searchLikeTV" onchange="{!c.filterBy}"
+                                                type="text" name="teste" label="teste" variant="label-hidden" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByTV}">
+                                            <div class="slds-truncate" title="TV">TV
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_TV'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_TV'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+									<th>
+										<div tabindex="0" onclick="">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Price TV">$</div>
+                                        </div>
+										<div class="slds-truncate"></div>
+									</th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:combobox aura:id="searchMovimentTV" name="type" label="Filter By Moviment TV"
+                                                variant="label-hidden" placeholder="Filtro"
+                                                options="{! v.optionsMoviment }" onchange="{! c.filterBy }" style="width: 110px;" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByMovimentTV}">
+                                            <div class="slds-truncate" title="Movimento TV">Mov. TV
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_MovimentTV'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_MovimentTV'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:input aura:id="searchLikeVirtua" onchange="{!c.filterBy}"
+                                                type="text" name="teste" label="teste" variant="label-hidden" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByVirtua}">
+                                            <div class="slds-truncate" title="BL">BL
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_Virtua'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_Virtua'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+									<th>
+										<div tabindex="0" onclick="">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Price Broadband">$</div>
+                                        </div>
+										<div class="slds-truncate"></div>
+									</th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:combobox aura:id="searchMovimentVirtua" name="type"
+                                                label="type" variant="label-hidden" placeholder="Filtro"
+                                                options="{! v.optionsMoviment }" onchange="{! c.filterBy }"
+                                                style="width: 110px;" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByMovimentVirtua}">
+                                            <div class="slds-truncate" title="Movimento Virtua">Mov.
+                                                BL
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_MovimentVirtua'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_MovimentVirtua'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:input aura:id="searchLikePhone" onchange="{!c.filterBy}"
+                                                type="text" name="teste" label="teste" variant="label-hidden" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByNetPhone}">
+                                            <div class="slds-truncate" title="Net Fone">Fone
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_Phone'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_Phone'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+									<th>
+										<div tabindex="0" onclick="">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Price Phone">$</div>
+                                        </div>
+										<div class="slds-truncate"></div>
+									</th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:combobox aura:id="searchMovimentPhone" name="type"
+                                                label="type" variant="label-hidden" placeholder="Filtro"
+                                                options="{! v.optionsMoviment }" onchange="{! c.filterBy }"
+                                                style="width: 110px;" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByMovimentNetPhone}">
+                                            <div class="slds-truncate" title="Movimento Net Fone">Mov.
+                                                Fone
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_MovimentPhone'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_MovimentPhone'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:input aura:id="searchLikeMobile" onchange="{!c.filterBy}"
+                                                type="text" name="teste" label="teste" variant="label-hidden" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByMobileNetPhone}">
+                                            <div class="slds-truncate" title="Móvel">Móvel
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_Mobile'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_Mobile'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+									<th>
+										<div tabindex="0" onclick="">
+                                            <div class="slds-truncate slds-align_absolute-center" title="Price Mobile">$</div>
+                                        </div>
+										<div class="slds-truncate"></div>
+									</th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div>
+                                            <lightning:combobox aura:id="searchMovimentMobile" name="type"
+                                                label="type" variant="label-hidden" placeholder="Filtro"
+                                                options="{! v.optionsMoviment }" onchange="{! c.filterBy }"
+                                                style="width: 110px;" />
+                                        </div>
+										<div tabindex="0" onclick="{!c.orderColumnByMovimentMobileNetPhone}">
+                                            <div class="slds-truncate" title="Movimento Móvel">Mov. Móvel
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_MovimentMobile'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_MovimentMobile'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div tabindex="0" onclick="{!c.orderColumnByProfile}">
+                                            <div>
+                                                <lightning:combobox aura:id="searchPerfil" name="profile"
+                                                    label="profile" variant="label-hidden"
+                                                    placeholder="Filtro" options="{! v.optionsProfile }"
+                                                    onchange="{! c.filterBy }" />
+                                            </div>
+                                            <div class="slds-truncate" title="Perfil da Oferta">Perfil
+                                                da Oferta
+                                                <aura:if isTrue="{!v.sortType == 'Ascendent_Profile'}">
+                                                    <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.sortType == 'Descendent_Profile'}">
+                                                    <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                                </aura:if>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <!-- <div tabindex="0" onclick="{!c.orderColumnByType}"> -->
+                                        <div>
+                                            <lightning:combobox aura:id="searchType" name="type" label="type"
+                                                variant="label-hidden" placeholder="Filtro"
+                                                options="{! v.optionsType }" onchange="{! c.filterBy }"
+                                                 />
+                                        </div>
+                                        <div class="slds-truncate" title="Tipo da Oferta">Tipo da Oferta
+                                            <aura:if isTrue="{!v.sortType == 'Ascendent_Type'}">
+                                                <lightning:icon iconName="utility:chevronup" size="xx-small" />
+                                            </aura:if>
+                                            <aura:if isTrue="{!v.sortType == 'Descendent_Type'}">
+                                                <lightning:icon iconName="utility:chevrondown" size="xx-small" />
+                                            </aura:if>
+                                        </div>
+                                        <!-- </div> -->
+                                    </th>
+                                    <!-- <th class="slds-cell-wrap" scope="col">
+                                        <div tabindex="0">
+                                            <div class="slds-truncate" title="Price">Preço</div>
+                                        </div>
+                                    </th>
+                                    <th class="slds-cell-wrap" scope="col">
+                                        <div tabindex="0">
+                                            <div class="slds-truncate" title="Variação de Gastos">Variação de
+                                                Gastos</div>
+                                        </div>
+                                    </th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <aura:iteration items="{! v.ofertas.data.recommendations }" var="oferta"
+                                    indexVar="index">
+                                    <tr
+                                        class="{! or( or(oferta.priority == '1', oferta.priority == '2'), oferta.priority == '3')  ? 'selectedbackground' : ''}">
+                                        <td data-label="Account Name" class="slds-cell-wrap">
+                                            <aura:if
+                                                isTrue="{! oferta.priority == '1' || oferta.priority == '2' || oferta.priority == '3'}">
+                                                <div>
+                                                    <button class="slds-button "
+                                                        style="background-color: #9e9894 !important; color: #fff; padding-left: 5px; padding-right: 5px;"
+                                                        title="Selecionada" disabled="true">Selecionada</button>
+                                                </div>
+                                                <aura:set attribute="else">
+                                                    <div class="slds-truncate" title="{!oferta.offerProfile}">
+                                                        <button class="slds-button "
+                                                            style="background-color: rgb(0, 157, 227) !important; color: #fff;  padding-left: 11px; padding-right: 11px;"
+                                                            id="{! oferta.priority }" title="Selecionar Oferta"
+                                                            onclick="{! c.chooseOffer }">Selecionar</button>
+                                                    </div>
+                                                </aura:set>
+                                            </aura:if>
+                                        </td>
+										<td data-label="TotalValue" class="slds-cell-wrap slds-text-link_reset">
+                                            <div class="slds-truncate" title="{!oferta.roundedTotalValue}">
+                                                <strong>
+                                                    <lightning:formattedNumber value="{!oferta.totalValue}"
+                                                        style="currency" currencyCode="BRL" />
+                                                </strong>
+                                            </div>
+                                        </td>
+                                        <td data-label="Variation" class="slds-cell-wrap slds-text-link_reset">
+                                            <div class="slds-truncate" title="{!oferta.roundedVariation}">
+                                                <strong><aura:if isTrue="{! oferta.variation > 0 }">+</aura:if>
+                                                    <lightning:formattedNumber value="{!oferta.variation}"
+                                                        style="currency" currencyCode="BRL" />
+                                                </strong>
+                                            </div>
+                                        </td>
+										<aura:if isTrue="{! !empty(oferta.rewardPoints) }">
+											<aura:if isTrue="{! v.isRetencao }" >
+											<td data-label="Points" class="slds-cell-wrap slds-text-link_reset">
+												<div class="slds-truncate slds-align_absolute-center" title="{!oferta.rewardPoints}">
+													<aura:if isTrue="{! !empty(oferta.rewardPoints) }">
+									 					{! oferta.rewardPoints }
+													</aura:if>
+												</div>
+											</td>
+											</aura:if>
+										</aura:if>
+                                        <td data-label="NameTv" class="slds-cell-wrap">
+                                            <div class="slds-truncate" title="{!oferta.nboTv[0].catalogName}">
+												<aura:if isTrue="{!oferta.nboTv[0].catalogName == '0' }">
+													SEM PLANO
+													<aura:set attribute="else">
+														{!oferta.nboTv[0].catalogName}
+													</aura:set>
+												</aura:if>
+                                            </div>
+                                        </td>
+										<td class="slds-cell-wrap">
+											<div class="slds-truncate" title="{!oferta.nboTv[0].roundedValue}">
+												<lightning:formattedNumber value="{! empty(oferta.nboTv[0].value) ? '0' : oferta.nboTv[0].value }"
+                                                        style="currency" currencyCode="BRL" />
+                                            </div>
+										</td>
+                                        <td data-label="MovimentTv" class="slds-cell-wrap">
+                                            <div class="slds-truncate slds-align_absolute-center">
+												
+                                                <aura:if isTrue="{! oferta.actionTv == 'a' }">
+                                                    <img src="{!$Resource.NBA_Acquisition}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionTv == 'b' }">
+                                                    <img src="{!$Resource.NBA_Upgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionTv == 'c' }">
+                                                    <img src="{!$Resource.NBA_Lateral}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionTv == 'd' }">
+                                                    <img src="{!$Resource.NBA_Downgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionTv == 'e' }">
+                                                    <img src="{!$Resource.NBA_Cancelado}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionTv == 'f' }">
+                                                    N/A
+                                                </aura:if>
+
+                                            </div>
+                                        </td>
+                                        <td data-label="NameBL" class="slds-cell-wrap">
+                                            <div class="slds-truncate" title="{!oferta.nboBroadband.catalogName}">
+												<aura:if isTrue="{!oferta.nboBroadband.catalogName == '0' }">
+												    SEM PLANO
+													<aura:set attribute="else">
+														{!oferta.nboBroadband.catalogName}
+													</aura:set>
+												</aura:if>
+											</div>
+                                        </td>
+										<td class="slds-cell-wrap">
+											<div class="slds-truncate" title="{! oferta.nboBroadband.value }">
+												<lightning:formattedNumber value="{! empty(oferta.nboBroadband.value) ? 0 : oferta.nboBroadband.value }"
+                                                        style="currency" currencyCode="BRL" />
+                                            </div>
+										</td>
+                                        <td data-label="MovimentBL" class="slds-cell-wrap">
+                                            <div class="slds-truncate slds-align_absolute-center">
+
+                                                <aura:if isTrue="{! oferta.actionBroadband == 'a' }">
+                                                    <img src="{!$Resource.NBA_Acquisition}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionBroadband == 'b' }">
+                                                    <img src="{!$Resource.NBA_Upgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionBroadband == 'c' }">
+                                                    <img src="{!$Resource.NBA_Lateral}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionBroadband == 'd' }">
+                                                    <img src="{!$Resource.NBA_Downgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionBroadband == 'e' }">
+                                                    <img src="{!$Resource.NBA_Cancelado}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{! oferta.actionBroadband == 'f' }">
+                                                    N/A
+                                                </aura:if>
+
+                                            </div>
+                                        </td>
+                                        <td data-label="NamePhone" class="slds-cell-wrap">
+                                            <div class="slds-truncate" title="{!oferta.nboPhone.catalogName}">
+												<aura:if isTrue="{!oferta.nboPhone.catalogName == '0' }">
+													SEM PLANO
+													<aura:set attribute="else">
+														{!oferta.nboPhone.catalogName}
+													</aura:set>
+												</aura:if>
+											</div>
+                                        </td>
+										<td class="slds-cell-wrap">
+											<div class="slds-truncate" title="{!oferta.nboPhone.value}">
+												<lightning:formattedNumber value="{! empty(oferta.nboPhone.value) ? 0 : oferta.nboPhone.value }"
+                                                        style="currency" currencyCode="BRL" />
+                                            </div>
+										</td>
+										<td data-label="MovimentPhone" class="slds-cell-wrap">
+                                            <div class="slds-truncate slds-align_absolute-center">
+
+                                                <aura:if isTrue="{!  oferta.actionPhone == 'a' }">
+                                                    <img src="{!$Resource.NBA_Acquisition}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionPhone == 'b' }">
+                                                    <img src="{!$Resource.NBA_Upgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionPhone == 'c' }">
+                                                    <img src="{!$Resource.NBA_Lateral}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionPhone == 'd' }">
+                                                    <img src="{!$Resource.NBA_Downgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionPhone == 'e' }">
+                                                    <img src="{!$Resource.NBA_Cancelado}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionPhone == 'f' }">
+                                                    N/A
+                                                </aura:if>
+
+                                            </div>
+                                        </td>
+										<td data-label="NameMobile" class="slds-cell-wrap">
+                                            <div class="slds-truncate" title="{!oferta.nboMobile[0].catalogName}">
+												<aura:if isTrue="{! or(oferta.nboMobile[0].catalogName == '0', oferta.nboMobile[0].catalogName ==  'SEM PLANO')}">
+													SEM PLANO
+													<aura:set attribute="else">
+														{!oferta.nboMobile[0].name}
+													</aura:set>
+												</aura:if>
+											</div>
+                                        </td>
+										<td class="slds-cell-wrap">
+											<div class="slds-truncate" title="{! oferta.nboMobile[0].price }">
+												<lightning:formattedNumber value="{! empty(oferta.nboMobile[0].price) ? 0 : oferta.nboMobile[0].price }"
+                                                        style="currency" currencyCode="BRL" />
+                                            </div>
+										</td>
+                                        <td data-label="MovimentMobile" class="slds-cell-wrap">
+                                            <div class="slds-truncate slds-align_absolute-center">
+
+                                                <aura:if isTrue="{!  oferta.actionMobile == 'a' }">
+                                                    <img src="{!$Resource.NBA_Acquisition}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionMobile == 'b' }">
+                                                    <img src="{!$Resource.NBA_Upgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionMobile == 'c' }">
+                                                    <img src="{!$Resource.NBA_Lateral}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionMobile == 'd' }">
+                                                    <img src="{!$Resource.NBA_Downgrade}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionMobile == 'e' }">
+                                                    <img src="{!$Resource.NBA_Cancelado}" class="imgSize" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!  oferta.actionMobile == 'f' }">
+                                                    N/A
+                                                </aura:if>
+
+                                            </div>
+                                        </td>
+										<td data-label="OfferProfile" class="slds-cell-wrap">
+                                            <div class="slds-truncate" title="{!oferta.profile}">{!oferta.profile}</div>
+                                        </td>
+                                        <td data-label="OfferType" class="slds-cell-wrap">
+                                            <div class="slds-grid slds-gutters slds-align_absolute-center" title="OfferType">
+												<aura:if isTrue="{!oferta.blindagem}">
+													<div class="slds-col slds-size_1-of-5">	
+														<img src="{!$Resource.NBA_Blindagem}" class="imgSize" title="BLINDAGEM" />
+													</div>
+												</aura:if>
+												<aura:if isTrue="{!oferta.combate}">
+													<div class="slds-col slds-size_1-of-5">
+														<img src="{!$Resource.NBA_Combrate}" class="imgSize" title="COMBATE" />
+													</div>
+												</aura:if>
+												<aura:if isTrue="{!oferta.exclusivo}">
+													<div class="slds-col slds-size_1-of-5">
+														<img src="{!$Resource.NBA_Exclusivo}" class="imgSize" title="EXCLUSIVO" />
+													</div> 
+												</aura:if>
+												<aura:if isTrue="{! or(or(or(oferta.nboBroadband.hasFidelity == '1', oferta.nboMobile.hasFidelity == '1'), oferta.nboPhone.hasFidelity == '1'), and( not(empty(oferta.nboTv)), oferta.nboTv[0].hasFidelity == '1')) }"> 
+													<div Class="slds-col slds-size_1-of-5">
+														<img src="{!$Resource.cec_identidade + '/images-upload/cec-produto/NBA_Fidelidade.png'}" class="imgSize" title="FIDELIDADE" />
+													</div>
+												</aura:if>
+											</div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+					<aura:if isTrue="{! v.ShowCancelamento }">
+						<button class="slds-button slds-button_text-destructive" onclick="{! c.getCancelOffers }">{! $Label.c.CANCELAMENTO_PARCIAL }</button>
+					</aura:if>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" Style="position: fixed;"></div>
+    </aura:if>
+</aura:component>

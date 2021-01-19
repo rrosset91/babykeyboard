@@ -1,0 +1,107 @@
+<template>
+    <div class="slds-grid slds-wrap slds-m-around_small">
+        <div class="slds-col slds-size_1-of-1">
+            <div class="slds-text-title">Motivo:</div>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-m-bottom_large slds-border_bottom">
+            <div title={record.lReason}>{record.lReason}</div>
+        </div>
+
+        <template if:false={signalview}>
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-text-title">Devolutiva:</div>
+            </div>            
+            <div class="slds-col slds-size_1-of-1 slds-m-bottom_large slds-border_bottom">
+                <!-- <div title={record.lFeedbackToCustomer}>{record.lFeedbackToCustomer}</div> -->
+                <lightning-formatted-rich-text value={record.lFeedbackToCustomer}></lightning-formatted-rich-text>
+            </div>
+        </template>
+
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-text-title">Criado por:</div>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-p-left_medium">
+            <div class="slds-text-title">Data de criação:</div>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-right_medium">
+            <lightning-formatted-url class="slds-p-right_xxx-small" value={record.lCreatedById} tooltip={record.lCreatedByName} label={record.lCreatedByName} target="_self" ></lightning-formatted-url>
+            <div class="slds-border_bottom"></div>                            
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-left_medium">
+            <lightning-formatted-date-time value={record.lCreatedDate} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+            <div class="slds-border_bottom"></div>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <div class="slds-text-title">Modificado por:</div>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-p-left_medium">
+            <div class="slds-text-title">Data de modificação:</div>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-right_medium">
+            <lightning-formatted-url value={record.lModifiedById} tooltip={record.lModifiedByName} label={record.lModifiedByName} target="_self" ></lightning-formatted-url>
+            <div class="slds-border_bottom"></div>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-left_medium">
+            <lightning-formatted-date-time value={record.lModifiedDate} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+            <div class="slds-border_bottom"></div>                            
+        </div>
+
+        <template if:true={signalview}>
+
+            <div class="slds-col slds-size_1-of-2">
+                <div class="slds-text-title">Data de Início:</div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-left_medium">
+                <div class="slds-text-title">Data prevista de resolução:</div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-right_medium">
+                <lightning-formatted-date-time value={record.lStartDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time>
+                <div class="slds-border_bottom"></div>                            
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-left_medium">
+                <lightning-formatted-date-time value={record.lEndDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time>
+                <div class="slds-border_bottom"></div>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2">
+                <div class="slds-text-title">Categorização:</div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-p-left_medium">
+                <div class="slds-text-title">Clientes Impactados:</div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-right_medium">
+                <div title={record.lCategorization}>{record.lCategorization}</div>
+                <div class="slds-border_bottom"></div>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-m-bottom_large slds-p-left_medium">
+                <div title={record.lProductType}>{record.lProductType}</div>
+                <div class="slds-border_bottom"></div>
+            </div>
+
+
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-text-title">Devolutiva:</div>
+            </div>            
+            <div class="slds-col slds-size_1-of-1 slds-m-bottom_large slds-border_bottom">
+                <!-- <div title={record.lFeedbackToCustomer}>{record.lFeedbackToCustomer}</div> -->
+                <lightning-formatted-rich-text value={record.lFeedbackToCustomer}></lightning-formatted-rich-text>
+            </div>
+
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-text-title">Orientação:</div>
+            </div>            
+            <div class="slds-col slds-size_1-of-1 slds-m-bottom_large slds-border_bottom">
+                <!-- <div title={record.lFeedbackToCustomer}>{record.lDescription}</div> -->
+                <lightning-formatted-rich-text value={record.lDescription}></lightning-formatted-rich-text>
+            </div>
+
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-text-title">Procedimentos da Operação:</div>
+            </div>            
+            <div class="slds-col slds-size_1-of-1 slds-m-bottom_large slds-border_bottom">
+                <!-- <div title={record.lFeedbackToCustomer}>{record.lResolution}</div> -->
+                <lightning-formatted-rich-text value={record.lResolution}></lightning-formatted-rich-text>
+            </div>
+        </template>
+    </div>
+</template>

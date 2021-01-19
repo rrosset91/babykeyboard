@@ -1,0 +1,167 @@
+<aura:component extends="c:Utils" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" controller="InvoicesController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!-- Open Invoices Data -->
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="invoices" type="Object[]" />
+    <aura:attribute name="selectedInvoices" type="Object[]" />
+    <aura:attribute name="contractId" type="String" />
+    <aura:attribute name="operatorId" type="String" />
+    <aura:attribute name="disabledGen" type="Boolean" default="true"/>
+    <aura:attribute name="disabledView" type="Boolean" default="true"/>
+    <aura:attribute name="maxRowSelection" type="Integer" default="1"/>
+    <aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String"/>
+    <aura:attribute name="defaultSortDirection" type="String"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="errorOnCall" type="Boolean" default="true"/>
+    <aura:attribute name="period" type="String" default="24"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    
+    <!-- 2a via Data -->
+    <aura:attribute name="isLoadingModal" type="Boolean" default="false"/>
+    <aura:attribute name="sendMethodOptions" type="List" />
+    <aura:attribute name="sendReasonOptions" type="List" />
+    <aura:attribute name="insertedCelphone" type="String"/>
+    <aura:attribute name="insertedEmail" type="String"/>
+    <aura:attribute name="selectedEmail" type="Boolean"/>
+    <aura:attribute name="selectedSMS" type="Boolean"/>
+    <aura:attribute name="selectedCorreio" type="Boolean"/>
+    <aura:attribute name="disabledSend" type="Boolean" default="true"/>
+    <aura:attribute name="duplicate" type="Object" />
+    <aura:attribute name="dialogModal" type="Boolean"/>
+    <aura:attribute name="selectedSendMethod" type="String" />
+    <aura:attribute name="selectedSendReason" type="Integer" />
+    <aura:attribute name="title" type="string" default="Título"/>
+    <aura:attribute name="typeIcon" type="string" default="utility:success"/>
+    <aura:attribute name="typeVariant" type="string" default="success"/>
+    <aura:attribute name="message" type="string" default="Mensagem"/>
+    <aura:attribute name="textbutton1" type="string" default="Fechar"/>
+    <aura:attribute name="onClickButton1" type="string" default="{!c.closeModalSegundaVia}"/>
+    <aura:registerEvent name="Financeiro_ComponentEvent" type="c:Financeiro_ComponentEvent"/>
+    <aura:handler name="change" value="{!v.contractId}" action="{!c.fetchData}"/>
+    <aura:handler name="change" value="{!v.operatorId}" action="{!c.fetchData}"/>
+
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Carregando..." size="large" />
+    </aura:if>
+    <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+        <lightning:accordionSection name="A" label="Últimas Faturas">         
+            
+            <div class="slds-section slds-is-open" aura:id="invoiceContainer">
+                <div class="slds-section__content" id="invoiceList">
+                    <div class="custom-padding">
+                        <aura:if isTrue="{!and(not(v.errorOnCall), not(empty(v.invoices)))}">
+                            <lightning:datatable columns="{!v.columns}"
+                                data="{!v.invoices}" 
+                                keyField="idFatura" 
+                                maxRowSelection="{!v.maxRowSelection}"
+                                onrowselection="{!c.handleSelectedInvoice}"
+                                resizeColumnDisabled="true"
+                                onrowaction="{!c.handleRowAction}"
+                                sortedBy="{!v.sortedBy}"
+                                sortedDirection="{!v.sortedDirection}"
+                                defaultSortDirection="{!v.defaultSortDirection}"
+                                onsort="{!c.onSort}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!and(empty(v.invoices), not(v.errorOnCall))}">
+                            <c:ExceptionContent showNoData="true" 
+                                noDataText1="{!$Label.c.Financeiro_SemFaturas}" />
+                        </aura:if>
+                        <aura:if isTrue="{!v.errorOnCall}">
+                            <c:ExceptionContent showError="true" 
+                                errorText1="{!$Label.c.Financeiro_ErroGen1}"
+                                errorText2="{!$Label.c.Financeiro_ErroGen2}"/>
+                        </aura:if>
+                    </div>
+                    <!--MODAL DE ENVIO DE SEGUNDA VIA-->
+                    <c:UiModal aura:id="duplicateModal" title="Enviar segunda via" size="x-small" onClose="{!c.onCloseModal}">
+                        <aura:set attribute="content">
+                            <aura:if isTrue="{!v.isLoadingModal}">
+                                <lightning:spinner alternativeText="Carregando..." size="large" />
+                            </aura:if>
+                            <lightning:layout horizontalAlign="center" multipleRows="true" verticalAlign="center">
+                                <lightning:layoutItem padding="horizontal-large">
+                                    <div class="sendDuplicateInvoice">
+                                        <lightning:comboBox name="sendMethod"
+                                            flexibility="auto" 
+                                            label="Tipo de Envio"
+                                            placeholder="Selecione um tipo de envio"
+                                            options="{!v.sendMethodOptions}"
+                                            value="{!v.selectedSendMethod}" 
+                                            onchange="{!c.handleSelectedSendMethod}"
+                                            required="true"
+                                            messageWhenValueMissing="Informação obrigatória"
+                                            />
+                                    </div>
+                                </lightning:layoutItem>
+                                <aura:if isTrue="{!v.selectedEmail}">
+                                    <lightning:layoutItem padding="horizontal-large">
+                                        <div class="sendDuplicateInvoice" id="customerEmail">
+                                            <lightning:input messageWhenTypeMismatch="Insira um email válido." 
+                                                type="email" 
+                                                name="adjustedEmail" 
+                                                value="{!v.duplicate.email}" 
+                                                label="Email para envio:"/>
+                                        </div>
+                                    </lightning:layoutItem>
+                                </aura:if>
+                                <aura:if isTrue="{!v.selectedSMS}">
+                                    <lightning:layoutItem padding="horizontal-large">
+                                        <div class="sendDuplicateInvoice" id="customerCelphone">
+                                            <lightning:input type="tel" 
+                                                pattern="[0-9]{11}" 
+                                                minlength="11" 
+                                                maxlength="11" 
+                                                name="adjustedPhone" 
+                                                value="{!v.duplicate.phoneNumber}" 
+                                                messageWhenPatternMismatch="Celular com 11 dígitos incluindo o DDD" 
+                                                fieldLevelHelp="Ex: 11999999999"
+                                                label="Telefone para envio:"/>
+                                        </div>
+                                    </lightning:layoutItem>
+                                </aura:if>
+                                <lightning:layoutItem padding="horizontal-large">
+                                    <div class="sendDuplicateInvoice">
+                                        <lightning:comboBox name="sendReason"
+                                            flexibility="auto" 
+                                            label="Motivo de envio"
+                                            placeholder="Selecione um motivo"
+                                            options="{!v.sendReasonOptions}"
+                                            value="{!v.selectedSendReason}" 
+                                            onchange="{!c.handleSelectedSendReason}"
+                                            required="true"
+                                            messageWhenValueMissing="Informação obrigatória"/>
+                                    </div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </aura:set>
+                        <aura:set attribute="footer">
+                            <div class="modal-buttons">
+                                <lightning:button class="sendDuplicateButtons" variant="brand-outline" label="Cancelar" onclick="{!c.cancelModal}" />
+                                <lightning:button class="sendDuplicateButtons" variant="brand" disabled="{!v.disabledSend}" label="Enviar" onclick="{!c.sendDuplicate}"/>
+                            </div>
+                        </aura:set>
+                    </c:UiModal>
+                    <aura:if isTrue="{!v.dialogModal}">
+                        <c:Solar_Cross_modalMessage aura:id="Solar_Cross_modalMessage"
+                            title="{!v.title}"
+                            typeIcon="{!v.typeIcon}"
+                            typeVariant="{!v.typeVariant}"
+                            message="{!v.message}"/>
+                    </aura:if>
+                    <div class="custom-footer custom-padding alignment-buttons">
+                        <c:Solar_Cross_Buttons 
+                            showFirst="true" 
+                            showSecond="false" 
+                            onClickFirst="{!c.clickGenDuplicate}"
+                            disabledFirst="{!v.disabledGen}"
+                            disabledSecond="{!v.disabledView}"
+                            labelFirst="Enviar 2a via"
+                            labelSecond="Continuar para Ficha Financeira"/>
+                    </div>
+                </div>
+            </div>
+        </lightning:accordionSection>
+    </lightning:accordion>
+</aura:component>

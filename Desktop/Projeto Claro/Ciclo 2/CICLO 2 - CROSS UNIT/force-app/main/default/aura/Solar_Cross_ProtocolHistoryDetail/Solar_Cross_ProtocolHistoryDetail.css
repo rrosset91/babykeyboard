@@ -1,0 +1,23 @@
+.THIS .custom-padding{
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.THIS .no-data{
+    text-align: center;
+    width: 100%;
+    display: inherit;
+    margin-top: 3%;
+    justify-content: center;
+}
+
+.THIS .no-data img{
+    width: 45%;
+    height: 45%;
+}
+
+.THIS .no-data h3{
+    font-weight: 400;
+    font-size: large;
+    padding-top: 0.75rem;
+}

@@ -1,0 +1,13 @@
+.THIS table.lista-saldo-acumulators {border: solid 1px #dbdada;border-right: solid 1px #dbdada;}
+.THIS table.lista-saldo-acumulators th {font-weight: normal;height: 42px;line-height: 43px;background: #F8F8F8;border-bottom: solid 1px #dbdada;}
+.THIS table.lista-saldo-acumulators th:last-child {border-right: solid 1px #dbdada;}
+.THIS table.lista-saldo-acumulators td {border-bottom: solid 1px #dbdada;height: 42px;white-space: initial;vertical-align: top;}
+.THIS table.lista-saldo-acumulators th:first-child {padding-left: 10px;}
+.THIS table.lista-saldo-acumulators td:first-child {padding-left: 10px;}
+.THIS table.lista-saldo-acumulators td {padding-top:9px;}
+.THIS table.lista-saldo-acumulators th:nth-child(1) {min-width:350px;}
+.THIS table.lista-saldo-acumulators th:nth-child(2) {min-width:100px;}
+.THIS table.lista-saldo-acumulators th:nth-child(3) {min-width:120px;}
+.THIS table.lista-saldo-acumulators th:nth-child(4) {width:100%;}
+.THIS table.lista-saldo-acumulators td {padding-right: 40px;}
+.THIS table.lista-saldo-acumulators tbody tr:last-child td {font-weight: bold;background: #f8f7f7;}

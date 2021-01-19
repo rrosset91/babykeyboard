@@ -1,0 +1,47 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" controller="CEC_ME_RedirecLinkClaroController">
+
+    <aura:attribute name="userProfile" type="String"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="selectedValue" type="String" default="Todos"/>
+    <aura:attribute name="jorneyMsg" type="String"/>
+    <aura:attribute name="data" type="Object[]"/>
+    <aura:attribute name="url" type="String"/>
+    <aura:attribute name="emptyMessage" type="String" default="Nenhum link a ser exibido"/>
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <!-- <aura:handler name="init" value="{!this}" action="{!c.onInit}" />   -->
+    <aura:handler name="change" value="{!v.recordId}" action="{!c.onInit}"/>       
+    
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-3 slds-m-left_medium slds-m-bottom_medium">
+            <lightning:combobox name="Tipo" label="Tipo" value="{!v.selectedValue}" options="{! v.options }" onchange="{! c.changePicklistFilter }"/>
+        </div>
+        
+    </div>
+    <div class="slds-m-left_medium slds-m-bottom_medium">
+        <div class="slds-text-heading_small">LINKS DE REDIRECIONAMENTO - CLARO</div>
+        <aura:if isTrue="{!not(empty(v.jorneyMsg))}">               
+            <div class="slds-text-color_weak">{!v.jorneyMsg}</div>
+        </aura:if>        
+    </div>
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Carregando..." size="medium" variant="brand" />
+
+        <aura:set attribute="else">  
+            <aura:if isTrue="{!empty(v.data)}">
+                <div class="slds-grid slds-align_absolute-center slds-m-top_xx-large">
+                    {!v.emptyMessage}
+                </div>
+                <aura:set attribute="else">  
+                    <div class="slds-grid slds-wrap slds-m-left_large slds-m-right_large">
+                        <aura:iteration items="{!v.data}" var="item">
+                            <div class="slds-col slds-size_3-of-12 slds-m-bottom_medium">
+                                <lightning:button variant="base" label="{!item.Name}" iconName="{!'utility:' + item.Icons__c}" onclick="{!c.handleButtonClick}" value="{!item.Link__c}" />
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>
