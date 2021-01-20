@@ -2,12 +2,12 @@
  * @description       :
  * @author            : Diego Almeida
  * @group             :
- * @last modified on  : 08-01-2021
+ * @last modified on  : 20-01-2021
  * @last modified by  : Diego Almeida
  * Modifications Log
  * Ver   Date         Author          Modification
  * 2.0   03-12-2020   Diego Almeida   US107387
-**/
+ **/
 public without sharing class FinancialHierarchy {
 	public static string parameterHierarchy = '';
 
@@ -90,22 +90,11 @@ public without sharing class FinancialHierarchy {
 		Id recordTypeIdParameter = Schema.SObjectType.Parameters__c.getRecordTypeInfosByDeveloperName().get('AuthorityControl').getRecordTypeId();
 		Id recordTypeIdPayment = Schema.SObjectType.vlocity_cmt__PaymentAdjustment__c.getRecordTypeInfosByDeveloperName().get('Itens_Contestados').getRecordTypeId();
 
-		contratoList = [
-			SELECT
-				Id,
-				name,
-				StatusLegado__c,
-				vlocity_cmt__CustomerValue__c,
-				ContractNumber__c,
-				CityCode__c,
-				ContractReferenceNumber__c
-			FROM Account
-			WHERE ContractReferenceNumber__c = :contract AND RecordTypeId = :recordTypeIdAccount
-		];
+		contratoList = [SELECT Id, name, StatusLegado__c, vlocity_cmt__CustomerValue__c, ContractNumber__c, CityCode__c, ContractReferenceNumber__c FROM Account WHERE ContractReferenceNumber__c = :contract AND RecordTypeId = :recordTypeIdAccount];
 
 		System.debug('Contrato query -> ' + contratoList.size());
 
-		if (contratoList.isEmpty()){
+		if (contratoList.isEmpty()) {
 			return false;
 		}
 		// @question: ha a possibilidade de mais de uma contrato com o mesmo numero? se sim como idenficado como principal?
@@ -140,31 +129,19 @@ public without sharing class FinancialHierarchy {
 				MinContestationQtt__c,
 				AnatelProconProneTargeting__c, //@US105985
 				DefaultTargeting__c //@US105985
-				// Account_Modality__c //@US107387
+			// Account_Modality__c //@US107387
 			FROM Parameters__c
-			WHERE Active__c = TRUE
+			WHERE
+				Active__c = TRUE
 				AND RecordTypeId = :recordTypeIdParameter
 				// AND Business_Division__c =: req.businessDivision
-				AND Business_Division__c =: 'Residencial'
+				AND Business_Division__c = :'Residencial'
 		];
-		System.debug('lstParametro>> '+lstParametro);
+		System.debug('lstParametro>> ' + lstParametro);
 		lstCase = [
-			SELECT
-				Id,
-				Status,
-				EntryReason__c,
-				LeavingReason__c,
-				ClosedDate,
-				Owner.Name,
-				createdby.UserRoleId
+			SELECT Id, Status, EntryReason__c, LeavingReason__c, ClosedDate, Owner.Name, createdby.UserRoleId
 			FROM Case
-			WHERE
-				recordtype.developername = 'Financial'
-				AND Status = 'Closed'
-				AND EntryReason__c = 'Validação de Contestação de Valores'
-				AND LeavingReason__c IN ('Contestação aprovada', 'Contestação Aprovada com ajustes', 'Contestação realizada')
-				AND ClosedDate = TODAY
-				AND OwnerId IN :lstUser
+			WHERE recordtype.developername = 'Financial' AND Status = 'Closed' AND EntryReason__c = 'Validação de Contestação de Valores' AND LeavingReason__c IN ('Contestação aprovada', 'Contestação Aprovada com ajustes', 'Contestação realizada') AND ClosedDate = TODAY AND OwnerId IN :lstUser
 		];
 		/*
 			Melhoria - Alterar motivo de saída:
@@ -173,16 +150,7 @@ public without sharing class FinancialHierarchy {
 			Roger Rosset - 23-09-2020
 		*/
 		List<Case> lstCaseN2Aprovado = [
-			SELECT
-				Id,
-				Status,
-				EntryReason__c,
-				LeavingReason__c,
-				ClosedDate,
-				Owner.Name,
-				createdby.UserRoleId,
-				Authorization__c,
-				AttendanceByUser__c
+			SELECT Id, Status, EntryReason__c, LeavingReason__c, ClosedDate, Owner.Name, createdby.UserRoleId, Authorization__c, AttendanceByUser__c
 			FROM Case
 			WHERE
 				recordtype.developername = 'Financial'
@@ -195,16 +163,7 @@ public without sharing class FinancialHierarchy {
 		];
 
 		List<Case> lstCaseN2Total = [
-			SELECT
-				Id,
-				Status,
-				EntryReason__c,
-				LeavingReason__c,
-				ClosedDate,
-				Owner.Name,
-				createdby.UserRoleId,
-				Authorization__c,
-				AttendanceByUser__c
+			SELECT Id, Status, EntryReason__c, LeavingReason__c, ClosedDate, Owner.Name, createdby.UserRoleId, Authorization__c, AttendanceByUser__c
 			FROM Case
 			WHERE
 				recordtype.developername = 'Financial'
@@ -216,10 +175,10 @@ public without sharing class FinancialHierarchy {
 				AND AttendanceByUser__c = :UserInfo.getUserId()
 		];
 		String unformatedDocument = '';
-		if(req.caseId != null){
-			Case caseAtual = [SELECT Id, AccountFormattedDocument__c FROM CASE WHERE Id =: req.caseId];
+		if (req.caseId != null) {
+			Case caseAtual = [SELECT Id, AccountFormattedDocument__c FROM CASE WHERE Id = :req.caseId];
 			String formatedDocument = caseAtual.AccountFormattedDocument__c;
-			unformatedDocument = formatedDocument.replaceAll('[^\\d]','');
+			unformatedDocument = formatedDocument.replaceAll('[^\\d]', '');
 			System.debug('@@@unformatedDocument -> ' + unformatedDocument);
 		}
 
@@ -234,13 +193,7 @@ public without sharing class FinancialHierarchy {
 		System.debug('Tamanho lstCaseN2Total -> ' + N2Total);
 		System.debug('lstCase porcentagemAprovacao -> ' + porcentagemAprovacao);
 
-		List<vlocity_cmt__PaymentAdjustment__c> lstPayment = [
-			SELECT ContestationAmount__c
-			FROM vlocity_cmt__PaymentAdjustment__c
-			WHERE RecordTypeId = :recordTypeIdPayment
-				AND vlocity_cmt__DisputeId__c IN :lstCase
-				AND ContestationAmount__c != NULL
-		];
+		List<vlocity_cmt__PaymentAdjustment__c> lstPayment = [SELECT ContestationAmount__c FROM vlocity_cmt__PaymentAdjustment__c WHERE RecordTypeId = :recordTypeIdPayment AND vlocity_cmt__DisputeId__c IN :lstCase AND ContestationAmount__c != NULL];
 		Decimal total = 0;
 
 		for (vlocity_cmt__PaymentAdjustment__c paym : lstPayment) {
@@ -274,11 +227,7 @@ public without sharing class FinancialHierarchy {
 					}
 				} else {
 					if (parametro.PercentageApprovedContestation__c != null) {
-						if (
-							parametro.PercentageApprovedContestation__c <= porcentagemAprovacao &&
-							parametro.MinContestationQtt__c <= lstCaseN2Aprovado.size() &&
-							parametro.Amount__c >= amount
-						) {
+						if (parametro.PercentageApprovedContestation__c <= porcentagemAprovacao && parametro.MinContestationQtt__c <= lstCaseN2Aprovado.size() && parametro.Amount__c >= amount) {
 							availableParameters.add(parametro);
 							System.debug('@@Entrou na % -> ' + parametro);
 							continue;
@@ -292,11 +241,11 @@ public without sharing class FinancialHierarchy {
 						continue;
 
 					// **De acordo com a regra caso o parametro esteja null assumir q ele esta validado como ok
-					Boolean amountBool 			= parametro.Amount__c >= amount;
-					Boolean contractBool		= parametro.ContractStatus__c != null	? validateContractStatus(parametro, contrato) 	: true;
-					Boolean segmentoBool		= parametro.Segment__c != null			? validateContractSegment(parametro, contrato) 	: true;
-					Boolean describeItemBool 	= parametro.ItemType__c != null 		? parametro.ItemType__c == itemType 			: true;
-					Boolean itemQttBool 		= parametro.ItemType__c != null 		? parametro.ItemQtt__c >= itemQuantity 			: true;
+					Boolean amountBool = parametro.Amount__c >= amount;
+					Boolean contractBool = parametro.ContractStatus__c != null ? validateContractStatus(parametro, contrato) : true;
+					Boolean segmentoBool = parametro.Segment__c != null ? validateContractSegment(parametro, contrato) : true;
+					Boolean describeItemBool = parametro.ItemType__c != null ? parametro.ItemType__c == itemType : true;
+					Boolean itemQttBool = parametro.ItemType__c != null ? parametro.ItemQtt__c >= itemQuantity : true;
 					System.debug('@@@amountBool -> ' + amountBool);
 					System.debug('@@@contractBool -> ' + contractBool);
 					System.debug('@@@segmentoBool -> ' + segmentoBool);
@@ -306,15 +255,11 @@ public without sharing class FinancialHierarchy {
 					//**US105985
 					System.debug('**********************US105985***********************************');
 
-
-
-					Boolean proconBool			= parametro.AnatelProconProneTargeting__c != null	? validateResponseProcon(parametro, contrato, unformatedDocument) 	: true;
+					Boolean proconBool = parametro.AnatelProconProneTargeting__c != null ? validateResponseProcon(parametro, contrato, unformatedDocument) : true;
 					System.debug('@@@proconBool -> ' + proconBool);
 
-					Boolean defaultBool			= parametro.DefaultTargeting__c != null				? validateResponseDefault(parametro, contrato, unformatedDocument) 	: true;
+					Boolean defaultBool = parametro.DefaultTargeting__c != null ? validateResponseDefault(parametro, contrato, unformatedDocument) : true;
 					System.debug('@@@defaultBool -> ' + defaultBool);
-
-
 
 					// !Refactoring
 					// Boolean contractBool = true;
@@ -348,7 +293,6 @@ public without sharing class FinancialHierarchy {
 					// 		segmentoBool = false;
 					// 	}
 					// }
-
 
 					// if (parametro.ItemQtt__c != null && parametro.ItemType__c != null) {
 					// 	itemQttBool = parametro.ItemQtt__c >= itemQuantity;
@@ -459,12 +403,12 @@ public without sharing class FinancialHierarchy {
 		return errorMessage;
 	}
 
-/**
-	* @description US107387 | US105985 - Execucao de parametrizacao de alcada
-	* @author Diego Almeida | 22-12-2020
-	* @return Map<String, Object>
-**/
-/*	@AuraEnabled
+	/**
+	 * @description US107387 | US105985 - Execucao de parametrizacao de alcada
+	 * @author Diego Almeida | 22-12-2020
+	 * @return Map<String, Object>
+	 **/
+	/*	@AuraEnabled
 	public static Map<String, Object> validateMobileAuthority(){
 		Map<String, Object> response = new Map<String, Object>();
 			response.put('success', true);
@@ -473,156 +417,157 @@ public without sharing class FinancialHierarchy {
 		return response;
 	}
 */
-/**
-	* @description US105985 : Valiacao PROCON
-	* @author Diego Almeida | 06-01-2021
-	* @param parametro
-	* @param contrato
-	* @return Boolean
-**/
+	/**
+	 * @description US105985 : Valiacao PROCON
+	 * @author Diego Almeida | 06-01-2021
+	 * @param parametro
+	 * @param contrato
+	 * @return Boolean
+	 **/
 	private static Boolean validateResponseProcon(Parameters__c parametro, Account contrato, String document) {
-		Map<String, Object> response = getPropensaoPROCON(document, contrato.ContractReferenceNumber__c, contrato.CityCode__c,'2');
+		Map<String, Object> response = getPropensaoPROCON(document, contrato.ContractReferenceNumber__c, contrato.CityCode__c, '2');
 		// System.debug('US105985 getPropensaoPROCON: ' + response);
 		// System.debug('US105985 parametro.AnatelProconProneTargeting__c: ' + parametro.AnatelProconProneTargeting__c);
 
-		if(response.get('propensaoPROCON') == true){
+		if (response.get('propensaoPROCON') == true) {
 			List<String> anatelList = parametro.AnatelProconProneTargeting__c.split(';');
-			if(anatelList.contains(String.valueOf(response.get('parameterPROCON')))){
+			if (anatelList.contains(String.valueOf(response.get('parameterPROCON')))) {
 				return true;
 			}
-		}else if(Integer.valueOf(response.get('statusCode')) > 400){
+		} else if (Integer.valueOf(response.get('statusCode')) > 400) {
 			return true;
 		}
 		return false;
 	}
 
-/**
-	* @description US105985 : Chamada da api CustomerProconPropensity
-	* @author Diego Almeida | 23-12-2020
-	* @param cpf CPFFormula__c do objeto contato or AccountFormattedDocument__c do objeto CASE
-	* @param contractNumber
-	* @param operatorCode
-	* @param origin '2' for Residencial and '3' for mobile
-	* @return Map<String, Object>
-**/
-	private static Map<String, Object> getPropensaoPROCON(String cpf, String contractNumber,String operatorCode, String origin) {
+	/**
+	 * @description US105985 : Chamada da api CustomerProconPropensity
+	 * @author Diego Almeida | 23-12-2020
+	 * @param cpf CPFFormula__c do objeto contato or AccountFormattedDocument__c do objeto CASE
+	 * @param contractNumber
+	 * @param operatorCode
+	 * @param origin '2' for Residencial and '3' for mobile
+	 * @return Map<String, Object>
+	 **/
+	private static Map<String, Object> getPropensaoPROCON(String cpf, String contractNumber, String operatorCode, String origin) {
 		Map<String, Object> response = new Map<String, Object>();
 
-        Map<String, String> params = new Map<String, String>();
-            params.put('origen', origin);
+		Map<String, String> params = new Map<String, String>();
+		params.put('origen', origin);
 		// System.debug('getPropensaoPROCON params: ' + params);
 
-        Map<String, String> headers = new Map<String, String>();
-            String authToken = getAuth('CustomerProconPropensity');
-			headers.put('X-Client-Auth', authToken);
-		String queryString = 'cpf='+cpf+'&contractNumber='+contractNumber+'&operatorCode='+operatorCode;
-			headers.put('X-QueryString', queryString);
+		Map<String, String> headers = new Map<String, String>();
+		String authToken = getAuth('CustomerProconPropensity');
+		headers.put('X-Client-Auth', authToken);
+		String queryString = 'cpf=' + cpf + '&contractNumber=' + contractNumber + '&operatorCode=' + operatorCode;
+		headers.put('X-QueryString', queryString);
 
 		// System.debug('getPropensaoPROCON headers: ' + headers);
 
 		Map<String, String> calloutResponse = OutboundCalloutHandler.sendRequest('', params, headers, 'CustomerProconPropensity');
-		JSONCustomerProconPropensity responseObject = (JSONCustomerProconPropensity)JSON.deserialize(calloutResponse.get('response'), JSONCustomerProconPropensity.class);
+		JSONCustomerProconPropensity responseObject = (JSONCustomerProconPropensity) JSON.deserialize(calloutResponse.get('response'), JSONCustomerProconPropensity.class);
 
-		if(Integer.valueOf(calloutResponse.get('statusCode')) < 400){
+		if (Integer.valueOf(calloutResponse.get('statusCode')) < 400) {
 			response.put('propensaoPROCON', true);
-			if(origin == '2'){
+			if (origin == '2') {
 				response.put('parameterPROCON', responseObject.data.codRangePropensity);
 			}
-		}else{
+		} else {
 			response.put('propensaoPROCON', false);
 			response.put('statusCode', calloutResponse.get('statusCode'));
 		}
 		return response;
-
 	}
 
-
-/**
-	* @description US105985 : Valiacao Segmentacao Default
-	* @author Diego Almeida | 06-01-2021
-	* @param parametro
-	* @param contrato
-	* @return Boolean
-**/
+	/**
+	 * @description US105985 : Valiacao Segmentacao Default
+	 * @author Diego Almeida | 06-01-2021
+	 * @param parametro
+	 * @param contrato
+	 * @return Boolean
+	 **/
 	private static Boolean validateResponseDefault(Parameters__c parametro, Account contrato, String document) {
-		Map<String, Object> response = getSegmentacaoDefault(document, contrato.ContractReferenceNumber__c, contrato.CityCode__c,'2');
+		Map<String, Object> response = getSegmentacaoDefault(document, contrato.ContractReferenceNumber__c, contrato.CityCode__c, '2');
 		// System.debug('US105985 getSegmentacaoDefault: ' + response);
 		// System.debug('US105985 parametro.DefaultTargeting__c: ' + parametro.DefaultTargeting__c);
 
-
-		if(response.get('propensaoDefault') == true){
-			if(parametro.DefaultTargeting__c == response.get('parameterDefault')){
+		if (response.get('propensaoDefault') == true) {
+			if (parametro.DefaultTargeting__c == response.get('parameterDefault')) {
 				return true;
 			}
-		}else if(Integer.valueOf(response.get('statusCode')) > 400){
+		} else if (Integer.valueOf(response.get('statusCode')) > 400) {
 			return true;
 		}
 		return false;
 	}
 
-/**
-	* @description US105985 : Chamada da api CustomerDefaultSegmetation
-	* @author Diego Almeida | 23-12-2020
-	* @param cpf CPFFormula__c do objeto contato or AccountFormattedDocument__c do objeto CASE
-	* @param contractNumber
-	* @param operatorCode
-	* @param origin '2' for Residencial and '3' for mobile
-	* @return Map<String, Object>
-**/
-	private static Map<String, Object> getSegmentacaoDefault(String cpf, String contractNumber,String operatorCode, String origin) {
+	/**
+	 * @description US105985 : Chamada da api CustomerDefaultSegmetation
+	 * @author Diego Almeida | 23-12-2020
+	 * @param cpf CPFFormula__c do objeto contato or AccountFormattedDocument__c do objeto CASE
+	 * @param contractNumber
+	 * @param operatorCode
+	 * @param origin '2' for Residencial and '3' for mobile
+	 * @return Map<String, Object>
+	 **/
+	private static Map<String, Object> getSegmentacaoDefault(String cpf, String contractNumber, String operatorCode, String origin) {
 		Map<String, Object> response = new Map<String, Object>();
 
-        Map<String, String> params = new Map<String, String>();
-            params.put('origen', origin);
-		// System.debug('getSegmentacaoDefault params: ' + params);
+		Map<String, String> params = new Map<String, String>();
+		params.put('origen', origin);
 
-        Map<String, String> headers = new Map<String, String>();
-            String authToken = getAuth('CustomerDefaultSegmetation');
-			headers.put('X-Client-Auth', authToken);
-		String queryString = 'cpf='+cpf+'&contractNumber='+contractNumber+'&operatorCode='+operatorCode;
-			headers.put('X-QueryString', queryString);
-
-		// System.debug('getSegmentacaoDefault headers: ' + headers);
+		Map<String, String> headers = new Map<String, String>();
+		String authToken = getAuth('CustomerDefaultSegmetation');
+		headers.put('X-Client-Auth', authToken);
+		String queryString = 'cpf=' + cpf + '&contractNumber=' + contractNumber + '&operatorCode=' + operatorCode;
+		headers.put('X-QueryString', queryString);
 
 		Map<String, String> calloutResponse = OutboundCalloutHandler.sendRequest('', params, headers, 'CustomerDefaultSegmetation');
-		JSONCustomerDefaultSegmetation responseObject = (JSONCustomerDefaultSegmetation)JSON.deserialize(calloutResponse.get('response'), JSONCustomerDefaultSegmetation.class);
+		// JSONCustomerDefaultSegmetation responseObject = (JSONCustomerDefaultSegmetation)JSON.deserialize(calloutResponse.get('response'), JSONCustomerDefaultSegmetation.class);
 
-		if(Integer.valueOf(calloutResponse.get('statusCode')) < 400){
+		JSONCustomerDefaultSegmetation resp = new JSONCustomerDefaultSegmetation('JSONInvoicesNegotiationOptions', calloutResponse);
+		// if(Integer.valueOf(calloutResponse.get('statusCode')) < 400){
+		// 	response.put('propensaoDefault', true);
+		// 	if(origin == '2'){
+		// 		response.put('parameterDefault', responseObject.data.descCluster);
+		// 	}
+		// }else{
+		// 	response.put('propensaoDefault', false);
+		// 	response.put('statusCode', calloutResponse.get('statusCode'));
+		// }
+
+		if (resp.isSuccessfull) {
 			response.put('propensaoDefault', true);
-			if(origin == '2'){
-				response.put('parameterDefault', responseObject.data.descCluster);
-			}
-		}else{
+			JSONCustomerDefaultSegmetation responseJSON = (JSONCustomerDefaultSegmetation) resp.getData();
+			response.put('parameterDefault', responseJSON.descCluster);
+		} else {
 			response.put('propensaoDefault', false);
 			response.put('statusCode', calloutResponse.get('statusCode'));
 		}
+
 		return response;
-
 	}
 
-/**
-	* @description Task 105985 :
-	* @author Diego Almeida | 23-12-2020
-	* @param customSetting
-	* @return String
-**/
-	private static String getAuth(String customSetting){
-        ServiceParameter__c setting = ServiceParameter__c.getValues(customSetting);
-        String token = setting.Token__c;
-        return token;
+	/**
+	 * @description Task 105985 :
+	 * @author Diego Almeida | 23-12-2020
+	 * @param customSetting
+	 * @return String
+	 **/
+	private static String getAuth(String customSetting) {
+		ServiceParameter__c setting = ServiceParameter__c.getValues(customSetting);
+		String token = setting.Token__c;
+		return token;
 	}
 
-
-
-
-/**
-	* !refactoring
-	* @description
-	* @author Diego Almeida | 05-01-2021
-	* @param parametro
-	* @param contrato
-	* @return Boolean
-**/
+	/**
+	 * !refactoring
+	 * @description
+	 * @author Diego Almeida | 05-01-2021
+	 * @param parametro
+	 * @param contrato
+	 * @return Boolean
+	 **/
 	private static Boolean validateContractStatus(Parameters__c parametro, Account contrato) {
 		// System.debug('validateContractStatus: ');
 		Boolean response = true;
@@ -635,8 +580,8 @@ public without sharing class FinancialHierarchy {
 
 			// System.debug('contractStatusList: '+contractStatusList);
 			// System.debug('lowerStatus: '+lowerStatus);
-			for (String contractStatus : contractStatusList){
-				if (contractStatus.toLowerCase() == lowerStatus){
+			for (String contractStatus : contractStatusList) {
+				if (contractStatus.toLowerCase() == lowerStatus) {
 					response = true;
 				}
 			}
@@ -648,14 +593,14 @@ public without sharing class FinancialHierarchy {
 		return response;
 	}
 
-/**
-	* !refactoring
-	* @description
-	* @author Diego Almeida | 05-01-2021
-	* @param parametro
-	* @param contrato
-	* @return Boolean
-**/
+	/**
+	 * !refactoring
+	 * @description
+	 * @author Diego Almeida | 05-01-2021
+	 * @param parametro
+	 * @param contrato
+	 * @return Boolean
+	 **/
 	private static Boolean validateContractSegment(Parameters__c parametro, Account contrato) {
 		// System.debug('validateContractSegment: ');
 		Boolean response = true;
@@ -667,30 +612,28 @@ public without sharing class FinancialHierarchy {
 			List<String> parmsSegList = parametro.Segment__c.split(';');
 			String segAccount = contrato.vlocity_cmt__CustomerValue__c.toLowerCase();
 
-
 			// System.debug('parmsSegList: '+parmsSegList);
 			// System.debug('segAccount: '+segAccount);
 
-			for (String paramSeg : parmsSegList){
-				if (paramSeg.toLowerCase() == segAccount){
+			for (String paramSeg : parmsSegList) {
+				if (paramSeg.toLowerCase() == segAccount) {
 					response = true;
 				}
 			}
-
 		} else {
 			response = false;
 		}
-		System.debug('validateContractSegment: '+response);
+		System.debug('validateContractSegment: ' + response);
 
 		return response;
 	}
 
 	/**
-	* @description US107387 - Retirada dos criterios de aceite da sprint por falta de definicao
-	* @author Diego Almeida | 29-12-2020
-	* @return Map<String, Object>
-	**/
-/* 	private static Map<String, Object> validateModalityAccount(List<Parameters__c> parameters, Account contrato){
+	 * @description US107387 - Retirada dos criterios de aceite da sprint por falta de definicao
+	 * @author Diego Almeida | 29-12-2020
+	 * @return Map<String, Object>
+	 **/
+	/* 	private static Map<String, Object> validateModalityAccount(List<Parameters__c> parameters, Account contrato){
 		Map<String, Object> response = new Map<String, Object>();
 		Map<String, Boolean> paramValidation = new Map<String, Boolean>();
 
@@ -710,13 +653,12 @@ public without sharing class FinancialHierarchy {
 	}
 	*/
 
-
 	/**
-	* @description US107387
-	* @author Diego Almeida | 29-12-2020
-	* @return Map<String, Object>
-	**/
-/* 	private static Map<String, Object> validateTypeItem(List<FinancialMobileInvoicesDetailsWrapper.ResponseInvoiceDetails> lstSelectedItems, List<Parameters__c> parameters){
+	 * @description US107387
+	 * @author Diego Almeida | 29-12-2020
+	 * @return Map<String, Object>
+	 **/
+	/* 	private static Map<String, Object> validateTypeItem(List<FinancialMobileInvoicesDetailsWrapper.ResponseInvoiceDetails> lstSelectedItems, List<Parameters__c> parameters){
 		Map<String, Object> response = new Map<String, Object>();
 		Map<String, Boolean> paramValidation = new Map<String, Boolean>();
 		Set<String> aprovedItemType = new Set<String>();
