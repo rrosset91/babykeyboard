@@ -1,0 +1,59 @@
+<template>
+	<div style="background-color: white">
+		<div class="custom-header">Confirmação</div>
+	</div>
+
+	<div class="discount-container">
+		<h3 class="subtitle">Confira abaixo a previsão de lançamento das parcelas</h3>
+		<div class="negotiation-details">
+			<lightning-layout>
+				<lightning-layout-item size="2">
+					<dl>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">Valor da Negociação</dt>
+						<dd class="slds-item_detail slds-text-align_left">{negotiatedAmount}</dd>
+					</dl>
+				</lightning-layout-item>
+				<lightning-layout-item size="2"> </lightning-layout-item>
+				<lightning-layout-item size="2">
+					<dl>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">Parcelas</dt>
+						<dd class="slds-item_detail slds-text-align_left">{negotiationConditions}</dd>
+					</dl>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+	</div>
+	<div class="installment-container"></div>
+
+	<div class="datatable">
+		<h3 class="subtitle">Simulação de valor</h3>
+		<lightning-datatable key-field="id" columns={columns} data={tableData} hide-checkbox-column resize-column-disabled="true" sorted-direction="asc" sorted-by="installmentNumber"> </lightning-datatable>
+		<div class="discount-container">
+			<lightning-layout>
+				<lightning-layout-item size="2">
+					<p class="total-title">VALOR TOTAL</p>
+				</lightning-layout-item>
+				<lightning-layout-item size="8"></lightning-layout-item>
+				<lightning-layout-item size="2">
+					<p class="total-value">{negotiatedAmount}</p>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+		<div class="negotiation-details">
+			<lightning-layout-item size="12">
+				<lightning-textarea name="negotiationObservation" label="OBSERVAÇÃO DA NEGOCIAÇÃO" onchange={handleObservation}></lightning-textarea>
+			</lightning-layout-item>
+		</div>
+		<div class="navigation-buttons">
+			<lightning-layout>
+				<lightning-layout-item size="2">
+					<lightning-button variant="brand-outline" label="Voltar" title="Voltar" onclick={handleBack} class="slds-m-left_x-small"></lightning-button>
+				</lightning-layout-item>
+				<lightning-layout-item size="8"></lightning-layout-item>
+				<lightning-layout-item size="2">
+					<lightning-button variant="brand" label="Negociar" title="Negociar" onclick={validateNegotiation} class="slds-m-left_x-small"></lightning-button>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+	</div>
+</template>

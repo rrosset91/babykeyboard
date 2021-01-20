@@ -32,3 +32,11 @@
 .custom-header {
 	font-weight: bold;
 }
+.modal-footer {
+	align-items: center;
+	align-self: center;
+	text-align: center;
+	margin: auto;
+	display: block;
+	position: relative;
+}

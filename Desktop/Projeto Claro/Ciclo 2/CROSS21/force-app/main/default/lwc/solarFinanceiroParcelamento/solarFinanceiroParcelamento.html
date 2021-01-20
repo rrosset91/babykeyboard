@@ -2,6 +2,18 @@
 	<template if:true={uiProperties.generalUi.isLoading}>
 		<lightning-spinner alternative-text="Carregando" size="medium"> </lightning-spinner>
 	</template>
+
+	<c-solar-modal size="x-small" header="Atenção">
+		<div slot="content">
+			<div class="modal-message">
+				<p><lightning-icon icon-name="utility:error" variant="error"> </lightning-icon>{uiProperties.modal.message}</p>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Ok" title="Ok" onclick={handleBack} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+
 	<template if:true={uiProperties.generalUi.show}>
 		<div style="background-color: white">
 			<div class="custom-header">Simulação</div>
@@ -23,25 +35,27 @@
 			<p>Selecione uma opção para simular os valores:</p>
 		</div>
 		<div class="installment-container" if:true={uiProperties.installmentOptions.show}>
-			<template for:each={installmentsOptions} for:item="option">
-				<div key={option.installmentId}>
-					<div class="installment-option" onclick={handleInstallmentSelection} data-id="installmentOption" id={option.installmentId}>
-						<dl>
-							<div>
-								<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">{option.label}</dt>
-								<dd class="slds-item_detail slds-text-align_left">{option.discount}</dd>
+			<lightning-layout>
+				<template for:each={installmentsOptions} for:item="option">
+					<div key={option.installmentId}>
+						<lightning-layout-item size="2">
+							<div class="installment-option" onclick={handleInstallmentSelection} data-id="installmentOption" id={option.installmentId}>
+								<dl>
+									<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">{option.ofertaParcelamento}</dt>
+									<dd class="slds-item_detail slds-text-align_left">{option.descontoParcelamento}</dd>
+								</dl>
 							</div>
-						</dl>
+						</lightning-layout-item>
 					</div>
-				</div>
-			</template>
+				</template>
+			</lightning-layout>
 		</div>
 
-		<div class="loading-spinner-div" if:true={uiProperties.dataTable.isLoading}>
-			<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
-		</div>
-		<div class="datatable" if:true={uiProperties.dataTable.show}>
-			<lightning-datatable key-field="id" columns={uiProperties.dataTable.columns} data={installmentsValues} hide-checkbox-column resize-column-disabled="true" sorted-direction="asc" sorted-by="installmentNumber"> </lightning-datatable>
+		<div class="datatable">
+			<div class="loading-spinner-div" if:true={uiProperties.dataTable.isLoading}>
+				<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
+			</div>
+			<lightning-datatable key-field="id" if:true={uiProperties.dataTable.show} columns={uiProperties.dataTable.columns} data={installmentsValues} hide-checkbox-column resize-column-disabled="true" sorted-direction="asc" sorted-by="installmentNumber"> </lightning-datatable>
 			<div class="discount-container">
 				<lightning-layout>
 					<lightning-layout-item size="2">
@@ -66,22 +80,5 @@
 				</lightning-layout>
 			</div>
 		</div>
-
-		<c-solar-modal size="small" header="Atenção" show-close-button="false" if:true={uiProperties.modal.show}>
-			<lightning-layout>
-				<lightning-layout-item size="4"> </lightning-layout-item>
-				<lightning-layout-item size="4">
-					<div class="modal-message">
-						<p>{uiProperties.modal.message}</p>
-					</div>
-				</lightning-layout-item>
-				<lightning-layout-item size="4"> </lightning-layout-item>
-			</lightning-layout>
-			<lightning-layout-item size="4"> </lightning-layout-item>
-			<lightning-layout-item size="4">
-				<lightning-button variant="brand" label="Ok" title="Ok" onclick={handleBack} class="slds-m-left_x-small"></lightning-button>
-			</lightning-layout-item>
-			<lightning-layout-item size="4"> </lightning-layout-item>
-		</c-solar-modal>
 	</template>
 </template>

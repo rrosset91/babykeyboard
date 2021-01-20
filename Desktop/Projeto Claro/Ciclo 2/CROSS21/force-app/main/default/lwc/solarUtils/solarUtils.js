@@ -2,7 +2,7 @@
  * @description       :
  * @author            : Joao Neves
  * @group             :
- * @last modified on  : 13-01-2021
+ * @last modified on  : 20-01-2021
  * @last modified by  : Roger Rosset
  * Modifications Log
  * Ver   Date         Author       Modification
@@ -56,7 +56,36 @@ export default class SolarAcessarFicha extends LightningElement {
 	static getMonthName(dt) {
 		return dt.toLocaleString("pt-BR", { month: "long" });
 	}
-
+	static getPtBrMonthName(monthNumber) {
+		switch (monthNumber) {
+			case "01":
+				return "Janeiro";
+			case "02":
+				return "Fevereiro";
+			case "03":
+				return "Março";
+			case "04":
+				return "Abril";
+			case "05":
+				return "Maio";
+			case "06":
+				return "Junho";
+			case "07":
+				return "Julho";
+			case "08":
+				return "Agosto";
+			case "09":
+				return "Setembro";
+			case "10":
+				return "Outubro";
+			case "11":
+				return "Novembro";
+			case "12":
+				return "Dezembro";
+			default:
+				break;
+		}
+	}
 	static jsonLogger(value) {
 		return JSON.parse(JSON.stringify(value));
 	}
