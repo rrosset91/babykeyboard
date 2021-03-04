@@ -1,0 +1,65 @@
+.THIS .bottom-content{
+    padding:1rem 0 2rem 0;
+}
+
+.THIS .cardLeft {
+    left: initial !important;
+    z-index: 3 !important;
+}
+
+.THIS .cardRight {
+    right: initial !important;
+    z-index: 3 !important;
+}
+
+.THIS .oneConsoleLayoutContainer2 .split-toggle {
+    left: 300px !important;
+}
+
+.THIS .oneConsoleLayoutContainer2 .fullRight .split-toggle {
+    left: 300px !important;
+}
+
+.THIS .button-sidebar { 
+	top: auto !important;
+    height:100% !important;
+    position:	absolute !important;
+    border: none !important;
+}
+
+.THIS .button-header { 
+	width:100% !important;
+    margin-left:-0.3rem!important;
+}
+
+.THIS .slds-no-flex { 
+	margin-left: 5px !important;
+    margin-right: 15px !important;
+}
+
+.THIS button.slds-button.design-allow-interaction.toggle.split-toggle.slds-split-view__toggle-button.slds-is-open.slds-button_icon-xx-small.slds-button_icon-border.cardLeft.slds-button_icon-small.slds-button_icon-border-filled { 
+	background: none !important;
+}
+
+.THIS .slds-button_icon-xx-small .slds-button__icon, .slds-button--icon-xx-small .slds-button__icon { 
+	width: 15px !important;
+    height: 15px !important;
+    color: #009de3 !important;
+}
+.THIS .right-aling{
+   right : 0 !important;
+    
+}
+
+.THIS .button-expand {
+    float       :right;
+    margin-top  :10%;
+    margin-right:1rem;
+}
+
+.THIS .slds-card {
+    border      :none !important;
+    box-shadow  :none !important;
+    background  :none !important;
+    margin-right:-5%;
+}

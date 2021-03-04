@@ -1,0 +1,18 @@
+<!-- CEC_PME_OrderPathItem -->
+<aura:component implements="force:hasRecordId,flexipage:availableForAllPageTypes" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.pathItem}" action="{!c.onChangePathItem}"/>
+    
+    <aura:attribute name="pathItem" type="Map" required="true" />
+    
+    <aura:if isTrue="{!v.pathItem != null}">
+        <li aura:id="{!v.pathItem.id}" class="{!v.pathItem.listCssClass}" role="presentation" id="{!v.pathItem.id}">
+            <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" role="option" data-value="{!v.pathItem.name}">
+                <span class="slds-path__stage">
+                    <lightning:icon iconName="utility:check" size="x-small" alternativeText="Stage Complete" variant="inverse"/>
+                </span>
+                <span class="slds-path__title">{!v.pathItem.name}</span>
+            </a>
+        </li>
+    </aura:if>
+</aura:component>

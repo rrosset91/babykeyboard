@@ -1,0 +1,13 @@
+.THIS {
+}
+.THIS .success svg{
+    fill: green;
+}
+
+.THIS .warning svg{
+    fill: #ffb75d;
+}
+
+.THIS .error svg{
+    fill: #c23934;
+}

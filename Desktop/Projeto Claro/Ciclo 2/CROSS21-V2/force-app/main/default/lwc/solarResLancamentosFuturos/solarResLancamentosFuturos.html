@@ -1,0 +1,89 @@
+<!--
+  @description       : 
+  @author            : Ricardo Alves
+  @group             : 
+  @last modified on  : 06-11-2020
+  @last modified by  : Joao Neves
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   06-11-2020   Ricardo Alves   Initial Version
+-->
+<template>
+	<lightning-spinner if:true={loading} alternative-text="Carregando..." size="medium"></lightning-spinner>
+
+	<header>
+		<h3 class="header-text">Selecione os itens para ver detalhes.</h3>
+		<div style="padding-top: 5px; width: 100%; display: flex; justify-content: flex-end" onkeyup={handleFiltroBusca}>
+			<lightning-input name="enter-search" label="Busca" type="search"> </lightning-input>
+		</div>
+	</header>
+
+	<div style="padding-top: 25px">
+    <template if:true={hasData}>
+      <lightning-datatable key-field="idLancamento" data={dataOnTable} columns={columns} onrowaction={handleRowAction} hide-checkbox-column resize-column-disabled="true">
+      </lightning-datatable>
+    </template>
+    <template if:false={hasData}>
+      <c-solar-exception-content show-empty="true"></c-solar-exception-content>
+    </template>
+	</div>
+
+	<!-- Modal Mais informações -->
+	<c-solar-modal size="small" header="Detalhe do Lançamento">
+		<div slot="content">
+			<div class="slds-form slds-grid slds-wrap slds-gutters">
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Data de Vencimento</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.formattedDate}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Lançamento</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.formattedBillDate}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Produto</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.description}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Item</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.extractItemTypeDescription}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Parceiro</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.partnerName}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Total de Parcelas</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.installmentsCount}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Número da Parcela</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{selectedDataRow.installmentNumber}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Valor</dt>
+						<dd class="slds-item_detail custom-content">{selectedDataRow.amountDue}</dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

@@ -1,0 +1,283 @@
+.THIS a
+{
+   color: #da291c;
+   font-size: 12px;
+   border-bottom: dotted 1px;
+}
+
+
+.THIS .vermelho 
+{
+    color: #da291c;
+}
+
+.THIS .bloco-title
+{
+   display: block;
+   border-bottom: solid 1px #dbdada;
+   margin-bottom: 12px;
+   font-size: 16px;
+   color: #da291c;
+}
+
+.THIS .slds-text-heading--label
+{
+   font-size: .75rem;
+   line-height: 1.25;
+   color: #706e6b;
+   text-transform: uppercase;
+   letter-spacing: .0625rem;
+}
+
+.THIS .slds-truncate 
+{
+   max-width: 100%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.THIS .slds-hint-parent 
+{
+   padding-left: 10px !important;
+   width: fit-content;
+   padding-right: 40px !important;
+   text-transform: none;
+   letter-spacing: initial;
+}
+
+.THIS .lista-dados-mobile
+{
+   border: solid 1px #dbdada;
+   border-bottom: solid 1px #dbdada;
+}
+
+.THIS thead 
+{
+   display: table-header-group;
+   vertical-align: middle;
+   border-color: inherit;
+}
+
+.THIS .lista-dados-mobile th
+{
+   border-bottom: solid 1px #dbdada;
+   font-weight: normal;
+   line-height: 34px;
+}
+
+.THIS .slds-text-heading--label
+{
+   font-size: .75rem;
+   line-height: 1.25;
+   color: #706e6b;
+   text-transform: uppercase;
+   letter-spacing: .0625rem;
+}
+
+.THIS table.lista-dados-mobile th:nth-child(1)
+{
+   min-width: 150px !important;
+   max-width: 150px !important;
+   padding: 10px;
+}
+
+.THIS table.lista-dados-mobile th:nth-child(2)
+{
+   min-width: 120px !important;
+   max-width: 120px !important;
+}
+
+.THIS table.lista-dados-mobile th:nth-child(3) 
+{
+   min-width: 381px;
+   
+}
+
+.THIS tr.slds-text-heading--label th:last-child
+{
+   border-right: solid 1px #dbdada;
+  
+}
+
+.THIS table th:last-child
+{
+   width: 100%;
+}
+
+.THIS tbody
+{
+   display: table-row-group;
+   vertical-align: middle;
+   border-color: inherit;
+}
+
+.THIS tr
+{
+   display: table-row;
+   vertical-align: inherit;
+   border-color: inherit;
+}
+
+.THIS .lista-dados-mobile td
+{
+   color: #434444;
+   border-bottom: solid 1px #dbdada;
+   font-weight: normal;
+   line-height: 34px;
+   padding:8px;
+}
+
+.THIS table.lista-dados-mobile td:nth-child(3) 
+{
+   min-width: 381px;
+   line-height: 39px;
+   white-space: normal;
+}
+
+.THIS table.lista-dados-mobile td:nth-child(4) 
+{
+   min-width: 320px;
+   text-transform: lowercase;
+   
+}
+
+.THIS .via-slds .slds-card__body 
+{
+   margin-bottom: .75rem;
+}
+
+.THIS .lista-dados-mobile tbody tr:hover td 
+{
+   background-color: #f8f8f7 !important;
+}
+/*RESET PARA TABELA DE CASOS*/
+.THIS .lista-dados-casos-residence th{
+   line-height: normal!important;
+   white-space: nowrap;
+}
+
+.THIS table.lista-dados-mobile .lista-dados-casos-residence th:nth-child(3),
+.THIS table.lista-dados-mobile .lista-dados-casos-residence td:nth-child(3){
+   min-width: 270px!important;
+}
+
+.THIS table.lista-dados-mobile .lista-dados-casos-residence th:nth-child(2){
+   min-width: auto!important;
+   max-width: 100%!important;
+}
+
+.THIS table th:last-child{
+   width: auto;
+}
+
+.THIS table.lista-dados-mobile td:nth-child(4),
+.THIS table.lista-dados-mobile .lista-dados-casos-residence td:nth-child(4){
+   min-width: auto!important;
+   max-width: 100%!important;
+   text-transform: none;
+}
+
+.THIS .lista-dados-casos-residence td{
+   padding: 0px!important;
+}
+
+/*Estilização nova tabela*/
+.THIS table.lista-dados-casos-residence{
+   border-bottom: 2px solid #da291c;
+}
+
+.THIS table.lista-dados-mobile > tbody > tr:last-child table.lista-dados-casos-residence{
+   border-bottom: none;
+}
+
+.THIS table.lista-dados-mobile .container-subtable{
+   padding: 0;
+}
+.THIS table.lista-dados-mobile .container-subtable > div{
+   display: block;
+   overflow: hidden;
+   height: auto;
+   transition: all linear .3s;
+}
+.THIS table.lista-dados-mobile .container-subtable > div.ocultarTabela{
+   height: 0px!important;
+   transition: all linear .3s;
+}
+.THIS table.lista-dados-casos-residence > thead{
+   background-color: #ededed;
+}
+.THIS table.lista-dados-casos-residence> thead > tr > th {
+   padding-top: 10px;
+   padding-bottom: 10px;
+}
+.THIS table.lista-dados-casos-residence > thead > tr > th,
+.THIS table.lista-dados-casos-residence > thead > tr >th:nth-child(1),
+.THIS .lista-dados-casos-residence td{
+   padding-left: 40px!important;
+}
+
+.THIS .lista-dados-casos-residence td {
+   line-height: 30px!important;
+}
+
+.THIS table.lista-dados-casos-residence th:last-child{
+   width: auto;;
+}
+
+.THIS table.lista-dados-mobile .callToActionRow > td{
+   text-align: right;
+}
+
+.THIS table.lista-dados-mobile button.createCaseBtn{
+   position: relative;
+   border: 1px solid #da291c;
+   padding: 5px 10px;
+   background-color: #da291c;
+   color: #fff;
+   line-height: normal;
+   margin: 10px 15px;
+   transition: all linear .3s;
+}
+
+.THIS table.lista-dados-mobile button.createCaseBtn:hover{
+   background-color: #b61f14;
+}
+
+.THIS table.lista-dados-mobile button.notifyInternalAction:before{
+   content: 'Atenção! Este contrato possui caso em aberto, verifique o processo  para o seu canal!';
+   display: block;
+   background-color: #898989;
+   border: 1px solid #898989;
+   color: #fff;
+   position: absolute;
+   top: -11px;
+   left: -211px;
+   width: 200px;
+   padding: 4px;
+   font-size: 11px;
+   pointer-events: none;
+   opacity: 0;
+   transition: all linear .3s;
+}
+
+.THIS table.lista-dados-mobile button.notifyInternalAction:after{
+   content: '';
+   background-color: #898989;
+   width: 10px;
+   height: 10px;
+   clip-path: polygon(100% 45%, 0 0, 0 100%);
+   position: absolute;
+   left: -11px;
+   opacity: 0;
+   pointer-events: none;
+   transition: all linear .3s;
+}
+
+.THIS table.lista-dados-mobile button.notifyInternalAction:hover:before{
+   opacity: 1;
+}
+
+.THIS table.lista-dados-mobile button.notifyInternalAction:hover:after{
+   opacity: 1;
+}

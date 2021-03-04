@@ -1,0 +1,105 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 01/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 9] + [Componente do header (bloco 2)]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 01/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 19333 - Solicitar ramal avaya]: Criação da estrutura do componente
+* Data 23/10/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: Inclusão do componente para a discagem para o número de conferência
+* ---------------------------------------------------------------
+* Data: 24/10/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Possibilitar conferencia]: Modificação da estrutura do javascript para contemplar a conferencia
+-->
+
+
+
+<apex:component >
+    
+    <apex:includeScript value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/libs/jQuery/jquery.mask.min.js')}"/>
+    
+    <div class="slds-grid customer-awaiting">
+        <div class="slds-col slds-size_10-of-12 customer-number">
+            <label class="slds-form-element__label" for="select-01">Telefone de origem</label><br/>
+            <input type="text" maxlength="16" class="number-input telefone-header2" id="numberInput" autocomplete="off" value=""/>
+        </div>
+        
+        <div class="delete-number-actions telefone-header2 slds-grid slds-size_2-of-12 display-none">
+            <div class="slds-col slds-size_6-of-12 delete-one active telefone-header2">
+                <img title="Apagar último digito do número de telefone" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/reduz.svg')}"/>  
+            </div>
+            
+            <div class="slds-col slds-size_6-of-12 delete-all active telefone-header2">
+                <img title="Apagar todo o número de telefone" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/clear-all-number-block.svg')}"/>  
+            </div>   
+            
+            <div class="slds-col slds-size_6-of-12 delete-all inactive display-none">
+                <img title="Apagar todo o número de telefone" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/apagar-off.svg')}"/>  
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    
+    $( function() {
+        
+        /*
+        $( "#numberInput" ).focus();
+
+        $("#numberInput").focusout(function(){
+
+        	if($("#numberInput").val().length < 9) {
+            	$("#numberInput").val(null);
+            } ;
+		});
+		*/
+			
+        $("#numberInput").on('input', function (event) { 
+            this.value = this.value.replace(/[^0-9]/g, '');
+            var value = $("#numberInput").val();
+            
+        });
+        
+        $("#numberInput").prop("disabled",true);
+        $("#numberInput").css("cursor","default");
+        
+        //DELETE ONE NUMBER ON INPUT
+        $(".delete-one.active.telefone-header2").on('click',function(){
+            var phoneNumber = $(".number-input.telefone-header2").val().slice(0,-1);
+            $(".number-input.telefone-header2").val("");
+            $(".number-input.telefone-header2").val(phoneNumber);
+            ativarFocus();
+        });
+        
+        //DELETE ALL NUMBERS ON INPUT
+        $(".delete-all.active.telefone-header2").on('click',function(){
+            $(".number-input.telefone-header2").val("");
+            $(".number-input.telefone-header2").val(null);
+            ativarFocus();
+        });
+        
+        //ENVIAR NUMERO DANDO ENTER (QUANDO O INPUT ESTA EM FOCO)
+        $('.number-input.telefone-header2').keypress(function(event){
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+                sendPhoneNumberToDriver();
+                event.preventDefault();
+            }
+        });
+        
+    } );
+    
+    function ativarFocus(){
+    	$(".number-input.telefone-header2").focus();
+        $("#nameInputVisible").prop("disabled",true);
+        $("#nameInputVisible").css("cursor","default");
+    }
+    
+    </script>
+    
+</apex:component>

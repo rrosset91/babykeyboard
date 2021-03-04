@@ -1,0 +1,48 @@
+{
+    "apiVersion": "1;2017-12-22",
+    "transactionId": "Id-a5421d6053a72f091bff52f8",
+    "data": {
+        "subscribers": [
+            {
+                "mobileSubscriberId": "925389248",
+                "name": "ANTONIO FAGUNDES",
+                "serviceType": "MOVEL",
+                "type": "CLARO_CONTROLE",
+                "subType": null,
+                "comboType": null,
+                "effectiveSinceDate": "2020-09-22T00:00:00.000-03:00",
+                "cancellationDate": null,
+                "status": "ATIVO",
+                "statusDate": "2020-09-22T00:00:00.000-03:00",
+                "documentationStatus": "NAO_RECEBIDA",
+                "msisdn": "11992704864",
+                "ticketAttendance": "****",
+                "productFamily": null,
+                "customer": {
+                    "name": "ANTONIO FAGUNDES",
+                    "personType": "PF",
+                    "type": "INDIVIDUAL",
+                    "subType": null,
+                    "mobileId": "119209896",
+                    "mobileType": "PF",
+                    "mobileSubType": "NORMAL",
+                    "account": {
+                        "mobileBan": null,
+                        "faId": null
+                    },
+                    "documents": {
+                        "cpf": "82113905078",
+                        "rg": "45456323",
+                        "passport": null
+                    },
+                    "acrmCustomerId": null,
+                    "crmCustomerId": null,
+                    "crmCustomerSubType": null
+                },
+                "omsSubscriberId": null,
+                "crmSubscriberId": "124497720609244710334072100310",
+                "titularId": null
+            }
+        ]
+    }
+}

@@ -1,0 +1,278 @@
+<!--
+  @File Name          : NBA_OfferComparator.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 27/01/2020 00:36:21
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    21/01/2020   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component controller="NBA_OfferComparator_CC"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <!-- ATRIBUTOS -->
+    <aura:attribute type="String" name="recordId" />
+    <aura:attribute type="Object" name="ofertas" />
+	<aura:attribute type="Object" name="fristOffers" />
+    <aura:attribute type="Object" name="ofertaSelecionada" />
+    <aura:attribute type="Object" name="oferta1" />
+    <aura:attribute type="Object" name="oferta2" />
+    <aura:attribute type="Object" name="oferta3" />
+    <aura:attribute type="Object" name="produtoAtual" />
+    <aura:attribute type="Object" name="produtoAntigo" />
+    <aura:attribute type="Object" name="lstPrecosPontosOpcionais" />
+    <aura:attribute type="Object" name="lstIsencoesTaxas" />
+    <aura:attribute type="Object" name="newOffertas" default="" />
+    <aura:attribute type="Object" name="feesExemptions" />
+    <aura:attribute type="Map" name="temporarySuspension" default="{hasSuspension:false}"/>
+	<aura:attribute type="Object" name="tvSelected1" />
+	<aura:attribute type="Object" name="tvSelected2" />
+	<aura:attribute type="Object" name="tvSelected3" />
+	<aura:attribute type="Object" name="selectedTv" />
+    <aura:attribute type="Object[]" name="lstPontuacao" />
+    <aura:attribute type="Object" name="hasPosse" />
+	<aura:attribute type="Boolean" name="first" default="false" />
+    <aura:attribute type="Boolean" name="showSpinner" default="false" />
+    <aura:attribute type="Boolean" name="showAdditionalTv" default="false" />
+    <aura:attribute type="Boolean" name="showAdditionalBroadband" default="false" />
+    <aura:attribute type="Boolean" name="showAdditionalPhone" default="false" />
+    <aura:attribute type="Boolean" name="showAdditionalMobile" default="false" />
+    <aura:attribute type="Boolean" name="forceAdditionalMobile" default="false" />
+	<aura:attribute type="Boolean" name="showAdditionalTaxas" default="false" />
+    <aura:attribute type="Boolean" name="isSelectedOffer" default="false" />
+    <aura:attribute type="Boolean" name="disableAllOffers" default="false" />
+    <aura:attribute type="Boolean" name="ShowCancelamento" default="false" />
+    <aura:attribute type="Boolean" name="ShowIsencaoTaxas" default="false" />
+    <aura:attribute type="Boolean" name="showTryAgain" default="false" />
+	<aura:attribute type="Boolean" name="showNoOffers" default="false" />
+	<aura:attribute type="Boolean" name="isTimeout" default="false" />
+	<aura:attribute type="Boolean" name="showAdditionals" default="false" />
+	<aura:attribute type="Boolean" name="calculate" default="false"/>
+	<aura:attribute type="Boolean" name="atualizar" default="true" />
+	<aura:attribute type="Boolean" name="fristCall" default="true" />
+	<aura:attribute type="String"  name="typeModal" default=""     />
+	<aura:attribute type="Boolean" name="addExtrasTv" default="false" />
+    <aura:attribute type="Boolean" name="addExtrasBL" default="false" />
+	<aura:attribute type="Boolean" name="isPurple" default="false" />
+	<aura:attribute type="Boolean" name="isRetencao" default="false" />
+	<aura:attribute type="Boolean" name="isInadimplente" default="false" />
+	<aura:attribute type="String"  name="subscriberId" default="" />
+	<!-- Att nova estrutura -->
+    <aura:attribute type="Boolean" name="exibirModalContratoInadimplente" default="false" />
+    <aura:attribute type="String[]"  name="mensagemModalContratoInadimplente" default="" />
+    <aura:attribute type="Boolean" name="exibirBotaoConsultarInadimplencia" default="false" />
+    <aura:attribute type="Boolean" name="desabilitarBotaoSelecionarOferta" default="false" />
+    <aura:attribute type="String"  name="phoneTitular" default="" />
+    <aura:attribute type="Boolean" name="hasServicoIndisponivel" default="false" />
+    <aura:attribute type="Boolean" name="hasDadoInconsistente" default="false" />
+    <aura:attribute type="String"  name="hasServicoIndisponivelComentario" default="" />
+    <aura:attribute type="Boolean" name="hasServicoIndisponivelModal" default="false" />
+    <aura:attribute type="String"  name="hasServicoIndisponivelModalTexto" default="" />
+    <aura:attribute type="Boolean" name="contratoMovelInadimplente" default="false"/>
+    <aura:attribute type="Boolean" name="contratoResidencialInadimplente" default="false"/>
+    <aura:attribute type="Boolean" name = "hasContractPME" default="false"/>
+    <aura:attribute type="Boolean" name = "noCurrentProduct" default="false"/>
+    <aura:attribute type="Decimal" name = "previousPossessionalue" default="0"/>
+	<!-- FIM Att nova estrutura -->
+	<!--Agendamento -->
+	<aura:attribute type="String"  name="cityCode" />
+	<!--Viabilidade Tecnica -->
+	<aura:attribute type="Object"  name="ContractViabilidade" />
+<!--	<aura:attribute type="String"  name="StatusPTVAnalogico" />
+	<aura:attribute type="String"  name="StatusPTVDigital" />
+	<aura:attribute type="String"  name="StatusVirtua" />
+	<aura:attribute type="String"  name="StatusVoip" />
+	<aura:attribute type="String"  name="StatusVOD" /> -->
+    <!-- HANDLER -->
+    <aura:handler value="{! this }" name="init" action="{! c.doInit }" />
+	<aura:handler value="{! v.fristCall }" name="change" action="{! c.recalculateOffersController }"  />
+    <aura:handler value="{! v.newOffertas }" name="change" action="{! c.recalculateOffers }" />
+	<aura:handler value="{! v.isTimeout }" name="change" action="{! c.handleTimeout }" />
+    <aura:handler value="{! v.selectedTv }" name="change" action="{! c.selectTv }" />
+    <aura:handler value="{! v.ofertaSelecionada }" name="change" action="{! c.handleChangeOfertaSelecionada }" />
+    <aura:handler event="c:NBA_PageEvent" action="{!c.handlePageEvent}"/>
+    <aura:handler value="{! v.produtoAtual.totalValue }" name="change" action="{! c.updateOfferDiffsFromPossession }" />
+
+	<aura:registerEvent name="refresh" type="c:NBA_RefreshTabEvent"/>
+    <aura:registerEvent name="pageEvent" type="c:NBA_PageEvent"/>
+
+    <!--## Ajuste bonus e desconto ## 
+    <aura:attribute type="Object" name="newMobileDiscount" default="" />
+    <aura:handler value="{! v.newMobileDiscount }" name="change" action="{! c.bonusDesconto }" /> -->
+
+    <!-- SPINNER -->
+    <aura:if isTrue="{! v.showSpinner }">
+        <div class="slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_medium">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- RELOAD -->
+    <c:NBA_TryAgain showTryAgain="{! v.showTryAgain }" isTimeout="{! v.isTimeout }" />
+	<!-- NO OFFERS -->
+	<aura:attribute type="String" name="errorOfertas" default="Não foi identificada nenhuma oferta para esse cliente" />
+	<c:NBA_NoOffers showNoOffers="{! v.showNoOffers }" erroOfertas="{! v.errorOfertas }" />
+    <div class="slds-grid" style="padding-right:5rem">
+	<aura:if isTrue="{! v.atualizar }" >
+        <!-- PRODUTO ATUAL -->
+        <div id="produtoAtual" class="slds-col slds-size_1-of-4 box-oferta clickable" onclick="{! c.selecionar }">
+            <c:NBA_CurrentProduct nomeOferta="{! $Label.c.OFERTA_PRODUTO_ATUAL }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo}" isPurple="{! v.isPurple }" hasMobile="{! v.hasPosse.hasMovel }" temporarySuspension="{! v.temporarySuspension }" />
+        </div>
+        <!-- OFERTA 1 -->
+        <div id="oferta1"
+            class="{! v.isSelectedOffer ? 'slds-col slds-size_1-of-4 box-oferta clickable' : 'slds-col slds-size_1-of-4 box-oferta clickable selected' }"
+            onclick="{! c.selecionar }">
+            <c:NBA_Offer nomeOferta="{! $Label.c.OFERTA_OFERTA_1 }" oferta="{! v.oferta1 }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo}" tv="{! v.tvSelected1 }" inadimplente="{! v.isInadimplente}" isRetencao="{! v.isRetencao }" />
+        </div>
+        <!-- OFERTA 2 -->
+        <div id="oferta2" class="slds-col slds-size_1-of-4 box-oferta clickable" onclick="{! c.selecionar }">
+            <c:NBA_Offer aura:id="offer2" nomeOferta="{! $Label.c.OFERTA_OFERTA_2 }" oferta="{! v.oferta2 }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo}" tv="{! v.tvSelected2 }" inadimplente="{! v.isInadimplente}" isRetencao="{! v.isRetencao }"/>
+        </div>
+        <!-- OFERTA 3 -->
+        <aura:if isTrue="{! v.isSelectedOffer}">
+            <div id="oferta3"
+                class="{! v.isSelectedOffer ? 'slds-col slds-size_1-of-4 box-oferta clickable selected' : 'slds-col slds-size_1-of-4 box-oferta clickable' }"
+                onclick="{! c.selecionar }">
+                <c:NBA_Offer nomeOferta="{! $Label.c.OFERTA_OFERTA_SELECIONADA }" oferta="{! v.oferta3 }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo}" tv="{! v.tvSelected3 }" inadimplente="{! v.isInadimplente}" isRetencao="{! v.isRetencao }"/>
+            </div>
+            <aura:set attribute="else">
+                <div id="oferta3" class="slds-col slds-size_1-of-4 box-oferta clickable" onclick="{! c.selecionar }">
+                    <c:NBA_Offer nomeOferta="{! $Label.c.OFERTA_OFERTA_3 }" oferta="{! v.oferta3 }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo}" tv="{! v.tvSelected3 }" inadimplente="{! v.isInadimplente}" isRetencao="{! v.isRetencao }" />
+                </div>
+            </aura:set>
+        </aura:if>
+	</aura:if>
+    </div>
+<div class="slds-grid slds-wrap">
+<div class="slds-col slds-size_1-of-4 " style="padding-left:2.5rem">
+	<c:NBA_ViabilidadeTecnica ContractViabilidade="{! v.ContractViabilidade }" />
+</div>
+<div class="slds-col slds-size_3-of-4">
+	<c:NBA_ModalAllOffers aura:id="modalAllOffers" newOffertas="{! v.newOffertas}" produtoAtual="{! v.produtoAtual }" oferta1="{! v.oferta1 }"
+        caseId="{! v.recordId }" ofertaSelecionada="{! v.ofertaSelecionada }" oferta2="{! v.oferta2 }" oferta3="{! v.oferta3 }"
+        disableAllOffers="{! v.disableAllOffers }" lstPontuacao="{! v.lstPontuacao }" isRetencao="{! v.isRetencao }" hasPosse="{! v.hasPosse }" />
+	<aura:if isTrue="{! v.showAdditionals }">
+		<c:NBA_ModalAdditionalsTV aura:id="modalAditionalsTV" oferta1="{! v.oferta1 }" oferta2="{! v.oferta2 }"
+			oferta3="{! v.oferta3 }" produtoAtual="{! v.produtoAtual }" oferta="{! v.ofertaSelecionada }" selectedTv="{! v.selectedTv }"
+
+			disabledTV="{! v.showAdditionalTv }" lstPrecosPontosOpcionais="{! v.lstPrecosPontosOpcionais }" fristCall="{! v.fristCall }" 
+			showAdditionalTv="{! v.addExtrasTv }" typeModal="{! v.typeModal }" lstPontuacao="{! v.lstPontuacao }" calculate="{! v.calculate }" temporarySuspension="{! v.temporarySuspension }" produtoAntigo="{! v.produtoAntigo}" />
+
+		<c:NBA_ModalAdditionalsBroadband aura:id="modalAditionalsBroadband" oferta1="{! v.oferta1 }"
+			oferta2="{! v.oferta2 }" oferta3="{! v.oferta3 }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo}"
+			oferta="{! v.ofertaSelecionada }" disabledBroadband="{! v.showAdditionalBroadband }" fristCall="{! v.fristCall }" showAdditionalBroadband="{! v.addExtrasBL}" typeModal="{! v.typeModal }" lstPontuacao="{! v.lstPontuacao }" calculate="{! v.calculate }" />
+		<c:NBA_ModalAdditionalsPhone aura:id="modalAditionalsPhone" oferta1="{! v.oferta1 }" oferta2="{! v.oferta2 }"
+			oferta3="{! v.oferta3 }" produtoAtual="{! v.produtoAtual }" oferta="{! v.ofertaSelecionada }" produtoAntigo="{! v.produtoAntigo}"
+			disabledPhone="{! v.showAdditionalPhone }" lstPontuacao="{! v.lstPontuacao }" calculate="{! v.calculate }" />
+		<c:NBA_ModalAdditionalsMobile aura:id="modalAditionalsMobile" oferta1="{! v.oferta1 }" oferta2="{! v.oferta2 }" isPurple="{! v.isPurple }"
+			oferta3="{! v.oferta3 }" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo }" oferta="{! v.ofertaSelecionada }" caseId="{! v.recordId}" cityCode="{! v.cityCode}"
+			disabledMobile="{! v.showAdditionalMobile }" forceAdditionalMobile="{! v.forceAdditionalMobile}" atualizar="{! v.atualizar }" retencao="{! v.ShowCancelamento }" lstOfertas="{! v.ofertas }" lstPontuacao="{! v.lstPontuacao }" calculate="{! v.calculate }" />
+        <aura:if isTrue="{! v.isRetencao }">
+            <!--    <c:NBA_ModalBonusDesconto produtoAtual="{! v.produtoAtual }" ofertaSelecionada="{! v.ofertaSelecionada }" bonusDesconto="{! v.newMobileDiscount}" /> -->
+        </aura:if>
+		<aura:if isTrue="{! v.ShowIsencaoTaxas }">
+			<c:NBA_ModalFeesExemptions aura:id="modalFeesExemptions" produtoAtual="{! v.produtoAtual }" produtoAntigo="{! v.produtoAntigo }"
+                feesExemptions="{! v.feesExemptions }" lstIsencaoTaxa="{! v.lstIsencoesTaxas }" ofertaSelecionada="{! v.ofertaSelecionada }" disabledTaxas="{! v.isInadimplente }" 
+                posse="{! v.hasPosse }" temporarySuspension="{! v.temporarySuspension }" />
+		</aura:if>
+	</aura:if>
+</div>
+</div>
+    <div class="slds-grid">
+        <div class="slds-col slds-size_8-of-12">
+            <aura:if isTrue="{! v.ShowCancelamento }">
+                <c:NBA_ModalTotalCancellation produtoAtual="{! v.produtoAtual }" cityCode="{! v.cityCode}" produtoAntigo="{! v.produtoAntigo }" isPurple="{! v.isPurple }" isRetencao="{! v.isRetencao }" temporarySuspension="{! v.temporarySuspension }" />
+            </aura:if>
+        </div>
+		<div class="slds-col slds-size_2-of-12"  Style="justify-items: stretch; display: grid; padding-right: 1.5rem">
+			<aura:if isTrue="{! v.exibirBotaoConsultarInadimplencia }">
+				<lightning:button variant="neutral"
+				label="Consultar Inadimplência"
+				title="Consultar Inadimplência"
+				onclick="{! c.verificarInadimplencia }" />
+			</aura:if>
+		</div>
+        <div Class="slds-col slds-size_2-of-12"  Style="justify-items: stretch; display: grid; padding-right: 1.5rem">
+            <c:NBA_SelectOffer ofertaSelecionada="{! v.ofertaSelecionada }" produtoAntigo="{! v.produtoAntigo }" tv="{! v.selectedTv }" isRetencao="{! v.ShowCancelamento }" inadimplente="{! v.isInadimplente}"
+                feesExemptions="{! v.feesExemptions }"  lstOfertas="{! v.ofertas }" lstIsencoes="{! v.lstIsencoesTaxas }" cityCode="{! v.cityCode}" produtoAtual="{! v.produtoAtual }" retencao="{! v.isRetencao }"
+                desabilitarBotaoSelecionarOferta="{! v.desabilitarBotaoSelecionarOferta }" subscriberId="{!v.subscriberId}" recordId="{!v.recordId}" forceAdditionalMobile="{! v.forceAdditionalMobile}"
+                temporarySuspension="{! v.temporarySuspension }" />
+        </div>
+    </div>
+    <!-- </aura:if> -->
+
+    <!-- MODAL INADIMPLENCIA  -->
+	<aura:if isTrue="{! v.exibirModalContratoInadimplente}">
+        <div style="min-height: 40%;">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id"
+                aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt"
+                aria-modal="true">
+                <div class="slds-modal__container" style="max-width: 40% !important;">
+                    <header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+                    	<strong class="slds-text-heading_medium" id="prompt-heading-id">
+                            Cliente com status de contrato inelegível:
+                            <br/>
+                            <aura:iteration items="{!v.mensagemModalContratoInadimplente}" var="mensagem">
+                                <br/> {!mensagem}
+                            </aura:iteration>
+                            <br/>
+                            <aura:if isTrue="{! v.isRetencao }">
+                                <br/>Regularize antes de seguir com a Oferta no NBA.
+                                <aura:set attribute="else">
+                                    <br/>Favor seguir com o encerramento do atendimento.
+                                </aura:set>
+                            </aura:if>
+                        </strong>
+                    </header>
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <div class="slds-modal__content">
+                            <div class="slds-align_absolute-center slds-p-vertical_medium">
+								<aura:if isTrue="{! v.isRetencao }">
+									<lightning:button variant="neutral" label="Voltar" title="Voltar" onclick="{!c.closeModalInadimplencia}" />
+									<lightning:button variant="neutral" label="Encerramento" title="Encerramento" onclick="{!c.finalizarCaso}" />
+                                    <aura:set attribute="else">
+                                        <lightning:button variant="brand" label="OK" title="OK" onclick="{! c.finalizarCaso }" />
+                                    </aura:set>
+								</aura:if>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    
+    <!-- MODAL SERVIÇO INDISPONIVEL  -->
+    <aura:if isTrue="{! v.hasServicoIndisponivelModal}">
+        <div style="min-height: 40%;">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id"
+                aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt"
+                aria-modal="true">
+                <div class="slds-modal__container" style="max-width: 40% !important;">
+                    <header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+                      <strong class="slds-text-heading_medium" id="prompt-heading-id">
+                            {!v.hasServicoIndisponivelModalTexto}
+                      </strong>
+                    </header>
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <div class="slds-modal__content">
+                            <div class="slds-align_absolute-center slds-p-vertical_medium">
+                                      <lightning:button 
+													variant="brand" 
+													label="OK" 
+													title="OK"
+													onclick="{! c.finalizarCaso }" />
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+</aura:component>

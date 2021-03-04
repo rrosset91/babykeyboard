@@ -1,0 +1,16 @@
+{
+    "apiVersion": "1;2020-11-30",
+    "transactionId": "5c837e78-4803-4f4c-9091-c6439b12590f",
+    "startTimestamp": "2020-12-23T19:28:30.306-03:00",
+    "endTimestamp": "2020-12-23T19:28:34.668-03:00",
+    "data": {
+        "statusCode": "RTDM00",
+        "status": "Execução com Sucesso",
+        "message": "13 - Envio inserido para processamento",
+        "trackingNumber": "MTBNWkJSNkIxOC5wZ3wxfENBTVBfVEVTVEV8NTUxMTk3NjY4MjY3MnwyMDIwMTIyMzE5MzAwLjYzNDE5NTA3NTE3NzY4MDQ=",
+        "campaign": "CAMP_TESTE",
+        "channel": "1",
+        "destination": "5511976682672",
+        "sendDate": "2020-12-23T19:28:30.608-03:00"
+    }
+}

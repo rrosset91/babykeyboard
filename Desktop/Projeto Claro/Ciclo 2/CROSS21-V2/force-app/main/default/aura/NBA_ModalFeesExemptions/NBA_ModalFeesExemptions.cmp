@@ -1,0 +1,122 @@
+<aura:component controller="NBA_OfferComparator_CC"
+	implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+
+	<aura:attribute type="Object" name="produtoAntigo" />
+	<aura:attribute type="Object" name="produtoAtual" />
+	<aura:attribute type="Object" name="oferta1" />
+	<aura:attribute type="Object" name="oferta2" />
+	<aura:attribute type="Object" name="oferta3" /> 
+	<aura:attribute type="Object" name="ofertaSelecionada" />
+	<aura:attribute type="Object" name="posse" />
+	<aura:attribute type="Object" name="feesExemptions" />
+	<aura:attribute type="Object" name="lstIsencaoTaxa" />
+	<aura:attribute type="Object" name="periodOptions" />
+	<aura:attribute type="Object" name="modalityOptions" />
+	<aura:attribute type="List" name="productOptions"  />
+	<aura:attribute type="List" name="suspensionProducts"  />
+	<aura:attribute type="List" name="selectedProducts"  />
+	<aura:attribute type="String" name="selectedPeriod" />
+	<aura:attribute type="String" name="selectedModality" />
+	<aura:attribute type="Boolean"  name="disabledTaxas" />
+	<aura:attribute type="Boolean" name="showFeesExemptions" default="false" />
+	<aura:attribute type="Boolean" name="showFeesExemptionButton" default="true" />
+	<aura:attribute type="Map" name="temporarySuspension" />
+
+	<aura:handler value="{! this }" name="init" action="{! c.doInit }" />
+
+	<aura:handler event="c:NBA_PageEvent" action="{!c.handlePageEvent}"/>
+	
+	<!-- BOTÃO ISENÇÃO DE TAXAS -->
+	<aura:if isTrue="{! v.showFeesExemptionButton }">
+		<div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+			<!--<div class="slds-col slds-size_3-of-12 box-oferta"></div> -->
+			<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable' +( v.disabledTaxas ? ' disableSection' : ' ') }" Style="margin-left: 0.5rem;" 
+             onclick="{! c.incluirIsencaoTaxas }"></div>
+			<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable' +( v.disabledTaxas ? ' disableSection' : ' ') }" 
+				onclick="{! c.incluirIsencaoTaxas }">{! $Label.c.NBA_Title_Exemptions_Suspension }</div>
+			<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable' +( v.disabledTaxas ? ' disableSection' : ' ') }" 
+				onclick="{! c.incluirIsencaoTaxas }">
+				<div class="down-arrow alim-icon-add">
+					<!-- <lightning:icon iconName="utility:down" size="x-small" alternativeText="Detalhar" /> -->
+				</div>
+			</div>
+		</div>
+
+		<!-- MODAL ISENÇÃO DE TAXAS -->
+		<aura:if isTrue="{! v.showFeesExemptions }">
+			<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+				aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+				<div class="slds-modal__container">
+					<header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+						<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+							title="Close" onclick="{! c.closeFeesExemption }">
+							<lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+							<span class="slds-assistive-text">Close</span>
+						</button>
+						<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!
+							$Label.c.NBA_Title_Exemptions_Suspension }</h2>
+					</header>
+
+					<div class="slds-modal__content slds-p-around_large" id="modal-content-id-1">
+						<lightning:layout>
+							<!-- ISENÇÃO -->
+							<lightning:layoutItem size="8">
+								<div class="slds-text-heading_small slds-text-title_bold slds-text-title--caps slds-m-bottom_large">
+									{! $Label.c.NBA_Text_Exemptions }
+								</div>
+
+								<aura:iteration items="{! v.lstIsencaoTaxa }" var="taxa" indexVar="index">
+									<div class="custom-checkbox">
+										<lightning:input type="checkbox" checked="{! taxa.checked }"/> {!taxa.label }
+									</div>	
+								</aura:iteration>
+							</lightning:layoutItem>
+
+							<!-- SUSPENSÃO -->
+							<lightning:layoutItem size="4">
+								<aura:if isTrue="{! and(equals(v.ofertaSelecionada, v.produtoAtual),v.productOptions.length != 0) }">
+									<div class="slds-text-title_bold slds-text-title--caps slds-m-bottom_xx-small">
+										{! $Label.c.NBA_Text_Suspension }
+									</div>
+									
+									<lightning:layout multipleRows="true">
+										<lightning:layoutItem flexibility="auto">
+
+											<lightning:select aura:id="period" value="{! v.selectedPeriod }" label="Período" onchange="{! c.handlePeriodChange }">
+												<option value="" text="Selecione"></option>
+												<aura:iteration items="{! v.periodOptions }" var="data">
+													<option value="{! data.period }" text="{! data.period }"></option>
+												</aura:iteration>
+											</lightning:select>
+										</lightning:layoutItem>
+
+										<lightning:layoutItem flexibility="auto" padding="horizontal-small">
+											<lightning:select aura:id="modality" value="{! v.selectedModality }" label="Modalidade" disabled="{! empty(v.selectedPeriod) }">
+												<option value="" text="Selecione"></option>
+												<aura:iteration items="{! v.modalityOptions }" var="data">
+													<option value="{! data }" text="{! data }"></option>
+												</aura:iteration>
+											</lightning:select>
+										</lightning:layoutItem>
+
+										<lightning:layoutItem size="12" class="slds-m-top_xx-small custom-checkbox">
+											<aura:if isTrue="{! not(empty(v.productOptions)) }">
+												<lightning:checkboxGroup aura:id="products" label="Produtos" options="{! v.productOptions }" value="{! v.selectedProducts }" disabled="{! empty(v.selectedModality) }" />
+											</aura:if>
+										</lightning:layoutItem>
+									</lightning:layout>
+								</aura:if>
+							</lightning:layoutItem>
+						</lightning:layout>
+					</div>
+
+					<footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+						<button class="slds-button slds-button_brand"
+							onclick="{! c.updateFeesExemptions }">Atualizar</button>
+					</footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</aura:if>
+	</aura:if>
+</aura:component>

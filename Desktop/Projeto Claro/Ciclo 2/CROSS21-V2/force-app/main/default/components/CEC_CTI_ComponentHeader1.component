@@ -1,0 +1,79 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 01/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 9] + [Componente do header (bloco 1)]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 01/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 19333 - Solicitar ramal avaya]: Criação da estrutura do componente
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 24/01/2020
+* Autor: Diego Lima - Deloitte
+* Alterações: Remoção da sessão de status de atendimento, icone de notificações e pausa
+-->
+
+
+<apex:component >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_DefaultSoftphoneHeader/css/pageStyle.css')}"/>
+    
+    <div class="slds-grid attendance-status-and-informations">
+        
+        <!--
+        <div class="status-attendance slds-col slds-size_6-of-12">
+            <span>--</span>
+        </div>
+        -->
+        
+        <div class="ramal-info slds-col slds-size_4-of-12">
+            <div class="slds-grid">
+                <div class="slds-col slds-size_4-of-12 text-center">
+                    <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/user-icon-header.svg')}"/>  
+                </div>
+                <div class="slds-col slds-size_8-of-12">
+                    <div class="section-ramal">
+                        <label>
+                            Ramal
+                        </label>
+                        <br/>
+                        <span id="valueRamalHeader"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--
+<div class="hidden-field display-none">
+<input id="encryptValue" type="hidden" value="{!wrapperSoftphoneComponent.encryptValue}"/>
+<input id="ramalNumber" type="hidden" value="{!wrapperSoftphoneComponent.ramal}"/>
+</div>
+--> 
+        <!--
+        <div class="pause-and-bell slds-grid slds-size_2-of-12">
+            <div class="slds-col slds-size_6-of-12 icon-pause active display-none">
+                <img title="Pausar" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/pausa-on.svg')}"/>  
+            </div>      
+            <div class="slds-col slds-size_6-of-12 icon-pause inactive">
+                <img title="Pausar" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/pausa-off.svg')}"/>  
+            </div>
+            
+            <div class="slds-col slds-size_6-of-12 icon-bell active display-none">
+                <img class="img-bell" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/notificacao-on.svg')}"/>    
+            </div> 
+            <div class="slds-col slds-size_6-of-12 icon-bell inactive">
+                <img class="img-bell" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/notifications-off.svg')}"/>    
+            </div> 
+        </div>
+		-->
+        
+    </div>
+    
+    <script>
+    	completeRamal(); 
+    </script>
+    
+</apex:component>

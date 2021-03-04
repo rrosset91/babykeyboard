@@ -1,0 +1,335 @@
+<!-- CEC_PME_ResumoPedidoPlano.cmp -->
+<aura:component>
+    <aura:attribute name="planos" type="Object"/>
+    <aura:attribute name="Data" type="Object"/>
+    <aura:attribute name="compartilhado" type="Boolean" default="false"/>
+    <aura:attribute name="tipoEntrega" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    
+    <!-- HEADER PLANOS -->
+    <div class="bloco">
+        <div class="bloco-lista-pedido border">
+            <div class="bloco-100">
+                <div class="col-pedido-linhas">
+                    <div>Linhas</div>
+                    <div>{!v.planos.linhas}</div>
+                </div>
+                <div class="col-pedido-servicos">
+                    <div>Serviços</div>
+                    <div><ui:outputCurrency value="{!v.planos.servicos}"></ui:outputCurrency></div>
+                </div>
+                <div class="col-pedido-aparelhos">
+                    <div>Aparelhos</div>
+                    <div>{!v.planos.aparelhos}</div>
+                </div>
+                <div class="col-pedido-equipamentos">
+                    <div>Equipamentos</div>
+                    <div><ui:outputCurrency value="{!v.planos.equipamentos}"></ui:outputCurrency></div>
+                </div>
+                <div class="col-pedido-acumulados">
+                    <div>Pontos Acumulados</div>
+                    <div>{!v.planos.pontosAcumulados}</div>
+                </div>
+                <div class="col-pedido-utilizados">
+                    <div>Pontos Utilizados</div>
+                    <div>{!v.planos.pontosUtilizados}</div>
+                </div>
+                <div class="col-pedido-pontos">
+                    <div>Saldo de pontos</div>
+                    <div>{!v.planos.pontosSaldo}</div>
+                </div>
+				<div class="col-pedido-pagamentos">
+                    <div>Pagamento</div>
+                    <div>{!v.planos.tipoPagamento == 'Vista' ? 'À vista' : v.planos.tipoPagamento}</div>
+                </div>
+				<div class="col-pedido-entrega">
+                    <div>Tipo de entrega</div>
+                    <div>{!v.tipoEntrega}</div>
+                </div>
+                <aura:if isTrue="{!and(v.planos.tradeInInd != '', v.planos.tradeInInd != null)}">
+                    <div class="col-pedido-tradeinind">
+                        <div>Trade-In Individual</div>
+                        <div>{!v.planos.tradeInInd}</div>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!and(v.planos.tradeInComp != '', v.planos.tradeInComp != null)}">
+                    <div class="col-pedido-tradeincomp">
+                        <div>Trade-In Compartilhado</div>
+                        <div>{!v.planos.tradeInComp}</div>
+                    </div>
+                </aura:if>
+                <!-- Inserir aura:if pra detectar quando for Compartilhado e exibir o campo; Se for individual, sumir o campo -->
+                <div class="col-pedido-ld21">
+                    <div>LD21</div>
+                    <div>{!v.planos.ld21}</div>
+                </div>                
+            </div>
+        </div>
+    </div>
+    
+    <!-- LISTA DE PLANOS --> 
+    <div class="col-line-10 padding-top-10 margin-bottom-10">
+        <span class="bloco-100 title-section">Planos</span>
+    </div>
+    <aura:iteration items="{!v.planos.planos}" var="plano">
+        <button class="accordion border-b" id="{!'headerPlanos' + _index}" onclick="{!c.toggleSecao}">
+            <div class="plano-tipo"><span class="sub-title">{!plano.tipoPlano}</span></div>
+			<div class="plano-regional"><span class="legenda">Regional:</span> {!plano.regional}</div>
+			<div class="plano-uf"><span class="legenda">UF:</span> {!plano.uf}</div>
+			<div class="plano-grupo"><span class="legenda">Grupo:</span> {!plano.grupo}</div>
+        </button>
+        <div class="bloco"  id="{!'secaoPlanos' + _index}">
+            <div class="bloco-lista table-lista-plan border-b" id="bloco-plano-tipo-1024">
+                <aura:if isTrue="{!plano.tipo != '--'}">
+                    <div class="col-tab-plan" id="plano-tipo">
+                        <span class="title-table">Tipo</span>
+                    </div>
+                </aura:if>
+                <div class="col-tab-plan" id="plano-regional">
+                    <span class="title-table">Regional</span>
+                </div>
+                <div class="col-tab-plan"  id="plano-uf">
+                    <span class="title-table">UF</span>
+                </div>
+                <aura:if isTrue="{!plano.ddd != '--'}">
+                    <div class="col-tab-plan"  id="plano-ddd">
+                        <span class="title-table">DDD</span>
+                    </div>
+                </aura:if>
+                <div class="col-tab-plan" id="plano-qtd-linhas">
+                    <span class="title-table">Qtd. Linha Total</span>
+                </div>
+                <div class="col-tab-plan"  id="plano-total">
+                    <span class="title-table">Total do Plano</span>
+                </div>
+                
+                <!--//////////////////////////////////////////////////////////////////////////////-->
+                <aura:if isTrue="{!plano.descontoVolume != 0 }">
+                <aura:if isTrue="{!plano.tipoPlano == 'Plano Claro Total Individual'}">   
+                <div class="col-tab-plan"  id="desconto-volume">
+                    <span class="title-table">Desconto por Volume</span>
+                </div>
+                <div class="col-tab-plan"  id="valor-desconto">
+                    <span class="title-table">Valor com Desconto</span>
+                </div>
+                </aura:if> 
+                </aura:if>
+                <!-- kit -->
+                <aura:if isTrue="{!plano.tipoPlano == 'Plano Claro Total Individual'}">   
+                	<div class="col-tab-plan" id="plano-kit">
+                   	 <span class="title-table">Kit</span>
+               	 </div>
+                </aura:if> 
+                <!-- kit -->
+                <!--//////////////////////////////////////////////////////////////////////////////-->
+                <aura:if isTrue="{!plano.grupo}">
+                    <div class="col-tab-plan"  id="plano-grupo">
+                        <span class="title-table">Grupo</span>
+                    </div>
+                </aura:if>
+                
+            </div>
+            <div class="bloco-lista table-dados border-b" id="bloco-plano-tipo-1024">
+                <aura:if isTrue="{!plano.tipo != '--'}">
+                    <div class="col-tab-plan" id="plano-tipo">
+                        <span class="title-table-plan">{!plano.tipo}</span>
+                    </div>
+                </aura:if>
+                <div class="col-tab-plan" id="plano-regional">
+                    <span class="title-table-plan">{!plano.regional}</span>
+                </div>
+                <div class="col-tab-plan" id="plano-uf">
+                    <span class="title-table-plan">{!plano.uf}</span>
+                </div>
+                <aura:if isTrue="{!plano.ddd != '--'}">
+                    <div class="col-tab-plan" id="plano-ddd">
+                        <span class="title-table-plan">{!plano.ddd}</span>
+                    </div>
+                </aura:if>
+                <div class="col-tab-plan"  id="plano-qtd-linhas">
+                    <span class="title-table-plan">{!plano.qtdLinha}</span>
+                </div>
+                <div class="col-tab-plan"  id="plano-total">
+                    <span class="title-table-plan"><ui:outputCurrency value="{!plano.total}"/></span>
+                </div>
+                <!--/////////////////////////////////////////////////////////////////////////////////-->
+                <aura:if isTrue="{!plano.descontoVolume != 0}">
+                <aura:if isTrue="{!plano.tipoPlano == 'Plano Claro Total Individual'}">
+                <div class="col-tab-plan"  id="desconto-volume">
+                    <span class="title-table-plan"><ui:outputCurrency value="{!plano.descontoVolume}"/></span>
+                </div>
+                <div class="col-tab-plan"  id="valor-desconto">
+                    <span class="title-table-plan"><ui:outputCurrency value="{!plano.valorComDesconto}"/></span>
+                </div>
+                </aura:if>
+                </aura:if>
+                <!--/////////////////////////////////////////////////////////////////////////////////-->
+				<aura:if isTrue="{!plano.tipoPlano == 'Plano Claro Total Individual'}"> 
+                	<div class="col-tab-plan"  id="plano-kit">
+                    	<span class="title-table-plan">{!plano.kit}</span>
+               	 </div>
+                </aura:if>
+                <aura:if isTrue="{!plano.grupo}">
+                    <div class="col-tab-plan"  id="plano-grupo">
+                        <span class="title-table-plan">{!plano.grupo}</span>
+                    </div>
+                </aura:if>
+            </div>
+            <div class="bloco-lista table-dados border-b" id="bloco-plano-tipo-580">
+                <aura:if isTrue="{!plano.tipo != '--'}">
+                	<div><span class="legenda">Tipo: </span>{!plano.tipo}</div>
+                </aura:if>
+                <aura:if isTrue="{!plano.ddd != '--'}">
+                    <div><span class="legenda">DDD: </span>{!plano.ddd}</div>
+                </aura:if>
+                <div><span class="legenda">Qtd. Linha Total:</span> {!plano.qtdLinha}</div>
+                <div><span class="legenda">Total do plano:</span> <ui:outputCurrency value="{!plano.total}"/></div>
+            </div>
+            <div class="bloco-lista table-lista-plan adicionais">
+                <div id="bloco-servicos-adicionais">
+                    <div class="col-tab-plan-datos">
+                        <span class="title-table padding-left-0">Franquia {!plano.servicosAdicionais.franquia}</span>
+                    </div>
+                    <div class="col-tab-plan-value-datos">
+                        <span class="title-table-plan"><ui:outputCurrency value="{!plano.servicosAdicionais.valor}"/></span>
+                        <!-- <aura:if isTrue="{!plano.tipoPlano == 'Plano Claro Total Compartilhado'}">
+                            <span class="title-table-plan"><ui:outputCurrency value="{!plano.servicosAdicionais.valor}"/></span>
+                            <aura:set attribute="else">
+                                <span class="title-table-plan"><ui:outputCurrency value="{!plano.servicosAdicionais.valor * plano.qtdLinha}"/></span>
+                            </aura:set>
+                        </aura:if>
+						-->
+                    </div>
+                </div>
+                <aura:if isTrue="{!and(and(plano.bonus != '', plano.bonus != null), plano.servicosAdicionaisBonus.bonus != true)}">
+                    <div id="bloco-servicos-adicionais">
+                        <div class="col-tab-plan-datos">
+                            <span class="title-table padding-left-0">Bônus/Dobro</span>
+                        </div>
+                        <div class="col-tab-plan-value-datos">
+                            <span class="title-table-plan">{!plano.bonus}</span>
+                        </div>
+                    </div>
+                </aura:if>
+                <!--SERVIÇOS DOS PLANOS>
+                <aura:iteration items="{!plano.servicosAdicionais.servicos}" var="servico">
+                    <aura:if isTrue="{!servico.type != 'Bonus'}" >
+                        <div id="bloco-servicos-adicionais">
+                            <div class="col-tab-plan-datos">
+                                <span class="title-table">{!servico.nome}</span>
+                            </div>
+                            <div class="col-tab-plan-value-datos">
+                                <span class="title-table-plan"><ui:outputCurrency value="{!servico.valor * plano.qtdLinha}"/></span>
+                            </div>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!and(servico.type == 'Bonus',plano.servicosAdicionaisBonus.bonus != true)}">}" >
+                        <div id="bloco-servicos-adicionais">
+                            <div class="col-tab-plan-datos">
+                                <span class="title-table">{!servico.nome}</span>
+                            </div>
+                            <div class="col-tab-plan-value-datos">
+                                <span class="title-table-plan"><ui:outputCurrency value="{!servico.valor * plano.qtdLinha}"/></span>
+                            </div>
+                        </div>
+                    </aura:if>
+                </aura:iteration-->
+            </div>
+            
+            <!-- GRUPOS DO COMPARTILHADO-->
+            <aura:if isTrue="{!plano.grupos.length > 0 ? true : false}" >
+                <aura:iteration items="{!plano.grupos}" var="grupo" indexVar="gruposIndex">
+                    <button class="accordion border-b" id="{!'headerProdutos' + gruposIndex}" onclick="{!c.toggleSecao}">
+                        <span class="sub-title-ddd">DDD {!grupo.ddd} - Linhas {!grupo.linhas} - Grupo {!grupo.grupo}</span>
+                    </button>
+                    <div class="bloco-lista table-lista-plan adicionais" id="{!'secaoProdutos' + gruposIndex}">
+                        <div id="bloco-servicos-adicionais">
+                            <div class="col-tab-plan-datos">
+                                <span class="title-table padding-left-0">Tipo</span>
+                            </div>
+                            <div class="col-tab-plan-value-datos">
+                                <span class="title-table">{!grupo.tipo}</span>
+                            </div>
+                        </div>
+                        <aura:iteration items="{!grupo.produtos}" var="produto" >
+                            <div id="bloco-servicos-adicionais">
+                                <div class="col-tab-plan-datos">
+                                    <span class="title-table padding-left-0">{!produto.nome}</span>
+                                </div>
+                                <div class="col-tab-plan-value-datos">
+                                    <span class="title-table"><ui:outputCurrency value="{!produto.valor}"/></span>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </aura:iteration>
+            </aura:if>
+        
+        <!-- SERVICOS OPCIONAIS-->
+    	<div class="col-line-10 padding-top-10 margin-bottom-10">
+        	<span class="bloco-100 title-section">Serviços Opcionais</span>
+    	</div>
+        <br></br>
+        <!-- SERVICOS OPCIONAIS - Passaporte -->
+        <aura:if isTrue="{!plano.servicosAdicionaisPassagem.passagem == true}"> 
+            <div class="plano-tipo">
+                <span class="sub-title-ddd">Passaporte</span>
+            </div>
+            <br></br>
+            <div class="bloco-lista table-lista-plan opcionais">
+                <aura:iteration items="{!plano.servicosAdicionaisPassagem.servicos}" var="servico">
+                        <div id="bloco-servicos-opcionais">
+                            <div class="col-tab-plan-datos">
+                                <span class="title-table">{!servico.nome}</span>
+                            </div>
+                            <div class="col-tab-plan-value-datos">
+                                <span class="title-table"><ui:outputCurrency value="{!servico.valor * plano.qtdLinha}"/></span>
+                            </div>
+                        </div>
+                </aura:iteration> 
+            </div>
+            <br></br>
+        </aura:if>
+        <!-- SERVICOS OPCIONAIS - Bonus -->
+        <aura:if isTrue="{!plano.servicosAdicionaisBonus.bonus == true}"> 
+        <br></br>
+            <div class="plano-tipo" >
+              <span class="sub-title-ddd">Bônus</span>
+            </div>
+
+            <div class="bloco-lista table-lista-plan opcionais">
+                <aura:iteration items="{!plano.servicosAdicionaisBonus.servicos}" var="servico">
+                    <!--aura:if isTrue="{!servico.type == 'Bonus'}"-->
+                        <div id="bloco-servicos-opcionais">
+                            <div class="col-tab-plan-datos">
+                                <span class="title-table">+ {!servico.nome}</span>
+                            </div>
+                        </div>
+                    <!--/aura:if-->
+                </aura:iteration>
+            </div>
+        <br></br>
+        </aura:if>
+        <!-- SERVICOS OPCIONAIS - SVAs -->
+        <aura:if isTrue="{!plano.servicosAdicionaisSVA.sva == true}"> 
+        <br></br>
+            <div class="plano-tipo">
+                <span class="sub-title-ddd">SVAs</span>
+            </div>
+            <div class="bloco-lista table-lista-plan opcionais">
+                <aura:iteration items="{!plano.servicosAdicionaisSVA.servicos}" var="servico">
+                    <div id="bloco-servicos-opcionais">
+                        <div class="col-tab-plan-datos">
+                            <span class="title-table">{!servico.nome}</span>
+                        </div>
+                        <div class="col-tab-plan-value-datos">
+                            <span class="title-table"><ui:outputCurrency value="{!servico.valor * plano.qtdLinha}"/></span>
+                        </div>
+                    </div>
+                </aura:iteration>
+            </div>
+    </aura:if>
+	</div>
+	</aura:iteration>  
+</aura:component>

@@ -1,0 +1,43 @@
+<aura:component>
+    <aura:attribute name="showNoData" type="Boolean" default="false"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    <aura:attribute name="noDataText1" type="String"/>
+    <aura:attribute name="noDataText2" type="String"/>
+    <aura:attribute name="errorText1" type="String"/>
+    <aura:attribute name="errorText2" type="String"/>
+    
+    <div>
+        <div class="custom-padding">
+            <aura:if isTrue="{!v.showNoData}">
+                <div class="no-data">
+                    <div>
+                        <img src="/img/chatter/Desert.svg" class="slds-illustration__svg"/>
+                    </div>
+                    <div>
+                        <h3>{!v.noDataText1}</h3>
+                    </div>
+                    <aura:if isTrue="{!v.noDataText2}">
+                        <div>
+                            <h3>{!v.noDataText2}</h3>
+                        </div>
+                    </aura:if>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.showError}">
+                <div class="no-data">
+                    <div>
+                        <img src="/resource/axe"/>
+                    </div>
+                    <div>
+                        <h3>{!v.errorText1}</h3>
+                    </div>
+                    <aura:if isTrue="{!v.errorText2}">
+                        <div>
+                            <h3>{!v.errorText2}</h3>
+                        </div>
+                    </aura:if>
+                </div>
+            </aura:if>
+        </div>
+    </div>
+</aura:component>

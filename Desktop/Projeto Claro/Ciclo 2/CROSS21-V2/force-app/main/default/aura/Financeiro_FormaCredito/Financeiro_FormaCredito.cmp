@@ -1,0 +1,294 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome" access="global" extends="c:Utils" controller="InvoicesController">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<aura:attribute name="showSecond" type="Boolean" />
+	<aura:attribute name="initialComponents" type="Boolean" default="true" />
+	<aura:attribute name="selectedReturnMethod" type="String" />
+	<aura:attribute name="selectedRecalculationMethod" type="String" />
+	<aura:attribute name="onSelectReturnMethod" type="Aura.Action" />
+	<aura:attribute name="sortedBy" type="String" />
+	<aura:attribute name="sortedDirection" type="String" />
+	<aura:attribute name="defaultSortDirection" type="String" />
+	<aura:attribute name="columns" type="List" />
+	<aura:attribute name="notContested" type="List" />
+	<aura:attribute name="invoiceItens" type="Object[]" />
+	<aura:attribute name="allItems" type="Object[]" />
+	<aura:attribute name="newItems" type="Object[]" />
+	<aura:attribute name="selectedRows" type="List" />
+	<aura:attribute name="toastShowed" type="Boolean" default="False" />
+	<aura:attribute name="bill" type="Object" />
+	<aura:attribute name="disabledRecalculation" type="Boolean" default="false" />
+	<aura:attribute name="disabledCredit" type="Boolean" default="false" />
+	<aura:attribute name="showCreditoEmAberto" type="Boolean" default="true" />
+	<aura:attribute name="disabledRefund" type="Boolean" default="false" />
+	<aura:attribute name="originalTotalPrice" type="String" />
+	<aura:attribute name="fixedTotalPrice" type="String" />
+	<aura:attribute name="openModal" type="Boolean" />
+
+	<!--Abrir modal escolha tipo de reembolso-->
+	<aura:attribute
+		name="optionsRefundEmAberto"
+		type="List"
+		default="[{'label': 'Fatura Corrigida', 'value': 'recalculation'},{'label': 'Crédito na Próxima Fatura', 'value': 'credit'}]"
+	/>
+	<aura:attribute name="openRefundEmAberto" type="String" default="" />
+	<aura:attribute name="optionsRefund" type="List" default="[{'label': 'Crédito na Próxima Fatura', 'value': 'false'},{'label': 'Reembolso', 'value': 'true'}]" />
+	<aura:attribute name="optionsRefundCredit" type="List" default="[{'label': 'Crédito na Próxima Fatura', 'value': 'credit'}]" />
+	<aura:attribute name="openOption" type="Boolean" default="false" />
+	<!--Abrir componente de reembolso-->
+	<aura:attribute
+		name="optionsTipoReembolso"
+		type="List"
+		default="[{'label': 'Conta Corrente', 'value': 'Conta Corrente'},{'label': 'Ordem de Pagamento', 'value': 'Ordem de Pagamento'}]"
+	/>
+	<aura:attribute name="valueTipoReembolso" type="String" />
+	<aura:attribute name="openReembolso" type="Boolean" default="false" />
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="refundcc" type="Boolean" default="False" />
+	<!--Atributos da modal segunda via-->
+	<aura:attribute name="sendMethodOptions" type="List" />
+	<aura:attribute name="sendReasonOptions" type="List" />
+	<aura:attribute name="selectedSendMethod" type="String" />
+	<aura:attribute name="selectedSendReason" type="Integer" />
+	<aura:attribute name="duplicate" type="Object" />
+	<aura:attribute name="isLoadingModal" type="Boolean" default="false" />
+	<aura:attribute name="selectedEmail" type="Boolean" />
+	<aura:attribute name="selectedSMS" type="Boolean" />
+	<aura:attribute name="selectedCorreio" type="Boolean" />
+	<aura:attribute name="disabledSend" type="Boolean" default="true" />
+	<aura:attribute name="choosedDuplicate" type="Object" />
+	<aura:attribute name="hasAuthority" type="Boolean" default="false" />
+	<aura:attribute name="caseId" type="String" />
+
+	<div>
+		<aura:if isTrue="{!v.initialComponents}">
+			<div aura:id="allItems">
+				<lightning:accordion allowMultipleSectionsOpen="true" activeSectionName="a">
+					<lightning:accordionSection name="a" label="Itens Corrigidos">
+						<lightning:datatable
+							columns="{!v.columns}"
+							data="{!v.invoiceItens}"
+							keyField="idItem"
+							resizeColumnDisabled="true"
+							hideCheckboxColumn="true"
+							sortedBy="{!v.sortedBy}"
+							sortedDirection="{!v.sortedDirection}"
+							defaultSortDirection="{!v.defaultSortDirection}"
+							onsort="{!c.onSort}"
+						/>
+					</lightning:accordionSection>
+					<lightning:accordionSection name="b" label="Itens Não Corrigidos">
+						<lightning:datatable
+							columns="{!v.notContested}"
+							data="{!v.newItems}"
+							keyField="idItem"
+							resizeColumnDisabled="true"
+							hideCheckboxColumn="true"
+							sortedBy="{!v.sortedBy}"
+							sortedDirection="{!v.sortedDirection}"
+							defaultSortDirection="{!v.defaultSortDirection}"
+							onsort="{!c.onSort}"
+						/>
+					</lightning:accordionSection>
+				</lightning:accordion>
+			</div>
+
+			<div class="generate-bill">
+				<div style="width: 100%" class="custom-buttons">
+					<div class="valorTotalFatura">
+						<lightning:layout multipleRows="true">
+							<lightning:layoutItem size="9">
+								<h1><b>{!$Label.c.Fin_FormaCredito_valor_total}</b></h1>
+							</lightning:layoutItem>
+							<lightning:layoutItem size="1" class="text-align-orginal">
+								<div class="valor-Original">
+									<h4>{!$Label.c.Fin_FormaCredito_Valor_Original}<br /></h4>
+									<h1>R$ {!v.originalTotalPrice}</h1>
+								</div>
+							</lightning:layoutItem>
+							<lightning:layoutItem size="1" class="text-align">
+								<div class="valor-Corrigido">
+									<h4>{!$Label.c.Fin_FormaCredito_Valor_Corrigido}<br /></h4>
+									<h1><b>R$ {!v.fixedTotalPrice}</b></h1>
+								</div>
+							</lightning:layoutItem>
+						</lightning:layout>
+						<aura:if isTrue="{! v.bill.status != 'Pago' &amp;&amp; v.bill.status != 'Pago Cartão de Crédito' }">
+							<h1>Selecione a opção de crédito desejado:</h1>
+							<aura:set attribute="else">
+								<h1></h1>
+							</aura:set>
+						</aura:if>
+					</div>
+					<aura:if
+						isTrue="{!v.bill.status == 'Em Aberto' || v.bill.status == 'Em Aberto por Rejeição de Cartão de Crédito' || v.bill.status == 'Em Aberto - Sub Júdice'}"
+					>
+						<aura:if isTrue="{!and(v.bill.contestation, v.bill.contestation.returnStrategy)}">
+							<h1>Método solicitado: {!v.bill.contestation.returnStrategy}</h1>
+						</aura:if>
+						<div class="radioTipoReembolso">
+							<lightning:radioGroup
+								name="radioTipoReembolso"
+								label="{!$Label.c.Reembolso_Tipo_Titulo_RadioButton}"
+								options="{!v.optionsRefundEmAberto}"
+								value="{!v.openRefundEmAberto}"
+								onchange="{!c.onClickCreditOptions}"
+								type="radio"
+								required="true"
+							/>
+						</div>
+					</aura:if>
+					<aura:if isTrue="{! v.bill.status == 'Pago' || v.bill.status == 'Pago Cartão de Crédito'}">
+						<aura:if isTrue="{!and(v.bill.contestation, v.bill.contestation)}">
+							<aura:if isTrue="{!and(v.bill.contestation, v.bill.contestation.reembolso)}">
+								<h1>Método solicitado: Reembolso</h1>
+							</aura:if>
+							<aura:if isTrue="{!and(v.bill.contestation, not(v.bill.contestation.reembolso))}">
+								<h1>Método solicitado: Crédito na Próxima Fatura</h1>
+							</aura:if>
+						</aura:if>
+						<lightning:radioGroup
+							name="radioGroup"
+							label="{!$Label.c.Fin_FormaCredito_Radio_Titulo}"
+							options="{!v.optionsRefund}"
+							value="{!v.openOption}"
+							type="radio"
+							onchange="{!c.onChangeContestar}"
+							required="true"
+						/>
+						<!--<lightning:button aura:id="refund" disabled="{!v.disabledRefund}" name="refund" label="Solicitar Reembolso" onclick="{!c.onClickCreditOptions}" class="credit-options"/>-->
+					</aura:if>
+				</div>
+				<aura:if isTrue="{!v.selectedReturnMethod == 'recalculation'}">
+					<div class="space-above">
+						<!--<h1>Selecione a opção de envio de fatura desejada:</h1>
+            				<lightning:button aura:id="E-mail" name="E-mail" label="E-mail" onclick="{!c.onClickMethod}" />
+							<lightning:button aura:id="Correio" name="Correio" label="Correio" onclick="{!c.onClickMethod}" />-->
+
+						<!--MODAL DE ENVIO DE SEGUNDA VIA-->
+						<c:UiModal aura:id="duplicateModal" title="Envio da Fatura" size="x-small" onClose="{!c.onCloseModal}">
+							<aura:set attribute="content">
+								<aura:if isTrue="{!v.isLoadingModal}">
+									<lightning:spinner alternativeText="Carregando..." size="large" />
+								</aura:if>
+								<lightning:layout horizontalAlign="center" multipleRows="true" verticalAlign="center">
+									<lightning:layoutItem padding="horizontal-large">
+										<div class="sendDuplicateInvoice">
+											<lightning:comboBox
+												name="sendMethod"
+												flexibility="auto"
+												label="Tipo de Envio"
+												placeholder="Selecione um tipo de envio"
+												options="{!v.sendMethodOptions}"
+												value="{!v.selectedSendMethod}"
+												onchange="{!c.handleSelectedSendMethod}"
+												required="true"
+												messageWhenValueMissing="Informação obrigatória"
+											/>
+										</div>
+									</lightning:layoutItem>
+
+									<aura:if isTrue="{!v.selectedEmail}">
+										<lightning:layoutItem padding="horizontal-large">
+											<div class="sendDuplicateInvoice" id="customerEmail">
+												<lightning:input
+													messageWhenTypeMismatch="Insira um email válido."
+													type="email"
+													name="adjustedEmail"
+													value="{!v.duplicate.email}"
+													label="Email para envio:"
+												/>
+											</div>
+										</lightning:layoutItem>
+									</aura:if>
+
+									<aura:if isTrue="{!v.selectedSMS}">
+										<lightning:layoutItem padding="horizontal-large">
+											<div class="sendDuplicateInvoice" id="customerCelphone">
+												<lightning:input
+													type="tel"
+													pattern="[0-9]{11}"
+													minlength="11"
+													maxlength="11"
+													name="adjustedPhone"
+													value="{!v.duplicate.phoneNumber}"
+													messageWhenPatternMismatch="Celular com 11 dígitos incluindo o DDD"
+													fieldLevelHelp="Ex: 11999999999"
+													label="Telefone para envio:"
+												/>
+											</div>
+										</lightning:layoutItem>
+									</aura:if>
+									<lightning:layoutItem padding="horizontal-large">
+										<div class="sendDuplicateInvoice">
+											<lightning:comboBox
+												name="sendReason"
+												flexibility="auto"
+												label="Motivo de envio"
+												placeholder="Selecione um motivo"
+												options="{!v.sendReasonOptions}"
+												value="{!v.selectedSendReason}"
+												onchange="{!c.handleSelectedSendReason}"
+												required="true"
+												messageWhenValueMissing="Informação obrigatória"
+											/>
+										</div>
+									</lightning:layoutItem>
+								</lightning:layout>
+							</aura:set>
+							<aura:set attribute="footer">
+								<div class="modal-buttons">
+									<lightning:button class="sendDuplicateCancel" variant="brand-outline" label="Cancelar" onclick="{!c.cancelModal}" />
+									<lightning:button class="sendDuplicateSubmit" variant="brand" disabled="{!v.disabledSend}" label="Enviar" onclick="{!c.chooseDuplicate}" />
+								</div>
+							</aura:set>
+						</c:UiModal>
+					</div>
+				</aura:if>
+			</div>
+		</aura:if>
+		<aura:if isTrue="{!v.openModal}">
+			<c:UiModal class=".slds-text-title_bold" aura:id="tipoReembolso" title="{!$Label.c.Reembolso_Tipo_Titulo}" size="dialog-m" onClose="{!c.onCloseRefundModal}">
+				<aura:set attribute="content">
+					<div>
+						<lightning:radioGroup
+							name="radioTipoReembolso"
+							label="{!$Label.c.Reembolso_Tipo_Titulo_RadioButton}"
+							options="{!v.optionsTipoReembolso}"
+							value="{!v.valueTipoReembolso }"
+							onchange="{!c.onChangeRefund}"
+							type="radio"
+							required="true"
+						/>
+					</div>
+				</aura:set>
+				<aura:set attribute="footer">
+					<div class="modal-buttons">
+						<lightning:layout horizontalAlign="spread">
+							<div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small">
+								<lightning:button variant="brand-outline" label="Cancelar" onclick="{!c.closeRefundModal}" />
+							</div>
+							<div class="slds-p-top_medium slds-p-right_xx-small slds-p-bottom_xx-small">
+								<lightning:button variant="brand" label="Continuar para Reembolso" onclick="{!c.openReembolso}" />
+							</div>
+						</lightning:layout>
+					</div>
+				</aura:set>
+			</c:UiModal>
+		</aura:if>
+		<aura:if isTrue="{!v.openReembolso}">
+			<c:Financeiro_Reembolso
+				layoutReembolsoCC="{!v.refundcc}"
+				showSecond="{!v.showSecond}"
+				recordId="{!v.recordId}"
+				operatorId="{!v.operatorId}"
+				contractId="{!v.contractId}"
+				refundcc="{!v.refundcc}"
+				hasAuthority="{!v.hasAuthority}"
+				caseId="{!v.caseId}"
+				bill="{!v.bill}"
+			/>
+		</aura:if>
+	</div>
+</aura:component>

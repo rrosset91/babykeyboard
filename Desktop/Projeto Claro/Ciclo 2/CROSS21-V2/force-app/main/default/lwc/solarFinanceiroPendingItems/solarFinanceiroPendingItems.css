@@ -1,0 +1,13 @@
+.modal-message {
+	text-align: center;
+	position: relative;
+	width: 100%;
+}
+
+.right {
+	text-align: left;
+}
+
+.container {
+	width: 100%;
+}

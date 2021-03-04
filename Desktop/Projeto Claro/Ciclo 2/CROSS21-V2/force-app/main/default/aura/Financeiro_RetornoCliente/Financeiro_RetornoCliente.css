@@ -1,0 +1,51 @@
+.THIS .custom-height{
+	height:4rem
+}
+
+.THIS .padding-buttons{
+	padding-top: 5%;
+    padding-bottom: 2%;
+}
+
+.THIS .button-options button{
+	cursor: pointer;
+	font-weight: 300;
+	color: #ffffff;
+	background-color: #da281c;
+	font-size: 14px;
+    height: 32px;
+   	width: 100px;
+	border: 1px #da281c solid;
+    border-radius: 4px;
+}
+
+/*.THIS .button-options button:focus{
+	color: white;
+	border: 1px #8a110a solid;
+	background-color: #8a110a;
+}*/
+
+.THIS .button-options button:hover{
+	color: #ffffff;
+	border: 1px #8a110a solid;
+	background-color: #8a110a;
+}
+
+
+.THIS .credit-options{
+	padding-left: 3%;
+    padding-right: 3%;
+}
+
+.THIS .custom-header{
+    color: #1D3861;
+    font-weight: 400;
+    font-size: x-large;
+}
+
+.THIS .generate-bill h1{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	font-size: 15px;
+    font-weight: 300;
+}

@@ -1,0 +1,219 @@
+<aura:component controller="CEC_360_ShowCasesController"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" />
+
+    <aura:attribute name="startDate" type="Date" />
+    <aura:attribute name="endDate" type="date" />
+    <aura:attribute name="maxDate" type="String" />
+    <aura:attribute name="minDate" type="String" />
+    <aura:attribute name="isSearch" type="Boolean" default="false" />
+    <aura:attribute name="isDate" type="Boolean" default="false" />
+    <aura:attribute name="data" type="Object[]" />
+    <aura:attribute name="showTable" type="Boolean" default="false" />
+    <aura:attribute name="isProfileCanalCritico" type="Boolean" default="false" />
+    <aura:attribute name="isMobile" type="Boolean" default="false" />
+    <aura:attribute name="hasValue" type="Boolean" default="false" />
+    <aura:attribute name="options" type="Object" /> 
+    <aura:attribute name="lstStatusCase" type="List" />
+    <aura:attribute name="lstCases" type = "List"/>
+    
+    <!-- Filtro de Seleção de Dados -->
+    <div class="slds-grid slds-gutters slds-p-bottom_medium">
+        <aura:if isTrue="{!v.isMobile}">
+            <div class="protocolo-linha">
+                <div>
+                    <span>
+                        <lightning:combobox aura:id="slds-ativos"
+                                            name="ativos"
+                                            label="Linha"
+                                            value="others"
+                                            placeholder="Selecionar"
+                                            onchange="{! c.makeAction }"
+                                            options="{! v.options }"
+                                            />
+                    </span>
+                </div>
+            </div> 
+        </aura:if>      
+        <aura:if isTrue="{!v.hasValue}">
+        <div class="campo-data-inicio margin-left-10">
+            <div>
+                <span>
+                    <lightning:input aura:id="startDate" label="Data início" type="date" messageWhenBadInput="Data inválida."
+                                     value="{!v.startDate}" max="{!v.maxDate}" disabled="{!v.isDate}" onchange="{!c.handleChangesDate}"/>
+                </span>
+            </div>
+        </div>
+        <div class="campo-data-fim">
+            <div>
+                <span>
+                    <lightning:input aura:id="endDate" label="Data fim" type="date" messageWhenBadInput="Data inválida."
+                                     value="{!v.endDate}" min="{!v.minDate}" max="{!v.maxDate}" disabled="{!v.isDate}" onchange="{!c.handleChangesDate}"/>
+                </span>
+            </div>
+        </div>
+        <div class="campo-selecao">
+            <div>
+                <span>
+                    <lightning:select aura:id="statusCase" name="statusCase" label="Status">
+                        <option value="">Selecionar</option>
+                        <aura:iteration items="{!v.lstStatusCase}" var="item">
+                            <option text="{!item.label}" value="{!item.value}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </span>
+            </div>
+        </div>
+        <div class="campo-buscar">
+            <div class="slds-p-top_large">
+                <span>
+                    <lightning:button variant="destructive" label="Buscar" onclick="{!c.retCaseData}" disabled="{!v.isSearch}"/>
+                </span>
+            </div>
+        </div>
+      
+        <aura:if isTrue="{!v.isProfileCanalCritico}">
+            <div class="campo-criarcaso">
+                <div class="slds-p-top_large">
+                    <span>
+                        <lightning:button variant="destructive" label="Criar Caso" onclick="{!c.createNewCase}" disabled=""/>
+                    </span>
+                </div>
+            </div>
+        </aura:if>
+      </aura:if>
+    </div>
+    <br/>
+    <!-- Tabela Informativa -->
+    <aura:if isTrue="{!v.showTable}">
+        <table class="slds-table slds-table_bordered slds-no-row-hover">            
+            <thead>
+                <tr class="slds-text-title_caps">
+                    <th scope="col"><div class="slds-truncate" title="CaseNumber">Número do Caso</div></th>
+                    <th scope="col"><div class="slds-truncate" title="CreatedDate">Data de Abertura</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Description">Descrição</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Channel">Canal de Criação</div></th>
+                    <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <aura:iteration items="{!v.lstCases}" var="case"  indexVar="contIndex">
+                    <tr class="slds-hint-parent">
+                        <th data-label="CaseNumber" scope="row">
+                            <div class="slds-truncate" title="{!case.caseNumber}">
+                                <lightning:buttonIcon iconName="{!case.showDetails?'utility:chevrondown':'utility:chevronright'}"  
+                                                      onclick="{!c.expandDetails}" 
+                                                      value="{!contIndex}"/>&nbsp;&nbsp;{!case.caseNumber}
+                            </div>
+                        </th>
+                        <td data-label="CreatedDate">
+                            <div class="slds-truncate" title="{!case.createdDate}">
+                                <lightning:formattedDateTime value="{!case.createdDate}" year="numeric" month="numeric" day="numeric"/>                            
+                            </div>
+                        </td>
+                        <td data-label="Description" class="slds-truncate_container_25">
+                            <div class="slds-truncate" title="{!case.description}">{!case.shortDesc}</div>
+                        </td>
+                        <td data-label="Channel">
+                            <div class="slds-truncate" title="{!case.description}">{!case.channel}</div>
+                        </td>
+                        <td data-label="Status">
+                            <div class="slds-truncate" title="{!case.status}">{!case.status}</div>
+                        </td>
+                    </tr> 
+                    
+                    <aura:if isTrue="{!case.showDetails}">
+                        <tr>                       
+                            <td colspan="12" id="tdDetails">  
+                                <div class="slds-box slds-size_12-of-12">
+                                    
+                                    <div class="slds-size_12-of-12 ">                            
+                                        <h3 class="slds-section__title slds-theme_shade">
+                                            <span class="slds-truncate slds-p-horizontal_small" title="Case">Caso</span>
+                                        </h3>
+                                    </div>                                
+                                    <div class="slds-grid slds-wrap slds-p-top_medium slds-p-bottom_medium">       
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_4-of-12">
+                                            <span class="slds-text-color_weak">Solicitante</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_3-of-12">
+                                                <span>{!case.contactName}</span>
+                                            </div>  
+                                        </div>                                      
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_2-of-12">
+                                            <span class="slds-text-color_weak">Canal de criação</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_2-of-12">
+                                                <span>{!case.channel}</span>
+                                            </div>  
+                                        </div>                                       
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_4-of-12">
+                                            <span class="slds-text-color_weak">Tipo</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_5-of-12">
+                                                <span>{!case.type}</span>
+                                            </div> 
+                                        </div>   
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_2-of-12">
+                                            <span class="slds-text-color_weak">Prioridade</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_2-of-12">
+                                                <span>{!case.priority}</span>
+                                            </div>
+                                        </div>                                    
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_12-of-12">
+                                            <span class="slds-text-color_weak">Descrição</span>
+                                            <div class="slds-col slds-truncate slds-p-top_xx-small slds-size_12-of-12">
+                                                <div class="quebrarLinha">{!case.description}</div>
+                                            </div>
+                                        </div>                                      
+                                    </div>
+                                    
+                                    <div class="slds-size_12-of-12 ">                            
+                                        <h3 class="slds-section__title slds-theme_shade">
+                                            <span class="slds-truncate slds-p-horizontal_small" title="ClosedCase">Fechamento do caso</span>
+                                        </h3>
+                                    </div>                                
+                                    <div class="slds-grid slds-wrap slds-p-top_large slds-p-bottom_large ">         
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_4-of-12">
+                                            <span class="slds-text-color_weak">Data do fechamento</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_2-of-12">
+                                                <span><lightning:formattedDateTime value="{!case.closedDate}" year="numeric" month="numeric" day="numeric"/></span>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_2-of-12">
+                                            <span class="slds-text-color_weak">Usuário</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_2-of-12">
+                                                <span>{!case.ownerName}</span>
+                                            </div>
+                                        </div>        
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_4-of-12">
+                                            <span class="slds-text-color_weak">Resolvido via</span>
+                                            <div class="slds-col slds-p-top_xx-small slds-size_2-of-12">
+                                                <span>{!case.ownerName}</span>
+                                            </div>
+                                        </div>     
+                                        
+                                        <div class="slds-col slds-p-left_small slds-p-bottom_small slds-size_12-of-12">
+                                            <span class="slds-text-color_weak">Resolução</span>
+                                            <div class="slds-col slds-truncate slds-p-top_xx-small slds-size_12-of-12">
+                                                <span>{!case.resolutionInfo}</span>
+                                            </div>
+                                        </div>  
+                                    </div>                                
+                                </div>
+                            </td>
+                        </tr>                
+                    </aura:if>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </aura:if>
+    
+</aura:component>

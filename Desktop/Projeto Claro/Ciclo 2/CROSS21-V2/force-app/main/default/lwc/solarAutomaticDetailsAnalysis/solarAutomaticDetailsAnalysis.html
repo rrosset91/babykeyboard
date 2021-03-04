@@ -1,0 +1,34 @@
+<!--
+  @description       : 
+  @author            : Roger Rosset
+  @group             : 
+  @last modified on  : 11-02-2021
+  @last modified by  : Roger Rosset
+  Modifications Log 
+  Ver   Date         Author         Modification
+  1.0   09-02-2021   Roger Rosset   Initial Version
+-->
+<template>
+	<!-- DATATABLE COMPARAÇÀO ENTRE FATURAS -->
+	<template if:true={isEmpty}>
+		<c-solar-exception-content show-empty="true" empty-message="Sem faturas para comparação"></c-solar-exception-content>
+	</template>
+	<template if:true={hasError}>
+		<c-solar-exception-content show-error="true" error-message="Erro ao consultar os faturas para comparação"></c-solar-exception-content>
+	</template>
+	<div class="loading-spinner-div" if:true={isLoading}>
+		<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
+	</div>
+	<template if:true={show}>
+		<lightning-datatable hide-checkbox-column="true" key-field="id" onrowaction={handleRowAction} resize-column-disabled="true" data={allDetails} columns={columns}></lightning-datatable>
+	</template>
+	<!-- MODAL DE DETALHES DO ITEM DAS FATURAS E DE EVENTOS-->
+	<c-solar-modal size="small" header="Detalhes do item da fatura">
+		<div slot="content">
+			<c-solar-modal-data-display class-to-add="slds-size_1-of-2" modal-data={modalData}></c-solar-modal-data-display>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

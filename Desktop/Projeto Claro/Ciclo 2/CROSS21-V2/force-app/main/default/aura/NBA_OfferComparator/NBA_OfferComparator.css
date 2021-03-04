@@ -1,0 +1,70 @@
+.THIS .box-top-ofertas{
+    max-width       : 85%       !important;
+    margin-left     : 5rem      !important;
+}
+
+.THIS .box-oferta{
+    margin          : 0.5rem    !important;
+}
+
+.THIS .box-adicional{
+    padding-left          : 0.5rem;
+    padding-right         : 0.5rem;
+}
+
+.THIS .clickable{
+    cursor          : pointer   !important;
+}
+
+.THIS .selected div div{
+    border-color    : rgba(0, 157, 227, 1);
+    /*background      : rgb(239, 239, 239);*/
+    background 		:rgb(229, 245, 252);
+}
+.THIS .pad-ad{
+    padding: 0.5rem 2rem 0.5rem 0rem !important;
+    /* padding-top    : 0.5rem          !important;
+    padding-left   : 3rem            !important;
+    padding-bottom : 0.5rem          !important;
+    padding-right  : 0rem            !important; */
+}
+
+.THIS .slds-modal__container{
+    max-width:none;
+    width:75%;
+}
+
+.THIS .check{
+    display:inline-flex;
+}
+
+.THIS .custom-combobox{
+    width			: 80%;
+    float			: right;
+    margin-left		: 2rem;
+}
+.THIS .alim-icon-add{
+    display        : flex     !important;
+    justify-content: flex-end !important;
+    margin-right   : 3%       !important;
+}
+.THIS .alim-add{
+    padding-left: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+.THIS .slds-form-element__label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    display: inline-block;
+    color: rgb(62, 62, 60);
+    font-size: .75rem;
+    padding-right: .5rem;
+    padding-top: 1rem !important;
+    margin-bottom: .125rem;
+}
+.THIS .slds-modal {
+    position: fixed !important;
+}

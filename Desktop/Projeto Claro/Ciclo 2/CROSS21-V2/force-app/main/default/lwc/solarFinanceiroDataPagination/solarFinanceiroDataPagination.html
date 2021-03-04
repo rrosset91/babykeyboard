@@ -1,0 +1,31 @@
+<template>
+  <hr />
+  <h6>Registros do Protocolo:</h6>
+  <div class="loading-spinner-small" if:true={loading}>
+    <lightning-spinner alternative-text="Carregando" size="small">
+    </lightning-spinner>
+  </div>
+
+  <div if:false={loading}>
+    <div class="pagination-content-wrapper">
+      <ul
+        class="slds-list_horizontal slds-has-block-links slds-text-align_center"
+      >
+        <template for:each={pages} for:item="page">
+          <li key={page.page} onclick={handlePageClick}>
+            <a>{page.page}</a>
+          </li>
+        </template>
+      </ul>
+    </div>
+
+    <div class="protocol-data">
+      <c-solar-modal-data-display
+        modal-data={dataToDisplay}
+        class-to-add="slds-size_1-of-3"
+        dl-size="slds-p-around_x-medium"
+      >
+      </c-solar-modal-data-display>
+    </div>
+  </div>
+</template>

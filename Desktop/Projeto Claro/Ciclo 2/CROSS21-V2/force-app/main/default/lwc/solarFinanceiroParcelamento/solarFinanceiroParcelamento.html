@@ -1,0 +1,111 @@
+<!--
+  @description       :
+  @author            : Diego Almeida
+  @group             :
+  @last modified on  : 08-02-2021
+  @last modified by  : Diego Almeida
+  Modifications Log
+  Ver   Date         Author          Modification
+  1.0   05-02-2021   Diego Almeida   Initial Version
+-->
+<template>
+	<template if:true={uiProperties.generalUi.isLoading}>
+		<lightning-spinner alternative-text="Carregando" size="medium"></lightning-spinner>
+	</template>
+
+	<c-solar-modal size="x-small" header="Atenção">
+		<div slot="content">
+			<div class="modal-message">
+				<p><lightning-icon icon-name="utility:error" variant="error"> </lightning-icon>{uiProperties.modal.message}</p>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Ok" title="Ok" onclick={handleBackModal} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+
+	<template if:true={uiProperties.generalUi.show}>
+		<div style="background-color: white">
+			<div class="custom-header">Simulação</div>
+		</div>
+
+		<div class="negotiation-amount">
+			<dl>
+				<div>
+					<dt class="slds-item_label slds-text-color_weak slds-text-align_left">Valor Total a Negociar</dt>
+					<dd class="slds-item_detail slds-text-align_left custom-content"><lightning-formatted-number value={negotiationAmount} format-style="currency" currency-code="BRL"> </lightning-formatted-number></dd>
+				</div>
+			</dl>
+		</div>
+		<div class="loading-spinner-div" if:true={uiProperties.installmentOptions.isLoading}>
+			<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
+		</div>
+		<div class="discount-container">
+			<h3 class="subtitle">Desconto</h3>
+			<p>Selecione uma opção para simular os valores:</p>
+		</div>
+		<div class="installment-container" if:true={uiProperties.installmentOptions.show}>
+			<lightning-layout>
+				<template for:each={installmentsOptions} for:item="option">
+					<div key={option.installmentId}>
+						<lightning-layout-item size="2">
+							<div class="installment-option" onclick={handleInstallmentSelection} data-id="installmentOption" id={option.installmentId}>
+								<dl>
+									<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">{option.ofertaParcelamento}</dt>
+									<dd class="slds-item_detail slds-text-align_left">{option.descontoParcelamento}</dd>
+								</dl>
+							</div>
+						</lightning-layout-item>
+					</div>
+				</template>
+			</lightning-layout>
+		</div>
+		<div class="datatable">
+			<div class="loading-spinner-div" if:true={uiProperties.dataTable.isLoading}>
+				<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
+			</div>
+		</div>
+		<div class="datatable">
+
+			<div class="discount-container" if:true={uiProperties.dataTable.show}>
+				<h3 class="subtitle">Simulação de valor</h3>
+				<lightning-datatable
+					key-field="id"
+					if:true={uiProperties.dataTable.show}
+					columns={uiProperties.dataTable.columns}
+					data={installmentsValues}
+					hide-checkbox-column resize-column-disabled="true"
+					sorted-direction="asc"
+					sorted-by="installmentNumber">
+				</lightning-datatable>
+				<lightning-layout if:true={uiProperties.dataTable.show}>
+					<lightning-layout-item size="2">
+						<p class="total-title">VALOR TOTAL</p>
+					</lightning-layout-item>
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="2">
+						<p class="total-value"><lightning-formatted-number value={negotiatedValue} format-style="currency" currency-code="BRL"> </lightning-formatted-number>&nbsp;*</p>
+					</lightning-layout-item>
+				</lightning-layout>
+				<lightning-layout if:true={uiProperties.dataTable.show}>
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="4">
+						<p class="msg-total">*Os valores já contemplam juros e multa</p>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+
+			<div class="navigation-buttons" if:true={uiProperties.dataTable.show}>
+				<lightning-layout>
+					<lightning-layout-item size="2">
+						<lightning-button variant="brand-outline" label="Voltar" title="Voltar" onclick={handleBack} class="slds-m-left_x-small"></lightning-button>
+					</lightning-layout-item>
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="2">
+						<lightning-button variant="brand" label="Continuar" title="Continuar" onclick={submitNegotiation} class="slds-m-left_x-small"></lightning-button>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+		</div>
+	</template>
+</template>

@@ -1,0 +1,120 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 05/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 9] + [Componente do atendimento da chamada]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 05/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 19336 - Realizar ligações externas]: Criação da estrutura do componente
+* ---------------------------------------------------------------
+* Data: 24/10/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Possibilitar conferencia]: Modificação da estrutura do javascript para contemplar a conferencia
+-->
+
+
+<apex:component >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_DiskNumber/css/pageStyle.css')}"/>
+
+    
+    <div class="keyboard-phone keyboard-active border-top-solid ">
+        <div class="side-padding">
+            <div class="group-keyboard">
+                <div class="slds-grid">
+                    <div data-number="1" class="slds-col slds-size_4-of-12 number-structure text-center ">
+                        <span>1</span>
+                        <div class="vertical-line"></div>
+                        <hr class="horizontal-line"/>
+                    </div>
+                    
+                    <div data-number="2" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>2</span>
+                        <div class="vertical-line"></div>
+                        <hr class="horizontal-line"/>
+                    </div>
+                    
+                    <div data-number="3" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>3</span>
+                        <div class="horizontal-line"></div>
+                    </div>
+                </div>
+                
+                <div class="slds-grid">
+                    <div data-number="4" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>4</span>
+                        <div class="vertical-line"></div>
+                        <hr class="horizontal-line"/>
+                    </div>
+                    
+                    <div data-number="5" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>5</span>
+                        <div class="vertical-line"></div>
+                        <hr class="horizontal-line"/>
+                    </div>
+                    
+                    <div data-number="6" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>6</span>
+                        <hr class="horizontal-line"/>
+                    </div>
+                </div>
+                
+                <div class="slds-grid">
+                    <div data-number="7" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>7</span>
+                        <div class="vertical-line"></div>
+                        <hr class="horizontal-line"/>
+                    </div>
+                    
+                    <div data-number="8" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>8</span>
+                        <div class="vertical-line"></div>
+                        <hr class="horizontal-line"/>
+                    </div>
+                    
+                    <div data-number="9" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>9</span>
+                        <hr class="horizontal-line"/>
+                    </div>
+                </div>
+                
+                <div class="slds-grid">
+                    <div data-number="*" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>*</span>
+                        <div class="vertical-line"></div>
+                    </div>
+                    
+                    <div data-number="0" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>0</span>
+                        <div class="vertical-line"></div>
+                    </div>
+                    
+                    <div data-number="#" class="slds-col slds-size_4-of-12 number-structure text-center">
+                        <span>#</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script>
+        $(".keyboard-phone [data-number]").on('click',function(){
+            
+            if($(".number-input").val().length < 16){
+                if ( $('.number-input.telefone-header2').is('[readonly]') ) { 
+                    var phoneNumber = $(".number-input.conference").val() + $(this).data("number");
+                	$(".number-input.conference").val(phoneNumber);
+                }
+                else{
+                    $('.number-input.telefone-header2').removeAttr('readonly');
+                    var phoneNumber = $(".number-input.telefone-header2").val() + $(this).data("number");
+                	$(".number-input.telefone-header2").val(phoneNumber);
+                }
+            }
+        });
+    </script>
+    
+</apex:component>

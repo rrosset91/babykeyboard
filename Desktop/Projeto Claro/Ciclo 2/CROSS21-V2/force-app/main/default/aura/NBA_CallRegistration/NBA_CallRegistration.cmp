@@ -1,0 +1,180 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="NBA_CustomCasePath_CC">
+	<aura:attribute type="String" 	name="recordId" />
+	<aura:attribute type="String" 	name="recordTypeId" />
+    <aura:attribute type="String"   name="msgRetido" />
+    <aura:attribute type="String"   name="cdBase" />
+    <aura:attribute type="Boolean"  name="temSistemaIndisponivel" default="false" />
+    <aura:attribute type="Boolean"  name="temInadimplencia" default="false" />
+    <aura:attribute type="String"   name="caseStatus" />
+    <aura:attribute type="Object"   name="caseOrder" />
+    <aura:attribute type="Boolean"	name="disabled"				default="false" />
+    <aura:attribute type="Boolean" 	name="saved" 				default="false" />
+    <aura:attribute type="Boolean"	name="activeMonetization"	default="false" /> 
+    <aura:attribute type="Boolean"	name="isRetencao"       	default="false" /> 
+    <aura:attribute type="Boolean"	name="retido"	            default="true" />
+    <aura:attribute type="Boolean"	name="totalCancelation"	    />
+    <aura:attribute type="Boolean"	name="validaRetido"	        default="false" />
+    <aura:attribute type="Boolean"	name="showSpinner"	        default="false" />
+    <aura:attribute type="Boolean"	name="recalcularTabulacao"	default="false" />
+    <aura:attribute type="String"	name="descricao"	        default="" />
+    <aura:attribute type="Object"	name="caseRecord"	        />
+    <aura:attribute type="Object"	name="isContractPME"	    default ="false" />
+    <!-- HANDLER -->
+    <aura:handler value="{! this }" name="init" action="{! c.doInit }" />
+    <!-- SPINNER -->
+    <aura:if isTrue="{! or(v.showSpinner, v.recalcularTabulacao) }">
+        <div class="slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_medium">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!and(!v.saved,  v.totalCancelation != NULL)}" >
+
+        <lightning:recordEditForm aura:id="formularioCaso" onsubmit="{!c.handleSubmit}" onsuccess="{!c.handleSuccess}" onerror="{!c.handleError}"
+            recordId="{! v.recordId }" recordTypeId="{! v.recordTypeId }" objectApiName="Case">
+           
+            <!-- <lightning:messages /> -->
+            <!-- MSGRETIDO -->
+            <aura:renderIf isTrue="{! v.validaRetido }">
+                <div  style="{! if(v.validaRetido == true, 'display:unset', 'display:none')}">                
+                    <div id="divModal" style="min-height: 40%;position:fixed;z-index:9999">
+                        <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id"
+                            aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt"
+                            aria-modal="true">
+                            <div class="slds-modal__container" style="max-width: 40%!important;">
+                                <header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+                                    <strong class="slds-text-heading_medium" id="prompt-heading-id">
+                                        {! v.msgRetido}
+                                    </strong>
+                                </header>
+                                <footer class="slds-modal__footer slds-theme_default">
+                                    <div class="slds-modal__content">
+                                        <div class="slds-align_absolute-center slds-p-vertical_medium">
+                                                    <lightning:button 
+                                                                variant="brand" 
+                                                                label="OK" 
+                                                                title="OK"
+                                                                onclick="{! c.handleOrder }" />
+                                        </div>
+                                    </div>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                </div>
+            </aura:renderIf>
+            
+            <!-- PRODUTOS TRATADOS NO ATENDIMENTO -->
+			<h4 class="slds-section__title slds-align_absolute-center title">PRODUTOS TRATADOS NO ATENDIMENTO</h4>
+			<div class="slds-grid slds-gutters slds-p-bottom_large">	
+				<div class="slds-col slds-size_1-of-2">
+					<lightning:inputField fieldName="ProductTV__c" 		disabled="{! not(v.activeMonetization) }"/>
+					<lightning:inputField fieldName="A_la_Carte__c" 	disabled="{! not(v.activeMonetization) }"/>
+                	<lightning:inputField fieldName="broadband__c" 		disabled="{! not(v.activeMonetization) }"/>
+				</div>
+				<div class="slds-col slds-size_1-of-2">
+					<lightning:inputField fieldName="Fixo__c" 			disabled="{! not(v.activeMonetization) }"/>
+                	<lightning:inputField fieldName="Movel__c"			disabled="{! not(v.activeMonetization) }"/>
+				</div>
+			</div>
+            
+            <!-- SONDAGEM -->
+            <h4 class="slds-section__title slds-align_absolute-center title">SONDAGEM</h4>
+            <div class="slds-grid slds-gutters slds-p-bottom_large no-padding-bottom">	
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="callReason" fieldName="CallReason__c" 	disabled="{! !v.isRetencao}" onchange="{! c.recalcularTabulacao }"/>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:inputField aura:id="callSubReason" fieldName="Subreason__c" 	disabled="{! !v.isRetencao}"/>
+                </div>
+            </div>
+            <div class="slds-grid slds-gutters slds-p-bottom_large">	
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning:inputField aura:id="Description" fieldName="Description"/>
+                </div>    
+            </div>
+        
+            <!-- TV -->
+            <h4 class="slds-section__title slds-align_absolute-center title">TV</h4>
+            <div class="slds-grid slds-gutters slds-p-bottom_large">	
+                <div class="slds-col slds-size_1-of-2">
+
+                    <lightning:inputField fieldName="TVN1Result__c" onchange="{! c.handleChangeLevel1 }" required="true" aura:id="tvn1"/>
+					<lightning:inputField fieldName="TVN3Result__c" required="true" onchange="{! c.handleChangeLevel3 }" aura:id="tvn3"/>
+
+                </div>
+                <div class="slds-col slds-size_1-of-2">					
+                    <lightning:inputField fieldName="TVN2Result__c" required="true" onchange="{! c.handleChangeLevel2 }" aura:id="tvn2"/>
+				</div>
+            </div>
+            
+            <!-- BANDA LARGA -->
+            <h4 class="slds-section__title slds-align_absolute-center title">BANDA LARGA</h4>
+            <div class="slds-grid slds-gutters slds-p-bottom_large">	
+                <div class="slds-col slds-size_1-of-2">
+
+                    <lightning:inputField fieldName="BLN1Result__c"  onchange="{! c.handleChangeLevel1 }" required="true"  aura:id="bln1"/>
+					<lightning:inputField fieldName="BLN3Result__c"   required="true" onchange="{! c.handleChangeLevel3 }" aura:id="bln3"/>
+
+                </div>
+                <div class="slds-col slds-size_1-of-2">                	
+					<lightning:inputField fieldName="BLN2Result__c" required="true" onchange="{! c.handleChangeLevel2 }" aura:id="bln2"/>
+				</div>
+            </div>
+            
+            <!-- TELEFONE -->
+            <h4 class="slds-section__title slds-align_absolute-center title">TELEFONE</h4>
+            <div class="slds-grid slds-gutters slds-p-bottom_large">	
+                <div class="slds-col slds-size_1-of-2">
+
+                    <lightning:inputField fieldName="PhoneN1Result__c"  onchange="{! c.handleChangeLevel1 }" required="true"  aura:id="phonen1"/>
+                	<lightning:inputField fieldName="PhoneN3Result__c"  required="true" onchange="{! c.handleChangeLevel3 }" aura:id="phonen3" />
+
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+				<lightning:inputField fieldName="PhoneN2Result__c" required="true" onchange="{! c.handleChangeLevel2 }" aura:id="phonen2"/>
+				</div>
+            </div>
+            
+            <!-- MÓVEL -->
+            <h4 class="slds-section__title slds-align_absolute-center title">MÓVEL</h4>
+            <div class="slds-grid slds-gutters slds-p-bottom_large">	
+                <div class="slds-col slds-size_1-of-2">
+
+                    <lightning:inputField fieldName="MobileN1Result__c"  onchange="{! c.handleChangeLevel1 }" required="true"  aura:id="mobilen1"/>
+					<lightning:inputField fieldName="MobileN3Result__c"  required="true" onchange="{! c.handleChangeLevel3 }" aura:id="mobilen3" />
+
+                </div>
+                <div class="slds-col slds-size_1-of-2">                	
+					<lightning:inputField fieldName="MobileN2Result__c" required="true" onchange="{! c.handleChangeLevel2 }" aura:id="mobilen2"/>
+				</div>
+            </div>
+            
+            <!-- A LA CARTE --> 
+            <h4 class="slds-section__title slds-align_absolute-center title">A LA CARTE</h4>
+            <div class="slds-grid slds-gutters slds-p-bottom_large">	
+                <div class="slds-col slds-size_1-of-2">
+
+                    <lightning:inputField fieldName="ALaCarteN1Result__c" onchange="{! c.handleChangeLevel1 }" aura:id="lctn1"/>
+					<lightning:inputField fieldName="ALaCarteN3Result__c" onchange="{! c.handleChangeLevel3 }" aura:id="lctn3"/>
+
+                </div>
+                <div class="slds-col slds-size_1-of-2">					
+					<lightning:inputField fieldName="ALaCarteN2Result__c" onchange="{! c.handleChangeLevel2 }" aura:id="lctn2"/>
+				</div>
+            </div>
+            
+            <lightning:messages />
+            <div class="slds-m-top_medium slds-align_absolute-center">
+                <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Salvar" />
+            </div>
+        </lightning:recordEditForm>
+        <aura:set attribute="else">
+            <p>Ocorreu um Erro no Carregamento, por favor atualizar a Página!</p>
+        </aura:set>
+    </aura:if>
+</aura:component>

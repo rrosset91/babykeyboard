@@ -1,0 +1,13 @@
+<!-- CEC_PME_DocusignSuccessMessage -->
+<apex:page lightningStyleSheets="true" showHeader="false" sidebar="false">
+    <apex:slds />
+    <div class="slds-scope">
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small ">Assinatura concluída com sucesso</h2>
+                </div>
+            </div>
+        </div> 
+    </div>
+</apex:page>

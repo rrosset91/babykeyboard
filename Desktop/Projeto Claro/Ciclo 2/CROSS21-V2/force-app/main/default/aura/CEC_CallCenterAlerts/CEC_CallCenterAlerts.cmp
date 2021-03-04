@@ -1,0 +1,105 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="CEC_CallCenter_Alerts_Controller">
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="accordionLabel" type="String"/>
+    <aura:attribute name="index" type="String"/>
+    <aura:attribute name="alertId" type="String"/>
+    <aura:handler name="init" value="{! this }" action="{! c.onInit }"/>
+    <aura:attribute name="activeSections" type="List" default="['A']" />
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Alertas</b>
+        </h1>
+    </aura:attribute>
+   
+    <aura:attribute name="alerts" type="Object"/>
+
+    <aura:if isTrue="{!v.isLoading}">
+        <!-- Componente não é exibido -->
+        <aura:set attribute="else">
+            <lightning:card class="" variant="narrow" title="{!v.headerTitle}" iconName="custom:custom67">
+                <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" onsectiontoggle="{! c.handleSectionToggle }" activeSectionName="{! v.activeSections }">
+                    <lightning:accordionSection name="A" label="{!v.accordionLabel}">                              
+                        <aura:iteration items="{!v.data}" var="item" indexVar="indexVar">
+                            <div class="slds-box slds-m-bottom_medium">
+                                <!-- <lightning:icon iconName="action:priority" alternativeText="Alerta" title="Alerta" size=" xx-small" class="slds-m-bottom_medium"/> -->
+                                <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-heading_small">Motivo</div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-body_regular" title="{!item.Reason__c}">{!item.Reason__c}</div>                              
+                                    </div>
+                                </div>
+
+                                <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-heading_small">Devolutiva Cliente</div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-body_regular" title="{!item.FeedbackToCustomer__c}">{!item.FeedbackToCustomer__c}</div>                              
+                                    </div>
+                                </div>
+                                <div>
+                                    <lightning:button variant="brand-outline" label="Concluir" title="Concluir" onclick="{! c.openConcludeModal }" name="{!item.Id}" value="{!indexVar}"/>
+                                </div>
+                               
+              
+                                <!-- <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-heading_small">Data Início</div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-body_regular" title="{!item.StartDate__c}">
+                                            <lightning:formattedDateTime value="{!item.StartDate__c}" year="numeric" month="numeric" day="numeric"/>
+                                        </div>                              
+                                    </div>
+                                </div> -->
+
+                                <!-- <div class="slds-grid slds-wrap slds-m-bottom_small">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-heading_small">Data Fim</div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-body_regular" title="{!item.EndDate__c}">
+                                            <lightning:formattedDateTime value="{!item.EndDate__c}" year="numeric" month="numeric" day="numeric"/>
+                                        </div>                              
+                                    </div>
+                                </div> -->
+                                <!-- <div class="">
+                                    <lightning:formattedUrl value="{!'/' + item.Id}" 
+                                        label="Clique aqui para mais detalhes"
+                                        target="_self"
+                                        tooltip="Clique aqui para mais detalhes"
+                                        class="slds-m-bottom_medium"/>
+                                </div> -->
+                            </div>
+                        </aura:iteration>
+                    </lightning:accordionSection>   
+                </lightning:accordion>
+            </lightning:card>
+        </aura:set>
+    </aura:if>
+    
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="ConcludeModal" class="slds-modal">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeConcludeModal}" variant="container" alternativeText="Fechar" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                <h2 id="header43" class="slds-text-heading--medium">Concluir Alerta</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="slds-align_absolute-center">                    
+                   Deseja concluir esse alerta?
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button label="Concluir" variant="brand-outline" title="Concluir" onclick="{!c.concludeAlert}" />
+                <lightning:button label="Fechar" variant="brand" title="Fechar" onclick="{!c.closeConcludeModal}" />
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop " aura:id="ModalConclude"></div>
+</aura:component>

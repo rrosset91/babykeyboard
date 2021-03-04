@@ -1,0 +1,40 @@
+<!-- CEC_360_Alerts Component 20/05 -->
+<!-- Danilo Fucuhara -->
+<aura:component controller="CEC_360_AlertsController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="inadimplencia" type="String"/>
+    <aura:attribute name="retencao" type="String"/>
+    <aura:attribute name="campanhasPromocoes" type="String"/>
+    <aura:attribute name="carenciaUpgrade" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:card variant="Narrow" title="Alertas" iconName="utility:alert">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_4-of-4 slds-m-top_xx-small">
+                <p class="slds-p-horizontal_small">
+                    Cliente:
+                </p>
+            </div>
+            <div class="slds-col slds-size_3-of-4 slds-m-top_xx-small">
+                <p class="slds-p-horizontal_small slds-m-left_small">
+                    Inadimplência:
+                </p>
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-m-top_xx-small">
+                <span>{!v.inadimplencia}</span>
+            </div>
+            <div class="slds-col slds-size_4-of-4 slds-m-top_xx-small">
+                <p class="slds-p-horizontal_small">
+                    Assinante:
+                </p>
+            </div>
+            <div class="slds-col slds-size_3-of-4 slds-m-top_xx-small">
+                <p class="slds-p-horizontal_small slds-m-left_small">
+                    Carência Upgrade:
+                </p>
+            </div>
+            <div class="slds-col slds-size_1-of-4 slds-m-top_xx-small">
+                <span>{!v.carenciaUpgrade}</span>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,24 @@
+{
+   "apiVersion": "1;2019-01-08",
+   "transactionId": "Id-c409fe5e27ca60097b48cc1e",
+   "data": {
+      "invoices": [
+         {
+            "invoiceId": "170461766",
+            "statusInvoiceId": "1",
+            "statusInvoiceDescription": "Em Aberto",
+            "dueDate": "2019-08-10",
+            "invoiceAmount": "450.61",
+            "paymentForm": "DebitoContaCorrente"
+         },
+         {
+            "invoiceId": "172244786",
+            "statusInvoiceId": "2",
+            "statusInvoiceDescription": "Pago",
+            "dueDate": "2019-07-10",
+            "invoiceAmount": "449.89",
+            "paymentForm": "DebitoContaCorrente"
+         }
+      ]
+   }
+}

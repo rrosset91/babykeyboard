@@ -1,0 +1,32 @@
+.THIS .claroColor {
+    background-color: #D52B1E;
+}
+
+.THIS .title{
+    display: block;
+    border-bottom: solid 1px #dbdada;
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #da291c;
+}
+
+.THIS .formCancelButton{
+    text-align: right;
+}
+
+.THIS .formCancelButton button{
+    width: 105px;
+}
+
+.THIS .formSaveButton{
+    text-align: left;
+}
+
+.THIS .formSaveButton button{
+    width: 110px;
+}
+
+.THIS .fontStyle{
+    font-size: 15px;
+	font-weight: bold;    
+}

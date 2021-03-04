@@ -1,0 +1,134 @@
+<!--
+  @description       : Componente para salvar forma de retorno com o cliente (E-mail/SMS/Telefone)
+  @author            : Ricardo Alves
+  @group             : Financeiro
+  @last modified on  : 01-08-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   12-23-2020   Ricardo Alves				 		  Initial Version
+-->
+<template>
+	<template if:true={tipoContato}>
+		<div slot="content" class="modal_body">
+			<lightning-combobox
+				name="communicationType"
+				label="Selecione a forma de comunicação com o cliente:"
+				value={communicationType}
+				placeholder="Escolha o tipo de comunicação"
+				options={options}
+				onchange={handleChange}
+			></lightning-combobox>
+			<!-- Campo E-mail (Se escolhido) -->
+			<div if:true={isEmailSelected}>
+				<div>
+					<lightning-input
+						data-id="emailField"
+						type="email"
+						label="E-mail para contato:"
+						maxlength="255"
+						placeholder="cliente@email.com.br"
+						message-when-value-missing="Campo obrigatório!"
+						onblur={validateFields}
+						value={selectedValue}
+						required
+					>
+					</lightning-input>
+				</div>
+			</div>
+			<!-- Campo SMS (Se escolhido) -->
+			<div if:true={isSmsSelected}>
+				<div>
+					<lightning-input
+						data-id="smsField"
+						type="tel"
+						label="Número do celular para SMS:"
+						value={selectedValue}
+						maxlength="15"
+						placeholder="11999999999"
+						message-when-value-missing="Campo obrigatório!"
+						onblur={validateFields}
+						required
+					></lightning-input>
+				</div>
+			</div>
+			<!-- Campo Telefone (Se escolhido) -->
+			<div if:true={isPhoneSelected}>
+				<div>
+					<lightning-input
+						data-id="phoneField"
+						type="tel"
+						label="Número do telefone para contato:"
+						value={selectedValue}
+						maxlength="15"
+						placeholder="11999999999"
+						message-when-value-missing="Campo obrigatório!"
+						onblur={validateFields}
+						required
+					></lightning-input>
+				</div>
+			</div>
+		</div>
+	</template>
+	<template if:false={tipoContato}>
+		<div slot="content" class="modal_body">
+			<lightning-combobox
+				name="communicationType"
+				label="Selecione a forma de comunicação com o cliente:"
+				value={communicationType}
+				placeholder="Escolha o tipo de comunicação"
+				options={options}
+				onchange={handleChange}
+			></lightning-combobox>
+			<!-- Campo E-mail (Se escolhido) -->
+			<div if:true={isEmailSelected}>
+				<div>
+					<lightning-input
+						data-id="emailField"
+						type="email"
+						label="E-mail para contato:"
+						maxlength="255"
+						placeholder="cliente@email.com.br"
+						message-when-value-missing="Campo obrigatório!"
+						onblur={validateFields}
+						value={selectedValue}
+						required
+					>
+					</lightning-input>
+				</div>
+			</div>
+			<!-- Campo SMS (Se escolhido) -->
+			<div if:true={isSmsSelected}>
+				<div>
+					<lightning-input
+						data-id="smsField"
+						type="tel"
+						label="Número do telefone para SMS:"
+						value={selectedValue}
+						maxlength="15"
+						placeholder="11999999999"
+						message-when-value-missing="Campo obrigatório!"
+						onblur={validateFields}
+						required
+					></lightning-input>
+				</div>
+			</div>
+			<!-- Campo Telefone (Se escolhido) -->
+			<div if:true={isPhoneSelected}>
+				<div>
+					<lightning-input
+						data-id="phoneField"
+						type="tel"
+						label="Número do telefone para contato:"
+						value={selectedValue}
+						maxlength="15"
+						placeholder="11999999999"
+						message-when-value-missing="Campo obrigatório!"
+						onblur={validateFields}
+						required
+					></lightning-input>
+				</div>
+			</div>
+		</div>
+	</template>
+</template>

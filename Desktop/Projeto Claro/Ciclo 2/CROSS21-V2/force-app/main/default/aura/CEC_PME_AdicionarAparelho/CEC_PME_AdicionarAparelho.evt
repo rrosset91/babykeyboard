@@ -1,0 +1,7 @@
+<aura:event type="COMPONENT" description="Adiciona aparelho com as cores selecionadas">
+    <aura:attribute name="label" type="String"/>
+    <aura:attribute name="value" type="String"/>
+    <aura:attribute name="color" type="String"/>
+    <aura:attribute name="colors" type="String"/>
+    <aura:attribute name="associacao" type="Boolean"/>
+</aura:event>

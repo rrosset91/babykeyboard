@@ -1,0 +1,79 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 18/07/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 8] + [Componente com as ações da ligação:
+* tranferir, ligar/desligar e colocar no mudo]
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 18/07/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [Criação do componente e sua estrutura]
+-->
+
+<apex:component >
+    
+    <div class="call-primary-actions slds-grid">
+        
+        
+        <div class="slds-col slds-size_4-of-12"></div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action start-call normal-call active text-center central-icon display-none">
+            <img title="Iniciar chamada" onclick="sendPhoneNumberToDriver();" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/fone-chamar.svg')}"/>
+        </div>
+      
+        <div class="slds-col slds-size_4-of-12 div-action start-call conference active text-center central-icon display-none">
+            <img title="Iniciar chamada" onclick="sendPhoneNumberToDriver();" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-available.svg')}"/>
+        </div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action end-call inactive text-center central-icon">
+            <img title="" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/desligar-off.svg')}"/>
+        </div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action end-call active display-none text-center central-icon">
+            <img title="Encerrar chamada" onclick="finishCall();"  class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/desligar-on.svg')}"/>
+        </div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action end-call-connecting active display-none text-center central-icon">
+            <img title="Encerrar chamada" onclick="finishCall();"  class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/call-wait.svg')}"/>
+        </div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action wait off text-center side-icon ">
+            <img title="Em espera" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/espera-off.svg')}"/>    
+        </div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action wait active text-center side-icon display-none">
+            <img title="Desativar espera" class="hover-active" onclick="deactivateHold();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/espera-ativo.svg')}"/>    
+        </div>
+        
+        <div class="slds-col slds-size_4-of-12 div-action wait inactive text-center side-icon display-none ">
+            <img title="Ativar espera" class="hover-active" onclick="activateHold();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/espera-on.svg')}"/>
+        </div>
+        
+        
+    </div>
+    
+    <script>
+    	function inConference(){
+            
+            $('.trash.trash-on').css('display','none');
+            $('.trash.trash-off').css('display','block');
+            
+            $('.number-input').css('pointer-events','none');
+            $('.cancel-conference').css('display','none');
+            $('.in-conference').css('display','block');
+            
+            $('.keyboard-phone').removeClass('keyboard-active');
+            $(".keyboard-phone [data-number]").css('cursor','no-drop');
+            $('.keyboard-phone.keyboard-active [data-number]').off();
+            
+            $('.call-primary-actions .div-action.wait-off').css('display','none');
+            $('.call-primary-actions .div-action.wait-on').css('display','block');
+            
+            $('.call-primary-actions .div-action.start-call').css('display','none');
+            $('.call-primary-actions .div-action.end-call').css('display','block');
+            
+        };
+
+    
+    </script>
+</apex:component>

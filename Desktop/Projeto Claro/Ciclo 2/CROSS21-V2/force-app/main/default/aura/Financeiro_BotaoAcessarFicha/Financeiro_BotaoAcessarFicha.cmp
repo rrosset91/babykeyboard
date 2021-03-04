@@ -1,0 +1,54 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 03-03-2021
+  @last modified by  : Felipe Ducheiko
+  @last modified on  : 03-03-2021
+  @last modified by  : Felipe Ducheiko
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   28-10-2020   Joao Neves   Initial Version
+  1.0   04-12-2020   Vini D.	  Add -> hasPermission/func getHaspermssion TU98
+-->
+<aura:component
+	implements="lightning:isUrlAddressable,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+	access="global"
+	controller="FinancialMobileGeneralService"
+	extends="c:Utils"
+	
+>
+	<lightning:workspaceAPI aura:id="workspace" />
+	<lightning:navigation aura:id="navService" />
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="pageReference" type="Object" />
+	<aura:attribute name="isResidentialAndProfile" type="Boolean" default="false" />
+	<aura:attribute name="isMobileAndProfile" type="Boolean" default="false" />
+	<aura:attribute name="hasPermission" type="Boolean" default="false" />
+	<aura:attribute name="hasButtonVisibility" type="Boolean" default="true" />
+	<aura:attribute name="isVisible" type="Boolean" default="false" />
+	
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<div>
+		<div class = "slds-clearfix">
+			<div class="slds-float_right slds-p-right_medium">
+				<aura:if isTrue="{!v.isResidentialAndProfile}">
+					<lightning:layout>
+						<lightning:layoutItem class="slds-p-right_medium">
+							<c:Financeiro_ActionButtons disabledFirst="{!v.isVisible}" showFirst="{!v.hasButtonVisibility}" showSecond="false" onClickFirst="{!c.clickViewNegotiation}" labelFirst="Negociação"/>
+						</lightning:layoutItem>
+
+						<lightning:layoutItem>
+							<c:Financeiro_ActionButtons disabledFirst="{!v.isVisible}" showFirst="{!v.hasPermission}" showSecond="false" onClickFirst="{!c.clickViewBill}" labelFirst="Ir para a Ficha Financeira"/>
+						</lightning:layoutItem>
+					</lightning:layout>
+				</aura:if>
+				<aura:if isTrue="{!v.isMobileAndProfile}">
+					<c:solarAcessarFicha recordId="{!v.recordId}"></c:solarAcessarFicha>
+				</aura:if>
+			</div>
+		</div>
+	</div>
+</aura:component>

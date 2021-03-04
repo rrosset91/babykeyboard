@@ -1,0 +1,81 @@
+<aura:component controller="CEC_360_MemoController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="showModal" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="showSpinnerModal" type="boolean" default="false"/>
+    <aura:attribute name="showTable"  type="boolean" default="false"/>
+    <aura:attribute name="memoList" type="Object[]"/>
+    <aura:attribute name="startDate" type="String"/>
+    <aura:attribute name="endDate" type="String"/>
+    <aura:attribute name="maxDate" type="String"/>
+    <aura:attribute name="minDate" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="isAsset" type="Boolean"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/> 
+    <div class="slds-p-top_xxx-small">
+        <div class="slds-text-heading_small">Busca de memorandos por data:</div>
+        <div style="border-bottom: 1px solid #dddbda"></div>
+        <div class="slds-grid slds-gutters">
+            
+            <div class="slds-col slds-size_3-of-9">
+                <lightning:input aura:id="startDate" type="date" value="{!v.startDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                 label="{!$Label.c.field_label_startDate}"  
+                                 messageWhenBadInput="{!$Label.c.msg_error_invalidDate}" 
+                                 />
+            </div>
+            <div class = "slds-col slds-size_3-of-9">
+                <lightning:input aura:id="endDate" type="date" value="{!v.endDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                 label="{!$Label.c.field_label_endDate}" 
+                                 messageWhenBadInput="{!$Label.c.msg_error_invalidDate}" 
+                                 />
+            </div>
+            <div class="slds-col slds-size_3-of-9">
+                <div class="slds-p-top_large">
+                    <lightning:button label="{!$Label.c.Btn_Search}" iconName="utility:search" iconPosition="left"
+                                      onclick="{!c.callSearch}" disabled="{!v.disabledButton}">
+                    </lightning:button>
+                </div>
+            </div>
+        </div>
+        <div class="slds-p-top_x-small">
+            
+            <div style="border-bottom: 1px solid #dddbda"></div>
+            <aura:if isTrue="{!v.showSpinnerModal}">
+                <div class="slds-text-align_center">
+                    <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                        <lightning:spinner alternativeText="Loading" size="medium" />
+                    </div>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.showTable}">
+                <table class="slds-table slds-table_fixed-layout">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th>Data</th>
+                            <th style="width:45px">Tipo</th>
+                            <th>Categoria</th>
+                            <th>Texto</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.memoList}" var="memo">
+                            <tr>
+                                <td>{!memo.memoDate}</td>
+                                <td>{!memo.memoType}</td>
+                                <td>
+                                    <p class="slds-truncate" title="{!memo.memoCategoryDesc}">
+                                        {!memo.memoCategoryDesc} </p></td>
+                                <td>
+                                <p class="slds-truncate" title="{!memo.memoText}">
+                                    {!memo.memoText}</p>
+                                </td>
+                            </tr>   
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </aura:if>
+        </div>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="29" viewBox="0 0 29 29">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="29" height="29" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="reagendar-on" clip-path="url(#clip-path)">
+    <path id="Caminho_97" data-name="Caminho 97" d="M341.153,404.388a14.5,14.5,0,1,0,14.5,14.5A14.5,14.5,0,0,0,341.153,404.388Zm0,27.984a13.484,13.484,0,1,1,13.484-13.484A13.484,13.484,0,0,1,341.153,432.372Z" transform="translate(-326.653 -404.388)" fill="#acacac"/>
+    <g id="calendar" transform="translate(6 5)">
+      <g id="Grupo_42" data-name="Grupo 42" transform="translate(0)">
+        <path id="Caminho_39" data-name="Caminho 39" d="M20.793,54.15v2.125c0,.96.234,1.734-.71,1.734H16c-.944,0-.72-.774-.72-1.734V54.142H12.422v2.132c0,.96.224,1.734-.72,1.734H7.624c-.944,0-.71-.774-.71-1.734V54.15a1.569,1.569,0,0,0-1.5,1.573V68.176a1.569,1.569,0,0,0,1.548,1.584H20.748A1.571,1.571,0,0,0,22.3,68.176V55.723A1.569,1.569,0,0,0,20.793,54.15Zm-.5,13.251a.675.675,0,0,1-.669.681H8.055a.675.675,0,0,1-.669-.681V60.968a.675.675,0,0,1,.669-.681H19.623a.675.675,0,0,1,.669.681V67.4Z" transform="translate(-5.411 -51.628)" fill="none" stroke="#DA291C" stroke-width="0.8"/>
+        <path id="Caminho_40" data-name="Caminho 40" d="M80.2,4.937H81.4a.642.642,0,0,0,.655-.629V.63A.642.642,0,0,0,81.4,0H80.2a.642.642,0,0,0-.655.63V4.308A.642.642,0,0,0,80.2,4.937Z" transform="translate(-76.55 0)" fill="none" stroke="#DA291C" stroke-width="0.8"/>
+        <path id="Caminho_41" data-name="Caminho 41" d="M345.113,4.937H346.3a.642.642,0,0,0,.654-.629V.63A.642.642,0,0,0,346.3,0h-1.191a.642.642,0,0,0-.655.63V4.308A.642.642,0,0,0,345.113,4.937Z" transform="translate(-333.039 0)" fill="none" stroke="#DA291C" stroke-width="0.8"/>
+      </g>
+    </g>
+  </g>
+</svg>

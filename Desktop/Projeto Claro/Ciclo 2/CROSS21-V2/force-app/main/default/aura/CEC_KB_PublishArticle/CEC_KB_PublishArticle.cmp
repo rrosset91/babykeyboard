@@ -1,0 +1,33 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="CEC_KB_PublishArticleController">
+    <!-- Handlers -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- Attributes -->
+    <aura:attribute name="options" type="List" default="[{'label': 'Publicar agora', 'value': 'now'},
+                                                        {'label': 'Agendar publicação', 'value': 'later'}]" />
+    <aura:attribute name="value" type="String" default="now" />
+    <aura:attribute name="disabledDateField" type="Boolean" default="true" />
+    <aura:attribute name="disabledCheckbox" type="Boolean" default="false" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="recordId" type="String" />
+    <div class="slds-text-heading_large">Publicar Artigo</div>
+
+    <div class="slds-border_top slds-m-top_medium">
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Loading" size="large" />
+        </aura:if>
+        <lightning:radioGroup name="radioGroup" label="" options="{!v.options}" value="{!v.value}" type="radio" onchange="{!c.onRadioSelect}" class="slds-m-top_medium" />
+        
+        <lightning:helptext
+        content="O padrão para esta revisão é de 6 meses após a publicação. Marque este campo para receber uma notificação quando ela for concluída."
+        />
+        <lightning:input type="date" name="Coloque uma data" label="Data de revisão" aura:id="scheduleRevisionDate" class="slds-m-top_medium"/>
+        <lightning:input type="date" name="Coloque uma data" label="Data de publicação" disabled="{!v.disabledDateField}" aura:id="scheduleDate" class="slds-m-top_medium"/>
+
+        <lightning:input type="checkbox" label="Nova versão" name="Nova versão" aura:id="newVersion" disabled="{!v.disabledCheckbox}" class="slds-m-top_medium" checked="true"/>
+    </div>
+    <div class="slds-border_top slds-m-top_medium">
+        <lightning:button label="Cancelar" title="Cancelar" onclick="{!c.doCancel}" class="slds-m-top_medium" />
+
+        <lightning:button variant="brand" label="Publicar" title="Publicar" onclick="{!c.onPublish}" class="slds-m-top_medium" />
+    </div>
+</aura:component>

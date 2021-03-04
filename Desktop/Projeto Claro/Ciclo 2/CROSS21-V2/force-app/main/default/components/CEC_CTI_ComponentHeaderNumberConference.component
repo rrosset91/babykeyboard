@@ -1,0 +1,90 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 09/09/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 11] + [Componente de discagem do 
+* numero da conferencia)]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 09/09/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Possibilitar conferencia]: Criação da estrutura do componente
+* ---------------------------------------------------------------
+* Data: 20/09/2019
+* Autor: Eduardo Marques - Deloitte
+* Alterações: [US 15416 - Possibilitar conferencia]: Adicionada a acao nos campos
+-->
+
+
+<apex:component >
+    
+
+    
+    <div class="slds-grid customer-awaiting conference">
+        <div class="slds-col slds-size_9-of-12 customer-number">
+            <input type="text" maxlength="16" class="number-input conference" id="numberInputConference" autocomplete="off" value="" />
+        </div>
+        
+        <div class="delete-number-actions slds-grid slds-size_3-of-12">
+            <div class="slds-col slds-size_6-of-12 delete-one active conference">
+                <img title="Apagar último digito do número de telefone" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/reduz.svg')}"/>  
+            </div>
+            
+            <div class="slds-col slds-size_6-of-12 delete-all active conference">
+                <img title="Apagar todo o número de telefone" class="hover-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/clear-all-number-block.svg')}"/>  
+            </div>   
+            
+            <div class="slds-col slds-size_6-of-12 delete-all inactive display-none">
+                <img title="Apagar todo o número de telefone" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/apagar-off.svg')}"/>  
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    
+    $( function() {
+    
+        $("#numberInputConference").on('input', function (event) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            var value = $("#numberInputConference").val();
+            
+        });
+        
+        // $("#numberInputConference").prop("disabled",true);
+                
+        //DELETE ONE NUMBER ON INPUT
+        $(".delete-one.active.conference").on('click',function(){
+            var phoneNumber = $(".number-input.conference").val().slice(0,-1);
+            $(".number-input.conference").val("");
+            $(".number-input.conference").val(phoneNumber);
+            ativarFocusConference()
+        });
+        
+        //DELETE ALL NUMBERS ON INPUT
+        $(".delete-all.active.conference").on('click',function(){
+            $(".number-input.conference").val("");
+            $(".number-input.conference").val(null);
+            ativarFocusConference();
+        });
+        
+        //ENVIAR NUMERO DANDO ENTER (QUANDO O INPUT ESTA EM FOCO)
+        $('.number-input.conference').keypress(function(event){
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == '13'){
+                sendPhoneNumberToDriver();
+                event.preventDefault();
+            }
+        });
+        
+    } );
+    
+    function ativarFocusConference(){
+        $('.number-input.telefone-header2').attr('readonly', true);
+    	$('.number-input.conference').focus();
+        $('#numberInputConference').css('cursor','default');
+
+    }
+    
+    </script>
+    
+</apex:component>

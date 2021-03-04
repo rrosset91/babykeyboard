@@ -1,0 +1,161 @@
+<!-- 
+* Autor: Eduardo Marques - Deloitte
+* Data: 16/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 11] + [Componente ]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 24/10/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 15416 - Possibilitar conferencia]: Modificação da estrutura do javascript para ativar a espera
+*-----------------------------------------------------------------
+* Data: 03/02/2020
+* Autor: Diego Lima - Deloitte
+* Alterações: Adequação o novo layout de UX
+*/
+-->
+<apex:component >
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_Attendance/css/pageStyle.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_MergeConferenceCall/css/pageStyle.css')}"/>
+
+	<div class="slds-grid customer-name-and-contract"> 
+        <div class="slds-col slds-size_1-of-12 customer-contract">
+            <img class="contract-img display-none" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/detalhes.svg')}"/>
+        </div>
+    </div>
+   	<div class="in-attendance merge">
+       
+		<div class="slds-col slds-size_12-of-12 text-center img-merge">
+			<img class="conference-active" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-merge-available.svg')}"/> 
+            <img class="conference-onhold display-none" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-merge-block.svg')}"/>  
+		</div>
+      
+        <div class="text-center attendance-text">
+            <div class="slds-col slds-size_12-of-12"></div>
+            
+            <div class="slds-col slds-size_12-of-12">
+                <h1 id="call-duration-count-conference" class="call-duration-count text-center">00:00:00</h1>
+                <p class="call-duration-text conference text-center">Tempo de chamada</p>
+            </div>
+            
+            <div class="slds-col slds-size_12-of-12 customer-wait-count conference display-none">
+                <p class="text-center">Conferência em espera - <label class="holdTimeConference minutes">00</label>:<label class="holdTimeConference seconds">00</label></p>
+            </div>
+            
+            <div class="slds-col slds-size_12-of-12 customer-mute-count display-none">
+                <p class="text-center">Chamada no mudo - <label class="minutes">0</label> min <label class="seconds">0</label> s</p>
+            </div> 
+        </div>
+    </div>
+
+
+    
+    <div class="driver-datas display-none">
+        Modo de depuração - Pressione CTRL + ALT + B para fechar
+        <div id="messages">
+            
+        </div>
+        
+    </div>
+    
+    <script>
+    
+    //TIMER CONFERENCIA
+    var timerConference; 
+    
+    //CHAMADA EM ESPERA
+    var onlyDriverHoldHourConf;
+    var onlyDriverHoldMinutesConf;
+    var onlyDriverHoldSecondsConf;
+
+	var currentHoldDateConf;
+    var currentHoldHourConf;
+    var currentHoldMinutesConf;
+    var currentHoldSecondsConf;
+    
+    var finalHoldHourConf;
+    var finalHoldMinutesConf;
+    var finalHoldSecondsConf;
+    
+    var timerHoldConf;
+    
+    function timerCallHoldConf(timeDriverHoldConf){
+        
+        $('.holdTimeConference').empty();
+
+    	onlyDriverHoldHourConf = timeDriverHoldConf.substring(11,13);
+        onlyDriverHoldMinutesConf = timeDriverHoldConf.substring(14,16);
+        onlyDriverHoldSecondsConf = timeDriverHoldConf.substring(17,19);
+    
+        currentHoldDateConf = new Date();
+        currentHoldHourConf = currentHoldDateConf.getHours();
+        currentHoldMinutesConf = currentHoldDateConf.getMinutes();
+        currentHoldSecondsConf = currentHoldDateConf.getSeconds();
+    
+        finalHoldHourConf = currentHoldHourConf - onlyDriverHoldHourConf ;
+        finalHoldMinutesConf = currentHoldMinutesConf - onlyDriverHoldMinutesConf;
+        finalHoldSecondsConf = currentHoldSecondsConf - onlyDriverHoldSecondsConf;
+        
+        timerHoldConf = new easytimer.Timer();
+        
+        timerHoldConf.start({startValues: {hours: finalHoldHourConf, minutes: finalHoldMinutesConf, seconds: finalHoldSecondsConf}});
+    
+        timerHoldConf.addEventListener('secondsUpdated', function (e) {
+            if(timerHoldConf.getTimeValues().minutes < 10){
+            	$('.holdTimeConference.minutes').html('0'+timerHoldConf.getTimeValues().minutes);
+            } else {
+            	$('.holdTimeConference.minutes').html(timerHoldConf.getTimeValues().minutes);
+            }
+			
+            if(timerHoldConf.getTimeValues().seconds < 10){
+            	$('.holdTimeConference.seconds').html('0'+timerHoldConf.getTimeValues().seconds);
+            } else {
+            	$('.holdTimeConference.seconds').html(timerHoldConf.getTimeValues().seconds);
+            }
+            
+            
+        });
+        timerHoldConf.addEventListener('started', function (e) {
+            $('#holdTimeConference').html(timerHoldConf.getTimeValues().toString());
+        });
+       	
+   	}
+    
+    
+    
+    function startCountDurationConference(driverCallDurationConference){
+        
+        console.log('entrou na startCountDurationConference ------------');
+        console.log('driverCallDurationConference - ' + driverCallDurationConference);
+        
+        var onlyDriverHourConference = driverCallDurationConference.substring(11,13);
+        var onlyDriverMinutesConference = driverCallDurationConference.substring(14,16);
+        var onlyDriverSecondsConference = driverCallDurationConference.substring(17,19);
+        
+        var currentDateConference = new Date();
+        var currentHourConference = currentDateConference.getHours();
+        var currentMinutesConference = currentDateConference.getMinutes();
+        var currentSecondsConference = currentDateConference.getSeconds();
+        
+        var finalHourConference = currentHourConference - onlyDriverHourConference ;
+        var finalMinutesConference = currentMinutesConference - onlyDriverMinutesConference;
+        var finalSecondsConference = currentSecondsConference - onlyDriverSecondsConference;
+        
+        timerConference = null;
+        timerConference = new easytimer.Timer();
+        timerConference.start({startValues: {hours: finalHourConference, minutes: finalMinutesConference, seconds: finalSecondsConference}});
+        
+        $('.finish-call img').click(function () {
+            timerConference.stop();
+        });
+        
+        timerConference.addEventListener('secondsUpdated', function (e) {
+            $('#call-duration-count-conference').html(timerConference.getTimeValues().toString());
+        });
+        timerConference.addEventListener('started', function (e) {
+            $('#call-duration-count-conference').html(timerConference.getTimeValues().toString());
+        });
+    }
+
+    </script>
+</apex:component>

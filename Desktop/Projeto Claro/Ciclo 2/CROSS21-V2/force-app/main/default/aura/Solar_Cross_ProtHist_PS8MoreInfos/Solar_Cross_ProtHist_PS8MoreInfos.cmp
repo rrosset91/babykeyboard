@@ -1,0 +1,83 @@
+<aura:component>
+    <aura:attribute name="ps8MoreInfo" type="Object"/>
+
+    <div class="slds-modal__content slds-p-around--medium ">
+        <div class="slds-m-bottom_large">          
+            <div class="slds-box slds-m-bottom_medium">
+                <div class="slds-grid slds-gutters ">
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-heading_small"><b>Motivo 1</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-heading_small"><b>Motivo 2</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-heading_small"><b>Motivo 3</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-heading_small"><b>Motivo 4</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-heading_small"><b>Motivo 5</b></div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-gutters ">
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].reasonCode1}">{!v.ps8MoreInfo.data.attendances[0].reasonDescription1}</div>                              
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].reasonCode2}">{!v.ps8MoreInfo.data.attendances[0].reasonDescription2}</div>                              
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].reasonCode3}">{!v.ps8MoreInfo.data.attendances[0].reasonCode3}</div>                              
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].reasonCode4}">{!v.ps8MoreInfo.data.attendances[0].reasonCode4}</div>                              
+                    </div>
+                    <div class="slds-col slds-size_1-of-5">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].reasonCode5}">{!v.ps8MoreInfo.data.attendances[0].reasonCode5}</div>                              
+                    </div>
+                </div>
+                
+                <div class="slds-grid slds-gutters slds-m-top_small">
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-text-heading_small"><b>Memo</b></div>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters ">
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].memo}">{!v.ps8MoreInfo.data.attendances[0].memo}</div>                              
+                    </div>    
+                </div>
+
+
+                <div class="slds-grid slds-gutters slds-m-top_small">
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="slds-text-heading_small"><b>Dt/Hr da Criação</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="slds-text-heading_small"><b>Resumo</b></div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="slds-text-heading_small"><b>Detalhes</b></div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-gutters ">
+                    <div class="slds-col slds-size_1-of-3">
+                        <!-- <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateDate[0]}">{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateDate[0]}</div>   --> 
+                        <lightning:formattedDateTime class="slds-text-body_regular" value="{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateDate[0]}" year="numeric" month="2-digit" day="2-digit" hour="numeric" minute="numeric"/>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateResume}">{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateResume}</div>                              
+                    </div>
+                    <div class="slds-col slds-size_1-of-3">
+                        <div class="slds-text-body_regular" title="{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateDetail}">{!v.ps8MoreInfo.data.attendances[0].updateInteraction[0].updateDetail}</div>                              
+                    </div>
+                </div>
+            </div>      
+        </div>
+    </div>
+
+</aura:component>

@@ -1,0 +1,467 @@
+{
+    "apiVersion": 1,
+    "transactionId": "12a602be-fe7a-49b0-8560-a8f58fb62bd0",
+    "data": {
+        "mobileOfferId": 414409134,
+        "waPlanPriceId": 16443,
+        "name": "Claro Controle App 5GB + Minutos ilimitados + SVA",
+        "wppPricePlanId": "NULL",
+        "effectiveDate": "2020-09-22T00:00:00.000-03:00",
+        "expirationDate": "2023-12-21T00:00:00.000-03:00",
+        "effectiveDateSale": "2009-01-14T00:00:00.000-03:00",
+        "expirationSaleDate": "2049-12-31T00:00:00.000-03:00",
+        "flatType": "NULL",
+        "level": "ASSINANTE",
+        "dependentMinimumQty": 0,
+        "dependentMaxQty": 0,
+        "minimumMobilePhoneQty": 0,
+        "maxMobilePhoneQty": 0,
+        "maxfixedPhoneQty": 0,
+        "minimumfixedPhoneQty": 0,
+        "minimumBroadbandQty": 0,
+        "maxBroadbandQty": 0,
+        "valueSignatureTable": "NULL",
+        "signatureValue": 84.99,
+        "minimumSignatureValue": 50.0,
+        "valueDiscountSubscription": 0.0,
+        "valuePercentageDiscountSubscription": "NULL",
+        "valueDiscountLoyalty": "NULL",
+        "valuePercentageDiscountLoyalty": "NULL",
+        "totalMonthlyValue": 191.78,
+        "franchise": "NULL",
+        "measuredUnit": "NULL",
+        "franchiseMinutesVc1": "NULL",
+        "franchiseMinutesVc1Go": "NULL",
+        "franchiseMinutesVc1Fx": "NULL",
+        "franchiseMinutesVc1Mm": "NULL",
+        "franchiseMinutesVc2": "NULL",
+        "torpedoFranchise": "NULL",
+        "franchiseData": "NULL",
+        "limitControl": 0.0,
+        "needStartDate": "2020-09-22-03:00",
+        "gracePeriod": 0,
+        "offers": [
+            {
+                "mobileOfferId": 414279176,
+                "wppOfferId": "NULL",
+                "name": "Claro Vídeo - Controle",
+                "offerType": "OPCIONAL",
+                "mobileCategoryOfferId": "SERVICO_VALOR_AGREGADO",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2021-01-07-03:00",
+                "expiryDate": "2023-12-17-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL",
+                "listRelatedOffers": {
+                    "correlatedOffer": {
+                        "mobileOfferId": 414279203
+                    }
+                }
+            },
+            {
+                "mobileOfferId": 414279524,
+                "wppOfferId": "NULL",
+                "name": "Claro Banca - Controle",
+                "offerType": "OPCIONAL",
+                "mobileCategoryOfferId": "SERVICO_VALOR_AGREGADO",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2021-01-07-03:00",
+                "expiryDate": "2023-12-17-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL",
+                "listRelatedOffers": {
+                    "correlatedOffer": {
+                        "mobileOfferId": 414279346
+                    }
+                }
+            },
+            {
+                "mobileOfferId": 414409134,
+                "wppOfferId": "NULL",
+                "name": "Claro Controle App 5GB + Minutos ilimitados + SVA",
+                "offerType": "OPCIONAL",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-09-22-03:00",
+                "expiryDate": "2023-12-21-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": 84.99,
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL",
+                "listRelatedOffers": [
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 380466132
+                        }
+                    },
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 380571183
+                        }
+                    },
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 380834928
+                        }
+                    },
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 414409110
+                        }
+                    },
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 414409609
+                        }
+                    },
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 414410630
+                        }
+                    },
+                    {
+                        "correlatedOffer": {
+                            "mobileOfferId": 414412553
+                        }
+                    }
+                ]
+            },
+            {
+                "mobileOfferId": 380498947,
+                "wppOfferId": "NULL",
+                "name": "Desc50%12mA",
+                "offerType": "DESCONTO",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-12-23-03:00",
+                "expiryDate": "2023-12-20-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": 50.0
+            },
+            {
+                "mobileOfferId": 380523526,
+                "wppOfferId": "NULL",
+                "name": "Controle Total",
+                "offerType": "PLANO_PRECO",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-09-22-03:00",
+                "expiryDate": "NULL",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL"
+            },
+            {
+                "mobileOfferId": 414224829,
+                "wppOfferId": "NULL",
+                "name": "Bônus de dados 2GB - Promo Whatsapp",
+                "offerType": "OPCIONAL",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-12-22-03:00",
+                "expiryDate": "2021-12-22-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL"
+            },
+            {
+                "mobileOfferId": 414298423,
+                "wppOfferId": "NULL",
+                "name": "DESCPromoC30",
+                "offerType": "DESCONTO",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-12-23-03:00",
+                "expiryDate": "2023-12-21-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": 30.0
+            },
+            {
+                "mobileOfferId": 414313727,
+                "wppOfferId": "NULL",
+                "name": "Desc30%FuncCTR",
+                "offerType": "DESCONTO",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-12-30-03:00",
+                "expiryDate": "2023-12-17-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": 30.0
+            },
+            {
+                "mobileOfferId": 414317324,
+                "wppOfferId": "NULL",
+                "name": "Bônus de dados 4GB - Promo Whatsapp - 6M",
+                "offerType": "OPCIONAL",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-12-23-03:00",
+                "expiryDate": "2023-12-10-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL"
+            },
+            {
+                "mobileOfferId": 414397075,
+                "wppOfferId": "NULL",
+                "name": "PJXHabil 84,89",
+                "offerType": "DESCONTO",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-09-22-03:00",
+                "expiryDate": "2023-12-19-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": 84.89,
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": 100.0
+            },
+            {
+                "mobileOfferId": 414397647,
+                "wppOfferId": "NULL",
+                "name": "DesCtr20,00",
+                "offerType": "DESCONTO",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2020-09-22-03:00",
+                "expiryDate": "2023-12-18-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": "NULL",
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": 20.0
+            },
+            {
+                "mobileOfferId": 414403089,
+                "wppOfferId": "NULL",
+                "name": "NETFLIX Básico - Controle",
+                "offerType": "OPCIONAL",
+                "mobileCategoryOfferId": "NULL",
+                "level": "ASSINANTE",
+                "effectiveStartDate": "2021-01-07-03:00",
+                "expiryDate": "2023-12-17-03:00",
+                "compositionIndicatorPricePlan": false,
+                "mandatoryIndicator": "NULL",
+                "indicatorDistribution": false,
+                "indicatorDistributedSubscriber": false,
+                "recurrentIndicator": "NULL",
+                "franchise": "NULL",
+                "offerValue": 21.9,
+                "monthlyFee": "NULL",
+                "monthlyDiscountValue": "NULL"
+            }
+        ],
+        "componentGroups": {
+            "nome": "Claro Controle App 5GB + Minutos ilimitados + SVA",
+            "serviceType": "NULL",
+            "minimumQuantity": "NULL",
+            "maximumQuantity": "NULL",
+            "valueSignatureTable": "NULL",
+            "signatureValue": "NULL",
+            "minimumSignatureValue": "NULL",
+            "maximumSignatureValue": "NULL",
+            "valueDiscountSubscription": "NULL",
+            "valuePercentageDiscountSubscription": "NULL",
+            "valueDiscountLoyalty": "NULL",
+            "valuePercentageDiscountLoyalty": "NULL",
+            "components": [
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "PF Tarifa LDN Embratel 29",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                },
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "Claro Recado Controle",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                },
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "Aprovisionamento 4G",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                },
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "Pacote de Dados Controle App 5GB",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                },
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "Claro Banca Premium - Controle App",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                },
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "Pacote Whatsapp - Controle",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                },
+                {
+                    "mobileComponentId": "NULL",
+                    "name": "Controle - Claro Video",
+                    "componentType": {
+                        "typeId": "NULL",
+                        "name": "NULL"
+                    },
+                    "amount": "NULL",
+                    "measuredUnit": "NULL",
+                    "valueSignatureTable": "NULL",
+                    "signatureValue": "NULL",
+                    "valueDiscountSubscription": "NULL",
+                    "valuePercentageDiscountSubscription": "NULL"
+                }
+            ]
+        },
+        "subscriber": {
+            "signatureType": "CLARO_CONTROLE",
+            "activationPlatformDate": "NULL",
+            "activationDate": "NULL",
+            "situation": "ATIVO",
+            "platformSituation": "NULL",
+            "bandDeadline": "NULL",
+            "dateSituation": "2020-09-22T00:00:00.000-03:00",
+            "balance": "NULL",
+            "creditExpirationDate": "NULL",
+            "dateBlockingCalls": "NULL",
+            "balanceExpirationDate": "NULL",
+            "serviceExpirationDate": "NULL",
+            "expirationDatePhone": "NULL",
+            "serviceIntercept": "NULL",
+            "networkSituation": "ATIVO",
+            "dataSituationNetwork": "2020-09-22T00:00:00.000-03:00",
+            "device": {
+                "msisdn": 11992704864,
+                "simCard": {
+                    "iccId": "NULL"
+                },
+                "model": {
+                    "technology": "GSM",
+                    "technologicalGeneration": "3G"
+                }
+            },
+            "pricePlan": {
+                "dependentQty": 1
+            },
+            "mobileSubscriberId": 925389248
+        }
+    }
+}

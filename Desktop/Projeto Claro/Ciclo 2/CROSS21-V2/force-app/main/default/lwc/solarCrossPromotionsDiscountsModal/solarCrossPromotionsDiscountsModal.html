@@ -1,0 +1,51 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 12-15-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   12-13-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+<section id ="modal-fade-in-open" role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+            <div style="float:right;">
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close" onclick={handleCloseModal} variant="bare-inverse" style="float:right;"></lightning-button-icon>
+            </div>
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Promoções e Descontos</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_large">
+                <lightning-accordion allow-multiple-sections-open="true"  active-section-name={activeSections}>
+                    <lightning-accordion-section label='Promoções' name="A">
+                        <lightning-datatable key-field="id"
+                        data={promotions}
+                        columns={columns}
+                        hide-checkbox-column = 'true'
+                        default-sort-direction={defaultSortDirection}
+                        sorted-direction={sortDirectionPromotion}
+                        sorted-by={sortedByPromotion}
+                        onsort={onHandleSortPromotion}
+                        >
+                        </lightning-datatable>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section label="Descontos" name="B">
+                        <lightning-datatable key-field="id"
+                        data={discounts}
+                        columns={columns}
+                        hide-checkbox-column = 'true'
+                        default-sort-direction={defaultSortDirection}
+                        sorted-direction={sortDirectionDiscount}
+                        sorted-by={sortedByDiscount}
+                        onsort={onHandleSortDiscount}
+                        >
+                        </lightning-datatable>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </div>
+        </div>
+    </section>
+    <div id="modal-backdrop" class="slds-backdrop slds-backdrop_open"></div>
+</template>

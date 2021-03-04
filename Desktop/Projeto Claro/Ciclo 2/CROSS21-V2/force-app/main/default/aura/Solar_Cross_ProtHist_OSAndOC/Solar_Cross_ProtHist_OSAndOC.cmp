@@ -1,0 +1,106 @@
+<aura:component>
+    <aura:attribute name="activeSections" type="List" default="['A','B']" />
+    <aura:attribute name="requisition" type="Object"/>
+
+    <div class="slds-modal__content slds-p-around--medium ">
+        <div class="slds-m-bottom_large">
+            <lightning:accordion aura:id="accordion" allowMultipleSectionsOpen="true" activeSectionName="{! v.activeSections }">
+                <aura:if isTrue="{!not(empty(v.requisition.listWorkOrder))}">
+                    <lightning:accordionSection name="A" label="Detalhes das OSs">
+                        <aura:iteration items="{!v.requisition.listWorkOrder}" var="workOrder">
+                            <div class="slds-box slds-m-bottom_medium">
+                                <!-- <lightning:icon iconName="action:priority" alternativeText="Alerta" title="Alerta" size=" xx-small" class="slds-m-bottom_medium"/> -->
+                                <div class="slds-grid slds-gutters ">
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Número da Ordem de serviço</b></div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Tipo da OS</b></div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Status</b></div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Baixada</b></div>
+                                    </div>
+                                </div>
+
+                                <div class="slds-grid slds-gutters ">
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="{!workOrder.workOrderID}">{!workOrder.workOrderID}</div>                              
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="{!workOrder.workorderTypeDescription}">{!workOrder.workorderTypeDescription}</div>                              
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="{!workOrder.statusDescription}">{!workOrder.statusDescription}</div>                              
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="">
+                                            <aura:if isTrue="{!workOrder.terminationDate == null}">
+                                                <p>Não</p>
+                                                <aura:set attribute="else">
+                                                    <p>Sim</p>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>   
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-grid slds-gutters slds-m-top_small">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-heading_small"><b>Observações da solicitação</b></div>
+                                    </div>
+                                </div>
+                                <div class="slds-grid slds-gutters ">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <div class="slds-text-body_regular" title="{!workOrder.note}">{!workOrder.note}</div>                              
+                                    </div>    
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </lightning:accordionSection>
+                </aura:if>
+
+                <aura:if isTrue="{!not(empty(v.requisition.listConfigOrder))}">
+                    <lightning:accordionSection name="B" label="Detalhes das OCs">
+                        <aura:iteration items="{!v.requisition.listConfigOrder}" var="configOrder">
+                            <div class="slds-box slds-m-bottom_medium">
+                                <!-- <lightning:icon iconName="action:priority" alternativeText="Alerta" title="Alerta" size=" xx-small" class="slds-m-bottom_medium"/> -->
+                                <div class="slds-grid slds-gutters ">
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Número</b></div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Tipo de fechamento</b></div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Baixa feita por</b></div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-heading_small"><b>Data de termino</b></div>
+                                    </div>
+                                </div>
+
+                                <div class="slds-grid slds-gutters">
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="{!configOrder.configurationOrderID}">{!configOrder.configurationOrderID}</div>                              
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="{!configOrder.configurationorderTypeDescription}">{!configOrder.configurationorderTypeDescription}</div>                              
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="!configOrder.closeUser}">{!configOrder.closeUser}</div>                              
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <div class="slds-text-body_regular" title="{!configOrder.terminationDate}">{!configOrder.terminationDate}</div>                              
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    </lightning:accordionSection>
+                </aura:if>
+            </lightning:accordion>
+        </div>
+    </div>
+</aura:component>

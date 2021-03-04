@@ -1,0 +1,31 @@
+<!-- CEC_PME_OrderPath -->
+<aura:component controller="CEC_PME_OrderPathController" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="c:CEC_PME_MobileButtonEvt" action="{!c.handleComponentEvent}"/>
+    
+    <aura:attribute name="path" type="Map" default="{'items':[]}"/>
+    <aura:if isTrue="{!not(empty(v.path.items))}">
+        <div class="cCEC_PME_OrderPath">
+            <article class="slds-card">
+                <div class="slds-card__body slds-card__body_inner">
+                    <div class="slds-path">
+                        <div class="slds-grid slds-path__track">
+                            <div class="slds-grid slds-path__scroller-container">
+                                <div class="slds-path__scroller" role="application">
+                                    <div class="slds-path__scroller_inner">
+                                        <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                            <aura:iteration items="{!v.path.items}" var="item">
+                                                <c:CEC_PME_OrderPathItem pathItem="{!item}"/>
+                                            </aura:iteration>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </aura:if>
+</aura:component>

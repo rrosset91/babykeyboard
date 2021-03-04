@@ -1,0 +1,12 @@
+.THIS .generate-bill {
+	height: 32px;
+	font: 13pt;
+	/*color: #da281c;*/
+	border: 1px #c1c1c1 solid;
+	border-radius: 4px;
+}
+
+.THIS #second-button {
+	padding-left: 5px;
+	float: right;
+}

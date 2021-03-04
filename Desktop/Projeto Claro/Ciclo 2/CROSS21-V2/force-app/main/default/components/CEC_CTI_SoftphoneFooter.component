@@ -1,0 +1,63 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 11/05/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 5] + [Criação do componente de visualforce
+* que será utilizado como footer do Softphone e aparecerá na maioria das páginas]
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 11/05/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: Criação de toda a estrutura html do arquivo]
+-->
+
+<apex:component >
+    
+    <div class="footer-page open-call-infos">
+        
+        <div class="call-primary-actions slds-grid">
+            <div class="slds-col slds-size_4-of-12 div-action text-center">
+                <img title="Em espera" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-espera-off.svg')}"/>    
+            </div>
+            
+            <div class="slds-col slds-size_4-of-12 div-action finish-call text-center">
+                <img title="Encerrar chamada" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/endcall-off.svg')}"/>
+            </div>
+            
+            <div class="slds-col slds-size_4-of-12 div-action text-center">
+                <img title="Mudo" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-mute-off.svg')}"/>
+            </div>
+        </div>
+        
+        <div class="call-logs slds-grid">
+            <div class="slds-col slds-size_6-of-12 log-box scheduled text-center">
+                <h2>Agendadas</h2>
+            </div>
+            
+            <div class="slds-col slds-size_6-of-12 log-box text-center">
+                <h2>Executadas</h2>
+            </div>
+        </div>
+        
+        <div class="call-secondary-actions slds-grid">
+            <div class="slds-col slds-size_4-of-12 div-action text-center return-inactive display-none">
+                <img title="Agendar retorno" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-calendar-off.svg')}"/>
+            </div>
+            
+            <div class="slds-col slds-size_4-of-12 div-action text-center return-active">
+                <a href="/apex/CEC_CTI_Scheduling">
+                    <img title="Agendar retorno" class="hover-active" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-calendar.svg')}"/>
+                </a>    
+            </div>
+            
+            <div class="slds-col slds-size_4-of-12 div-action transfer-call text-center">
+                <img title="Transferir" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-transfer-off.svg')}"/>
+            </div>
+            
+            <div class="slds-col slds-size_4-of-12 div-action text-center">
+                <img title="Conferência" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-group-off.svg')}"/>
+            </div>
+        </div>
+        
+    </div>
+    
+</apex:component>

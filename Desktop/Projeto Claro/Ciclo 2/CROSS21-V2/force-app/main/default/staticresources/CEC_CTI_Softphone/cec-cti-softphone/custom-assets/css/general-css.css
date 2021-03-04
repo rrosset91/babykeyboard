@@ -1,0 +1,322 @@
+     
+html body.sfdcBody{
+    background-color: #FAFAFB !important;
+    margin: 0px;
+}
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+ 
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+h1{
+    font-size: 16px;
+    color: #3e3e3c;
+}
+
+h2{
+    font-size: 14px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.text-left{
+    text-align: left;
+}
+
+
+.hover-active{
+    cursor: pointer;
+}
+
+.active-option{
+    background-color: #F7F8F7;
+}
+
+.cti-button-red{
+    background: #DA291C;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px 20px 8px 20px;
+    border: none;
+    font-size: 14px;
+}
+
+.cti-button-red:hover{
+    background: #DA291Ccc;
+}
+
+
+.cti-button-blue{
+    background: #DA291C;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px 20px 8px 20px;
+    border: none;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.cti-button-blue:hover{
+    background: #DA291Cc7;
+}
+
+.cti-button-grey{
+    background: #ABABAF;
+    color: #fff;
+    font-weight: 100;
+    padding: 8px 20px 8px 20px;
+    border: none;
+    margin-left: 45px;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.cti-button-grey:hover{
+    background: #ababafbf;
+}
+
+.cti-button-yellow{
+    background: #FFBC4A;
+    color: #fff;
+    padding: 5px 10px 5px 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 400;
+    border: solid 1px #FFBC4A;
+}
+
+.cti-button-yellow:active {
+    border-color: #ffbc4a !important;
+}
+
+.cti-button-red:active {
+    border-color: #da291c !important;
+}
+
+.display-none{
+    display: none !important;
+}
+
+
+.side-padding{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/* DATEPICKER E TIMEPICKER */
+
+#ui-datepicker-div a {
+    color:#444;
+    text-decoration:none;
+}
+
+#ui-datepicker-div {
+    background:#fff;
+    box-shadow: 0 0 5px rgba(57,70,78,.2);
+    padding:10px;
+    display:none;
+}
+.ui-datepicker-header {
+    position:relative;
+}
+.ui-datepicker-header .ui-corner-all {
+    display:block;
+    width:50%;
+    position:absolute;
+    font-size:10px;
+    color:#ccc;
+    cursor:pointer;
+}
+
+.ui-datepicker-prev {
+    left:0;
+    text-align:left;
+}
+.ui-datepicker-next {
+    right:0;
+    text-align:right;
+}
+
+#ui-datepicker-div td,
+#ui-datepicker-div th {
+    width:35px;
+    height:35px;
+}
+
+.ui-datepicker-current-day{
+    background-color: #ecebea;
+    border-radius: 100px;
+}
+
+.ui-datepicker-calendar tbody tr td:hover{
+    background-color: #ecebea;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+
+#ui-datepicker-div table {
+    border-collapse: collapse;
+}
+
+#ui-datepicker-div td {
+    text-align: center;
+}
+
+.ui-state-disabled:hover{
+    border: none;
+}
+.ui-state-disabled {
+    background:#f8f8f8;
+    color:#e74c3c;
+    opacity:0.5;
+}
+
+.ui-datepicker-title {
+    text-align: center !important;
+}
+
+.ui-datepicker-calendar thead tr th{
+    text-align: center !important;
+}
+
+.ui-state-disabled {
+    background: transparent !important;
+    color: #dddbda !important;
+    opacity: 1 !important;
+}    
+
+.ui-timepicker-viewport{
+    padding: 3px !important;
+}
+
+.ui-timepicker-standard a{
+    padding: 0px !important;
+    padding-top: 2px;
+    margin-right: 16px;
+    font-size: 13px;
+}
+
+
+
+.driver-datas{
+    margin-left: 15px;
+}
+
+/* ESTILO DO BLOCO "GENERAL CONTENT" DAS PÁGINAS*/
+
+.general-content{
+    padding-top: 10px;
+    background-color: #FAFAFB;
+
+
+}
+
+
+        
+.call-primary-actions {
+    border-top: none;
+}
+
+.call-primary-actions .end-call img {
+    width: 37px;
+}
+
+.call-primary-actions .div-action{
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.call-primary-actions .central-icon img {
+    /*width: 55px;*/
+    width: 50px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-page .call-primary-actions .div-action.end-call-connecting img{
+    margin-top: -30px;
+}
+
+.call-primary-actions .side-icon img {
+    /*width: 40px;
+    padding-top: 12px;
+    padding-bottom: 15px;*/
+    width: 35px;
+    padding-top: 19px;
+    padding-bottom: 0px;
+    float: right;
+    margin-right: 15px;
+}
+
+
+
+/* SCC SCROLLBAR */
+
+.css-scrollbar::-webkit-scrollbar-track {
+    background-color: #ddd;
+    border-radius: 6px;
+}
+
+.css-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 6px;
+}
+
+.css-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #DA291C;
+    margin-right: 10px;
+    height: 54px;
+}
+
+
+/* CEC_CTI_ConnectingCall */
+
+.connecting-content{
+    width: 100%;
+    height: 240px;
+    padding-top: 55px; 
+}
+
+.connecting-content h1{
+    color: #DA291C;
+}
+
+.noselectBtn {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+    supported by Chrome, Opera and Firefox */
+}
+
+
+.cti-button-red.btn-link-red{
+    padding: 7px;
+    border-radius: 5px;
+}
+
+.cti-button-red.btn-link-red:hover{
+    background: #DA291C;
+    color: #fff;
+    font-weight: 100;
+    border: none;
+    font-size: 14px;
+    text-decoration: none;
+}

@@ -1,0 +1,17 @@
+.THIS.title 
+{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.THIS .dialog
+{
+	width: 470px;
+	height: 280px;
+}
+
+.THIS .dialog-m
+{
+	width: 450px;
+	height: 280px;
+}

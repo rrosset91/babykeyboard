@@ -1,0 +1,39 @@
+<aura:component controller="CEC_360_BalanceController" implements="flexipage:availableForRecordHome,force:hasRecordId" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="showSpinner" type="Boolean"/>
+
+    <aura:attribute name="dataPromotional" type="CEC_RestObjects.PromotionalBalances"/>
+
+    <aura:if isTrue="{!v.showSpinner}">    
+        <div class="slds-text-align_center">
+            <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                <lightning:spinner alternativeText="Loading" size="medium" />
+            </div>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-m-bottom_medium">
+                
+                    <table class="lista-saldo-promocional slds-table slds-row-hover">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Unidade</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <aura:iteration items="{!v.dataPromotional}" var="PromotionalBalances">
+                            <tbody>
+                                <tr>
+                                    <td>{!PromotionalBalances.description}</td>
+                                    <td>{!PromotionalBalances.measurementUnit}</td>
+                                    <td>{!PromotionalBalances.balance}</td>
+                                </tr>
+                            </tbody>
+                        </aura:iteration>
+                    </table>
+               
+            </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

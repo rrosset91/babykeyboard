@@ -1,0 +1,114 @@
+<aura:component controller="Solar_Cross_InteractionClientController">
+    <aura:attribute name="case" type="Case"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="reload" type="Boolean" />
+    <aura:attribute name="disableSaveButton" type="Boolean" default="false"/>
+    <aura:attribute name="disableTextArea" type="Boolean" default="false"/>
+    <aura:attribute name="disableLoadInt" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.reload}" action="{!c.reload}"/>   
+
+
+
+    <!--<aura:if isTrue="{!not(empty(v.data.lInteractionsLst))}">-->
+        <div class="slds-grid slds-wrap slds-m-bottom_small">
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-text-heading_medium"><b>Histórico de interações:</b></div>
+            </div>
+            <div class="slds-col slds-size_1-of-1">
+                <div class="slds-clearfix">
+                    <span class="slds-float_right slds-m-left_small slds-m-top_xx-small" >
+                        <lightning:buttonIcon iconName="utility:refresh"  onclick="{!c.reloadInteractionsManually}" variant="brand" tooltip="Atualizar histórico de interações" disabled="{!v.disableLoadInt}"/>
+                    </span>
+                    <span class="slds-float_right">
+                        <div class="slds-col slds-size_1-of-1">
+                            <span class="slds-text-title">Contatos com sucesso: <b>{!v.data.lSuccessfulAttempts}</b></span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1">
+                            <span class="slds-text-title">Contatos sem sucesso: <b>{!v.data.lUnsuccessfulAttempts}</b></span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <aura:iteration items="{!v.data.lInteractionsLst}" var="dat">
+            <lightning:formattedDateTime value="{!dat.lDateKey}" year="numeric" month="numeric" day="numeric" class="slds-m-bottom_xx-small"></lightning:formattedDateTime>
+            <hr class="slds-m-top_xx-small"/>
+            <aura:iteration items="{!dat.lInteractionsLst}" var="item">
+                <aura:if isTrue="{!item.lAuthor == 'Empresa'}">
+                    <lightning:layout verticalAlign="center" horizontalAlign="end">                
+                        <lightning:layoutItem padding="around-small">
+                            <section aria-describedby="dialog-body-id-98" aria-label="Dialog Title" class="slds-popover slds-nubbin_right slds-popover_large" role="dialog">
+                                <div class="slds-popover__body" id="dialog-body-id-98">
+                                    <div class="slds-grid slds-m-bottom_small">
+                                        <div>
+                                            <div class="slds-text-title">{!item.lClaroLogin}</div>
+                                        </div>
+                                        <div class="slds-col_bump-left">
+                                            <div class="slds-text-title">
+                                                <lightning:formattedDateTime value="{!item.lCreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning:formattedDateTime>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <aura:if isTrue="{!and(item.lType == 'Telefone',item.lComments==null)}">
+                                        <lightning:textarea aura:id="descriptionInteraction" name="interaction" class="topText"
+                                        label="Interação" placeholder="Escreva aqui..." required="true" value="{!item.lCommentsManual}"
+                                        messageWhenValueMissing="Preencha este campo." disabled="{!v.disableTextArea}" />
+                                        <lightning:button label="Salvar" class="slds-button slds-button_brand" variant="brand" value="{!item}" aura:id="btnCreate" onclick="{!c.updateTopic}" disabled="{!v.disableSaveButton}" />
+                                        <aura:set attribute="else">
+                                            <p>{!item.lComments}</p>
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                                <footer class="slds-popover__footer footerStyle slds-border_top">
+                                    <div class="slds-grid">
+                                        <div>
+                                            <div class="slds-text-title">{!item.lType}</div>
+                                            <aura:if isTrue="{!item.lCallId != null}">
+                                                <div class="slds-text-title">Id da ligação</div>
+                                            </aura:if>
+                                        </div>
+                                        <div class="slds-col_bump-left">
+                                            <lightning:icon iconName="{!item.lFooterIcon}" variant="{!item.lFooterVariant}" size="x-small"/>
+                                            <aura:if isTrue="{!item.lCallId != null}">
+                                                <div class="slds-text-title">{!item.lCallId}</div>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                </footer>
+                            </section> 
+                        </lightning:layoutItem>
+                        <lightning:layoutItem padding="around-small">            
+                                <lightning:icon iconName="utility:questions_and_answers" variant="error" />
+                        </lightning:layoutItem>
+                    </lightning:layout> 
+
+                    <aura:set attribute="else">
+                        <lightning:layout verticalAlign="center">
+                            <lightning:layoutItem padding="around-small" >            
+                                <lightning:icon iconName="utility:user" variant="error" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem padding="around-small" >
+                                    <section aria-describedby="dialog-body-id-98" aria-label="Dialog Title" class="slds-popover slds-nubbin_left slds-popover_large footerStyle" role="dialog">
+                                        <div class="slds-popover__body" id="dialog-body-id-98">
+                                            <div class="slds-grid slds-m-bottom_small slds-m-bottom_x-small">
+                                                <div>
+                                                    <div class="slds-text-title">{!item.lClaroLogin}</div>
+                                                </div>
+                                                <div class="slds-col_bump-left">
+                                                    <lightning:formattedDateTime value="{!item.lCreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning:formattedDateTime>
+                                                </div>
+                                            </div>
+                                            <p>{!item.lComments}</p>
+                                        </div>
+                                    </section> 
+                            </lightning:layoutItem>
+                        </lightning:layout> 
+                    </aura:set>
+                </aura:if>
+            </aura:iteration>
+        </aura:iteration>
+    <!--</aura:if>-->
+</aura:component>

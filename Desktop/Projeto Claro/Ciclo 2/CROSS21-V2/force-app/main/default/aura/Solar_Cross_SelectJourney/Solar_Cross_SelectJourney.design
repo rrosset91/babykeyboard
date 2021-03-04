@@ -1,0 +1,5 @@
+<design:component label="Seleção de Jornada">
+    <design:attribute name="customerAction" label="URA - campo 1" description="Campo 'Ação do cliente'"/>
+    <design:attribute name="usedSystem" label="URA - campo 2" description="Campo 'Sistema Utilizado'"/>
+    <design:attribute name="selfResult" label="URA - campo 3" description="Campo 'Resultado do autoatendimento'"/>
+</design:component>

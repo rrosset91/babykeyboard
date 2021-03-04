@@ -1,0 +1,59 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 29-01-2021
+  @last modified by  : Roger Rosset
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   20-01-2021   Joao Neves   Initial Version
+-->
+<template>
+	<lightning-spinner if:true={isLoading} size="medium"></lightning-spinner>
+	<span if:false={hasError}>
+		<template if:false={hasData}>
+			<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+		</template>
+	</span>
+
+	<template if:true={hasError}>
+		<c-solar-exception-content show-error="true"></c-solar-exception-content>
+	</template>
+
+	<main class="container">
+		<section id="Datatable" style="padding-top: 5px">
+			<template if:true={hasData}>
+				<h1 style="color: #da291c; font-weight: 600; font-size: 20px">Negociação</h1>
+				<lightning-datatable data={details.bills} key-field="billId" columns={columns} sorted-direction={sortDirection} selected-rows={details.selectedBills} onsort={handleSort.sortBills} onrowselection={handleRowSelection} sorted-by={sortBy}> </lightning-datatable>
+
+				<h1 style="margin-top: 15px; margin-bottom: 2px; font-weight: 600">LANÇAMENTO FUTUROS / JUROS E MULTAS</h1>
+
+				<lightning-datatable data={details.statements} key-field="billId" columns={columns} hide-checkbox-column="true" sorted-direction={sortDirection} onsort={handleSort.sortStatements} sorted-by={sortBy}></lightning-datatable>
+
+				<div style="padding: 0rem 0.75rem 0rem 0.75rem">
+					<hr />
+
+					<div style="display: flex; justify-content: space-between">
+						<div><h1 style="text-transform: capitalize; font-weight: 600; font-size: 20px">TOTAL</h1></div>
+						<div><h1 style="text-transform: capitalize; font-weight: 600; font-size: 20px">{details.fullSumFormattedBrl}</h1></div>
+					</div>
+
+					<div style="width: 100%; justify-content: flex-end; display: flex; padding-top: 10px">
+						<lightning-button label="Simular" variant="brand" class="slds-m-left_x-small" onclick={handleSimulation} disabled={buttonSimulation}> </lightning-button>
+					</div>
+				</div>
+			</template>
+		</section>
+	</main>
+
+	<c-solar-modal size="small" header="Atenção">
+		<div slot="content">
+			<div class="modal-message">
+				<p><lightning-icon icon-name="utility:error" variant="error"></lightning-icon> {errorMessage}</p>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Ok" title="Ok" onclick={handleClose} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

@@ -1,0 +1,76 @@
+<template>
+    <!-- Componente somente é exibido caso exista algum alerta -->
+    <div if:true={containData}>
+        <lightning-card class="" variant="narrow" icon-name="custom:custom53">
+            <b slot="title">Box de Alertas</b>               
+                <!-- Exibe os alertas direcionados ao cliente apenas se a lista não estiver vazia -->
+
+            <div if:true={containSegmentedAlerts} class="slds-m-bottom_large">
+                <c-solar-cross-show-alerts records={data.segmentedAlerts} count={segmentedCount} onchangeitem={changeItemShow} accordionlabel={segmentedAccordionLabel} accordionicon="action:new_group" ondetail={openModalDetail}></c-solar-cross-show-alerts>
+                <div class="slds-border_top"></div>
+            </div>
+            <div if:true={containSignalAlerts} class="slds-m-vertical_large">
+                <c-solar-cross-show-alerts records={data.signalAlerts} count={signalCount} onchangeitem={changeItemShow} accordionlabel="Sinal"  accordionicon="action:fallback" ondetail={openModalDetail}></c-solar-cross-show-alerts>
+                <div class="slds-border_top"></div>
+            </div>
+            <div if:true={containGeneralAlerts} class="slds-m-top_large">
+                <c-solar-cross-show-alerts records={data.generalAlerts} count={generalCount} onchangeitem={changeItemShow} accordionlabel={generaldAccordionLabel}  accordionicon="action:announcement" ondetail={openModalDetail}></c-solar-cross-show-alerts>
+
+                </div>
+            <div if:true={allAlertsConcluded}>
+                <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-m-around_x-small">
+                    <div class="slds-text-title_bold slds-text-heading_medium slds-text-align_center">
+                        Todos os alertas concluídos com sucesso!
+                    </div>
+                </div>
+            </div>
+        </lightning-card>
+    </div>
+    <!-- Modal de detalhes -->
+    <div role="dialog" tabindex="-1" aria-labelledby="header44" data-id="modalDetail" class="slds-modal">
+        <!-- <span onkeypress={keycheck}> -->
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <lightning-button-icon variant="bare-inverse" icon-name="utility:close" alternative-text="Fechar" title="Close" onclick={closeModalDetail} class="slds-modal__close" ></lightning-button-icon>
+                    <h2 id="header44" class="slds-text-heading--medium">{contexteRecordInConclusionModal.lReason}</h2>
+                </div>
+
+                <div class="slds-modal__content slds-p-around--medium slds-p-horizontal_small">
+                    <c-solar-cross-alert-detail record={contexteRecordInConclusionModal} signalview={signalView}></c-solar-cross-alert-detail>
+
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning-button class="slds-m-horizontal_xxx-small" variant="brand-outline" label="Voltar" title="Voltar" onclick={closeModalDetail}></lightning-button>
+                    <lightning-button class="slds-m-horizontal_xxx-small" variant="brand" label="Concluir" title="Concluir" onclick={openModalConclusion}></lightning-button>
+                </div>
+            </div>
+        <!-- </span> -->
+    </div>
+    <div class="slds-backdrop " id="backDropDetail" data-id="backDropDetail"></div>
+    <!-- Modal de Conclusão do alerta -->
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" data-id="modalConclude" class="slds-modal">
+        <template if:true={showSpinner}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <template if:false={showSpinner}>
+        <!-- <span onkeypress={keycheck}> -->
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <lightning-button-icon variant="bare-inverse" icon-name="utility:close" alternative-text="Fechar" title="Close" onclick={closeModalConclusion} class="slds-modal__close" ></lightning-button-icon>
+                    <h2 id="header43" class="slds-text-heading--medium">Concluir Alerta</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-align_absolute-center">                    
+                        Deseja concluir esse alerta?
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning-button class="slds-m-horizontal_xxx-small" variant="brand-outline" label="Cancelar" title="Cancelar" onclick={closeModalConclusion}></lightning-button>
+                    <lightning-button class="slds-m-horizontal_xxx-small" variant="brand" label="Concluir" title="Concluir" onclick={concludeAlertClick}></lightning-button>
+                </div>
+            </div>
+        <!-- </span> -->
+        </template>
+    </div>
+    <div class="slds-backdrop " id="backDropConclude" data-id="backDropConclude"></div>
+</template>

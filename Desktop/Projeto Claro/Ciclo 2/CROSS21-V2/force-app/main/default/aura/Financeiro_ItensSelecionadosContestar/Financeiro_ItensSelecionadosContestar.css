@@ -1,0 +1,63 @@
+.THIS .custom-header {
+	color: #1d3861;
+	font-weight: 400;
+	font-size: x-large;
+}
+
+.THIS .custom-padding {
+	padding-left: 0.75rem;
+	padding-right: 0.75rem;
+}
+
+.THIS .table thead th span {
+	color: black;
+	font-weight: normal;
+}
+
+.THIS .table {
+	font-weight: bold;
+}
+
+.THIS .custom-footer {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	padding-top: 10px;
+}
+
+.THIS .header-columnAdress {
+	white-space: normal;
+	word-wrap: break-word;
+	width: 250px;
+}
+
+.THIS .divTextArea {
+	padding-top: 0.75rem;
+}
+
+.THIS textarea {
+	font-weight: bold;
+	border: 1px solid #dce4ec;
+	border-radius: 4px;
+	width: 100%;
+}
+
+.THIS lightning-primitive-header-actions {
+	display: none;
+}
+
+.THIS .slds-grid_align-end {
+	justify-content: left !important;
+}
+
+.THIS .custom-box {
+	width: 250px;
+}
+
+.THIS .modal-input {
+	width: 90px;
+}
+
+.THIS .slds-docked-form-footer.slds-is-absolute {
+	z-index: 9;
+}

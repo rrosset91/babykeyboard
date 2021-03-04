@@ -1,0 +1,138 @@
+<aura:component controller="CEC_360_PromotionsController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="dataPromotions" type="Object[]" />
+    <aura:attribute name="dataPromotionsHistory" type="Object[]"/>
+    <aura:attribute name="paginationList" type="Object[]"/>
+    <aura:attribute name="showSpinnerHistory" type="Boolean" default="false"/>
+    <aura:attribute name="startDate" type="String"/>
+    <aura:attribute name="endDate" type="String"/>
+    <aura:attribute name="showTableHistory" type="Boolean" />
+    <aura:attribute name="pageSize" type="Integer" default="10"/>
+    <aura:attribute name="totalSize" type="Integer" default="0"/>
+    <aura:attribute name="start" type="Integer" default="0"/>
+    <aura:attribute name="end" type="Integer" default="0"/>
+    <aura:attribute name="hasPromotions" type="Boolean"/>
+    <aura:attribute name="showPromotions" type="Boolean" default="false" />
+    <aura:attribute name="hasHistoric" type="Boolean" default="false" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <div class="slds-m-bottom_x-small">
+    <div class="title-section">Promoções Ativas</div>
+        <div class="slds-p-top_medium" style="min-height:8rem; max-height:10rem;">
+            <aura:if isTrue="{! and(v.hasPromotions == false)}">
+                    <div class="slds-box">                      
+                        <lightning:layout>
+                            <lightning:layoutItem size="10">
+                                <div class="slds-text-heading_medium" contenteditable="false"><span class="vermelho">Atenção:</span> Não foi possível encontrar promoções ativas.</div>
+                            </lightning:layoutItem>
+                        </lightning:layout>                     
+                    </div>
+             <aura:set attribute="else">   
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered lista-promocoes-ativas">
+                <thead>
+                    <tr>
+                        <th>Nome da promoção</th>
+                        <th>Status</th>
+                        <th>Início</th>
+                        <th>Canal de vendas</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead> 				             
+                        <aura:iteration items="{!v.dataPromotions}" var="promotion">
+                            <tbody>
+                                <tr>
+                                    <td><a data-promotionName="{!promotion.promotionName}"
+                                        data-effectiveDate="{!promotion.effectiveDate}"
+                                        data-channelName="{!promotion.channelName}"
+                                        data-statusContractedPromotion="{!promotion.statusContractedPromotion}"
+                                        data-promotionIdNGP="{!promotion.promotionIdNGP}" 
+                                        data-promotionVersionNGP="{!promotion.promotionVersionNGP}"
+                                        data-sequentialIdNGP="{!promotion.sequentialIdNGP}"
+                                        onclick="{!c.openDetails}">{!promotion.promotionName}</a></td>
+                                    <td>{!promotion.statusContractedPromotion}</td>
+                                    <!--td>{!promotion.promotionDescription}</td-->
+                                    <td>{!promotion.effectiveDate}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>                            
+                        </aura:iteration>                
+                   </table>
+                 </aura:set>
+            </aura:if>
+            <aura:if isTrue="{!v.showSpinner}">
+                <div class="slds-text-align_center">
+                    <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                        <lightning:spinner alternativeText="Loading" size="medium"/>
+                    </div>
+                </div>
+            </aura:if>
+        </div>
+    </div>
+    <div class="slds-m-bottom_medium  slds-m-top_medium">
+        <div class="title-section">Histórico de Promoções</div>
+        <div class="slds-grid slds-gutters slds-p-top_medium data-block">
+            <div class="data-inicio">
+                <lightning:input aura:id="startDate" type="date" value="{!v.startDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                    label="Data de início"  
+                                    messageWhenBadInput="Data inválida." 
+                                    />
+            </div>
+            <div class="data-fim">
+                <lightning:input aura:id="endDate" type="date" value="{!v.endDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                    label="Data de fim" 
+                                    messageWhenBadInput="Data inválida ." 
+                                    />
+            </div>
+            <div class="buscar">
+                <div class="slds-p-top_large">
+                    <lightning:button label="Buscar" variant="destructive"
+                                        onclick="{!c.callPromotionsHistory}"
+                                      class="botao-buscar">
+                    </lightning:button>
+                </div>
+            </div>
+        </div>
+        <div class="slds-m-bottom_medium">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-1">
+                    <aura:if isTrue="{!v.showSpinnerHistory}">
+                        <div class="slds-text-align_center">
+                            <lightning:spinner alternativeText="Loading" size="medium"/>
+                        </div>
+                    </aura:if>
+                   <aura:if isTrue="{!v.showPromotions}">
+                    <div class="slds-p-top_xx-small" >
+                        <aura:if isTrue="{!v.hasHistoric}">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered lista-historico-promocao" >
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nome da promoção</th>
+                                        <th scope="col">Período de Vigência</th>
+                                        <th scope="col">Canal de vendas</th>
+                                    </tr>
+                                </thead>
+                                
+                                <aura:iteration items="{!v.paginationList}" var="promotion" indexVar="itemIndex">
+                                    
+                                    <tbody>
+                                        <tr>
+                                            <td>{!promotion.promotionName}</td>
+                                            <td>{!promotion.effectiveDate} a {!promotion.effectiveEndDate}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </aura:iteration>
+                            </table>
+                        </aura:if>
+                    </div>
+                    <div class="slds-text-align_center slds-m-around_small">
+                        <lightning:button iconName="utility:chevronleft" iconPosition="left" label="Anterior" disabled="{!v.start == 0}" onclick="{!c.anteriorHandler}" />
+                        <lightning:button iconName="utility:chevronright" iconPosition="right" label="Próximo" disabled="{!v.end >= v.totalSize}" onclick="{!c.proximoHandler}" />
+                    </div>
+                 </aura:if>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,465 @@
+<aura:component controller="NBA_OfferComparator_CC">
+	<aura:attribute type="Boolean" name="showSpinner" default="false" />
+	<aura:attribute type="Boolean" name="dddOk" default="false" />
+	<aura:attribute type="String" name="caseId" />
+	<aura:attribute type="Object" name="oferta1" />
+	<aura:attribute type="Object" name="oferta2" />
+	<aura:attribute type="Object" name="oferta3" />
+	<aura:attribute type="Object" name="produtoAtual" />
+	<aura:attribute type="Object" name="produtoAntigo" />
+	<aura:attribute type="Object" name="oferta" />
+	<aura:attribute type="String" name="cityCode" />
+	<aura:attribute type="Object" name="mobileBackup" />
+	<aura:attribute type="String" name="offerId" default="" />
+	<aura:attribute type="Boolean" name="disabledMobile" />
+	<aura:attribute type="Boolean" name="showAdditionalMobile" default="false" />
+	<aura:attribute type="Boolean" name="forceAdditionalMobile" />
+	<aura:attribute type="Boolean" name="notShowItensTit" default="true" />
+	<aura:attribute type="Boolean" name="addDep" default="false" />
+	<aura:attribute type="Boolean" name="checkedDependente" default="true" />
+	<aura:attribute type="Boolean" name="newDependente" default="false" />
+	<aura:attribute type="Boolean" name="atualizarDependentesPosse" default="true" />
+	<aura:attribute type="Boolean" name="atualizarDependentesOferta" default="true" />
+	<aura:attribute type="Object[]" name="lstPontuacao" />
+	<aura:attribute type="Object[]" name="lstOfertas" />
+	<aura:attribute type="Object[]" name="dependentes" />
+	<aura:attribute type="String[]" name="origensDependente" />
+	<aura:attribute type="String[]" name="listaPromocaoTitular" />
+	<aura:attribute type="String[]" name="beneficionsPromocaoTitular" />
+	<aura:attribute type="Boolean" name="enableUtilizacao" default="true" />
+	<aura:attribute type="Boolean" name="enablePromocao" default="true" />
+	<aura:attribute type="String" name="oldMaxDep" />
+	<aura:attribute type="Boolean" name="frist" default="true" />
+	<aura:attribute type="String" name="msgportabilidade" default="" />
+	<aura:attribute type="Boolean" name="hasDependentChanges" default="false" />
+	<aura:attribute type="Integer" name="oldUncheckedCurrentDependentsValue" default="0" />
+	<aura:attribute type="Integer" name="oldUncheckedCurrentDependentsDiscount" default="0" />
+	<aura:attribute type="Integer" name="oldValueComDescontoChecked" default="0" />
+	<aura:attribute type="Integer" name="oldValueSemDescontoChecked" default="0" />
+	<aura:attribute type="Integer" name="depDesconto" default="0" />
+	<aura:attribute type="Integer" name="depSemDesconto" default="0" />
+	<aura:attribute type="Integer[]" name="currentDependentValues" />
+	<aura:attribute type="Integer[]" name="currentDependentDiscounts" />
+	<aura:attribute type="Boolean" name="atualizar" />
+	<aura:attribute type="Boolean" name="retencao" />
+	<aura:attribute type="Boolean" name="calculate" />
+	<!-- Atributos Titular Oferta -->
+	<aura:attribute type="String[]" name="listaOrigemTitular" />
+	<aura:attribute type="String" name="origemTitular" default="" />
+	<aura:attribute type="String" name="numeroTelefoneTitular" />
+	<aura:attribute type="String" name="promocaoTitular" default="" />
+	<aura:attribute type="String" name="promocaoTitularOferta" default="" />
+	<aura:attribute type="boolean" name="showPromocao" default="true" />
+	<aura:attribute type="String" name="idTitularOferta" default="" />
+	<aura:attribute type="String" name="numeroTelefoneTitularOferta" default="" />
+	<aura:attribute type="Boolean" name="isPurple" default="false" />
+	<!-- DEPENDNETE -->
+	<aura:attribute type="Object[]" name="lstDependenteAdd" />
+	<aura:attribute type="Object[]" name="lstDependenteRemove" />
+
+	<aura:method name="callUpdateAditionalsMobile" action="{! c.validateAdditionalsMobile }" />
+	<aura:method name="callUpdateOfferDiffs" action="{! c.updateOfferDiffs }" access="global" />
+	<!-- HANDLERS AUXILIARES DOS ONCHANGES -->
+	<aura:handler value="{!v.origemTitular}" name="change" action="{!c.onchageOrigemTitular}" />
+	<aura:handler value="{!v.promocaoTitularOferta}" name="change" action="{!c.onchagePromocaoTitularOferta}" />
+	<aura:handler value="{!v.promocaoTitular}" name="change" action="{!c.onchagePromocaoTitular}" />
+	<aura:handler value="{! this }" name="init" action="{!c.loadAdditionalMobile}" />
+	<aura:handler value="{!v.oferta.key}" name="change" action="{!c.loadAdditionalMobile}" />
+	<aura:handler value="{!v.forceAdditionalMobile}" name="change" action="{!c.forceAdditionalMobile}" />
+	<aura:handler value="{!v.showAdditionalMobile}" name="change" action="{!c.resetOfferId}" />
+	<!-- BOTÃO ADICIONAIS TV -->
+	<div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+		<!--    <div class="slds-col slds-size_3-of-12 box-oferta"></div> -->
+		<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable ' + ( v.disabledMobile ? ' disableSection' : '' ) }" style="margin-left:0.5rem" onclick="{! c.incluirAdicionaisMobile }"></div>
+		<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable ' + ( v.disabledMobile ? ' disableSection' : '' ) }" onclick="{! c.incluirAdicionaisMobile }">{! $Label.c.OFERTA_ADICIONAIS_DE_MOVEL }</div>
+		<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable ' + ( v.disabledMobile ? ' disableSection' : '' ) }" style="margin-right:0.5rem" onclick="{! c.incluirAdicionaisMobile }">
+			<div class="down-arrow alim-icon-add">
+				<!-- <lightning:icon iconName="utility:down" size="x-small" alternativeText="Detalhar" /> -->
+			</div>
+		</div>
+	</div>
+	<!-- MODAL VALIDA PORTABILIDADE  -->
+	<aura:if isTrue="{! v.msgportabilidade != ''}">
+		<div style="min-height: 40%;position:fixed;z-index:9999">
+			<section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+				<div class="slds-modal__container" style="max-width: 40%!important;">
+					<header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_warning' }">
+						<strong class="slds-text-heading_medium" id="prompt-heading-id">
+							{! v.msgportabilidade}
+						</strong>
+					</header>
+					<footer class="slds-modal__footer slds-theme_default">
+						<div class="slds-modal__content">
+							<div class="slds-align_absolute-center slds-p-vertical_medium">
+								<lightning:button variant="brand" label="OK" title="OK" onclick="{! c.closemodalportabilidade }" />
+							</div>
+						</div>
+					</footer>
+				</div>
+			</section>
+			<div class="slds-backdrop slds-backdrop_open"></div>
+		</div>
+	</aura:if>
+	<!-- MODAL ADICIONAIS MOBILE -->
+	<aura:if isTrue="{! v.showAdditionalMobile }">
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large" Style="position: fixed;">
+			<!-- SPINNER -->
+			<aura:if isTrue="{! v.showSpinner }">
+				<div id="SpnId" class="slds-spinner_container slds-is-fixed">
+					<div role="status" class="slds-spinner slds-spinner_medium">
+						<span class="slds-assistive-text">Loading</span>
+						<div class="slds-spinner__dot-a"></div>
+						<div class="slds-spinner__dot-b"></div>
+					</div>
+				</div>
+			</aura:if>
+			<div class="slds-modal__container" Style="width: 95%;">
+				<header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+					<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.closeAdicionalMobile }">
+						<lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+						<span class="slds-assistive-text">Close</span>
+					</button>
+					<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{! $Label.c.OFERTA_ADICIONAIS_DE_MOVEL }</h2>
+				</header>
+
+				<!-- SE TEM TITULAR NA POSSE = MOSTRA TITULAR ao selecionar POSSE / OFERTA  -->
+				<aura:if isTrue="{! v.produtoAtual.mobile.planMobile.label != 'NÃO POSSUI'}">
+					<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" Style="min-height: 15rem;">
+						<div class="slds-size_1-of-2 slds-text-heading_medium" style="padding-bottom:1rem">
+							<strong>{! $Label.c.PRINCIPAL_MOVEL }</strong>
+						</div>
+						<div class="slds-grid slds-wrap" style="display:block">
+							<div class="slds-col slds-size_12-of-12">
+								<div class="slds-grid slds-wrap">
+									<div class="slds-col slds-size_1-of-12 slds-margin-new"> </div>
+									<div class="slds-col slds-size_11-of-12">
+										<div class="slds-grid" style="display:block">
+											<div class="slds-grid">
+												<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+													<lightning:select aura:id="field" label="Origem" name="selBaseTitular" value="{! v.produtoAtual.mobile.titularMobile.origem }" disabled="{! v.notShowItensTit }">
+														<option value="Base" text="Base"></option>
+														<option value="Novo" text="Novo"></option>
+														<option value="Portabilidade" text="Portabilidade"></option>
+													</lightning:select>
+												</div>
+												<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+													<lightning:select aura:id="field" label="Operadora" name="selOperadoraTitular" value="{! v.produtoAtual.mobile.titularMobile.operadora }" disabled="{! v.notShowItensTit }">
+														<option value="Claro" text="Claro"></option>
+														<option value="Tim" text="Tim"></option>
+														<option value="Oi" text="Oi"></option>
+														<option value="Vivo" text="Vivo"></option>
+														<option value="Algar" text="Algar"></option>
+														<option value="Nextel" text="Nextel"></option>
+														<option value="Outra" text="Outra"></option>
+													</lightning:select>
+												</div>
+												<div class="slds-col slds-size_2-of-12 slds-m-left_small">
+													<lightning:input type="text" label="N° Telefone" name="txtNTC" value="{! v.produtoAtual.mobile.titularMobile.numeroTelefone }" disabled="{! v.notShowItensTit }" />
+												</div>
+												<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+													<lightning:select aura:id="field" label="Plano" title="{! v.oferta.mobile.planMobile.label }" name="selOperadoraTitular" value="{! v.oferta.mobile.planMobile.label }" disabled="{! v.notShowItensTit }">
+														<option value="{! v.oferta.mobile.planMobile.label }" text="{! v.oferta.mobile.planMobile.label }"></option>
+													</lightning:select>
+												</div>
+												<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+													<aura:if isTrue="{! v.showPromocao }">
+														<lightning:select aura:id="field" label="Promoção" value="{! v.promocaoTitular }" name="selPromocaoTitular" disabled="false">
+															<aura:iteration items="{! v.listaPromocaoTitular }" var="promocao">
+																<option value="{! promocao }" text="{! promocao }"></option>
+															</aura:iteration>
+														</lightning:select>
+													</aura:if>
+												</div>
+												<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+													<lightning:input aura:id="valorPromocaoTitular" type="number" formatter="currency" label="Valor" name="txtValorTit" value="{! v.oferta.mobile.titularMobile.valorProduto - v.oferta.mobile.titularMobile.discountPromo}" disabled="{! v.notShowItensTit }" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="slds-grid slds-wrap" style="display:block">
+							<div class="slds-col slds-size_12-of-12 slds-m-top_medium">
+								<div class="slds-grid slds-wrap" style="margin-left: 3.5rem;">
+									<aura:iteration items="{! v.oferta.mobile.svas }" var="beneficio">
+										<div class="slds-col slds-size_4-of-12  slds-wrap slds-gutters">
+											<li> {! beneficio } </li>
+										</div>
+									</aura:iteration>
+									<aura:iteration items="{! v.beneficionsPromocaoTitular }" var="beneficio">
+										<div class="slds-col slds-size_4-of-12  slds-wrap slds-gutters">
+											<li> {! beneficio } </li>
+										</div>
+									</aura:iteration>
+								</div>
+							</div>
+						</div>
+					</div>
+				</aura:if>
+
+				<!-- SE NÃO TEM TITULAR NA POSSE = MOSTRA OPÇÕES DE AQUISIÇÃO APENAS NA OFERTA  -->
+				<aura:if isTrue="{! v.produtoAtual.mobile.planMobile.label == 'NÃO POSSUI'}">
+					<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" Style="min-height: 15rem;">
+						<div class="slds-size_1-of-2 slds-text-heading_medium" style="padding-bottom:1rem">
+							<strong>{! $Label.c.PRINCIPAL_MOVEL }</strong>
+						</div>
+						<div class="slds-grid slds-wrap" style="display:block">
+							<div class="slds-col slds-size_12-of-12">
+								<div class="slds-grid slds-wrap">
+									<div class="slds-col slds-size_1-of-12 slds-margin-new"> </div>
+									<div class="slds-col slds-size_11-of-12">
+										<div class="slds-grid" style="display:block">
+											<div class="slds-grid">
+												<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+													<lightning:select aura:id="origemTitularOferta" label="Origem" name="selBaseTitular" value="{! v.origemTitular }" disabled="false">
+														<aura:iteration items="{! v.listaOrigemTitular }" var="origem">
+															<option value="{! origem }" selected="{!origem == v.origemTitular}">{! origem }</option>
+														</aura:iteration>
+													</lightning:select>
+												</div>
+												<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+													<lightning:select aura:id="operadoraTitular" label="Operadora" name="selOperadoraTitular" value="{! v.produtoAtual.mobile.titularMobile.operadora }" disabled="{! v.origemTitular != 'Portabilidade' }">
+														<option value="Claro" text="Claro"></option>
+														<option value="Tim" text="Tim"></option>
+														<option value="Oi" text="Oi"></option>
+														<option value="Vivo" text="Vivo"></option>
+														<option value="Algar" text="Algar"></option>
+														<option value="Nextel" text="Nextel"></option>
+														<option value="Outra" text="Outra"></option>
+													</lightning:select>
+												</div>
+												<div class="slds-col slds-size_2-of-12 slds-m-left_small">
+													<lightning:input aura:id="numeroTelefoneTitular" type="text" label="N° Telefone" name="numeroTelefoneTitular" value="{! v.numeroTelefoneTitularOferta }" disabled="{! v.origemTitular != 'Portabilidade' }" maxlength="14" onchange="{! c.mascaraTelefoneTitular }" />
+												</div>
+												<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+													<lightning:select aura:id="field" label="Plano" title="{! v.oferta.mobile.planMobile.label }" name="selOperadoraTitular" value="{! v.oferta.mobile.planMobile.label }" disabled="{! v.notShowItensTit }">
+														<option value="{! v.oferta.mobile.planMobile.label }" text="{! v.oferta.mobile.planMobile.label }"></option>
+													</lightning:select>
+												</div>
+												<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+													<aura:if isTrue="{! v.showPromocao }">
+														<lightning:select aura:id="promocaoTitularOferta" label="Promoção" value="{! v.promocaoTitularOferta }" name="selPromocaoTitular" disabled="{! v.origemTitular == '' }">
+															<aura:iteration items="{! v.listaPromocaoTitular }" var="promocao">
+																<option value="{! promocao }" selected="{!promocao == v.promocaoTitularOferta}">{! promocao }</option>
+															</aura:iteration>
+														</lightning:select>
+													</aura:if>
+												</div>
+												<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+													<lightning:input aura:id="valorPromocaoTitular" type="number" formatter="currency" label="Valor" name="txtValorTit" value="{! v.oferta.mobile.titularMobile.valorProduto - v.oferta.mobile.titularMobile.discountPromo}" disabled="{! v.notShowItensTit }" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="slds-grid slds-wrap" style="display:block">
+							<div class="slds-col slds-size_12-of-12 slds-m-top_medium">
+								<div class="slds-grid slds-wrap" style="margin-left: 3.5rem;">
+									<aura:iteration items="{! v.oferta.mobile.svas }" var="beneficio">
+										<div class="slds-col slds-size_4-of-12  slds-wrap slds-gutters">
+											<li> {! beneficio } </li>
+										</div>
+									</aura:iteration>
+									<aura:iteration items="{! v.beneficionsPromocaoTitular }" var="beneficio">
+										<div class="slds-col slds-size_4-of-12  slds-wrap slds-gutters">
+											<li> {! beneficio } </li>
+										</div>
+									</aura:iteration>
+								</div>
+							</div>
+						</div>
+					</div>
+				</aura:if>
+
+				<!-- DEPENDENTES -->
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="min-height: 25%;">
+
+					<div class="slds-grid slds-wrap">
+						<div class=" slds-col slds-size_9-of-12 slds-text-heading_medium" style="padding-bottom:1rem">
+							<strong>{! $Label.c.DEPENDENTES_MOVEL }</strong>
+						</div>
+						<aura:if isTrue="{! v.oferta.mobile.posseAtual }">
+							<div Class="slds-col slds-size_3-of-12" Style="padding-left: 2rem;">
+								<lightning:button label="Adicionar Dependentes" title="Adicionar Dependentes" onclick="{! c.adicionarDependente }" />
+							</div>
+						</aura:if>
+					</div>
+
+					<!-- POSSE ATUAL -->
+					<aura:if isTrue="{!v.atualizarDependentesPosse}">
+						<aura:iteration items="{! v.oferta.mobile.listaDependentesMobilePosse }" var="dependentes" indexVar="index">
+							<div class="slds-grid slds-wrap" style="display:block">
+								<div class="slds-col slds-size_12-of-12">
+									<div class="slds-grid slds-wrap">
+										<div class="slds-col slds-size_1-of-12 slds-margin-new">
+											<div class="slds-grid" style="display:block">
+												<div class="slds-grid slds-align_absolute-center">
+													<div class="slds-col slds-m-top_large" style="display:-webkit-inline-box">
+														{! index + 1 }&nbsp;&nbsp;
+														<lightning:input aura:id="dep" type="checkbox" label="" name="{! index }" checked="{! dependentes.checked }" onchange="{! c.updateAttChecked }" disabled="{! or(!v.retencao, and(v.retencao, !v.isPurple)) }" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="slds-col slds-size_11-of-12">
+											<div class="slds-grid" style="display:block">
+												<div class="slds-grid">
+													<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+														<lightning:select aura:id="field" label="Origem" name="selBaseTitular" value="{! dependentes.origem }" disabled="{! dependentes.disabled }">
+															<option value="Base" text="Base"></option>
+															<option value="Novo" text="Novo"></option>
+															<option value="Portabilidade" text="Portabilidade"></option>
+														</lightning:select>
+													</div>
+													<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+														<lightning:select aura:id="field" label="Operadora" name="selOperadoraTitular" value="{! dependentes.operadora }" disabled="{! or(dependentes.disabled, dependentes.disabledNew )}">
+															<option value="Claro" text="Claro"></option>
+															<option value="Tim" text="Tim"></option>
+															<option value="Oi" text="Oi"></option>
+															<option value="Vivo" text="Vivo"></option>
+															<option value="Algar" text="Algar"></option>
+															<option value="Nextel" text="Nextel"></option>
+															<option value="Outra" text="Outra"></option>
+														</lightning:select>
+													</div>
+													<div class="slds-col slds-size_2-of-12 slds-m-left_small">
+														<lightning:input type="text" label="N° Telefone" name="txtNTC" value="{! dependentes.numeroTelefone }" disabled="{! and(or(dependentes.disabled, dependentes.disabledNew ), dependentes.origem != 'Portabilidade') }" />
+													</div>
+													<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+														<lightning:select aura:id="field" label="Utilização" name="selOperadoraDep" value="{! dependentes.nomePlano=='POS PG' ? 'DADOS + VOZ' : (dependentes.nomePlano=='POS BL' ? 'DADOS' : 'CONTROLE') }" disabled="{! dependentes.disabled}">
+															<option value="DADOS" text="DADOS"></option>
+															<option value="DADOS + VOZ" text="DADOS + VOZ"></option>
+															<option value="CONTROLE" text="CONTROLE"></option>
+														</lightning:select>
+													</div>
+													<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+														<lightning:select aura:id="field" label="Promoção" value="{! dependentes.promoSelected }" name="selPromocaoTitular" disabled="true">
+															<option value="{! dependentes.promoSelected }" text="{! dependentes.promoSelected }"></option>
+														</lightning:select>
+													</div>
+													<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+														<lightning:input type="number" formatter="currency" label="Valor" name="txtValorTit" value="{! dependentes.valorProduto }" disabled="{! or(dependentes.disabled, dependentes.disabledNew ) }" />
+													</div>
+													<div class="slds-col slds-size_1-of-12 slds-m-left_small slds-align_absolute-center" Style="padding-top: 1rem;">
+														<aura:if isTrue="{! !dependentes.checked}">
+															<strong>CANCELADO</strong>
+														</aura:if>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="slds-grid slds-wrap" style="display:block">
+									<div class="slds-col slds-size_12-of-12 slds-m-top_medium">
+										<div class="slds-grid slds-wrap" style="margin-left: 3.5rem;">
+											<aura:iteration items="{! v.oferta.mobile.listaDependentesMobilePosse.listBeneficiosDoPlano }" var="beneficio">
+												<div class="slds-col slds-size_4-of-12 slds-wrap slds-gutters">
+													<!-- slds-margin-new -->
+													<li> {! beneficio } </li>
+												</div>
+											</aura:iteration>
+										</div>
+									</div>
+								</div>
+							</div>
+						</aura:iteration>
+					</aura:if>
+
+					<!-- OFERTA Alexandre Amaro -->
+					<aura:if isTrue="{! v.oferta.mobile.posseAtual }">
+						<aura:if isTrue="{!v.atualizarDependentesOferta}">
+							<aura:iteration items="{! v.dependentes }" var="dependentes" indexVar="index">
+								<div class="slds-grid slds-wrap" style="display:block">
+									<div class="slds-col slds-size_12-of-12">
+										<div class="slds-grid slds-wrap">
+											<div class="slds-col slds-size_1-of-12 slds-margin-new">
+												<div class="slds-grid" style="display:block">
+													<div class="slds-grid slds-align_absolute-center">
+														<div class="slds-col slds-m-top_large" style="display:-webkit-inline-box">
+															{! index + 1 + v.oferta.mobile.listaDependentesMobilePosse.length }&nbsp;&nbsp;
+															<lightning:input aura:id="dep" type="checkbox" label="" name="{! index }" checked="{! dependentes.checked }" onchange="{! c.alterarFlagDependente }" disabled="false" />
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="slds-col slds-size_11-of-12">
+												<div class="slds-grid" style="display:block">
+													<div class="slds-grid">
+														<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+															<lightning:select class="origem-size" label="Origem" name="{! index }" value="{! dependentes.origem }" disabled="{! dependentes.disabled }" onchange="{! c.alterarOrigemDependente }">
+																<aura:iteration items="{! v.origensDependente }" var="origem">
+																	<option value="{! origem }" text="{! origem }"></option>
+																</aura:iteration>
+															</lightning:select>
+														</div>
+														<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+															<lightning:select aura:id="OperadoraOferta" label="Operadora" name="selOperadoraTitular" value="{! dependentes.operadora }" disabled="{! dependentes.origem != 'Portabilidade' }">
+																<option value="Claro" text="Claro"></option>
+																<option value="Tim" text="Tim"></option>
+																<option value="Oi" text="Oi"></option>
+																<option value="Vivo" text="Vivo"></option>
+																<option value="Algar" text="Algar"></option>
+																<option value="Nextel" text="Nextel"></option>
+																<option value="Outra" text="Outra"></option>
+															</lightning:select>
+														</div>
+														<div class="slds-col slds-size_2-of-12 slds-m-left_small">
+															<lightning:input aura:id="numeroTelefoneDependente" type="tel" label="N° Telefone" name="{! index }" value="{! dependentes.numeroTelefone }" disabled="{! dependentes.origem != 'Portabilidade' }" maxlength="14" onchange="{! c.mascaraTelefone }" />
+														</div>
+														<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+
+															<lightning:select label="Utilização" name="{! index }" value="{! dependentes.utilizacao }" disabled="{! empty(dependentes.listaUtilizacao)}" required="{! !empty(dependentes.listaUtilizacao)}" onchange="{! c.alterarUtilizacaoDependente }">
+
+																<aura:iteration items="{! dependentes.listaUtilizacao }" var="utilizacao">
+																	<option value="{! utilizacao }" text="{! utilizacao }"></option>
+																</aura:iteration>
+															</lightning:select>
+														</div>
+														<div class="slds-col slds-size_3-of-12 slds-m-left_small">
+
+															<lightning:select label="Promoção" value="{! dependentes.promocao }" name="{! index }" disabled="{! empty(dependentes.listaPromocao)}" required="{! !empty(dependentes.listaPromocao)}" onchange="{! c.alterarPromocaoDependente }">
+
+																<aura:iteration items="{! dependentes.listaPromocao }" var="promocao">
+																	<option value="{! promocao }" text="{! promocao }"></option>
+																</aura:iteration>
+															</lightning:select>
+														</div>
+														<div class="slds-col slds-size_1-of-12 slds-m-left_small">
+															<lightning:input type="number" formatter="currency" label="Valor" name="txtValorTit" value="{! dependentes.value}" disabled="true" />
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap" style="display:block">
+										<div class="slds-col slds-size_12-of-12 slds-m-top_medium">
+											<div class="slds-grid slds-wrap" style="margin-left: 3.5rem;">
+												<aura:iteration items="{! dependentes.beneficios }" var="beneficio">
+													<div class="slds-col slds-size_4-of-12 slds-wrap slds-gutters">
+														<!-- slds-margin-new slds-wrap -->
+														<li> {! beneficio } </li>
+													</div>
+												</aura:iteration>
+											</div>
+										</div>
+									</div>
+								</div>
+							</aura:iteration>
+						</aura:if>
+					</aura:if>
+					<!-- fim Alexandre Amaro -->
+
+				</div>
+				<footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+					<button class="slds-button slds-button_brand" onclick="{! c.handleUpdateAdditionalClick }">Atualizar</button>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open" Style="position: fixed;"></div>
+	</aura:if>
+</aura:component>

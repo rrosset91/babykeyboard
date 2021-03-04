@@ -1,0 +1,141 @@
+<aura:component controller="CEC_360_AccBillingDetailsController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="noAsset" type="Boolean" default="false"/>
+    <aura:attribute name="noAssetPre" type="Boolean" default="false"/>
+    <aura:attribute name="minDate" type="Date" />
+    <aura:attribute name="maxDate" type="date" />
+    <aura:attribute name="dataInValue" type="date" />
+    <aura:attribute name="dataEndValue" type="date" />
+    <aura:attribute name="data" type="Object[]" />
+    <aura:attribute name="cancContracts" type="List"/>
+    <aura:attribute name="contractNumber" type="String"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="drawnTable" type="Boolean"/>
+    <aura:attribute name="hasNet" type="Boolean" default="false"/>
+    <aura:attribute name="hasSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="hasSpinner2" type="Boolean" default="false"/>
+    <aura:attribute name="hasCancel" type="Boolean" default="false"/>
+    <aura:attribute name="Conta" type="Account" />
+    <aura:attribute name="recordId" type="String" />
+    
+    
+    <aura:if isTrue="{!v.noAsset}">
+        <div class="slds-box">
+            <lightning:layout>
+                <lightning:layoutItem size="10">
+                    <div class="slds-text-heading_medium title-size-12" contenteditable="false"><span class="vermelho">Atenção:</span> O cliente não possui contratos.</div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-box">  
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-p-bottom_medium slds-size_3-of-12">
+                        <span><lightning:combobox aura:id="cmbContract" value="{!v.contractNumber}" 
+                                                  options="{!v.options}" placeholder="Selecione um contrato" onchange="{!c.getContractInfos}"
+                                                  /></span>
+                    </div>
+                </div>
+                <aura:if isTrue="{!v.hasSpinner2}"> 
+                    <div class="title-sessao">Detalhes</div>
+                    <div class="slds-p-left_medium">
+                        <table class="lista-cobranca-dia">
+                            <tr>
+                                <th>Dia do Vencimento</th>
+                                <th>Dia do Fechamento</th>
+                                <th>Dia de Liberação da Franquia</th>
+                                <th>Dia de Renovação de Carência</th>
+                            </tr>
+                            <tr>
+                                <td>{!v.Conta.DueDay__c}</td>
+                                <td>{!v.Conta.CloseDay__c}</td>
+                                <td>{!v.Conta.DiaLiberacaoFranquia__c}</td>
+                                <td>{!v.Conta.DiaRenovacaoCarencia__c}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">Forma de Pagamento</th>
+                                <th colspan="2">Forma de Envio de Cobrança</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">{!v.Conta.vlocity_cmt__AccountPaymentType__c}</td>
+                                <td colspan="2">{!v.Conta.vlocity_cmt__BillDeliveryMethod__c}</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4">Endereço de Cobrança</th>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.vlocity_cmt__StreetAddress__c}, 
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.Number__c} - 
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.Complement__c} - 
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.Neighborhood__c} - 
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.vlocity_cmt__City__c} - 
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.vlocity_cmt__State__c} - 
+                                    {!v.Conta.vlocity_cmt__PremisesId__r.vlocity_cmt__PostalCode__c}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="title-sessao">Faturas</div>
+                    <div>
+                        <table class="lista-cobranca-busca">
+                            <tr>
+                              <td>
+                                <lightning:input aura:id="startDate" type="date" max="{!v.maxDate}"
+                                 min="{!v.minDate}" required="true" fieldName="startDate" label="Data de início"
+                                 value="{!v.dataInValue}"
+                                 messageWhenBadInput="Data Inválida."
+                                 messageWhenRangeOverflow="A data limite para busca é até 30 dias a partir de hoje."
+                                 messageWhenRangeUnderflow="A data inserida é anterior há 5 anos." />
+                                </td>
+                                <td>
+                                    <lightning:input aura:id="endDate" type="date" max="{!v.maxDate}" min="{!v.minDate}"
+                                     required="true" fieldName="EndDate" label="Data fim" value="{!v.dataEndValue}"
+                                     messageWhenBadInput="Data Inválida." pattern="^(\s*\d\s*){10}$"
+                                     messageWhenRangeOverflow="A data limite para busca é até 30 dias a partir de hoje."
+                                     messageWhenRangeUnderflow="A data inserida é anterior há 5 anos." />
+                                </td>
+                                <td>
+                                    <lightning:button variant="destructive" label="Buscar" class="botao-busca" onclick="{!c.retInvoiceData}"></lightning:button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <aura:if isTrue="{!v.drawnTable}">
+                        <table  class="slds-table lista-cobranca-faturas">
+                            <thead>
+                                <tr class="slds-text-heading_label">
+                                    <th>Status</th>
+                                    <th>Valor (R$)</th>
+                                    <th>Data de vencimento</th>
+                                    <th>Fatura para download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Use the Apex model and controller to fetch server side data -->
+                                <aura:iteration items="{!v.data}" var="invoice">
+                                    <tr>
+                                        <td class="{!invoice.statusInvoiceDescription}">{!invoice.statusInvoiceDescription}</td>
+                                        <td>{!invoice.invoiceAmount_aux}</td>
+                                        <td>{!invoice.dueDate_aux}</td>
+                                        <td><a data-end="{!invoice.dueDate_aux}" data-id="{!invoice.invoiceId}" onclick="{!c.pdfInvoice}">
+                                            <lightning:icon class="slds-align_absolute-center" iconName="doctype:pdf" size="small" /></a></td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </aura:if>
+                    <aura:if isTrue="{!v.showSpinner}">
+                        <div class="slds-text-align_center">
+                            <div style="position: relative; display: inline-block; width: 80px; height: 80px;">
+                                <lightning:spinner alternativeText="Loading" size="medium" />
+                            </div>
+                        </div>
+                    </aura:if>
+                    
+                    {!v.pdfContainer}
+                </aura:if>
+            </div>
+        </aura:set>
+    </aura:if>                    
+</aura:component>

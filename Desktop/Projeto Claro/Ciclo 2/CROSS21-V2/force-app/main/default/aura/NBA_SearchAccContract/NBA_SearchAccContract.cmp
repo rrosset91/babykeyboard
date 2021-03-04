@@ -1,0 +1,5 @@
+<aura:component controller="NBA_CustomCasePath_CC" implements="force:appHostable,lightning:isUrlAddressable" access="global">
+    <aura:handler value="{!this}" name="init" action="{!c.initialize}" />
+    <lightning:workspaceAPI aura:id="workspaceAPI" />
+    <lightning:navigation aura:id="navService"/>
+</aura:component>

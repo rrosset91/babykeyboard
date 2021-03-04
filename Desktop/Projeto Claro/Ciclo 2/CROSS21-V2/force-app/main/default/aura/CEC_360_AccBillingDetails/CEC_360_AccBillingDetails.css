@@ -1,0 +1,23 @@
+.THIS .vermelho {color: #da291c;}
+.THIS .title-sessao {height: 34px;background: #f3f2f2;line-height: 34px;border-radius: 5px;padding-left: 10px;font-size: 14px;}
+.THIS table.lista-cobranca-dia {width: auto;line-height: 34px;}
+.THIS table.lista-cobranca-dia th {height: 43px;font-weight: normal;font-size: 12px;padding-right: 40px;color: #aaaaaa;}
+.THIS table.lista-cobranca-dia td {height: 43px;font-weight: normal;font-size: 13px;padding-right: 40px;color: #434444;line-height: 15px;vertical-align: top;}
+.THIS table.lista-cobranca-busca {width: auto;}
+.THIS table.lista-cobranca-busca td:nth-child(2) {padding-right: 20px;padding-left: 20px;}
+.THIS table.lista-cobranca-busca td:nth-child(3) {padding-top: 24px;}
+.THIS table.lista-cobranca-faturas {line-height: 43px;border:solid 1px #dbdada;margin-top: 15px;}
+.THIS table.lista-cobranca-faturas th {height: 43px;font-weight: normal;font-size: 12px;padding-right: 40px;color: #434444;text-transform: initial;letter-spacing: initial;background: #f3f2f2;border-bottom: solid 1px #dbdada;}
+.THIS table.lista-cobranca-faturas td {height: 43px;font-weight: normal;font-size: 13px;padding-right: 40px;color: #434444;line-height: 15px;border-bottom: solid 1px #dbdada;}
+.THIS table.lista-cobranca-faturas td:last-child {width:100%}
+.THIS table.lista-cobranca-faturas th:last-child {width:100%}
+.THIS table.lista-cobranca-faturas td a {display: block;width: 24px;}
+.THIS table.lista-cobranca-faturas th:nth-child(1) {padding-left: 10px;width: 100px;}
+.THIS table.lista-cobranca-faturas td:nth-child(1) {padding-left: 10px;}
+.THIS table.lista-cobranca-faturas th:nth-child(2) {width: 100px;}
+.THIS table.lista-cobranca-faturas th:nth-child(3) {width: 140px;}
+.THIS table.lista-cobranca-faturas th:nth-child(4) {width: calc(100px - 350px);}
+.THIS td.Em.atraso {color:#f5842b;}
+.THIS .botao-busca {background-color:#da291c;}
+.THIS .botao-busca:hover {background-color:#da291c;}
+.THIS .slds-text-heading_medium.title-size-12 {font-size: 13px;font-weight: 400;}

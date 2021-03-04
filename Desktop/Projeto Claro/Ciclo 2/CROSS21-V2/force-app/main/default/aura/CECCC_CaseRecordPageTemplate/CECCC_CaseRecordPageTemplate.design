@@ -1,0 +1,12 @@
+<design:component label="CECCC_Case">
+    <flexipage:template >
+        <!-- The default width for the "left" region is "MEDIUM". In tablets,
+        the width is "SMALL" -->
+        <flexipage:region name="left" defaultWidth="SMALL" />
+        <flexipage:region name="center" defaultWidth="SMALL" />
+        <flexipage:region name="right" defaultWidth="MEDIUM">
+            <flexipage:formfactor type="MEDIUM" width="SMALL" />
+        </flexipage:region>        
+    </flexipage:template>
+    
+</design:component>

@@ -1,0 +1,93 @@
+{
+  "data":{
+    "workorders":[{
+      "workOrderID": "14654648",
+      "workorderTypeID": "454542",
+      "workorderTypeDescription": "Alteração de Equipamento",
+      "note": "Cliente recebeu o técnico em sua residência. Foi feita a troca de equipamento e o reset da linha. Foi necessário também trocar a fiação desde o poste até o equipamento dentro da residência",
+      "terminationDate": "05-05-2020",
+      "attendanceDate": "04-04-2020",
+      "isExempt": "Sim",
+      "eventDate": "07-06-2020",
+      "cityID": "01823",
+      "operatorCode": "011",
+      "contractNumber": "18293-1",
+      "requestID": "82",
+      "status": "Ok",
+      "statusDescription": "Tudo certo",
+      "closeUser": "2050"
+    }]
+  },
+  "isSelected": "true",
+  "id": "1",
+  "listWorkOrder": [
+    {
+      "workOrderID": "14654648",
+      "workorderTypeID": "454542",
+      "workorderTypeDescription": "Alteração de Equipamento",
+      "note": "Cliente recebeu o técnico em sua residência. Foi feita a troca de equipamento e o reset da linha. Foi necessário também trocar a fiação desde o poste até o equipamento dentro da residência",
+      "terminationDate": "05-05-2020",
+      "attendanceDate": "04-04-2020",
+      "isExempt": "Sim",
+      "eventDate": "07-06-2020",
+      "cityID": "01823",
+      "operatorCode": "011",
+      "contractNumber": "18293-1",
+      "requestID": "82",
+      "status": "Ok",
+      "statusDescription": "Tudo certo",
+      "closeUser": "2050"
+    },
+    {
+      "workOrderID": "456459847",
+      "workorderTypeID": "2236558",
+      "workorderTypeDescription": "Instalação de novo ponto de TV",
+      "note": "Foi necessário furar a parede do cliente, pois não havia espaço no conduíte. O furo foi devidadmente autorizado, conforme consta no documento de OS assinado pelo cliente. Houve a necessidade de comparecer até a residência do cliente duas vezes, já que ao constatar a necessidado de furar a parede, o técnico voltou até a base para pegar o equipamento adequado.",
+      "terminationDate": "10-06-2020",
+      "attendanceDate": "09-06-2020",
+      "isExempt": "Sim",
+      "eventDate": "20-06-2020",
+      "cityID": "01823",
+      "operatorCode": "011",
+      "contractNumber": "18293-1",
+      "requestID": "82",
+      "status": "Ok",
+      "statusDescription": "Concluído",
+      "closeUser": "15454"
+    }
+  ],
+  "listConfigOrder": [
+    {
+      "configurationOrderId": "82000",
+      "configurationorderTypeId": "87",
+      "configurationorderTypeDescription": "802",
+      "productID": "003",
+      "productDescription": "0923",
+      "terminationDate": "09-04-2020",
+      "pointID": "009",
+      "cityID": "01823",
+      "operatorCode": "011",
+      "contractNumber": "18293-1",
+      "requestID": "82",
+      "status": "Ok",
+      "statusDescription": "Em andamento",
+      "closeUser": "15454"
+    },
+    {
+      "configurationOrderId": "526956",
+      "configurationorderTypeId": "4587",
+      "configurationorderTypeDescription": "8956",
+      "productID": "005",
+      "productDescription": "0990",
+      "terminationDate": "05-01-2020",
+      "pointID": "008",
+      "cityID": "01823",
+      "operatorCode": "011",
+      "contractNumber": "18293-1",
+      "requestID": "82",
+      "status": "Concluído",
+      "statusDescription": "Tudo certo",
+      "closeUser": "5984"
+    }
+  ]
+}

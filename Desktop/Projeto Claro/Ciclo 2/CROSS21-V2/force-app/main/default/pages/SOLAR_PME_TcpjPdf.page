@@ -1,0 +1,1415 @@
+<!-- SOLAR_PME_TcpjPdf -->
+<apex:page showHeader="false" applyHtmlTag="false" renderAs="Pdf" controller="SOLAR_PME_TcpjPdfController" >
+    <head>
+        <style> 
+            @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans");
+            
+            @page {
+                @top-center {
+                	content: element(header);
+                }
+                @bottom-left {
+                	content: element(rubricbl);
+                }
+            	@bottom-center {
+                	content: element(rubricbc);
+                }
+            	@bottom-right {
+                	content: element(rubricbr);
+                }
+            	margin-top: 1.8cm;
+            	margin-bottom: 2cm;
+            }
+            
+            @page signature-page {
+                @bottom-left {
+                	content: none;
+                }
+            	@bottom-center {
+                	content: none;
+                }
+            	@bottom-right {
+                	content: none;
+                }
+            	height: 61rem;
+            }
+            
+            .signature-page {
+            	page: signature-page;
+            }
+            
+            div.rubricbl {
+            	position: running(rubricbl);
+            }
+            div.rubricbc {
+            	position: running(rubricbc);
+            }
+            div.rubricbr {
+            	position: running(rubricbr);
+            }
+            
+            body {
+            	font-family: 'Ropa Sans', sans-serif !important;
+			}
+            
+            div.header {
+            	text-align: center;
+                padding: 5px;
+                position: running(header);
+                font: 14px bold;
+                text-transform: uppercase;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .header h3 {
+				display: inline-block;
+            	vertical-align: middle;
+            }
+            
+            .header img {
+            	display: inline-block;
+            	vertical-align: middle;
+            	margin-top: 5px;
+            }
+            
+            #main {
+            	font: 9px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            p {
+                padding: 1.5px;
+                margin: 1px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            h2 {
+                background-color: #d5d5d5;
+            	color: #303030;
+                font-size: 14px;
+                padding: 5px;
+            	font-family: 'Ropa Sans', sans-serif;
+           	   }
+            
+            .row {
+            	display: block;
+            }
+            
+            .colum {
+            	vertical-align: top;
+            	display: inline-block;
+            }
+            
+            .options-group {
+            	display: block;
+            	width: 100%;
+            	margin-bottom: 15px;
+            	padding-left: 30px;
+            }
+            
+            .options-group .colum {
+            	vertical-align: middle;
+            	height: 21px;
+            }
+            
+            .w-100 {
+            	width: 100%;
+            }
+            
+            .w-95 {
+            	/* for whitespaces */
+            	width: 94%;
+            }
+            
+            .w-90 {
+            	width: 85%;
+            }
+            
+            .w-85 {
+            	width: 85%;
+            }
+
+            .w-70 {
+            	width: 70%;
+            }
+            
+            .w-50 {
+            	width: 50%;
+            }
+            
+            .w-40 {
+            	width: 40%;
+            }
+            
+            .w-30 {
+            	width: 30%;
+            }
+            
+            .w-25 {
+            	width: 25%;
+            }
+            
+            .w-20 {
+            	width: 19%;
+            }
+            
+            .w-15 {
+            	width: 15%;
+            }
+            
+            .w-14 {
+            	width: 14%;
+            }
+            
+            .w-12 {
+            	width: 12%;
+            }
+            
+            .w-10 {
+            	width: 10%;
+            }
+            
+            .w-8 {
+            	width: 8%;
+            }
+            
+            .w-5 {
+            	width: 5%;
+            }
+            
+            .subtitle {
+            	font: 10px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .label {
+            	font: 8px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .value {
+            	font-size: 8px;
+            }
+            
+            .value.center {
+            	text-align: center;
+            }
+            
+            .logo {
+            	float: right;
+            	height: 35px;
+            }
+            
+            .square {
+            	text-align: center;
+                width: 20px;
+                height: 20px;
+                border: 2px solid;
+                font-size: 12px;
+            }
+            
+            .square p {
+            	margin: -2px;
+            }
+            
+            .anchors {
+				color: #ffffff;
+                font-size: 2px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+
+            .anchors.radio {	 
+            	color: #ffffff;
+                font-size: 1px;
+            	opacity: 0;
+            	margin-left: -30px;
+            	padding-top: 14px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .ass-field {
+            	height: 15px;
+            	border-bottom: 2px solid;
+            	margin-bottom: 0px;
+            }
+            
+            .align-top-center {
+            	vertical-align: top;
+            	text-align: center;
+            }
+            
+            .m-t-30 {
+            	margin-top: 30px;
+            }
+            
+            .m-t-60 {
+            	margin-top: 60px;
+            }
+            
+            .m-t-120 {
+            	margin-top: 120px;
+            }
+            
+            .mp-r-0 {
+            	margin-right: 0px;
+            	padding-right: 0px;
+            }
+            
+            .float-right {
+            	float: right;
+            }
+            
+            .px {
+            	font-size: 10px;
+            	padding-top:5px;
+            }
+            
+            .local-data {
+            	margin: 0px;
+            	padding: 0px;
+            }
+            
+        </style>
+    </head>
+    
+    <div class="header">
+        <h3>Termo de contratação - pessoa jurídica</h3>
+        <img src="/file-asset/ClaroLogopng?v=1&height=40&width=40" alt="Claro Logo" class="logo"  width="40" height="40"/>
+    </div>
+    
+    <div class="rubricbl">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#01
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#02
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#03
+            </div>
+        </div>
+    </div>
+    <div class="rubricbc">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#04
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#05
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#06
+            </div>
+        </div>
+    </div>
+    <div class="rubricbr">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#07
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#08
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#09
+            </div>
+        </div>
+    </div>
+    
+    <div id="resale">
+        <h2>Dados da Revenda</h2>
+        <div class="row">
+            <div class="colum w-50">
+                <p class="label">
+                    Razão Social
+                </p>
+                <p class="value">
+                    {!owner.Resale__c}
+                </p>
+                <p class="label">
+                    Nome do Consultor
+                </p>
+                <p class="value">
+                    {!owner.Name}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    CNPJ
+                </p>
+                <p class="value">
+                    {!CNPJResale}
+                </p>
+                <p class="label">
+                    Código Vendedor
+                </p>
+                <p class="value">
+                    {!owner.ConsultantCode__c}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Código Revenda
+                </p>
+                <p class="value">
+                    {!owner.ResaleCode__c}
+                </p>
+                <p class="label">
+                    Canal de Venda
+                </p>
+                <p class="value">
+                    {!varOrder.Account.CommercialSegment__c}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Segmento
+                </p>
+                <p class="value">
+                    {!$Label.CEC_PME_GGD_Segmento}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="customer">
+        <h2>Dados da Empresa</h2>
+        <div class="row">
+            <div class="colum w-40">
+                <p class="label">
+                    Razão Social
+                </p>
+                <p class="value">
+                    {!varOrder.Account.Name}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    CNPJ
+                </p>
+                <p class="value">
+                    {!AccountCNPJ}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Cliente
+                </p>
+                <p class="value">
+                    {!if(and(varOrder.Account.NETClient__c,varOrder.Account.EMBRATELClient__c),'NET/Embratel',if(varOrder.Account.NETClient__c,'NET',if(varOrder.Account.EMBRATELClient__c,'EMBRATEL','---')))}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Número do Contrato
+                </p>
+                <p class="value">
+                    {!varOrder.Account.NETContractNumber__c}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="adm">
+        <h2>Representante Legal / Administrador</h2>
+        <div class="row">
+            <div class="colum w-20">
+                <p class="label">
+                    Nome Completo
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    CPF
+                </p>
+            </div>
+            <div class="colum w-12">
+                <p class="label">
+                    Telefone Fixo
+                </p>
+            </div>  
+            <div class="colum w-12">
+                <p class="label">
+                    Telefone celular
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    E-mail
+                </p>
+            </div>
+            <div class="colum w-12">
+                <p class="label">
+                    Representante Legal
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    Cargo
+                </p>
+            </div>
+        </div>
+        <apex:repeat value="{!ListAdministrators}" var="administrator">
+            <div class="row">
+                <div class="colum w-20">
+                    <p class="value">
+                        {!administrator.administratorReq.name}
+                    </p>
+                </div>
+                <div class="colum w-10">
+                    <p class="value">
+                        {!administrator.administratorReq.formattedCpf}
+                    </p>
+                </div>
+                <div class="colum w-12">
+                    <p class="value">
+                        {!administrator.phone}
+                    </p>
+                </div>  
+                <div class="colum w-12">
+                    <p class="value">
+                        {!administrator.mobilePhone}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!administrator.formatedEmail}
+                    </p>
+                </div>
+                <div class="colum w-12">
+                    <p class="value">
+                        {!if(administrator.administratorReq.isLegalRepresentative,'Sim','Não')}
+                    </p>
+                </div>
+                <div class="colum w-10">
+                    <p class="value">
+                        {!administrator.administratorReq.jobTitle}
+                    </p>
+                </div>
+            </div>
+        </apex:repeat>
+    </div>
+    
+    <div id="address">
+        <h2>Endereço</h2>
+        <div class="row">
+            <div class="colum w-10">
+                <p class="label">
+                    Tipo
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    CEP
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    Tipo de Log.
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Endereço
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    Número
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    Complemento
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    Bairro
+                </p>
+            </div>
+            <div class="colum w-14">
+                <p class="label">
+                    Cidade
+                </p>
+            </div>
+            <div class="colum w-5">
+                <p class="label">
+                    UF
+                </p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="colum w-10">
+                <p class="value">
+                    {!$Label.CEC_PME_GGD_End_Princ}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!formattedAccountShipPostcode}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!ShippingAddressType}
+                </p>
+            </div>  
+            <div class="colum w-15">
+                <p class="value">
+                    {!varOrder.Account.ShippingStreet}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!varOrder.Account.CEC_ShippingNumber__c}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!ShippingComplement}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!varOrder.Account.CEC_ShippingNeighborhood__c}
+                </p>
+            </div>
+            <div class="colum w-14">
+                <p class="value">
+                    {!varOrder.Account.ShippingCity}
+                </p>
+            </div>
+            <div class="colum w-5">
+                <p class="value">
+                    {!varOrder.Account.ShippingState}
+                </p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="colum w-10">
+                <p class="value">
+                    {!$Label.CEC_PME_GGD_End_Cob}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!formattedBillingPostalCode}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!BillingAddressType}
+                </p>
+            </div>  
+            <div class="colum w-15">
+                <p class="value">
+                    {!varOrder.Account.BillingStreet}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!varOrder.Account.CEC_BillingNumber__c}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!BillingComplement}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="value">
+                    {!varOrder.Account.CEC_BillingNeighborhood__c}
+                </p>
+            </div>
+            <div class="colum w-14">
+                <p class="value">
+                    {!varOrder.Account.BillingCity}
+                </p>
+            </div>
+            <div class="colum w-5">
+                <p class="value">
+                    {!varOrder.Account.BillingState}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="Receiver">
+        <h2>Dados do Recebedor dos Equipamentos</h2>
+        <div class="row">
+            <div class="colum w-20">
+                <p class="label">
+                    Nome Completo 
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    RG
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    Telefone Fixo
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    Telefone Celular
+                </p>
+            </div>
+        </div>
+        <apex:outputPanel rendered="{! !ISBLANK(varOrder.ReceiverFullName1__c)}">
+            <div class="row">
+                <div class="colum w-20">
+                    <p class="value">
+                        {!varOrder.ReceiverFullName1__c}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!ReceiverRG1}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>  
+                <div class="colum w-20">
+                    <p class="value">
+                        {!ReceiverMobile1}
+                    </p>
+                </div>
+            </div>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{! !ISBLANK(varOrder.ReceiverFullName2__c)}">
+            <div class="row">
+                <div class="colum w-20">
+                    <p class="value">
+                        {!varOrder.ReceiverFullName2__c}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!ReceiverRG2}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>  
+                <div class="colum w-20">
+                    <p class="value">
+                        {!ReceiverMobile2}
+                    </p>
+                </div>
+            </div>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{! !ISBLANK(varOrder.ReceiverFullName3__c)}">
+            <div class="row">
+                <div class="colum w-20">
+                    <p class="value">
+                        {!varOrder.ReceiverFullName3__c}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!ReceiverRG3}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>  
+                <div class="colum w-20">
+                    <p class="value">
+                        {!ReceiverMobile3}
+                    </p>
+                </div>
+            </div>
+        </apex:outputPanel>
+    </div>
+    
+    <div id="plan">
+        <h2>Planos Contratados</h2>
+        <apex:repeat value="{!salesDocuments.plans}" var="plan">
+            <apex:repeat value="{!plan.groups}" var="group">
+                <div class="row">
+                    <div class="colum w-40">
+                        <p class="label">
+                            Plano 
+                        </p>
+                        <p class="value">
+                            {!plan.formattedName}
+                        </p>
+                    </div>
+                    <div class="colum w-40">
+                        <p class="label">
+                            Grupo
+                        </p>
+                        <p class="value">
+                            {!group.name}
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="colum w-10">
+                        <p class="label">
+                            Tipo Solicitação
+                        </p>
+                        <p class="value">
+                            {!group.requestType}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Regional
+                        </p>
+                        <p class="value">
+                            {!group.regional}
+                        </p>
+                    </div>
+                    <div class="colum w-5">
+                        <p class="label">
+                            UF
+                        </p>
+                        <p class="value">
+                            {!group.stateAbbreviation}
+                        </p>
+                    </div>
+                    <div class="colum w-5">
+                        <p class="label">
+                            DDD
+                        </p>
+                        <p class="value">
+                           {!group.areaCode}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Franquia
+                        </p>
+                        <p class="value">
+                            {!group.franchise}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Valor
+                        </p>
+                        <p class="value">
+                            {!group.formattedValue}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Desconto
+                        </p>
+                        <p class="value">
+                            {!group.formattedProgressiveDiscount}
+                        </p>
+                    </div>
+                    <div class="colum w-15">
+                        <p class="label">
+                            Valor c/Desc
+                        </p>
+                        <p class="value">
+                            {!group.formattedValueDiscount}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Qtd. Linhas
+                        </p>
+                        <p class="value">
+                            {!group.lineAmount}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Kit
+                        </p>
+                        <p class="value">
+                            {!group.formattedKit}
+                        </p>
+                    </div>
+                    <div class="colum w-8">
+                        <p class="label">
+                            Trade-in
+                        </p>
+                        <p class="value">
+                            {!plan.tradeIn}
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="colum w-100">
+                        <p class="value">
+                            <spam class="subtitle">Plugin: </spam> 
+                            <apex:repeat value="{!group.plugins}" var="plugin">
+                                {!plugin.type} (valor: {!plugin.formattedValue});
+                            </apex:repeat>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="colum w-100">
+                        <p class="value">
+                            <spam class="subtitle">Bônus: </spam> 
+                            <apex:repeat value="{!group.listBonus}" var="bonusItem">
+                                {!bonusItem.name};
+                            </apex:repeat>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="colum w-100">
+                        <p class="value">
+                            <spam class="subtitle">Serviços Adicionais: </spam>
+                            <apex:repeat value="{!group.additionalServices}" var="additionalService">
+                                {!additionalService.name} (valor: {!additionalService.formattedValue});
+                            </apex:repeat>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="colum w-100">
+                        <p class="value">
+                            <spam class="subtitle">Serviços Inclusos: </spam>
+                            <apex:repeat value="{!group.includedServices}" var="includedService">
+                                {!includedService.name};
+                            </apex:repeat>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="colum w-50">
+                        <p class="subtitle">
+                            Detalhamento das linhas: 
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="colum w-20">
+                            <p class="label">
+                                Número da linha
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="label">
+                                Operadora
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="label">
+                                CPF Doador
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="label">
+                                ICCID
+                            </p>
+                        </div>
+                    </div>
+                <apex:outputPanel rendered="{! !group.hasLineDetails}">
+                    <div class="row">
+                        <div class="colum w-20">
+                            <p class="value">
+                                ---
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="value">
+                                ---
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="value">
+                                ---
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="value">
+                                ---
+                            </p>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:repeat value="{!group.lineDetails}" var="lineDetail" rendered="{!group.hasLineDetails}">
+                    <div class="row">
+                        <div class="colum w-20">
+                            <p class="value">
+                                {!lineDetail.formattedTelephoneNumber}
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="value">
+                                {!lineDetail.formattedOperator}
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="value">
+                                {!lineDetail.donor.formattedCpf}
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="value">
+                                {!lineDetail.simcard.formattedIccid}
+                            </p>
+                        </div>
+                    </div>
+                </apex:repeat>
+                
+                <div class="row">
+                    <div class="colum w-50">
+                        <p class="subtitle">
+                            Equipamentos: 
+                        </p>
+                    </div>
+                </div>
+                <apex:outputPanel rendered="{!group.lineDetails.size>0}">
+                    <div class="row">
+                        <div class="colum w-10">
+                            <p class="label">
+                                Quantidade
+                            </p>
+                        </div>
+                        <div class="colum w-30">
+                            <p class="label">
+                                Equipamento
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="label">
+                                Cor
+                            </p>
+                        </div>
+                        <div class="colum w-15">
+                            <p class="label">
+                                Aceita outra cor?
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="label">
+                                Valor Unitário
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="label">
+                                Faixa
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="label">
+                                Pontuação
+                            </p>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:repeat value="{!group.listFormattedDevice}" var="formattedDevice">
+                    <div class="row">
+                        <div class="colum w-10">
+                            <p class="value">
+                                {!if(and(group.requestType == 'TT PF/PJ',formattedDevice.equipment=='SimCard'),'---',formattedDevice.amount)}
+                            </p>
+                        </div>
+                        <div class="colum w-30">
+                            <p class="value">
+                                {!if(and(group.requestType == 'TT PF/PJ',formattedDevice.equipment=='SimCard'),'---',formattedDevice.equipment)}
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="value">
+                                {!formattedDevice.color}
+                            </p>
+                        </div>
+                        <div class="colum w-15">
+                            <p class="value">
+                                {!formattedDevice.acceptAnotherColor}
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="value">
+                                {!formattedDevice.unitaryValue}
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                           <p class="value">
+                                {!formattedDevice.range}
+                            </p>
+                        </div>
+                        <div class="colum w-10">
+                            <p class="value">
+                                {!formattedDevice.punctuation}
+                            </p>
+                        </div>
+                    </div>
+                </apex:repeat>
+            </apex:repeat>
+        </apex:repeat>
+    </div>
+    
+    <div id="Donor" style="margin-top: 60px">
+        <h2>Dados do Doador - Transferência de Titularidade</h2>
+        
+        <div class="row">
+            <div class="colum w-40">
+                <p class="label">
+                    Nome Completo
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    CPF
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    Telefone
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    Email
+                </p>
+            </div>
+        </div>
+        <apex:outputPanel rendered="{!!HasDonor}">
+            <div class="row">
+                <div class="colum w-40">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        ---
+                    </p>
+                </div>
+            </div>
+        </apex:outputPanel>
+        <apex:repeat value="{!ListOrderItemWithDonor}" var="orderItemWithDonor">
+            <div class="row">
+                <div class="colum w-40">
+                    <p class="value">
+                        {!orderItemWithDonor.DonatorName__c}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!orderItemWithDonor.DonatorDocumentNumber__c}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!orderItemWithDonor.DonatorPhone__c}
+                    </p>
+                </div>
+                <div class="colum w-20">
+                    <p class="value">
+                        {!orderItemWithDonor.DonatorEmail__c}
+                    </p>
+                </div>
+            </div>
+        </apex:repeat>
+    </div>
+    
+    <div id="Resume">
+        <h2>Resumo da Contratação</h2>
+        
+        <div class="row">
+        <div class="colum w-40">
+            <p class="label">
+                Tempo de Vigência de Contrato
+            </p>
+            <p class="value">
+               [ ]12 Meses [X]24 Meses [ ]Sem Fidelização
+            </p>
+        </div>
+        <div class="colum w-20">
+            <p class="label">
+                Data Vencimento da Fatura
+            </p>
+            <p class="value">
+                {!salesDocuments.customer.billingSpec.paymentDayDue}
+            </p>
+        </div>
+        <div class="colum w-20">
+            <p class="label">
+                Quantidade de Linhas
+            </p> 
+            <p class="value">
+                {!salesDocuments.summary.lineQuantity}
+            </p>
+        </div>
+        <div class="colum w-20">
+            <p class="label">
+                Total de Serviços
+            </p>
+            <p class="value">
+                {!salesDocuments.summary.formattedTotalValueOfServices}
+            </p>
+        </div>
+        </div>
+        
+        <div class="row">
+            <div class="colum w-40">
+                <p class="label">
+                    Quantidade de Equipamentos
+                </p>
+                <p class="value">
+                    {!salesDocuments.summary.deviceQuantity} Aparelhos, {!DeviceTotalizer.totalTripleSimcard} Simcard Triple, {!DeviceTotalizer.totalDetachedTripleSimcard} Simcard Triple Avulso
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="label">
+                    Total de Equipamentos
+                </p>
+                <p class="value">
+                    {!salesDocuments.summary.formattedTotalValueOfEquipments}
+                </p>
+            </div>
+            <div class="colum w-30">
+                <p class="label">
+                    Forma de Pagamento dos Equipamentos
+                </p>
+                <p class="value">
+                    {!salesDocuments.summary.paymentMethod}
+                </p>
+            </div>
+        </div>
+        <br/>
+        <apex:outputPanel rendered="{!IsShared}">
+            <div class="row">
+                <div class="colum w-100">
+                    <p class="value"> Tarifa excedentes:</p>
+                    <p class="value"> VC1 - R$ 0,25 / Min (Valor Flat Nacional com Imposto)</p>
+                    <p class="value"> VC2 / VC3 - Plano Alternativo Embratel 28 (Consulte tarifas Plano Homologado)</p>
+                    <p class="value"> TORPEDO - R$ 0,10 (Outras Operadores)</p>
+                    <p class="value"> MEGABYTE - R$ 0,03 (Após Franquia do Plano) Sem Redução de Velocidade</p>
+                </div>
+            </div>
+        </apex:outputPanel>
+    </div>
+    
+    <div id="ass" class="signature-page">
+        <h2>Declarações do Assinante</h2>
+
+        <div class="options-group">
+            <div class="row">
+                <div class="colum w-5">
+                <div class="square">
+                    <p class="anchors radio">
+                        RADIO#01#1
+                    </p> 
+                </div>
+  
+                </div>
+                <div class="colum w-90">
+                    <p class="value">
+                        ACEITO receber mensagens de cunho publicitário enviadas pela CLARO e/ou seus parceiros para os aparelhos vinculados ao Plano de Serviço;
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-5">
+                    <div class="square">
+                        <p class="anchors radio">
+                            RADIO#01#2
+                        </p>
+                    </div>
+                </div>
+                <div class="colum w-90">
+                    <p class="value">
+                        NÃO ACEITO receber mensagens de cunho publicitário enviadas pela CLARO e/ou seus parceiros para os aparelhos vinculados ao meu Plano de Serviço.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="options-group">
+            <div class="row">
+                <div class="colum w-5">
+                    <div class="square">
+                        <apex:outputPanel rendered="{!IsLd21}">
+                            <p class="px"> X </p>  
+                        </apex:outputPanel>
+                    </div>
+                </div>
+                <div class="colum w-90">
+                    <p class="value">
+                        ACEITO o redirecionamento das chamadas de Longa distância conforme regra do Termo de Gestor de LD21 em anexo.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-5">
+                    <div class="square">
+                        <apex:outputPanel rendered="{!!IsLd21}">
+                            <p class="px"> X </p>  
+                        </apex:outputPanel>
+                    </div>
+                </div>
+                <div class="colum w-90">
+                    <p class="value">
+                        NÃO ACEITO o redirecionamento das chamadas de Longa distância conforme regra do Termo de Gestor de LD21 em anexo.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="options-group">
+            <div class="row">            
+                <div class="colum w-5">
+                    <div class="square">
+                        <p class="anchors radio">
+                            RADIO#02#1
+                        </p>
+                    </div>
+                </div>
+                <div class="colum w-90">
+                    <p class="value">
+                        AUTORIZO o fornecimento para terceiros dos meus dados cadastrais e/ou pessoas, inclusive as informações de consumo e registro de comportamento de utilização/navegação, nos termos da lei em vigor
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-5">
+                    <div class="square">
+                        <p class="anchors radio">
+                            RADIO#02#2
+                        </p>
+                    </div>
+                </div>
+                <div class="colum w-90">
+                    <p class="value">
+                        NÃO AUTORIZO o fornecimento para terceiros dos meus dados cadastrais e/ou pessoais, inclusive as informações de consumo e registro de comportamento de utilização/navegação, nos termos da lei em vigor.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="colum w-100">
+                <p class="value">
+                    Declaro, para os devidos fins e efeitos de direito, que (i) o preenchimento e assinatura deste instrumento não significam a aceitação automática de tal solicitação pela CLARO, ficando a análise suspensa até o envio, por e-mail, de cópia meus documentos pessoais; (ii) autorizo a CLARO a proceder a análise das informações cadastrais, junto aos órgãos restritivos de crédito e instituições assemelhadas; (iii) conheço (a) o Plano Básico de Serviços e (b) as condições do Plano de Serviço, Promoções e/ou Pacotes contratados; (iv) tenho conhecimento que este instrumento integra (a) o Contrato SMP, (b) o Contrato de Permanência, (c) o Regulamento da Promoção e (d) o Sumário do Plano, especialmente as condições para cancelamento, tendo recebido cópia deste(s) documento(s); (v) sendo hipótese de Portabilidade Numérica, declaro que estou ciente das condições previstas no Contrato SMP e concordo em receber nova(s) linha(s) no caso de meu(s) número(s) portado(s) esteja(m) cancelado(s) ou em qualquer hipótese que inviabilize a conclusão da portabilidade pela Claro; (vi) tenho ciência de que, ao não contratar um pacote de dados, serei tarifado pelo MB excedente no valor vigente do tráfego de dados e que a solicitação de bloqueio do uso de dados é de minha responsabilidade; (vii) a CLARO fica autorizada a direcionar as ligações de Longa Distância Nacional ao Código de Seleção de Prestadora de número 21 (Embratel); (viii) conforme regra do Plano homologado, a utilização de outro Código de Seleção de Prestadora estará sujeita a cobrança de excedente na conta, segundo as tarifas da prestadora utilizada; (ix) estou ciente de que a renovação total implica na manutenção de todas as linhas adquiridas, inclusive linhas suspensas, até o momento da renovação; (x) fui informado que a área de cobertura para os serviços 3G e 4G está restrita às localidades informadas no site da Claro: www.claro.com.br; (xi) para transferência de linhas, é obrigatória a assinatura do Termo de Transferência de Titularidade; (xii) tenho conhecimento de que o crédito total do Desconto Claro gerado em cada contratação e o parcelamento de aparelhos será concedido a partir da 5º fatura, em 20 parcelas (condição válida somente para as negociações na modalidade Desconto Claro) e que o valor total do crédito Desconto Claro será distribuído de forma igualitária entre as linhas adicionadas na referida contratação; (xiii) estou ciente que em caso de rescisão e cancelamento das linhas, os créditos do Desconto Claro serão perdidos; (xiv) caso contratado o módulo adicional do Gestor Online, a gestão das linhas e o tráfego de voz, inclusive direcionamento das ligações de Longa Distância Nacional, são de responsabilidade do administrador, bem como que o controle e bloqueio de dados 4G não está disponível no Gestor Online.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row m-t-30">
+            <div class="colum w-10">
+                <p class="label">
+                    
+                </p>
+            </div>
+            <div class="colum w-40">
+                <div class="ass-field">
+                    <p class="anchors">
+                        LOCALIZATION#1
+                    </p>
+                </div>
+            </div>
+            <div class="colum w-5 align-top-center">
+                <p class="label">
+                    ,
+                </p>
+            </div>
+            <div class="colum w-40 mp-r-0">
+                <div class="ass-field">
+                    <p class="anchors">
+                        DATE#1
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row local-data">
+            <div class="colum w-10 local-data">
+                <p class="label">
+                    
+                </p>
+            </div>
+            <div class="colum w-40 local-data">
+                <p class="label align-top-center">
+                    Local 
+                </p>
+            </div>
+            <div class="colum w-5 local-data">
+                <p class="label align-top-center">
+                    
+                </p>
+            </div>
+            <div class="colum w-40 local-data">
+                <p class="label align-top-center">
+                    Data
+                </p>
+            </div>
+        </div>
+        
+        <apex:repeat value="{!ListAdministratorsLegalRep}" var="administrator">
+            <div class="row m-t-30">
+                <div class="colum w-40">
+                    <div class="ass-field">
+                        <p class="anchors">
+                            {!administrator.anchor}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-40">
+                    <p class="label align-top-center">
+                        Representante Legal da Empresa
+                    </p>
+                </div>
+            </div>
+        </apex:repeat>
+        
+        <apex:repeat value="{!ListDonorsAnchor}" var="donorsAnchor">
+            <div class="row m-t-30">
+                <div class="colum w-40">
+                    <div class="ass-field">
+                        <p class="anchors">
+                            {!donorsAnchor}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-40">
+                    <p class="label align-top-center">
+                        Assinatura do Doador
+                    </p>
+                </div>
+            </div>
+        </apex:repeat>
+        
+        
+    </div>
+
+</apex:page>

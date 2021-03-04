@@ -1,0 +1,37 @@
+<template>
+        <div class="slds-m-bottom_x-small showTitle forceCommunityTopArticleList">
+            <span class="title slds-text-heading_large"><h1 class="title">Notícias</h1></span>
+        </div>
+        <div class="">
+            <ul class="">
+                <template for:each={obj} for:item="art">
+                    <li key={art.articleId} class="slds-border_bottom" > 
+                        <ul class=" itemRows slds-p-around_xx-small">
+                            <a class=""> 
+                                <li class="tableRowGroup">
+                                    <div class="slds-list--horizontal forceListRecordItem slds-p-vertical_xx-small">
+                                        <div class="recordCell recordFontWeight slds-text-heading_small" title="Article Title:"><span onclick={navigateToArticle} title={art.articleId}>{art.titulo}</span></div>
+                                    </div>
+                                </li>                                                                      
+                            </a>         
+                            <li class="tableRowGroup slds-text-color_default slds-p-vertical_xx-small">
+                                <div class="slds-list--horizontal forceListRecordItem">
+                                    <div class="slds-truncate"><span class="uiOutputText">{art.dataUltimaPubli} - </span></div>
+                                    <div class="slds-truncate"><span  class="uiOutputText"> {art.tema}</span></div>
+                                </div>
+                            </li>                                  
+                        </ul>
+                    </li>
+                </template>
+            </ul>
+        </div>
+        <div class="slds-float_right">
+            <lightning-button variant="base" label="Ver mais" title="Looks like a link" onclick={navigateToListView} class="slds-m-left_x-small"></lightning-button>
+        </div>
+        <template if:true={isLoading}>
+            <div>
+                <lightning-spinner alternative-text="loading"></lightning-spinner>
+            </div>
+        </template>
+
+</template>

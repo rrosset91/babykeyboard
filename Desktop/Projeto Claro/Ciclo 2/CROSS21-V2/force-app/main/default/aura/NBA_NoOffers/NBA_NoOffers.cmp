@@ -1,0 +1,35 @@
+<aura:component controller="NBA_OfferComparator_CC"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+
+    <aura:attribute type="Boolean" name="showNoOffers" default="false" />
+    <aura:attribute type="String" name="tema" default="warning" />
+	<aura:attribute type="String"   name="erroOfertas"   />
+	<aura:registerEvent name="refresh" type="c:NBA_RefreshTabEvent"/>
+
+    <aura:if isTrue="{!v. showNoOffers}">
+        <div style="min-height: 40%;">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id"
+                aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt"
+                aria-modal="true">
+                <div class="slds-modal__container" style="max-width: 40%; !important">
+                    <header class="{! 'slds-modal__header slds-theme_alert-texture slds-theme_' + v.tema }">
+                        <strong class="slds-text-heading_medium" id="prompt-heading-id">
+							<!--Não foi identificada nenhuma oferta para esse cliente --> {! v.erroOfertas }
+                        </strong>
+                    </header>
+
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <div class="slds-modal__content">
+                            <div class="slds-align_absolute-center slds-p-vertical_medium">
+                                <lightning:button variant="brand" label="OK" title="OK"
+                                    onclick="{! c.closeModal }" />
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,205 @@
+<!--
+* Autor: [Letícia Freitas] + [Deloitte]
+* Data: [28/05/2019]
+* Descrição: [Nome do projeto/ID: CEC FASE 1 ] + [Time: SQUAD 360 - Sprint 6] +
+* [Descrição da funcionalidade da classe: Componente para a busca de protocolos residenciais.] -->
+
+<aura:component controller = "CEC_360_ProtocolsMobileController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" /> 
+    <aura:attribute name="protocolsList" type="Object"/>
+    <aura:attribute name="startDate" type="Date"/>
+    <aura:attribute name="endDate" type="Date"/>
+    <aura:attribute name="protocolNumber" type="string"/>
+    <aura:attribute name="isDate" type="boolean" default="true"/>
+    <aura:attribute name="isNumber" type="boolean" default="false"/>
+    <aura:attribute name="disabledButton" type="boolean" default="true"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    <aura:attribute name="assetNumber" type="string"/>
+    <aura:attribute name="options" 	type="List"/>
+    <aura:attribute name="showModalDetails" type="Boolean" default="false"/>
+    <aura:attribute name="selectedProtocol" type="String" />
+    <aura:attribute name="showSpinnerModal" type="Boolean" default="true"/>
+    <aura:attribute name="showProtocols" type="Boolean" default="false"/>
+    <aura:attribute name="documentType" type="Boolean" default="false"/>
+    <aura:attribute name="protocolSearch" type="Boolean" default="false"/>
+    <aura:attribute name="protocolsDetails" type="Boolean" default="false"/>
+    <aura:attribute name="enableLine" type="Boolean" default="false"/>
+    
+    <div class="slds-text-heading_medium">Busca de protocolos:</div>
+    <div style="border-bottom: 1px solid #dddbda"></div>
+    <div class="slds-p-top_x-small">
+        <div class="slds-grid slds-gutters">
+            <div class ="slds-col slds-size_3-of-12">
+                <lightning:combobox disabled="{!v.enableLine}" aura:id="cmbAsset" value="{!v.assetNumber}" 
+                                    label="Linha" onchange="{!c.onRadio}" placeholder="Selecione uma linha"
+                                    />
+            </div>
+            
+            <div class="slds-col slds-align_absolute-left slds-size_8-of-12">
+                <div class="slds-p-top_large">
+                    <div class="slds-form-element__control slds-list_horizontal">
+                        <span class="slds-radio">
+                            <input type="radio" aura:id="radioDataMobile" checked="true" 
+                                   id="dataRadio" name="tipoBusca" value="dataRadio" onclick="{!c.getOptionsData}" />
+                            <label class="slds-radio__label" for="dataRadio">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">Por data:</span>
+                            </label>
+                        </span>
+                        <span class="slds-radio">
+                            <input type="radio" aura:id="radioNumberMobile"  id="number"
+                                   name="tipoBusca" value="number" onclick="{!c.getOptionsNumber}" />
+                            <label class="slds-radio__label" for="number">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">Por número de protocolo:</span>
+                            </label>
+                        </span> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Spinner -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <div class="slds-align_absolute-center">
+            <lightning:spinner alternativeText="Loading" size="medium" variant="brand" />
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isDate}" >
+        <div class="slds-p-top_x-small">
+            <div class="slds-text-heading_small">Busca por data:</div>
+            <div class="slds-grid slds-gutters">
+                
+                <div class="slds-col slds-size_3-of-12">
+                    <lightning:input aura:id="startDate" type="date" value="{!v.startDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                     label="Data de início"  
+                                     messageWhenBadInput="Data inválida." 
+                                     />
+                </div>
+                <div class = "slds-col slds-size_3-of-12">
+                    <lightning:input aura:id="endDate" type="date" value="{!v.endDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                     label="Data de fim" 
+                                     messageWhenBadInput="Data inválida." 
+                                     />
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                    <div class="slds-p-top_large">
+                        <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                          onclick="{!c.callProtocols}" disabled="{!v.disabledButton}">
+                        </lightning:button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.isNumber}">
+        <div class="slds-p-top_x-small">
+            <div class="slds-text-heading_small">Busca por número de protocolo:</div>
+            <div class="slds-grid slds-gutters">
+                
+                <div class = "slds-col slds-size_6-of-12">
+                    <lightning:input   aura:id="protocolNumber" class="tallTextArea" value="{!v.protocolNumber}" 
+                                     label="Número de protocolo:" maxlength="20" />
+                    
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                    <div class="slds-p-top_large">
+                        <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                          onclick="{!c.callProtocols}"  disabled="{!v.disabledButton}">
+                        </lightning:button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showProtocols}">
+        <div class="slds-p-top_small">
+            <table class="slds-table">
+                <thead>
+                    <tr>
+                        <th class="slds-text-title_caps">Número de atendimento</th>
+                        <th class="slds-text-title_caps" >Protocolo único</th>
+                        <th class="slds-text-title_caps">Status</th>
+                        <th class="slds-text-title_caps">Data de recebimento</th>
+                        <th class="slds-text-title_caps">Adicionado por</th>
+                        <th><lightning:icon iconName="utility:search" size="x-small" /></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.protocolsList}" var="cont"  indexVar="contIndex">
+                        <tr>
+                            <td>{!cont.interactionSequenceId}</td>
+                            <td>{!cont.protocolNumber}</td>
+                            <td>{!cont.situation}</td>
+                            <td>{!cont.solicitationDateOpening}</td>
+                            <td>{!cont.contactName}</td>
+                            <td><lightning:buttonIcon value="{!contIndex}" onclick="{!c.expandDetails}" iconName="{!cont.isExpandable?'utility:chevrondown':'utility:chevronright'}"/></td>
+                            <td></td>
+                        </tr>
+                        
+                        <aura:if isTrue="{!cont.isExpandable}">
+                              <tr class="slds-border_top">
+                            <td>
+                                <b><div class="slds-text-title">Motivo:</div></b>
+                                {!cont.reasonCode1}
+                            </td>
+                            
+                            <td>
+                                <b> <div class="slds-text-title">Motivo 2:</div></b>
+                                {!cont.reasonCode2}
+                            </td>
+                            
+                            <td>
+                                <b><div class="slds-text-title">Motivo 3:</div></b>
+                                {!cont.reasonCode3}
+                            </td>
+                            
+                            <td>
+                                <b><div class="slds-text-title">Motivo 4:</div></b>
+                                {!cont.reasonCode4}
+                            </td>
+                            
+                            <td>
+                                <b><div class="slds-text-title">Motivo 5:</div></b>
+                                {!cont.reasonCode5}
+                            </td>
+                            
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            </tr>
+                             <tr class="slds-border_bottom">
+                                <td>
+                                    <b><div class="slds-text-title">Data inicial:</div></b>
+                                    {!cont.solicitationDateOpening}
+                                </td>
+                                
+                                <td>
+                                    <b><div class="slds-text-title">Data final:</div></b>
+                                    {!cont.solicitationDateClosing}
+                                </td>
+                                
+                                <td>
+                                    <b><div class="slds-text-title">Método de contato:</div></b>
+                                    {!cont.channelRequestId}
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                
+                            </tr>
+                            
+                        </aura:if>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </aura:if>
+  </aura:component>

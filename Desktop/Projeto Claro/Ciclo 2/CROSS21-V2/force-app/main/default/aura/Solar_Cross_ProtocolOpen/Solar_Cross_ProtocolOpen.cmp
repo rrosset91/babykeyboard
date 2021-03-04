@@ -1,0 +1,156 @@
+<aura:component  controller="Solar_Cross_ProtocolCodificationFlow">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="contextCase" type="Object" />
+    <aura:attribute name="message" type="String"/> 
+
+    <aura:attribute name="isLoading" type="Boolean" default="true"/> 
+
+    <aura:attribute name="categoryValue" type="String" />
+    <!-- <aura:attribute name="productValue" type="String" /> -->
+    <aura:attribute name="modalityValue" type="String" />
+    <aura:attribute name="entryValue" type="String" />
+    <aura:attribute name="leaveValue" type="String" />
+
+    <aura:attribute name="resolutionValue" type="String" />
+    <aura:attribute name="descriptionValue" type="String" />
+
+
+    <aura:attribute name="categoryOptions" type="Object[]" />
+    <!-- <aura:attribute name="productOptions" type="Object[]" /> -->
+    <aura:attribute name="modalityOptions" type="Object[]" />
+    <aura:attribute name="entryOptions" type="Object[]" />
+    <aura:attribute name="leaveOptions" type="Object[]" />
+
+    <aura:attribute name="loadingSave" type="Boolean" default="false" />
+    <aura:attribute name="productShow" type="Boolean" default="false" />
+    <aura:attribute name="modalityShow" type="Boolean" default="false" />
+    <aura:attribute name="entryShow" type="Boolean" default="false" />
+    <aura:attribute name="leaveShow" type="Boolean" default="false" />
+    <aura:attribute name="enableUpdate" type="Boolean" default="true"/>     
+
+    <aura:attribute name="showBKO" type="Boolean" default="false" />
+    <aura:attribute name="showFCR" type="Boolean" default="false" />
+    <aura:attribute name="hasPermissionOfferCallCenter" type="Boolean" default="false" />
+    <aura:attribute name="viewMode" type="Boolean" default="false" />
+    <aura:attribute name="viewModal" type="Boolean" default="false" />
+    
+    <aura:attribute name="radioOfferOptions" type="List" default="[
+    {'label': 'Sim, ofereci e cliente aceitou', 'value': 'Sim, ofereci e cliente aceitou'},
+    {'label': 'Sim, ofereci, mas cliente não aceitou', 'value': 'Sim, ofereci, mas cliente não aceitou'},
+    {'label': 'Não, não consegui', 'value': 'Não, não consegui'},
+    {'label': 'Não se aplica para este atendimento', 'value': 'Não se aplica para este atendimento'}
+    ]"/>
+    <aura:attribute name="radioOfferValue" type="String" default=""/>
+    <aura:attribute name="showOffer" type="Boolean" default="false" />
+
+    
+
+    <aura:handler name="init" value="{! this }" action="{! c.onInit }"/>
+
+    <div class="{!v.loadingSave == true ? 'slds-show' : 'slds-hide'}">
+        <lightning:spinner alternativeText="Carregando..." size="medium" /> 
+    </div> 
+  
+    <div class="slds-grid slds-gutters">
+        <!-- COLUNA ESQUERDA -->
+        <div class="slds-col slds-size_1-of-2">  
+            <div class="slds-grid slds-gutters slds-grid_vertical">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning:combobox name="progress" label="Categoria" value="{!v.categoryValue}" options="{!v.categoryOptions}" placeholder="--- Nenhum ---" required="true" onchange="{!c.categoryEvt}" disabled="{!v.viewMode}"/> 
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning:combobox name="progress" label="Modalidade" value="{!v.modalityValue}" options="{!v.modalityOptions}" placeholder="--- Nenhum ---" required="true" onchange="{!c.modalityEvt}"  disabled="{! or(v.viewMode, !v.modalityShow)}"/>  
+                </div>
+            </div>
+        </div>
+        <!-- COLUNA DIREITA -->
+        <div class="slds-col slds-size_1-of-2"> 
+            <div class="slds-grid slds-gutters slds-grid_vertical">
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning:combobox name="progress" label="Motivo de entrada" value="{!v.entryValue}" options="{!v.entryOptions}" placeholder="--- Nenhum ---" required="true" onchange="{!c.entryEvt}" disabled="{! or(v.viewMode, !v.entryShow)}"/>
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                    <lightning:combobox name="progress" label="Motivo de saída" value="{!v.leaveValue}" options="{!v.leaveOptions}" placeholder="--- Nenhum ---" required="true" onchange="{!c.leaveEvt}" disabled="{! or(v.viewMode, !v.leaveShow)}"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+   
+    <!-- COLUNA CENTRAL -->
+    <aura:if isTrue="{!v.showFCR}">
+        <aura:if isTrue="{! and(v.showOffer,v.hasPermissionOfferCallCenter)}">
+            <div class="slds-grid slds-gutters">                  
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:textarea name="Resolução" label="Resolução" maxlength="10000" value="{!v.resolutionValue}" required="true" onchange="{!c.validateStringField}" disabled="{!v.viewMode}"/>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:radioGroup name="radioGroupRequired"
+                        label="Conseguiu oferecer alguma oferta no antedimento?"
+                        options="{! v.radioOfferOptions }"
+                        value="{! v.radioOfferValue }"
+                        type="radio"
+                        required="true"
+                        onchange="{!c.validateStringField}"
+                    />
+                    <div class="slds-m-top_x-small">
+                        <lightning:button label="Ver oportunidades" title="Neutral action" onclick="{!c.openModal}"/>
+                        <!-- <lightning:button variant="neutral" label="Cancelar" onclick="{!c.cancel}" />
+                        <lightning:button variant="brand" label="Salvar" onclick="{!c.updateContextCase}" disabled="{!v.enableUpdate}"/> -->
+                    </div>
+                </div>
+            </div>
+
+            <aura:set attribute="else">
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning:textarea name="Resolução" label="Resolução" maxlength="10000" value="{!v.resolutionValue}" required="true" onchange="{!c.validateStringField}" disabled="{!v.viewMode}"/>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+    </aura:if>    
+
+    <aura:if isTrue="{!v.showBKO}">
+        <div class="slds-grid slds-gutters">                  
+            <div class="slds-col slds-size_1-of-1 slds-m-top_small">
+                <div class="slds-box slds-theme_shade slds-theme_alert-texture">
+                    <aura:unescapedHtml value="{!v.message}" />
+                </div>
+            </div>
+        </div>
+        <div class="slds-grid slds-gutters">      
+            <div class="slds-col slds-size_1-of-1 slds-m-top_x-small">
+                <lightning:textarea name="Descrição" label="Descrição" maxlength="10000" value="{!v.descriptionValue}" required="true" onchange="{!c.validateStringField}" disabled="{!v.viewMode}"/>
+            </div>
+        </div>
+    </aura:if>        
+    <!-- BOTOES -->
+    <aura:if isTrue="{! not(v.viewMode)}">
+        <div class="slds-grid slds-gutters slds-m-top_medium">
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">            
+                <lightning:button class="slds-m-top_small" variant="neutral" label="Cancelar" onclick="{!c.cancel}" />
+                <lightning:button class="slds-m-top_small" variant="brand" label="Salvar" onclick="{!c.updateContextCase}" disabled="{!v.enableUpdate}"/>
+            </div>
+        </div>
+    </aura:if> 
+    
+    
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="ConcludeModal" class="slds-modal">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeModal}" variant="container" alternativeText="Fechar" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                <h2 id="header43" class="slds-text-heading--medium">Oportunidades Disponíveis</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <aura:if isTrue="{!v.viewModal}">
+                    <c:Solar_Cross_CallCenterOffers recordId="{!v.recordId}"/> 
+                </aura:if>               
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button label="Fechar" variant="brand" title="Fechar" onclick="{!c.closeModal}" />
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop " aura:id="ModalConclude"></div>
+</aura:component>

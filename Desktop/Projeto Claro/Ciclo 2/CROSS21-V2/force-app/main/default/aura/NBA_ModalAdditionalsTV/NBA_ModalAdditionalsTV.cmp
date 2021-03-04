@@ -1,0 +1,261 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+
+	<aura:attribute type="Object"  name="oferta1" />
+	<aura:attribute type="Object"  name="oferta2" />
+	<aura:attribute type="Object"  name="oferta3" />
+	<aura:attribute type="Object"  name="produtoAtual" />
+	<aura:attribute type="Object"  name="produtoAntigo" />
+	<aura:attribute type="Map" 	   name="temporarySuspension"/>	
+	<aura:attribute type="Object"  name="oferta" />
+	<aura:attribute type="Object"  name="selectedTv" />
+	<aura:attribute type="Boolean" name="disabled"  default="true" />
+	<aura:attribute type="Object"  name="lstPrecosPontosOpcionais" />
+	<aura:attribute type="Boolean" name="disabledTV" />
+	<aura:attribute type="Boolean" name="showSpinner" default="false" />
+	<aura:attribute type="Boolean" name="showAdditionalTv" default="false" />
+	<aura:attribute type="Object"  name="disableCheckbox"  />
+	<aura:attribute type="Object"  name="selecionado" />
+	<aura:attribute type="Boolean" name="fristCall" />
+	<aura:attribute type="String"  name="typeModal" />
+	<aura:attribute type="Object[]" name="lstPontuacao" />
+	<aura:attribute type="Boolean" name="calculate" />
+
+	<aura:method name="callIncluirAdicionaisTV" action="{! c.incluirAdicionaisTV }" access="global" />
+	<aura:method name="callUpdateAditionalsTV" action="{! c.updateAdditionalsTV }" access="global" />
+	
+	<aura:method name="callUpdateOfferDiffs" action="{! c.updateOfferDiffs }" access="global" />
+	<!-- BOTÃO ADICIONAIS TV -->
+	<div class="slds-grid pad-ad" style=" padding: 0.3rem 3rem 0.3rem 0rem ">
+	<!--	<div class="slds-col slds-size_3-of-12 box-oferta"></div> -->
+		<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_left clickable ' + ( v.disabledTV ? ' disableSection' : '' ) }"
+			style="margin-left:0.5rem" onclick="{! c.incluirAdicionaisTV }"></div>
+		<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-align_absolute-center clickable ' + ( v.disabledTV ? ' disableSection' : '' ) }"
+			onclick="{! c.incluirAdicionaisTV }">{! $Label.c.OFERTA_ADICIONAIS_DE_TV }</div>
+		<div class="{! 'slds-col slds-size_4-of-12 slds-border_top slds-border_bottom slds-border_right clickable ' + ( v.disabledTV ? ' disableSection' : '' ) }"
+			style="margin-right:0.5rem" onclick="{! c.incluirAdicionaisTV }">
+			<div class="down-arrow alim-icon-add">
+				<!-- <lightning:icon iconName="utility:down" size="x-small" alternativeText="Detalhar" /> -->
+			</div>
+		</div>
+	</div>
+
+	<!-- SPINNER -->
+	<aura:if isTrue="{! v.showSpinner }">
+		<div class="slds-spinner_container slds-is-fixed">
+			<div role="status" class="slds-spinner slds-spinner_medium">
+				<span class="slds-assistive-text">Loading</span>
+				<div class="slds-spinner__dot-a"></div>
+				<div class="slds-spinner__dot-b"></div>
+			</div>
+		</div>
+	</aura:if>
+<aura:if isTrue="{! v.disabled }" >
+	<!-- MODAL ADICIONAIS TV -->
+	<aura:if isTrue="{! v.showAdditionalTv }">
+		<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+			aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open" Style="position: fixed;">
+			<div class="slds-modal__container">
+				<header class="slds-modal__header" style="border-bottom:2px solid rgb(0, 157, 227)">
+					<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+						title="Close" onclick="{! c.closeAdicionalTV }">
+						<lightning:icon iconName="utility:close" alternativeText="" variant="bare" />
+						<span class="slds-assistive-text">Close</span>
+					</button>
+					<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!
+						$Label.c.OFERTA_ADICIONAIS_DE_TV }</h2>
+				</header>
+
+				<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+					<div class="slds-grid">
+						<div class="slds-col slds-size_7-of-12">
+							<div class="slds-grid" style="display:block">
+								<div class="slds-size_1-of-1" style="padding-bottom:1rem">
+									<strong>{! $Label.c.OFERTA_A_LA_CARTE }</strong>
+									<strong style="padding-left:25rem">{! $Label.c.OFERTA_PROMOCAO }</strong>
+								</div>
+								<aura:iteration items="{! v.selectedTv.addOptions.lstAdditionals }" var="additional"
+									indexVar="indexAdd">
+									<div class=" slds-col slds-size_2-of-2  check">
+										<div class=" slds-col slds-size_7-of-12  check"
+											style="display:-webkit-inline-box">
+											<!--<div class="slds-size_3-of-3 slds-p-top_small check">-->
+											<lightning:input type="checkbox" label="" name="{! indexAdd }"
+												checked="{! additional.checked }" onchange="{! c.updateAdditional }"  />
+											{! additional.label + ' - ' }
+											<lightning:formattedNumber value="{! additional.value }" style="currency"
+												currencyCode="BRL" />
+										</div>
+										<div class="slds-col slds-size_5-of-12  check">
+											<aura:if isTrue="{! not(empty(additional.lstPromotions)) }">
+												<aura:if isTrue="{! additional.lstPromotions[0].discount > 0 }">
+													<select class="slds-select custom-combobox" value="" disabled="{! additional.disabled }"
+														onchange="{! c.updatePromoAdd }" id="{! v.nameAdd }" 
+														selected="{! empty(additional.promoSelected) }">
+														<option value="{! indexAdd + '#' }"
+															selected="{! empty(additional.promoSelected) }"></option>
+														<aura:iteration items="{! additional.lstPromotions }" var="pro"
+															indexVar="indexPromo">
+															<option value="{! indexAdd + '#' + indexPromo }"
+																selected="{! equals(indexPromo + '', additional.promoSelected) }">
+																{! pro.label }</option>
+														</aura:iteration>
+													</select>
+												</aura:if>
+											</aura:if>
+										</div>
+									</div>
+								</aura:iteration>
+							</div>
+						</div>
+
+						<div class="slds-col slds-size_5-of-12" style="margin-right:1rem">
+							<div class="slds-box" style="margin-top:2rem;display:inline-grid;width:90%">
+								<div style="padding-bottom:1rem"><strong>{! $Label.c.OFERTA_TECNOLOGIA }</strong></div>
+								<div style="display:-webkit-inline-box">
+									<lightning:input type="checkbox" name="4k"
+										checked="{! v.selectedTv.addOptions.fourKTechnology.checked }"
+										onchange="{! c.validateTechnology }"
+										disabled="{! or(v.selectedTv.addOptions.recordTechnology.checked, v.selectedTv.addOptions.fourKTechnology.disabled)  }" />
+									{! v.selectedTv.addOptions.fourKTechnology.label }
+									<!--<lightning:formattedNumber value="{! v.tv.addOptions.fourKTechnology.value }" style="currency" currencyCode="BRL" />-->
+								</div>
+								<div style="display:-webkit-inline-box">
+									<lightning:input type="checkbox" name="record"
+										checked="{! v.selectedTv.addOptions.recordTechnology.checked }"
+										onchange="{! c.validateTechnology }"
+										disabled="{! or(v.selectedTv.addOptions.fourKTechnology.checked, v.selectedTv.addOptions.recordTechnology.disabled) }" />
+									{! v.selectedTv.addOptions.recordTechnology.label }
+									<!--<lightning:formattedNumber value="{! v.tv.addOptions.recordTechnology.value }" style="currency" currencyCode="BRL" />-->
+								</div>
+								
+							</div>
+
+							<div class="slds-box" style="margin-top:1rem;width:90%">
+								<div style="padding-bottom:1rem"><strong>{! $Label.c.OFERTA_PONTO_OPCIONAL }</strong>
+								</div>
+								<div class="slds-grid slds-wrap">
+
+									<!-- 1° -->
+									<div class="slds-col slds-size_1-of-12" style="width:5%">1°</div>
+									<div class="slds-col slds-size_1-of-12" style="width:10%">
+										<lightning:input type="checkbox" label="" name="1"
+											checked="{! v.selectedTv.addOptions.firstPoint.checked }"
+											onchange="{! c.addPoint }"
+											disabled="{! v.disableCheckbox.first }" />
+									</div>
+
+									<div class="slds-col slds-size_5-of-12" style="width:40%;padding-right: 1rem">
+										<select class="slds-select" style="height:20px" id="select1"
+											onchange="{! c.updateTechnology }"
+											value="{! v.selectedTv.addOptions.firstPoint.label }"
+											disabled="{! or(v.selectedTv.addOptions.firstPoint.disabled, not(v.selectedTv.addOptions.secondPoint.disabled)) }">
+											<option value="">Selecione...</option>
+											<aura:iteration items="{! v.selectedTv.addOptions.firstPoint.isAlreadyIncluded ? v.selectedTv.addOptions.lstTechnology : v.selectedTv.addOptions.lstTechnologyAPI }" var="tec">
+												<option value="{! tec.label }"
+													selected="{! equals(v.selectedTv.addOptions.firstPoint.label, tec.label) }">
+													{! tec.label }</option>
+											</aura:iteration>
+										</select>
+									</div>
+									<div class="slds-col slds-size_5-of-12"
+										style="width:45%;text-align: center;height:20px;border:1px solid rgb(221, 219, 218)">
+										<lightning:formattedNumber value="{! (and(v.selectedTv.addOptions.firstPoint.checked, v.selectedTv.addOptions.firstPoint.label != '') ? 
+											v.selectedTv.addOptions.firstPoint.value : '') }" style="currency" currencyCode="BRL" />
+									</div>
+
+									<!-- 2° -->
+									<div class="slds-col slds-size_1-of-12" style="width:5%">2°</div>
+									<div class="slds-col slds-size_1-of-12" style="width:10%">
+										<lightning:input type="checkbox" name="2"
+											checked="{! v.selectedTv.addOptions.secondPoint.checked }"
+											onchange="{! c.addPoint }"
+											disabled="{! v.disableCheckbox.second }" />
+									</div>
+									<div class="slds-col slds-size_5-of-12" style="width:40%;padding-right: 1rem">
+										<select class="slds-select" style="height:20px" id="select2"
+											onchange="{! c.updateTechnology }"
+											value="{! v.selectedTv.addOptions.secondPoint.label }"
+											disabled="{! or(v.selectedTv.addOptions.firstPoint.disabled, or(v.selectedTv.addOptions.secondPoint.disabled, not(v.selectedTv.addOptions.thirdPoint.disabled))) }">
+											<option value="">Selecione...</option>
+											<aura:iteration items="{! v.selectedTv.addOptions.secondPoint.isAlreadyIncluded ? v.selectedTv.addOptions.lstTechnology : v.selectedTv.addOptions.lstTechnologyAPI }" var="tec">
+												<option value="{! tec.label }"
+													selected="{! equals(v.selectedTv.addOptions.secondPoint.label, tec.label) }">
+													{! tec.label }</option>
+											</aura:iteration>
+										</select>
+									</div>
+									<div class="slds-col slds-size_5-of-12"
+										style="width:45%;text-align: center;height:20px;border:1px solid rgb(221, 219, 218)">
+										<lightning:formattedNumber value="{! (and(v.selectedTv.addOptions.secondPoint.checked, v.selectedTv.addOptions.secondPoint.label != '') ? 
+											v.selectedTv.addOptions.secondPoint.value : '') }" style="currency" currencyCode="BRL" />
+									</div>
+
+									<!-- 3° -->
+									<div class="slds-size_1-of-12" style="width:5%">3°</div>
+									<div class="slds-size_1-of-12" style="width:10%">
+										<lightning:input type="checkbox" name="3"
+											checked="{! v.selectedTv.addOptions.thirdPoint.checked }"
+											onchange="{! c.addPoint }"
+											disabled="{! v.disableCheckbox.third }" />
+									</div>
+									<div class="slds-size_5-of-12" style="width:40%;padding-right: 1rem">
+										<select class="slds-select" style="height:20px" id="select3"
+											onchange="{! c.updateTechnology }"
+											value="{! v.selectedTv.addOptions.thirdPoint.label }"
+											disabled="{! or(v.selectedTv.addOptions.secondPoint.disabled, or(v.selectedTv.addOptions.thirdPoint.disabled, not(v.selectedTv.addOptions.fourthPoint.disabled))) }">
+											<option value="">Selecione...</option>
+											<aura:iteration items="{! v.selectedTv.addOptions.thirdPoint.isAlreadyIncluded ? v.selectedTv.addOptions.lstTechnology : v.selectedTv.addOptions.lstTechnologyAPI }" var="tec">
+												<option value="{! tec.label }"
+													selected="{! equals(v.selectedTv.addOptions.thirdPoint.label, tec.label) }">
+													{! tec.label }</option>
+											</aura:iteration>
+										</select>
+									</div>
+									<div class="slds-size_5-of-12"
+										style="width:45%;text-align: center;height:20px;border:1px solid rgb(221, 219, 218)">
+										<lightning:formattedNumber value="{! (and(v.selectedTv.addOptions.thirdPoint.checked, v.selectedTv.addOptions.thirdPoint.label != '') ? 
+											v.selectedTv.addOptions.thirdPoint.value : '') }" style="currency" currencyCode="BRL" />
+									</div>
+
+									<!-- 4° -->
+									<div class="slds-size_1-of-12" style="width:5%">4°</div>
+									<div class="slds-size_1-of-12" style="width:10%">
+										<lightning:input type="checkbox" name="4"
+											checked="{! v.selectedTv.addOptions.fourthPoint.checked }"
+											onchange="{! c.addPoint }"
+											disabled="{! v.disableCheckbox.fourth }" />
+									</div>
+									<div class="slds-size_5-of-12" style="width:40%;padding-right: 1rem">
+										<select class="slds-select" style="height:20px" id="select4"
+											onchange="{! c.updateTechnology }"
+											value="{! v.selectedTv.addOptions.fourthPoint.label }"
+											disabled="{! or(v.selectedTv.addOptions.thirdPoint.disabled, v.selectedTv.addOptions.fourthPoint.disabled) }">
+											<option value="">Selecione...</option>
+											<aura:iteration items="{! v.selectedTv.addOptions.fourthPoint.isAlreadyIncluded ? v.selectedTv.addOptions.lstTechnology : v.selectedTv.addOptions.lstTechnologyAPI }" var="tec">
+												<option value="{! tec.label }"
+													selected="{! equals(v.selectedTv.addOptions.fourthPoint.label, tec.label) }">
+													{! tec.label }</option>
+											</aura:iteration>
+										</select>
+									</div>
+									<div class="slds-size_5-of-12"
+										style="width:45%;text-align: center;height:20px;border:1px solid rgb(221, 219, 218)">
+										<lightning:formattedNumber value="{! (and(v.selectedTv.addOptions.fourthPoint.checked, v.selectedTv.addOptions.fourthPoint.label != '') ? 
+											v.selectedTv.addOptions.fourthPoint.value : '') }" style="currency" currencyCode="BRL" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<footer class="slds-modal__footer" style="border-top:2px solid rgb(0, 157, 227)">
+					<button class="slds-button slds-button_brand"
+						onclick="{! c.handleUpdateAdditionalClick }">Atualizar</button>
+				</footer>
+			</div>
+		</section>
+		<div class="slds-backdrop slds-backdrop_open" Style="position: fixed;" ></div>
+</aura:if>
+	</aura:if>
+</aura:component>

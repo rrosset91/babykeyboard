@@ -1,0 +1,51 @@
+<aura:component implements="force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="showPopOver" type="Boolean" default="false" />
+    <aura:attribute name="CEMComponentTitle" type="String" />
+    <aura:attribute name="popOverValue" type="String" />
+
+    <aura:attribute name="voicePopOver" type="Boolean" default="false" />
+    <aura:attribute name="smsPopOver" type="Boolean" default="false" />
+    <aura:attribute name="dataPopOver" type="Boolean" default="false" />
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="emptyData" type="Boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" default="Mensagem de erro dinâmica que exibe qual erro foi gerado na tentativa de trazer os dados"/>
+
+    <div class="slds-border_top slds-m-bottom_medium"></div>    
+    <lightning:overlayLibrary aura:id="overlayLib"/>    
+
+    <aura:if isTrue="{!(v.emptyData)}">
+        <div class="slds-grid slds-align_absolute-center slds-p-horizontal_large">
+            {!v.errorMessage}
+        </div>
+        <aura:set attribute="else">
+            <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-m-bottom_medium">
+                    <div class="slds-text-heading_small">{!v.CEMComponentTitle}</div>
+                </div>
+                <div class="slds-col slds-size_4-of-10">
+                    <lightning:icon size="small" iconName="utility:smiley_and_people" variant="success"/>
+                </div>
+                <div class="slds-col slds-size_4-of-10">
+                    <div onmouseover="{!c.handleShowPopover}" class="voice slds-m-left_x-small slds-text-title_bold" id="voice" data-value="90">Sinal de voz</div>
+                </div>       
+            </div>
+            <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                <div class="slds-col slds-size_4-of-10">
+                    <lightning:icon size="small" iconName="utility:sentiment_neutral" variant="warning"/>
+                </div>
+                <div class="slds-col slds-size_4-of-10">
+                    <div onmouseover="{!c.handleShowPopover}" class="sms slds-m-left_x-small slds-text-title_bold" id="sms" data-value="55">Sinal de Dados</div>
+                </div>          
+            </div>
+            <div class="slds-grid slds-wrap slds-m-bottom_medium">
+                <div class="slds-col slds-size_4-of-10">
+                    <lightning:icon size="small" iconName="utility:sentiment_negative" variant="error"/>
+                </div>
+                <div class="slds-col slds-size_4-of-10">
+                    <div onmouseover="{!c.handleShowPopover}" class="data slds-m-left_x-small slds-text-title_bold" id="data" data-value="30">Sinal de SMS</div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

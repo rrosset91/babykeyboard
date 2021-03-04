@@ -1,0 +1,73 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 11-26-2020
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   11-10-2020   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<aura:component controller="Solar_Cross_OutageResidential">
+
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="sortDirection" type="String" default="asc" />
+    <aura:attribute name="defaultSortDirection" type="String" default="asc" />
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="sortedBy" type="String" />
+    <aura:attribute name="messageError" type="String" />
+    <aura:attribute name="openModal" type="Boolean" />
+    <aura:attribute name="showSpinner" type="Boolean" />
+    <aura:attribute name="hasError" type="Boolean" />
+    <aura:attribute name="minimunDateFinish" type="date"/>
+    <aura:attribute name="maximumDateFinish" type="date"/>
+    <aura:attribute name="allOutages" type="Solar_Cross_OutageResidential.DataFields[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    
+    <div class="slds-modal slds-fade-in-open slds-modal_large" onkeyup="{!c.closeWithEsc}">
+        <div class="slds-modal__container" onkeyup="{!c.closeWithEsc}">
+            <div style="float:right;">
+                <lightning:buttonIcon iconName="utility:close" alternativeText="Close" title="Close" variant="bare-inverse" onclick="{!c.closeModal}" class="slds-float_right"/>
+            </div>
+            <div class="slds-modal__header">
+                <h2 class="title slds-text-heading--medium">Qualidade de Serviço</h2>
+            </div>
+                <div class="slds-modal__content slds-p-around--medium">
+                    <div class="slds-grid">
+                        <div class='slds-size_1-of-6 custom-text'>
+                            <lightning:input name="dataInicio" label="Data ínicio" type="date" style="margin-right:20px;"  onchange="{!c.onChangeMinDate}" aura:id="startDate" messageWhenBadInput='Uma data mínima precisa ser escolhida'/>
+                        </div>
+                        <div class='slds-size_1-of-6 custom-text'>
+                            <lightning:input name="dataFim" label="Data fim" type="date" style="margin-right:20px;" min="{!v.minimunDateFinish}" max="{!v.maximumDateFinish}" aura:id="endDate" disabled="{! empty(v.minimunDateFinish)}" required="true" messageWhenBadInput='Uma data máxima precisa ser escolhida' />
+                        </div>
+                        <div class='slds-size_1-of-6 slds-m-top_large'>
+                            <lightning:button name="Filtrar" label="Filtrar" onclick="{!c.handleFiltro}" variant="brand" />
+                        </div>
+                    </div>
+                    <div class="slds-m-top_medium slds-m-bottom_x-large">
+                    <aura:if isTrue="{!v.showSpinner}">
+                    <lightning:spinner alternativeText="Carregando..." size="medium" variant="brand"/>
+                        <aura:set attribute="else">
+                            <h3>{!v.messageError}</h3>
+                            <aura:if isTrue="{!v.hasError}">
+                                <aura:set attribute="else">
+                                    <lightning:datatable 	keyField="id"
+                                    columns="{!v.columns }"
+                                    data="{!v.allOutages}"
+                                    hideCheckboxColumn="true"
+                                    sortedDirection="{!v.sortDirection}"
+                                    defaultSortDirection="{!v.defaultSortDirection}"
+                                    sortedBy = "{!v.sortedBy}"
+                                    onsort="{!c.handleSort}"
+                                    wrapTextMaxLines="4"                                       
+                                    />
+                                </aura:set>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

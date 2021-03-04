@@ -1,0 +1,84 @@
+<!--
+  @description       : 
+  @author            : Roger Rosset
+  @group             : 
+  @last modified on  : 18-02-2021
+  @last modified by  : Roger Rosset
+  Modifications Log 
+  Ver   Date         Author            Modification
+  1.0   09-02-2021   Roger Rosset   Initial Version
+-->
+<template>
+	<template if:true={uiProperties.generalUi.isLoading}>
+		<lightning-spinner alternative-text="Carregando" size="large"></lightning-spinner>
+	</template>
+	<template if:true={uiProperties.generalUi.hasError}>
+		<c-solar-exception-content show-error="true" error-message="As faturas selecionadas não possuem todos os dados necessários para comparação"></c-solar-exception-content>
+	</template>
+	<template if:true={uiProperties.generalUi.show}>
+		<div style="background-color: white">
+			<div class="custom-header">Análise de Faturas</div>
+		</div>
+		<div class="invoices-resume">
+			<!-- <lightning-layout> -->
+			<div class="invoices-wrapper">
+				<div class="cards-wrapper">
+					<div class="card-recent">
+						<div class="container">
+							<h6 class="card-infos recent title"><b>Fatura mais recente</b></h6>
+							<h2 class="card-infos recent month">
+								<b><u>{newerMonth}</u></b>
+							</h2>
+							<p class="value card-infos recent"><lightning-formatted-number value={newerValue} format-style="currency" currency-code="BRL"> </lightning-formatted-number></p>
+						</div>
+					</div>
+					<div class="card-older">
+						<div class="container">
+							<h6 class="card-infos older title"><b>Fatura mais antiga</b></h6>
+							<h2 class="card-infos older month">
+								<b><u>{olderMonth}</u></b>
+							</h2>
+							<p class="value card-infos older"><lightning-formatted-number value={olderValue} format-style="currency" currency-code="BRL"> </lightning-formatted-number></p>
+						</div>
+					</div>
+				</div>
+				<div class="card-resume">
+					<div class="container">
+						<h5 class="card-infos recent title-resume"><b>Diferença de valor</b></h5>
+						<h3 class="card-infos recent month-resume">
+							<b><u>{monthYearNewer} - {monthYearOlder}</u></b>
+						</h3>
+						<p data-id="value-resume" class="value-resume">{valueSummaryChange}<lightning-formatted-number value={invoicesDifference} format-style="currency" currency-code="BRL"> </lightning-formatted-number></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="background-color: white" class="datatable">
+			<div class="custom-header subtitle">Comparação de itens entre faturas</div>
+		</div>
+		<div class="datatable">
+			<c-solar-automatic-details-analysis columns={columns.details} comparison-data={baseAttributes} operator-code={operatorCode} contract-number={contractNumber} oldest-invoice-number={olderInvoiceNumber} newer-invoice-number={newerInvoiceNumber}></c-solar-automatic-details-analysis>
+		</div>
+		<div class="resumed-totals">
+			<div class="totals">
+				<div class="container">
+					<h5 class="card-infos recent title-resume"><b>Diferença de valor</b></h5>
+					<p data-id="value-resume" class="value-resume">{valueSummaryChange}<lightning-formatted-number value={invoicesDifference} format-style="currency" currency-code="BRL"> </lightning-formatted-number></p>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<div style="background-color: white" class="datatable">
+		<div class="custom-header subtitle">Eventos ocorridos recentemente</div>
+	</div>
+
+	<!-- DATATABLE COMPARAÇÀO ENTRE EVENTOS -->
+	<div class="datatable">
+		<c-solar-automatic-event-analysis columns={columns.events} base-attributes={baseAttributes}></c-solar-automatic-event-analysis>
+	</div>
+
+	<div class="datatable">
+		<lightning-button variant="brand" label="Voltar" onclick={handleBackComparison}></lightning-button>
+	</div>
+</template>

@@ -1,0 +1,92 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 01/08/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 9] + [Componente de login]
+
+* Controle de Versão
+* ---------------------------------------------------------------
+* Data: 01/08/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: [US 19333 - Solicitar ramal avaya]: Criação da estrutura do componente
+* ---------------------------------------------------------------
+* Data: 11/12/2019
+* Autor: Diego Lima - Deloitte
+* Alterações: Mudança do frontend para adequação na nova identidade visual do softphone
+-->
+
+
+<apex:component >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_LoginPage/css/pageStyle.css')}"/>
+  
+    <script>
+    
+        $(document).ready(function(){
+            $("#numero-ramal").on('input', function (event) { 
+                this.value = this.value.replace(/[^0-9]/g, '');
+                var value = $("#numero-ramal").val();
+                if(value.length > 0)
+                {
+                    $("button").removeClass("cti-button-grey");
+                    $("button").addClass("cti-button-blue");
+                }
+                else
+                {
+                    $("button").removeClass("cti-button-blue");
+                    $("button").addClass("cti-button-grey");
+                }
+            });
+            
+            $('#numero-ramal').keypress(function (e) {                                       
+                if (e.which == 13) {
+                    e.preventDefault();
+                    sendDataDriver();
+                }
+            });
+            
+            var theSpan = document.querySelector('span[id^="org.ajax4jsf.oncomplete"]');
+            if (theSpan){
+                theSpan.style = 'display:none';
+                console.log('entrou no span');
+            }
+        });
+    
+    </script>
+    
+    <div class="general-content side-padding" id="loginPageComponent">
+        
+        <div class="slds-grid">
+            <div class="slds-col slds-size_12-of-12 login-header text-center">
+                <img src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/login-fora-da-rede.svg')}"/>
+                <br/>       
+                <h1>Login de usuário</h1>
+            </div>
+        </div>
+        
+        <div class="slds-grid">
+            <div class="slds-col slds-size_12-of-12 login">
+                <div class="slds-form-element">
+                    <div class="slds-form-element__control">   
+                        
+                        <div class="login-form slds-col slds-size_12-of-12">       
+                            <div class="ramal">
+                                <label>Ramal</label>
+                                <input type='text' autocomplete="off" id="numero-ramal" class="slds-input login-inputs ramal division-input"/>
+                            </div>
+                            
+                            <div class="error-messages"></div>
+                            
+                            <div class="button-sign">
+                                <button type="button" class="cti-button-red" onclick="sendDataDriver();" reRender="none" id="submit">Entrar</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="driver-datas display-none">
+            Modo de depuração - Pressione CTRL + ALT + B para fechar
+            <div id="messages"></div>
+        </div>  
+    </div>
+</apex:component>

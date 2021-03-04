@@ -1,0 +1,138 @@
+<aura:component controller="CEC_360_OcurrencesController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="contractNumber" type="String"/>
+    <aura:attribute name="startDate" type="String"/>
+    <aura:attribute name="endDate" type="String"/>
+    <aura:attribute name="maxDate" type="String"/>
+    <aura:attribute name="minDate" type="String"/>
+    <aura:attribute name="options" type="List"/>
+    <aura:attribute name="isDate"  type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isCheck" type="Boolean" default="true"/>
+    <aura:attribute name="showTable" type="Boolean" default="false"/>
+    <aura:attribute name="ordersItem" type="List"/>
+    <aura:attribute name="enableSearch" type="Boolean" default="true"/>
+    <aura:attribute name="isSearching" type="Boolean" default="false"/>
+    <aura:attribute name="disableContracts" type="Boolean" default="false"/>
+    
+    <div class="slds-box slds-theme_default">
+        <div class="slds-text-heading_medium">Ocorrências</div>
+        <div class="slds-grid slds-gutters">
+            
+            
+            <div class ="slds-col slds-size_3-of-12">
+                <lightning:combobox label ="Contrato" disabled="{!v.disableContracts}" aura:id="cmbContract" value="{!v.contractNumber}" 
+                                    onchange="{!c.enableSearch}" placeholder="Selecione um contrato"
+                                    />
+            </div>
+            
+            <div class="slds-col  slds-size_3-of-12">
+                <lightning:input aura:id="startDate" label="Data início" type="date" value="{!v.startDate}" max="{!v.maxDate}"
+                                 messageWhenBadInput="Data inválida." disabled="{!v.isDate}"
+                                 />
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning:input aura:id="startDate" label="Data fim" type="date" value="{!v.endDate}" max="{!v.maxDate}" 
+                                 messageWhenBadInput="Data inválida."  disabled="{!v.isDate}" />
+            </div>
+            
+            
+            <div class="slds-col slds-size_3-of-12">
+              <div class="slds-text-body_regular slds-p-left_none slds-p-top_large slds-float_left">
+                    <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                      disabled="{!v.enableSearch}" onclick="{!c.getOrders}" >
+                    </lightning:button>
+                </div>
+            </div>
+            
+            
+        </div> 
+        
+        
+        
+        <aura:if isTrue="{!v.isSearching}">
+            <lightning:spinner alternativeText="Loading" size="medium" />
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showTable}">
+            <div class="slds-p-top_small">
+                <table class="slds-table slds-table_fixed-layout">
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th style="width: 140px;">Número</th>
+                            <th style="width: 140px;">Status</th>
+                            <th style="width: 130px;">Aberta por</th>
+                            <th style="width: 150px;">Data de Criação</th>
+                            <th style="width: 150px;" >Data de Resolução</th>
+                            <th style="width: 120px;">Desc. Origem</th>
+                            <th><lightning:icon iconName="utility:search" size="x-small" /></th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody >
+                        <aura:iteration items="{!v.ordersItem}" var="order"  indexVar="orderIndex">
+                            
+                            <tr>
+                                <td>{!order.number_Z}</td>
+                                <td>{!order.status}</td>
+                                <td>{!order.name}</td>
+                                <td>{!order.creationDate}</td>
+                                <td>{!order.resolutionDate}</td>
+                                <td> <p class="slds-truncate" title="{!order.areaOrigin}">
+                                    {!order.areaOrigin}</p></td>
+                                <td><lightning:buttonIcon value="{!orderIndex}" onclick="{!c.expandDetails}" iconName="{!order.showDetails?'utility:chevrondown':'utility:chevronright'}"/>
+                                </td>
+                            </tr>
+                            
+                            <aura:if isTrue="{!order.showDetails}">
+                                
+                                <tr class="slds-border_top">
+                                    
+                                    <td>
+                                        <div class="slds-text-title">Protocolo</div>
+                                        <b>{!order.protocolNumber}</b>
+                                        
+                                    </td>
+                                    <td>
+                                        <div class="slds-text-title">Desc.grupo ocorrência</div>
+                                        <p class="slds-truncate" title="{!order.groupTypeDescription}"> 
+                                            {!order.groupTypeDescription}</p>
+                                    </td>
+                                     <td>    
+                                        <div class="slds-text-title">Desc.tipo </div>
+                                        <p class="slds-truncate" title="{!order.description}">{!order.description}</p>
+                                    </td>
+                                    <td>    
+                                        <div class="slds-text-title">Desc.tipo resolução</div>
+                                        <p class="slds-truncate" title="{!order.typeDescription}">{!order.typeDescription}</p>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr class="slds-border_bottom">
+                                    <td>    
+                                        <div class="slds-text-title">Observações:</div>
+                                        <p class="slds-truncate" title="{!order.note}"> {!order.note}</p>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    
+                                </tr>
+                            </aura:if>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+            
+        </aura:if>
+    </div>
+    
+    
+</aura:component>

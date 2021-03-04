@@ -1,0 +1,60 @@
+<aura:component>
+	<aura:attribute name="showFirst" type="Boolean" default="false" />
+	<aura:attribute name="showSecond" type="Boolean" default="false" />
+	<aura:attribute name="showBtnPDF" type="Boolean" default="false" />
+	<aura:attribute name="showCompare" type="Boolean" default="false" />
+	<aura:attribute name="showCompareHelp" type="Boolean" default="false" />
+	<aura:attribute name="compareHelp" type="String" />
+	<aura:attribute name="disabledFirst" type="Boolean" default="false" />
+	<aura:attribute name="disabledCompare" type="Boolean" default="false" />
+	<aura:attribute name="disabledSecond" type="Boolean" default="false" />
+	<aura:attribute name="disabledPDF" type="Boolean" default="false" />
+	<aura:attribute name="labelFirst" type="String" default="Voltar" />
+	<aura:attribute name="labelSecond" type="String" default="Próximo" />
+	<aura:attribute name="labelPDF" type="String" />
+	<aura:attribute name="onClickFirst" type="Aura.Action" />
+	<aura:attribute name="onClickSecond" type="Aura.Action" />
+	<aura:attribute name="onClickPDF" type="Aura.Action" />
+	<aura:attribute name="onClickCompare" type="Aura.Action" />
+
+	<div>
+		<aura:if isTrue="{!v.showFirst}">
+			<span id="first-button">
+				<lightning:button aura:id="first-button" disabled="{!v.disabledFirst}" label="{!v.labelFirst}" onclick="{!c.onClickFirst}" class="generate-bill" />
+			</span>
+		</aura:if>
+	</div>
+
+	<div>
+		<lightning:layout horizontalAlign="space">
+			<aura:if isTrue="{!v.showBtnPDF}">
+				<lightning:layoutItem padding="around-small">
+					<span id="showPDF-Button" class="Btn-PDF">
+						<lightning:button aura:id="showPDF-Button" disabled="{!v.disabledFirst}" variant="neutral" label="{!$Label.c.Fin_DetalhesFatura_VisualizarFaturasVisaoCliente}" onclick="{!c.showPDF}" class="generate-bill" />
+					</span>
+				</lightning:layoutItem>
+			</aura:if>
+
+			<!-- SPRINT 6 - AJUSTES PARA OCMPORTAMENTOS DO BOTAO DE ANALISE DE FATURAS US 111623-->
+			<aura:if isTrue="{!v.showCompare}">
+				<lightning:layoutItem padding="around-small">
+					<span id="second-button">
+						<lightning:button aura:id="compare-button" disabled="{!v.disabledCompare}" variant="brand" label="Exibir Análise" onclick="{!c.onClickCompare}" class="" />
+						<aura:if isTrue="{!v.showCompareHelp}">
+							<lightning:helptext content="{!v.compareHelp}"></lightning:helptext>
+						</aura:if>
+					</span>
+				</lightning:layoutItem>
+			</aura:if>
+			<!-- SPRINT 6 - AJUSTES PARA OCMPORTAMENTOS DO BOTAO DE ANALISE DE FATURAS FIM ALTERACAO US 111623-->
+
+			<aura:if isTrue="{!v.showSecond}">
+				<lightning:layoutItem padding="around-small">
+					<span id="second-button">
+						<lightning:button aura:id="second-button" disabled="{!v.disabledSecond}" variant="brand" label="{!v.labelSecond}" onclick="{!c.onClickSecond}" class="" />
+					</span>
+				</lightning:layoutItem>
+			</aura:if>
+		</lightning:layout>
+	</div>
+</aura:component>

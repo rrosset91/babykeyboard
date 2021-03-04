@@ -1,0 +1,16 @@
+<!-- CEC_PME_EmbeddedSignatureSystem  -->
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId" access="global">
+
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+    <lightning:button label="Voltar" onclick="{!c.closeFocusedTab}"/>
+
+    <aura:attribute name="url" type="String" access="GLOBAL" />
+
+    <iframe 
+        src="{!v.url}"
+        width="100%"
+        height="100%"
+    />
+
+</aura:component>

@@ -1,0 +1,365 @@
+{
+    "envelopeTemplateDefinition": {
+        "templateId": "935bb54b-16e4-40de-9f4b-caf8bfb20a9c",
+        "name": "Teste Modelado AACE",
+        "shared": "true",
+        "password": "",
+        "description": "",
+        "created": "2019-05-28T20:47:23.4300000Z",
+        "lastModified": "2019-06-05T18:39:38.7270000Z",
+        "lastModifiedBy": {
+            "userName": "Claro Docusign",
+            "userId": "99f3125e-c42a-4402-b300-7d10e83d5be6",
+            "email": "clarodocusign@gmail.com",
+            "uri": "/users/99f3125e-c42a-4402-b300-7d10e83d5be6"
+        },
+        "pageCount": 1,
+        "uri": "/templates/935bb54b-16e4-40de-9f4b-caf8bfb20a9c",
+        "folderName": "Templates",
+        "folderId": "d3ade851-e3d8-4902-a299-7a0e38993669",
+        "folderUri": "/folders/d3ade851-e3d8-4902-a299-7a0e38993669",
+        "owner": {
+            "userName": "Claro Docusign",
+            "userId": "99f3125e-c42a-4402-b300-7d10e83d5be6",
+            "email": "clarodocusign@gmail.com"
+        }
+    },
+    "documents": [
+        {
+            "documentId": "31934957",
+            "uri": "/envelopes/935bb54b-16e4-40de-9f4b-caf8bfb20a9c/documents/31934957",
+            "name": "teste modelado 2.pdf",
+            "order": "1",
+            "pages": "1",
+            "display": "inline",
+            "includeInDownload": "true",
+            "signerMustAcknowledge": "no_interaction",
+            "templateLocked": "false",
+            "templateRequired": "false",
+            "documentGroup": "content"
+        }
+    ],
+    "emailSubject": "DocuSign: teste modelado 2.pdf",
+    "emailBlurb": "",
+    "signingLocation": "online",
+    "customFields": {
+        "textCustomFields": [
+            {
+                "fieldId": "10286773615",
+                "name": "##SFOrder",
+                "show": "false",
+                "required": "false",
+                "value": ""
+            },
+            {
+                "fieldId": "10286773616",
+                "name": "CNPJ",
+                "show": "true",
+                "required": "true",
+                "value": ""
+            },
+            {
+                "fieldId": "10286773617",
+                "name": "Numero do Pedido do SFDC",
+                "show": "true",
+                "required": "true",
+                "value": ""
+            },
+            {
+                "fieldId": "10286776451",
+                "name": "templateUsageRestriction",
+                "show": "false",
+                "required": "false",
+                "value": "allOptions"
+            }
+        ],
+        "listCustomFields": []
+    },
+    "autoNavigation": "true",
+    "envelopeIdStamping": "true",
+    "notification": {
+        "reminders": {
+            "reminderEnabled": "true",
+            "reminderDelay": "2",
+            "reminderFrequency": "2"
+        },
+        "expirations": {
+            "expireEnabled": "true",
+            "expireAfter": "120",
+            "expireWarn": "3"
+        }
+    },
+    "enforceSignerVisibility": "false",
+    "enableWetSign": "false",
+    "allowMarkup": "false",
+    "allowReassign": "false",
+    "recipients": {
+        "signers": [
+            {
+                "defaultRecipient": "false",
+                "tabs": {
+                    "signerAttachmentTabs": [
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 6ea46ebc-c5a9-4cd2-9547-331ca46dcdcd",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "33617475",
+                            "pageNumber": "1",
+                            "xPosition": "227",
+                            "yPosition": "233",
+                            "tabId": "a7c4461c-b243-4d76-8f4d-599fdd00c196",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 59aa656f-394a-4dd3-ac35-b861f9a50dcc",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "33617475",
+                            "pageNumber": "1",
+                            "xPosition": "347",
+                            "yPosition": "233",
+                            "tabId": "11ed93cd-5985-4382-85b5-313630dbde25",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 8fa999f9-0280-45ed-9c19-b18d890f2bc3",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "33617475",
+                            "pageNumber": "1",
+                            "xPosition": "473",
+                            "yPosition": "233",
+                            "tabId": "3dc5c3be-e726-47b7-a94f-abd029959fbc",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 06f32fd8-d0ca-4918-a340-7cf521d913e2",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "33617475",
+                            "pageNumber": "1",
+                            "xPosition": "118",
+                            "yPosition": "230",
+                            "tabId": "343d8484-8f39-480f-9b21-fca9bf2c7771",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        }
+                    ]
+                },
+                "signInEachLocation": "false",
+                "agentCanEditEmail": "false",
+                "agentCanEditName": "false",
+                "name": "",
+                "email": "",
+                "recipientId": "33617475",
+                "recipientIdGuid": "00000000-0000-0000-0000-000000000000",
+                "accessCode": "",
+                "requireIdLookup": "false",
+                "routingOrder": "1",
+                "note": "",
+                "roleName": "BackOffice",
+                "deliveryMethod": "email",
+                "templateLocked": "false",
+                "templateRequired": "false",
+                "inheritEmailNotificationConfiguration": "false"
+            },
+            {
+                "defaultRecipient": "false",
+                "tabs": {
+                    "signerAttachmentTabs": [
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 8af78710-6abd-43cb-b76c-84e922157199",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "75648742",
+                            "pageNumber": "1",
+                            "xPosition": "117",
+                            "yPosition": "123",
+                            "tabId": "bc054dc1-c9bb-4f58-81fd-f159454cc5a7",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 95cd22d0-4498-4c73-a8ab-82b8e443ed77",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "75648742",
+                            "pageNumber": "1",
+                            "xPosition": "225",
+                            "yPosition": "122",
+                            "tabId": "3c8a809d-b9ff-4d18-b23d-00d30f23af9d",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo bcc48821-6238-46f5-ab22-d7cd1f14786e",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "75648742",
+                            "pageNumber": "1",
+                            "xPosition": "353",
+                            "yPosition": "120",
+                            "tabId": "0959a84a-55a0-481e-9902-d1ceac682eda",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 977bc469-404c-41a3-9fc4-ffafa993cd3c",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "75648742",
+                            "pageNumber": "1",
+                            "xPosition": "465",
+                            "yPosition": "120",
+                            "tabId": "2d0a195a-9f5a-44b9-bfa3-15fe64acbea1",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        }
+                    ]
+                },
+                "signInEachLocation": "false",
+                "agentCanEditEmail": "false",
+                "agentCanEditName": "false",
+                "name": "",
+                "email": "",
+                "recipientId": "75648742",
+                "recipientIdGuid": "00000000-0000-0000-0000-000000000000",
+                "accessCode": "",
+                "requireIdLookup": "false",
+                "routingOrder": "1",
+                "note": "",
+                "roleName": "cliente",
+                "deliveryMethod": "email",
+                "templateLocked": "false",
+                "templateRequired": "false",
+                "inheritEmailNotificationConfiguration": "false"
+            },
+            {
+                "defaultRecipient": "false",
+                "signInEachLocation": "false",
+                "agentCanEditEmail": "false",
+                "agentCanEditName": "false",
+                "name": "Fake User",
+                "email": "claro.docusign.fake.user@gmail.com",
+                "recipientId": "81126484",
+                "recipientIdGuid": "00000000-0000-0000-0000-000000000000",
+                "accessCode": "",
+                "requireIdLookup": "false",
+                "routingOrder": "1",
+                "note": "",
+                "roleName": "Fake User",
+                "deliveryMethod": "email",
+                "templateLocked": "false",
+                "templateRequired": "false",
+                "inheritEmailNotificationConfiguration": "false"
+            },
+            {
+                "defaultRecipient": "false",
+                "tabs": {
+                    "signerAttachmentTabs": [
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 4f0cedcb-b4af-4b49-87c5-c52df5590359",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "79402296",
+                            "pageNumber": "1",
+                            "xPosition": "113",
+                            "yPosition": "327",
+                            "tabId": "ce5cb5b3-47bd-424a-a50f-244342f3b278",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 006feb9a-05fd-48a6-bd80-ecf27fa2979e",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "79402296",
+                            "pageNumber": "1",
+                            "xPosition": "226",
+                            "yPosition": "322",
+                            "tabId": "0aa78b3d-5d87-41dd-95af-dc82c594c530",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 4d7fe61e-e3bd-49bf-bb89-c4a47ce80722",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "79402296",
+                            "pageNumber": "1",
+                            "xPosition": "347",
+                            "yPosition": "323",
+                            "tabId": "c4e5db4d-dfeb-4bbf-953f-19c2c8389bed",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        },
+                        {
+                            "name": "SignerAttachment",
+                            "tabLabel": "Anexo 29024938-5391-47dd-9264-146ebee463bb",
+                            "scaleValue": 1,
+                            "optional": "true",
+                            "documentId": "31934957",
+                            "recipientId": "79402296",
+                            "pageNumber": "1",
+                            "xPosition": "473",
+                            "yPosition": "324",
+                            "tabId": "040939c4-fc89-44fb-a168-53fd57946c1f",
+                            "templateLocked": "false",
+                            "templateRequired": "false"
+                        }
+                    ]
+                },
+                "signInEachLocation": "false",
+                "agentCanEditEmail": "false",
+                "agentCanEditName": "false",
+                "name": "",
+                "email": "",
+                "recipientId": "79402296",
+                "recipientIdGuid": "00000000-0000-0000-0000-000000000000",
+                "accessCode": "",
+                "requireIdLookup": "false",
+                "routingOrder": "1",
+                "note": "",
+                "roleName": "Vendededor",
+                "deliveryMethod": "email",
+                "templateLocked": "false",
+                "templateRequired": "false",
+                "inheritEmailNotificationConfiguration": "false"
+            }
+        ],
+        "agents": [],
+        "editors": [],
+        "intermediaries": [],
+        "carbonCopies": [],
+        "certifiedDeliveries": [],
+        "inPersonSigners": [],
+        "seals": [],
+        "witnesses": [],
+        "recipientCount": "4"
+    }
+}

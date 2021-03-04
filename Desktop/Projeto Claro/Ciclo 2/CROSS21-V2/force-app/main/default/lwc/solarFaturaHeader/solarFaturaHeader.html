@@ -1,0 +1,112 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+
+  @last modified on  : 12-11-2020
+  @last modified by  : Diego Almeida
+
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   30-10-2020   Joao Neves   Initial Version
+-->
+<template>
+	<div style="margin-left: 10px; margin-right: 10px">
+
+		<template if:false={layoutn2}>
+			<h3 class="header-text">{header}</h3>
+
+		<div style="background-color: #f3f2f2">
+			<lightning-layout horizontal-align="spread">
+				<lightning-layout-item size="2" padding="around-small">
+					<div class="custom-box">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Data de Vencimento</dt>
+
+								<dd class="slds-item_detail custom-content">{vencimento}</dd>
+
+						</div>
+					</div>
+				</lightning-layout-item>
+				<lightning-layout-item size="2" padding="around-small">
+					<div class="custom-box">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Valor</dt>
+
+								<dd class="slds-item_detail custom-content">{valor}</dd>
+
+						</div>
+					</div>
+				</lightning-layout-item>
+				<lightning-layout-item size="2" padding="around-small">
+					<div class="custom-box">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Status</dt>
+
+								<dd class="slds-item_detail custom-content">{status}</dd>
+
+						</div>
+					</div>
+				</lightning-layout-item>
+				<lightning-layout-item size="2" padding="around-small">
+					<div class="custom-box">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Forma de Pagamento</dt>
+
+								<dd class="slds-item_detail custom-content">{formaPagamento}</dd>
+
+						</div>
+					</div>
+				</lightning-layout-item>
+				<lightning-layout-item size="2" padding="around-small">
+					<div class="custom-box">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Modo de Envio</dt>
+
+								<dd class="slds-item_detail custom-content">{modoEnvio}</dd>
+
+						</div>
+					</div>
+				</lightning-layout-item>
+				<lightning-layout-item size="2" padding="around-small">
+					<div class="custom-box">
+						<div>
+							<dt class="slds-item_label slds-text-color_weak">Endereço de Cobrança</dt>
+
+								<dd class="slds-item_detail custom-content">{enderecoCobranca}</dd>
+
+						</div>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+
+		</template>
+	</div>
+	<template if:true={layoutn2}>
+
+		<header>
+			<label class="slds-p-top_x-small slds-text-heading_large custom-header">Itens a contestar</label>
+			<fieldset class="headerTitle">
+				<lightning-layout class="headerN2 slds-grid slds-gutters">
+						<lightning-layout-item class="slds-p-top_small slds-col">
+							<div class="header-columnAdress">
+								<p class="field-title" title="Field 6">Número do Caso: <label class="slds-p-left_x-small valueHeader">{numerocaso}</label></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item class="slds-p-top_small slds-col">
+							<div class="header-columnAdress">
+								<p class="field-title" title="Field 6">Tipo do Caso: <label class="slds-p-left_x-small valueHeader">{tipocaso}</label></p>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item class="slds-p-top_small slds-col">
+							<div class="header-columnAdress">
+								<p class="field-title" title="Field 6">Fatura: <label class="slds-p-left_x-small valueHeader">{header}</label></p>
+							</div>
+						</lightning-layout-item>
+				</lightning-layout>
+			</fieldset>
+		</header>
+
+	</template>
+</template>

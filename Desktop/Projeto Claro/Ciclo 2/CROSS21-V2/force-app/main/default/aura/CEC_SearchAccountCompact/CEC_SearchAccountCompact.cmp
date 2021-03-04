@@ -1,0 +1,77 @@
+<!-- SearchAccount Component. 27/11 v. 3.1 -->
+<!-- Danilo Fucuhara e Leticia Freitas -->
+<!--12/12/18 -Leticia Freitas - 
+1. Alterações na formatação do campo Numero do Documento, confome a alteração no combobox.
+2. Formatação máxima de digitos para busca por CPF,CNPJ e Passaporte -->
+<!--18/12/18 - Letícia Freitas - 
+1. Inclusão dos campos Linha e Contrato para a busca -->
+
+<aura:component controller="CEC_SearchAccount" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="acctList" type="Object" />
+    <aura:attribute name="showErrors" type="boolean" default="false"/>
+    <aura:attribute name="tableCol" type="List"/>
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:attribute name="isContract" type="boolean"/>
+    <aura:attribute name="doc" type="String"/>
+    <aura:attribute name="contrato" type="String"/>
+    <aura:attribute name="msi" type="String"/>
+    <aura:attribute name="tipo" type="String"/>
+    <aura:attribute name="isTrue" type="Boolean" default="true"/>
+    <aura:attribute name="isFalse" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:navigation aura:id="navService"/>
+    
+    <div class="slds-box" style="background-color: white">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-text-title slds-p-top_small" style="font-weight: bold">BUSCAR CLIENTE POR: DOCUMENTO, LINHA e CONTRATO</div>
+            </div>
+            
+            <div class="slds-col slds-size_6-of-12">
+                <div class="slds-text-body_regular slds-p-top_small slds-float_right" style="color: #1589ee;"><a href="#" onclick="{!c.handleClick}" > Ir para busca avançada</a></div>
+            </div>
+        </div>
+        
+        <div style="border-bottom: 1px solid #dddbda; margin-top: 5px"></div>  
+        
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <div class="slds-text-title_caps slds-p-top_small slds-m-bottom_small">BUSCA POR DOCUMENTO</div>
+                <lightning:combobox aura:id="cmbDoc" placeholder="..." label='Tipo' value="{!v.tipo}" onchange="{!c.clearDocument}" />
+                <span onkeypress="{!c.keyCheck}">
+                    <lightning:input aura:id="txtDoc" label='Documento' value="{!v.doc}" onkeypress="{!c.keyHandler}" onchange="{!c.formatMask}" />
+                </span>
+                <div class="slds-p-top_large">
+                    <div class="slds-align-bottom">
+                        <lightning:button variant="brand" label="Buscar Cliente" onclick="{!c.handleClick}"/>
+                    </div> 
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-20 slds-align_absolute-center">
+                <div class="slds-text-title_caps slds-p-top_small">OU</div> 
+            </div>
+            
+            <div class ="slds-col">
+                <div class="slds-text-title_caps slds-p-top_small slds-m-bottom_small">BUSCA POR LINHA</div>
+                <span onkeypress="{!c.keyCheck}">
+                    <lightning:input aura:id="txtMSISDN" label="Linha" value="{!v.msi}" onkeypress="{!c.keyHandlerMSI}" onchange="{!c.formatMaskMSI}" /> 
+                </span>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-20 slds-align_absolute-center">
+                <div class="slds-text-title_caps slds-p-top_small">OU</div> 
+            </div>
+            
+            <div class="slds-col">
+                <div class="slds-text-title_caps slds-p-top_small slds-m-bottom_small">BUSCA POR CONTRATO</div>
+                <span onkeypress="{!c.keyCheck}">
+                	<lightning:input aura:id="txtContrato" label="Número do Contrato" value="{!v.contrato}" onkeypress="{!c.keyHandlerContrato}" onchange="{!c.formatMaskContrato}" />
+                </span>
+            </div> 
+        </div>
+    </div>
+</aura:component>

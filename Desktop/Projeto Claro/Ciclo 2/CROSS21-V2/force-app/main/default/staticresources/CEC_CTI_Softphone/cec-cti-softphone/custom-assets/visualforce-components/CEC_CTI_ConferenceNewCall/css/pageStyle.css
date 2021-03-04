@@ -1,0 +1,108 @@
+.call-new-person{
+    display: inline-flex;
+    margin-top: 10px;
+}
+
+.call-new-person div {
+    display: inline-flex;
+}
+.call-new-person .conference-icon img{
+    margin-top: 4px;
+}
+
+.conference-icon img {
+    max-width: 49px;
+    max-height: 49px;
+}
+
+.conference-icon div {
+    display: table-row;
+}
+
+.call-new-person .main-call-hold{
+    padding-top: 7px;
+}
+
+table.conference-table td:nth-child(1) {
+    text-align: center;
+}
+table.conference-table td:nth-child(2) {
+    width: 64px;
+}
+table.conference-table td:nth-child(2) img {
+    width: 49px;
+    height: 49px;
+}
+table.conference-table td:nth-child(3) {
+    width: 64px;
+    text-align: right;
+}
+table.conference-table td:nth-child(3) img {
+    width: 49px;
+    height: 49px;
+}
+table.conference-table td:nth-child(4) {
+    text-align: center;
+}
+
+table.conference-table td h2 {
+    line-height: 16px;
+}
+
+div#conferenceNewCallComp {
+    padding-top: 10px;
+}
+
+.call-new-person .main-call-hold h1{
+    color: #DA291C;
+}
+
+.call-new-person .main-call-hold h2{
+    color: #ABABAF;
+    line-height: 14px;
+    display: block;
+}
+
+.left-15 {
+    margin-left: 15px;
+}
+
+.right-15 {
+    margin-right: 15px;
+}
+
+.footer-disk-conference{
+    bottom: 0px !important;
+}
+
+.padding-footer-conference{
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+
+
+.keyboard-phone .number-structure {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    position: relative;
+}
+
+.group-keyboard{
+    border: 1px solid #dbdada;
+    border-radius: 10px;
+}
+
+.keyboard-phone{
+    border-top: none;
+    border-bottom: none;
+}
+
+#numberInputConference,
+.chamar-terceiro{
+    color: #F5842B !important;
+    padding-top: 12px;
+}
+.phone-icon-terceiro{
+    margin-bottom: 2px;
+}

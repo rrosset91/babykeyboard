@@ -1,0 +1,13 @@
+<!-- CEC_PME_NavigateToOpp -->
+<aura:component controller="CEC_PME_NavigateToOppController" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickAction" >
+	<lightning:workspaceAPI aura:id="workspace"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="oppRecord" type="Object"/>
+    <aura:attribute name="oppLiRecord" type="OpportunityLineItem[]"/>
+    <force:recordData aura:id="opp"
+    	recordId="{!v.recordId}"
+    	fields="AccountId"
+    	targetFields="{!v.oppRecord}"
+        recordUpdated="{!c.handleRecordUpdated}"
+    />
+</aura:component>

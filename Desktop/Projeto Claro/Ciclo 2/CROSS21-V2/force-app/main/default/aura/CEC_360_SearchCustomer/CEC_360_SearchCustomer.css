@@ -1,0 +1,140 @@
+.THIS .border-bottom {border-bottom:solid 1px #dbdada;}
+.THIS .title-busca {font-size:18px;color:#DA291C;font-weight: 600;}
+.THIS .slds-button-group button {border-radius: 5px 5px 0px 0px !important;border-bottom: 0px;color:#707070;}
+.THIS .custom-box  {height: 34px;line-height: 34px;padding-right: 15px;}
+.THIS .box-title-busca {padding-left: 10px;padding-right: 25px;display:inline-block;}
+.border-bottom.cCEC_360_SearchCustomer {border-bottom: solid 1px #dbdada !important;margin-bottom: 15px;}
+.THIS .box-abas {display: inline-block;}
+.THIS .documento-tipo span span {margin-right: 20px;}
+.THIS .documento-botao {margin-left: 20px;}
+.THIS .documento-botao button {width: 100px;}
+.THIS .contrato-campo-cidade {display: inline-block;width: 115px;}
+.THIS .contrato-cidade-codigo {display: inline-block;height: 34px;line-height: 34px;padding-right: 20px;color: #707070;font-size: 13px;}
+.THIS .contrato-cidade-nome {display: inline-block;padding: 0px 15px;color: #707070;font-size: 13px;font-size: 13px;}
+.THIS .contrato-cidade-campo {display: inline-block;width: 300px;}
+.THIS .contrato-campo-numero {display: inline-block;line-height: 34px;height: 34px;width: 114px;color: #707070;font-size: 13px;}
+.THIS .contrato-campo-input {display: inline-block;margin-left: 15px;margin-right: 20px;width: 200px;}
+.THIS .contrato-campo-busca {display: inline-block;}
+.THIS .contrato-campo-busca button {width: 100px;}
+.THIS .telefone-label {display: inline-block;font-size: 13px}
+.THIS .telefone-input {display: inline-block;padding-right:20px;}
+.THIS .telefone-busca {display: inline-block;}
+.THIS .telefone-busca button {width: 100px;}
+.THIS .telefone-input label.slds-form-element__label.slds-no-flex {display: none;}
+.THIS span.documento-input label.slds-form-element__label.slds-no-flex {display: none;}
+.THIS .telefone-label span {color: #707070;}
+.THIS .endereco-cidade-cod  {display: inline-block;width: 115px;margin-right: 10px;}
+.THIS .endereco-cidade-nome {display: inline-block;width: 325px;}
+.THIS .endereco-cep {display: inline-block;width: 115px;margin-right: 10px;}
+.THIS .endereco-logradouro {display: inline-block;width: 475px;}
+.THIS .endereco-nmumero {display: inline-block;width: 95px;}
+.THIS .endereco-complemento {display: inline-block;width: 130px;margin-right: 10px;}
+.THIS .endereco-buscar {display: inline-block;width: 100px;}
+.slds-grid.slds-grid_vertical-align-center.margin-bottom-10.cCEC_360_SearchCustomer {margin-bottom: 10px;}
+.THIS label.slds-form-element__label {color: #707070;}
+.THIS .endereco-buscar button {width: 100px;}
+hr.linha.cCEC_360_SearchCustomer {margin-bottom: 5px; margin: 10px 0px; color: #dddbda;}
+.THIS .nome-nome {display: inline-block;padding-right: 20px;}
+.THIS .nome-input {display: inline-block;width: 390px;padding-right: 20px;}
+.THIS .nome-busca {display: inline-block;width: 100px;}
+.THIS .nome-busca button {width: 100px;}
+.THIS button.slds-button.slds-button_neutral.aba-selecionada {color: #da291c;}
+.THIS button.dropbtn {color:#707070;padding: 10px;font-size: 14px;border: solid 1px #dbdada;width: 100%;background: #ffffff;text-align: left;border-radius: 4px;}
+.THIS .dropdown {position: relative;display: inline-block;width: 100%}
+.THIS .dropdown-content {display: none;position: absolute;background-color: #ffffff;min-width: 100%;z-index: 1;}
+.THIS .dropdown-content a {color: #434444;padding: 12px 16px;text-decoration: none;display: block;border:solid 1px #dadada;border-bottom: 0px;}
+.THIS .dropdown-content a:hover {background-color: #f1f1f1;}
+.THIS .dropdown-content a:first-child {border-top: 0px;}
+.THIS .dropdown-content a:last-child {border-bottom: solid 1px #dbdada;}
+.THIS.dropdown:hover.THIS.dropdown-content {display: block !important;}
+.THIS .padding-right-15 {padding-right:15px;}
+
+.THIS input:hover {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS input:active {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS input:focus {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS input:focus-within {border-color: #dbdada !important;box-shadow: none !important;}
+
+.THIS .slds-input:hover {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS .slds-input:active {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS .slds-input:focus {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS .slds-input:focus-within {border-color: #dbdada !important;box-shadow: none !important;}
+
+.THIS button:hover {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS button:active {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS button:focus {border-color: #dbdada !important;box-shadow: none !important;}
+.THIS button:focus-within {border-color: #dbdada !important;box-shadow: none !important;}
+
+@media (max-width: 768px) {
+.cCEC_360_SearchCustomer button.slds-button.slds-button_neutral {font-size: 12px;font-weight: normal;height: 30px;line-height: 30px;}
+.THIS button.slds-button.slds-button_brand {background: #da291c;border: solid 1px #da291c;width: 100px;height: 34px;line-height: 34px;font-weight: normal;}
+.THIS input {line-height: 34px;height: 34px;font-size: 14px;color: #434444;}
+.slds-grid.slds-grid_vertical-align-center.bloco-768.cCEC_360_SearchCustomer {display: block;}
+.THIS .contrato-campo-numero {width: 118px;font-size: 13px;color: #707070;}
+.THIS .contrato-campo-input span label {display: none !important;}
+.THIS .contrato-campos {margin-bottom: 20px;}
+.cCEC_360_SearchCustomer .contrato-cidade-nome {display: inline-block;padding: 0px 10px 0px 0px;color: #707070;font-size: 13px;}
+.cCEC_360_SearchCustomer .contrato-campo-cidade {display: inline-block;width: calc(100% - 132px);}
+.cCEC_360_SearchCustomer .endereco-cidade-cod {display: inline-block;width: 140px;margin-right: 10px;}
+.cCEC_360_SearchCustomer .contrato-cidade-codigo {padding-right: 23px;margin-bottom: 15px;}
+.cCEC_360_SearchCustomer .endereco-cidade-nome {display: inline-block;width: calc(100% - 146px);}
+.cCEC_360_SearchCustomer .contrato-cidade-campo {display: inline-block;width: calc(100% - 133px);}
+.cCEC_360_SearchCustomer .endereco-logradouro {display: inline-block;width: calc(100% - 148px);}
+.cCEC_360_SearchCustomer .endereco-cep {display: inline-block;width: 138px;margin-right: 10px;}
+.THIS .endereco-numero.slds-p-right_small.slds-p-left_small {padding-left: 0px;width: 147px;display: inline-block;}
+.THIS .endereco-buscar div button {margin-top: -3px;}
+.THIS .documento-tipo .slds-radio {display: inline-flex;width:70px;}
+.THIS .nome-nome  span {font-size: 13px;color: #707070;}
+.THIS .nome-input span label {display: none !important;}
+.THIS .documento-tipo .slds-radio span {font-size: 13px !important;}
+.THIS .slds-radio_faux:after {background: #da291c !important;}
+.THIS .contrato-bloco-768 {width:100%;}
+.THIS .custom-box.telefone-bloco {font-size: 13px;color: #707070;}
+.THIS [aria-selected="true"] span.slds-media__body {color:#da291c;}
+.THIS svg.slds-icon.slds-icon-text-default.slds-icon_x-small {fill: #da291c;}
+.THIS lightning-base-combobox-item {border-bottom: solid 1px #dbdada;font-size: 13px;font-weight: normal;}
+.THIS lightning-combobox.slds-form-element label {display: none !important;}
+.THIS .slds-combobox__form-element.slds-input-has-icon.slds-input-has-icon_right input {font-size: 13px;}
+}
+@media (max-width: 610px) {
+.cCEC_360_SearchCustomer .nome-input {display: inline-block;width: calc(100% - 62px);padding-right: 0px;}
+.THIS .box-title-busca {width: 100%;padding-left: 0px !important;padding-bottom: 10px;}
+.cCEC_360_SearchCustomer .nome-busca {display: inline-block;width: 100px;margin-top: 10px;}
+.slds-grid.slds-grid_vertical-align-center.documento-bloco-535.cCEC_360_SearchCustomer {display: block;}
+.cCEC_360_SearchCustomer .custom-box {margin-bottom: 10px;}
+.THIS .documento-campo-input {margin-bottom: 10px;}
+.cCEC_360_SearchCustomer .documento-botao {margin-left: 0;border-top: solid 1px #dbdada;padding-top: 10px;}
+.cCEC_360_SearchCustomer .endereco-cidade-nome {display: inline-block;width: calc(100% - 150px);}
+.cCEC_360_SearchCustomer .endereco-cidade-cod {display: inline-block;width: 136px;margin-right: 10px;}
+.THIS .custom-box.telefone-bloco {width: 103px;display: inline-block;}
+.THIS .custom-box.documento-cpf-cnpj {width: 155px;display: inline-block;}
+.THIS .documento-campo-input {width: calc(100% - 155px);display: inline-block;}
+.cCEC_360_SearchCustomer .contrato-campo-busca {display: inline-block;border-top: solid 1px #dbdada;width: 100%;padding-top: 10px;margin-top: 10px;}
+.THIS .custom-box.telefone-busca {border-top: solid 1px #dbdada;width: 100%;padding-top: 10px;}
+.cCEC_360_SearchCustomer .nome-busca {border-top: solid 1px #dbdada;width: 100%;padding-top: 10px;}
+}
+            
+@media (max-width: 499px) {
+.cCEC_360_SearchCustomer .box-abas {display: block;}
+.cCEC_360_SearchCustomer .box-abas .slds-button-group {display: grid;}
+.cCEC_360_SearchCustomer .slds-button-group-list {display: grid;}
+.THIS .slds-button-group, .THIS .slds-button-group-list {display: inline-grid;width: 100%;text-align: left;align-content: normal;}
+.cCEC_360_SearchCustomer .documento-campo-input {width: 100%;}
+.cCEC_360_SearchCustomer .contrato-cidade-campo {width: 100%;}
+.cCEC_360_SearchCustomer .contrato-campo-cidade {width: 100%;}
+.cCEC_360_SearchCustomer .contrato-cidade-codigo {margin-bottom: 0px;}
+.cCEC_360_SearchCustomer .contrato-campo-input {display: inline-block;margin-left: 0px;margin-right: 0px;width: 100%;}
+.cCEC_360_SearchCustomer .contrato-campos {margin-bottom: 0px;}
+.cCEC_360_SearchCustomer .contrato-cidade-codigo {padding-right: 0px;margin-bottom: 0px;}
+.cCEC_360_SearchCustomer .custom-box {margin-bottom: 10px;width: 100%;padding-right: 0px;}
+.cCEC_360_SearchCustomer .endereco-cidade-nome {display: inline-block;width: 100%;padding-left: 0px;padding-right: 0px;}
+.cCEC_360_SearchCustomer .endereco-cidade-cod {display: inline-block;width: 100%;margin-right: 0px;}
+.cCEC_360_SearchCustomer .endereco-cep {display: inline-block;width: 100%;margin-right: 0px;}
+.cCEC_360_SearchCustomer .endereco-logradouro {display: inline-block;width: 100%;padding-left: 0px;padding-right: 0px;}
+.cCEC_360_SearchCustomer .endereco-numero.slds-p-right_small.slds-p-left_small {padding-left: 0;width: 100%;display: inline-block;padding-right: 0px;}
+.cCEC_360_SearchCustomer .endereco-complemento {display: inline-block;width: 100%;margin-right: 0px;padding-left: 0px;padding-right: 0px;margin-bottom: 15px;}
+.cCEC_360_SearchCustomer .nome-input {display: inline-block;width: 100%;padding-right: 0;}
+.cCEC_360_SearchCustomer .nome-nome {display: inline-block;padding-right: 0px;width: 100%;margin-bottom: 10px;}
+.cCEC_360_SearchCustomer .custom-box.telefone-bloco {width: 100%;display: inline-block;margin-bottom: 0px;}
+.cCEC_360_SearchCustomer .endereco-buscar {display: inline-block;width: 100%;border-top: solid 1px #dbdada !important;padding-top: 15px;}
+.border-bottom.cCEC_360_SearchCustomer {border-bottom: 0px !important;margin-bottom: 10px;}
+}

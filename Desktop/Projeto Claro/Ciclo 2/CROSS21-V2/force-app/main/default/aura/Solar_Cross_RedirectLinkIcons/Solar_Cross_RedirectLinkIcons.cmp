@@ -1,0 +1,60 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" controller="Solar_Cross_RedirectLinkController">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="icon" type="String" />
+    <aura:attribute name="options" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>   
+    <aura:attribute name="isLoading" type="Boolean" default="true"/>
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Ícone do Link</b>
+        </h1>
+    </aura:attribute>       
+    
+    <lightning:card class="" variant="narrow" title="{!v.headerTitle}" iconName="standard:solution"> 
+        <aura:set attribute="actions">
+            <lightning:button label="Editar" onclick="{!c.descriptionModal}"/>
+        </aura:set>
+        <aura:if isTrue="{!v.isLoading}">
+            <lightning:spinner alternativeText="Carregando..." size="medium" variant="brand" />
+            <aura:set attribute="else">  
+                <div class="slds-box slds-m-around_medium">   
+                    <!-- <div class="slds-m-top_medium slds-align_absolute-center"> -->
+                    <div class="slds-box slds-theme_shade">
+                        <div class="slds-text-heading_medium slds-align_absolute-center">
+                            {!v.icon} 
+                        </div>
+                    </div>           
+                    <div class="slds-m-top_medium slds-align_absolute-center">
+                        <lightning:icon iconName="{!'utility:' + v.icon}" alternativeText="Ícone" title="Ícone" size="large" />                    
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="DescriptionModal" class="slds-modal slds-modal_medium">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <lightning:buttonIcon iconName="utility:close" onclick="{!c.closeDescriptionModal}" variant="container" alternativeText="Fechar" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" />
+                <h2 id="header43" class="slds-text-heading--medium">Seleciona o ícone para o Link Útil</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="slds-align_absolute-center">
+
+                    <div class="slds-grid slds-wrap slds-m-left_large slds-m-right_large">
+                        <aura:iteration items="{!v.options}" var="item">
+                            <div class="slds-col slds-size_3-of-12 slds-m-bottom_medium">
+                                <lightning:button variant="base" label="{!item.label}" iconName="{!'utility:' + item.label}" onclick="{!c.updateIcon}" value="{!item.value}" />
+                            </div>
+                        </aura:iteration>
+                    </div>
+
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button label="Fechar" variant="brand" title="Fechar" onclick="{!c.closeDescriptionModal}" />
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop " aura:id="ModalDescription"></div>
+</aura:component>

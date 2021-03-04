@@ -1,0 +1,41 @@
+.THIS .wrap { 
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;      /* IE */
+}
+
+.THIS .selectedbackground {
+    background-color: rgb(236, 235, 234) !important;
+}
+
+.THIS .slds-dropdown-trigger .slds-dropdown {
+    z-index: 10 !important; 
+}
+
+.THIS .padding-table{
+    padding-bottom: 15rem !important;
+}
+
+.THIS .imgSize{
+    max-width: 20px;
+    min-width: 20px;
+    height: auto;
+}
+
+.THIS .all-offers{
+    width: 100%;
+    font-weight: bold;
+    border-width: 1.5px;
+}
+
+.THIS .all-offers.on{
+    color: rgb(0 0 0);
+    border-color: rgb(63 189 246);
+    background: rgb(105 206 252);
+}
+
+.THIS .all-offers.on .slds-icon-trend{
+    color: rgb(0 0 0)!important;
+}

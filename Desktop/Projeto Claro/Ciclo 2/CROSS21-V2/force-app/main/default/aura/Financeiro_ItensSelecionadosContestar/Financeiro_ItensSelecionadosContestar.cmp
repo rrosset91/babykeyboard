@@ -1,0 +1,188 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 02-04-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   02-04-2021   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<aura:component controller="InvoiceDetailsController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" extends="c:Utils">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+    <aura:attribute name="columns" type="List" />
+	<aura:attribute name="invoiceItens" type="Object[]" />
+	<aura:attribute name="selectedRows" type="List" />
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+	<aura:attribute name="draftValues" type="Object[]" default="[]"/>
+	<aura:attribute name="sortedBy" type="String"/>
+    <aura:attribute name="sortedDirection" type="String"/>
+    <aura:attribute name="defaultSortDirection" type="String"/>
+	<aura:attribute name="calcSelected" type="String"/>
+	<aura:attribute name="selectedReason" type="String"/>
+	<aura:attribute name="allValues" type="Object"/>
+	<aura:attribute name="calcValues" type="List" default="[]"/>
+    <aura:attribute name="reasonValuesOriginal" type="List" default="[]"/>
+    <aura:attribute name="reasonValues" type="List" default="[]"/>
+    <aura:attribute name="calculoDias" type="integer" default=""/>
+    <aura:attribute name="calculoPorcentagem" type="integer" default=""/>
+    <aura:attribute name="calculoTipoDias" type="Boolean" default="false"/>
+	<aura:attribute name="calculoTipoPorcentagem" type="Boolean" default="false"/>
+	<aura:attribute name="objectContext" type="Object"/>
+	<aura:attribute name="reasonContext" type="Object"/>
+	<aura:attribute name="contestationObservation" type="String"/>
+
+	<!--Status Fatura e Nível do Usuário-->
+	<aura:attribute name="invoicesStatus" type="List"/>
+	<aura:attribute name="isBackOfficeN2" type="Boolean" />
+	<aura:attribute name="disabled" type="Boolean" default="false" />
+	
+	<!--Modal Message-->
+	<aura:attribute name="dialogModal" type="Boolean" />
+	<aura:attribute name="avisoModal" type="Boolean" />
+	<aura:attribute name="titleMessage" type="string" default="Título" />
+	<aura:attribute name="typeIcon" type="string" default="utility:success" />
+	<aura:attribute name="typeIconWarning" type="string" default="utility:warning" />
+	<aura:attribute name="typeVariant" type="string" default="success" />
+	<aura:attribute name="message" type="string" default="Mensagem" />
+	<aura:attribute name="textButton1" type="string" default="Fechar" />
+	<aura:attribute name="textButton2" type="string" default="Fechar e ir para Ficha Financeira" />
+	<aura:attribute name="onClickButton1" type="string" default="{!c.closeModalMessage}" />
+	<aura:attribute name="onClickButton2" type="string" default="{!c.afterMessage}" />
+	<aura:attribute name="showButton1" type="Boolean" default="false"/>
+	<aura:attribute name="showButton2" type="Boolean" default="true"/>
+	<aura:attribute name="afterMessage" type="string"/>
+    
+	<aura:registerEvent name="Financeiro_ComponentEvent" type="c:Financeiro_ComponentEvent"/>
+
+    <div>
+		<aura:if isTrue="{!v.isLoading}">
+			<lightning:spinner alternativeText="Carregando..." size="large" />
+		</aura:if>
+			
+		<div aura:id="allItems">
+			<lightning:datatable
+							columns="{!v.columns}"
+							class="cols table"
+							data="{!v.invoiceItens}"
+							keyField="idItem"
+							resizeColumnDisabled="true"
+							hideCheckboxColumn="true"
+							sortedBy="{!v.sortedBy}"
+							sortedDirection="{!v.sortedDirection}"
+							defaultSortDirection="{!v.defaultSortDirection}"
+							onsort="{!c.onSort}"
+							onsave="{!c.handleSaveEdition}"
+							errors="{!v.errors}"
+							draftValues="{!v.draftValues}"
+							onrowaction="{!c.handleRowAction}"/>
+		</div>
+		<div class="divTextArea">
+			<lightning:textarea label="Observação" value="{!v.contestationObservation}"/>
+		</div> 
+
+		<!-- MODAL CALCULO -->
+		<c:UiModal aura:id="calcModal" title="Cálculo do Item" size="x-small" onClose="{!c.onCloseModal}">
+			<!-- BODY -->
+			<aura:set attribute="content">
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="3" smallDeviceSize="12"  mediumDeviceSize="3" largeDeviceSize="3">
+						<div class="custom-box">
+							<lightning:combobox 
+								placeholder="" 
+								label="Tipo de Cálculo" 
+								value="{!v.calcSelected}" 
+								options="{!v.calcValues}" 
+								onchange="{!c.handleRecalc}" 
+								disabled="{!v.disabled}"/>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="around-small" size="9" smallDeviceSize="12"  mediumDeviceSize="9" largeDeviceSize="9" alignmentBump="right" />
+				</lightning:layout>
+
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2">
+						<div class="modal-input">
+							<aura:if isTrue="{!v.calculoTipoPorcentagem}">
+								<ui:inputNumber label="Porcentagem" value="{!v.calculoPorcentagem}" updateOn="keyup" /> <br/>
+							</aura:if>
+							<aura:if isTrue="{!v.calculoTipoDias}">
+								<ui:inputNumber label= "Quantidade" value="{!v.calculoDias}" updateOn="keyup"/> <br/>
+							</aura:if>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12"  mediumDeviceSize="2" largeDeviceSize="2" alignmentBump="right" />                           
+				</lightning:layout>
+			</aura:set>
+			<!-- FOOTER -->
+			<aura:set attribute="footer">   
+				<lightning:layout horizontalAlign="space" multipleRows="false">             
+					<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12"  mediumDeviceSize="12" largeDeviceSize="12" >
+						<div class="modal-buttons">
+							<lightning:button variant="brand" label="Confirmar" onclick="{!c.saveCalc}" />
+						</div>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+		</c:UiModal>
+
+		<!-- MODAL MOTIVO -->
+		<c:UiModal aura:id="reasonModal" title="Motivo da contestação" size="x-small" onClose="{!c.onCloseReason}">
+			<!-- BODY -->
+			<aura:set attribute="content">
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12"  mediumDeviceSize="12" largeDeviceSize="12">
+						<lightning:combobox 
+							placeholder="" 
+							label="Selecione o Motivo" 
+							value="{!v.selectedReason}" 
+							options="{!v.reasonValues}" 
+							disabled="{!v.disabled}" />
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+			<!-- FOOTER -->
+			<aura:set attribute="footer">   
+				<lightning:layout horizontalAlign="space" multipleRows="false">             
+					<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12"  mediumDeviceSize="12" largeDeviceSize="12" >
+						<div class="modal-buttons">
+							<lightning:button variant="brand" label="Confirmar" onclick="{!c.handleSaveReason}" />
+						</div>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+		</c:UiModal>
+
+		<!-- Modal MEssage -->
+		<aura:if isTrue="{!v.dialogModal}">
+			<c:modalMessage
+				aura:id = "modalMessage"
+				title = "{!v.titleMessage}"
+				typeIcon = "{!v.typeIcon}"
+				typeVariant ="{!v.typeVariant}"
+				message = "{!v.message}"
+				textbutton1 = "{!v.textButton1}"
+				textbutton2 = "{!v.textButton2}"
+				showButton1 = "{!v.showButton1}"
+				showButton2 = "{!v.showButton2}"
+				onClickButton1 = "{!v.onClickButton1}"
+				onClickButton2 = "{!v.onClickButton2}"
+			/>
+		</aura:if>
+
+		<!-- Modal | Aviso ao operador
+		<aura:if isTrue="{!v.avisoModal}">
+			<c:modalAvisoContestacao    aura:id     	= "modalAvisoContestacao"
+										title 			= "Aviso"
+										typeIconwarning = "{!v.typeIconWarning}"
+										message		 	= "{!$Label.c.modalAvisoContestacao}"
+										textbutton1		= "{!v.textButton1}"
+										textbutton2     = "{!v.textButton2}"
+										/>
+		</aura:if> -->
+
+	</div>
+</aura:component>

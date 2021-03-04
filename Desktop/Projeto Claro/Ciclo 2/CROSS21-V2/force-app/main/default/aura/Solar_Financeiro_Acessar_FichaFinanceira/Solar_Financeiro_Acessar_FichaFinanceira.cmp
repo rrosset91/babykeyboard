@@ -1,0 +1,24 @@
+<!--
+  @description       :
+  @author            : Diego Almeida
+  @group             :
+  @last modified on  : 04-02-2021
+  @last modified by  : Diego Almeida
+  Modifications Log
+  Ver   Date         Author          Modification
+  1.0   02-02-2021   Diego Almeida   BUG 113351 -BUG PROD RELEASE - Acesso a ficha financeiro sem caso
+-->
+<aura:component implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable" access="global">
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:attribute type="String" name="encodedbaseAttributes"/>
+    <aura:attribute type="String" name="componentName"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <div class="slds-tabs_card">
+        <aura:renderIf isTrue="{!v.componentName == 'solarResFichaFinanceira'}">
+            <c:solarResFichaFinanceira encodedbaseAttributes="{!v.encodedbaseAttributes}"/>
+        </aura:renderIf>
+        <aura:renderIf isTrue="{!v.componentName == 'solarFichaFinanceira'}">
+            <c:solarFichaFinanceira encodedbaseAttributes="{!v.encodedbaseAttributes}"/>
+        </aura:renderIf>
+    </div>
+</aura:component>

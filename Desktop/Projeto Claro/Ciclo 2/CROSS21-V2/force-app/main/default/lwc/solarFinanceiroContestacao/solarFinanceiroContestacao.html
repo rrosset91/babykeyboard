@@ -1,0 +1,167 @@
+<!--
+  @description       : 
+  @author            : Diogo Domingos
+  @group             : 
+  @last modified on  : 07-01-2021
+  @last modified by  : Joao Neves
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   27-10-2020   Diogo Domingos                     Initial Version
+  1.1   27-10-2020   Diego Almeida 		                Add fluxo
+  1.2   11-11-2020   Caio Cesar 		                layout de acordo com o perfil
+-->
+<template>
+	<header>
+		<h2 class="title-table">No campo correspondente, digite o valor a contestar e selecione o motivo. Se preferir, calcule por percentual, ou dias a serem descontados</h2>
+	</header>
+
+	<main>
+		<div style="padding-top: 5px">
+			<template if:true={hasError}>
+				<c-solar-exception-content show-error="true"></c-solar-exception-content>
+			</template>
+			<template if:false={hasError}>
+				<template if:true={hasData}>
+					<template if:true={readonly}>
+						<div class="slds-p-around_medium lgc-bg">
+							<lightning-datatable data={data} key-field="chargeId" columns={columns} hide-checkbox-column="true" hide-number-column="true"> </lightning-datatable>
+						</div>
+					</template>
+					<template if:false={readonly}>
+						<div class="slds-p-around_medium lgc-bg">
+							<lightning-datatable
+								data={data}
+								key-field="chargeId"
+								columns={columns}
+								draft-values={draftValues}
+								onrowaction={handleRowAction}
+								ondeleterow={deleteRow}
+								onsave={handleSave}
+								hide-checkbox-column="true"
+								hide-number-column="true"
+							>
+							</lightning-datatable>
+						</div>
+					</template>
+				</template>
+				<template if:false={hasData}>
+					<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+				</template>
+			</template>
+		</div>
+	</main>
+
+	<footer>
+		<section class="Observacao">
+			<div if:true={layoutN2}>
+				<div>OBSERVAÇÃO DA CONTESTAÇÃO</div>
+				<div class="textAreaN1">{observacaoN1}</div>
+			</div>
+			<lightning-textarea
+				class="css-box-obs"
+				data-id="observacao"
+				name="Observacao"
+				label={labelTextArea}
+				value={obsValue}
+				message-when-value-missing="Campo obrigatório para dar prosseguimento a constestação"
+				required
+				disabled={readOnlyObservacao}
+			>
+			</lightning-textarea>
+		</section>
+
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex">
+				<lightning-button variant="destructive-text" label={labelButtonVoltar} class="slds-m-left_x-small" onclick={handleVoltar}> </lightning-button>
+			</div>
+			<template if:false={hasError}>
+				<div style="width: 50%; justify-content: flex-end; display: flex">
+					<div if:true={layoutN2}>
+						<lightning-button variant="destructive-text" label="Negar Todos os Itens" onclick={naoImplementado} class="slds-m-left_x-small" disabled={readOnlyButton}> </lightning-button>
+					</div>
+					<lightning-button variant="brand" label="Continuar para confirmação da contestação" onclick={handleConfirmation} class="slds-m-left_x-small" disabled={readOnlyButton}>
+					</lightning-button>
+				</div>
+			</template>
+		</div>
+	</footer>
+
+	<!-- Modal Calculadora-->
+	<c-solar-modal header="Calculadora" data-id="modalCaculadora" size="small" show-close-button>
+		<div slot="content">
+			<div class="bodyModalCalculator">
+				<lightning-layout>
+					<lightning-layout-item size="12">
+						<div class="custom-box">
+							<lightning-combobox label="Tipo de Cálculo" value={calcSelected} options={filtersCalc} onchange={handleChange}></lightning-combobox>
+						</div>
+					</lightning-layout-item>
+				</lightning-layout>
+				<lightning-layout>
+					<lightning-layout-item size="12">
+						<div class="modal-input">
+							<template if:true={calculoTipoPorcentagem}>
+								<lightning-input label="Porcentagem" value={calculoPorcentagem} formatter="percent" step="0.01" data-id="percentModalCalculo"></lightning-input>
+							</template>
+							<template if:true={calculoTipoDias}>
+								<lightning-input label="Quantidade" value={calculoDias} type="number" data-id="qtdModalCalculo"></lightning-input>
+							</template>
+						</div>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+		</div>
+
+		<div slot="footer">
+			<lightning-layout>
+				<lightning-layout-item padding="around-small">
+					<div class="modal-buttons">
+						<lightning-button variant="brand" label="Confirmar" onclick={saveCalculadora} disabled={confirmarCalculadora}></lightning-button>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+	</c-solar-modal>
+
+	<!-- Modal Motivo-->
+	<c-solar-modal header="Motivo da contestação" data-id="modalMotivo" size="small" show-close-button>
+		<div slot="content">
+			<div class="bodyModalMotivo">
+				<lightning-layout>
+					<lightning-layout-item size="12">
+						<lightning-combobox label="Selecione o Grupo" options={fixedReasons} value={groupValue} onchange={handleChangeGroup} data-id="itemMotivo" required> </lightning-combobox>
+						<lightning-combobox if:true={groupValue} label="Selecione o Motivo" options={filtersMotivo} value={valueMotivo} onchange={handleChangeReason} data-id="itemMotivo" required>
+						</lightning-combobox>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+		</div>
+
+		<div slot="footer">
+			<lightning-layout>
+				<lightning-layout>
+					<lightning-layout-item padding="around-small">
+						<div class="modal-buttons">
+							<lightning-button variant="brand" label="Confirmar" onclick={handleSaveMotivo}></lightning-button>
+						</div>
+					</lightning-layout-item>
+				</lightning-layout>
+			</lightning-layout>
+		</div>
+	</c-solar-modal>
+
+	<lightning-button variant="outline" label="Abrir Modal" onclick={handleOpenTestModal}></lightning-button>
+
+	<c-solar-modal header="Você não tem alçada. Selecione um motivo da disputa." data-id="modalSemAlcada" size="medium" show-close-button>
+		<div slot="footer">
+			<lightning-layout>
+				<lightning-layout-item padding="around-small">
+					<div class="modal-buttons">
+						<lightning-button variant="outline" label="Cancelar" onclick={handleCancelReason}></lightning-button>
+						<lightning-button variant="brand" label="Confirmar" onclick={handleSaveReason}></lightning-button>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+	</c-solar-modal>
+</template>

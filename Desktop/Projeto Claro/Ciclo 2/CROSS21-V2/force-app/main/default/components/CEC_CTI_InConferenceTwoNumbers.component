@@ -1,0 +1,264 @@
+<!-- 
+* Autor: Diego Lima - Deloitte
+* Data: 11/09/2019
+* Descrição: [Nome do projeto/ID: CEC FASE 1] + [Time: SQUAD CTI - Sprint 11] + [Componente com as ações de alternar entre duas chamadas
+* durante a conferencia ou fazer o merge entre ambas]
+* Controle de Versão
+-->
+
+
+<apex:component >
+    
+    <style>
+    
+        
+        
+    </style>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/visualforce-components/CEC_CTI_InConferenceTwoNumbers/css/pageStyle.css')}"/>
+
+    <div class="actions-change-call consultation-connected slds-grid text-center">
+        
+        <div class="slds-col slds-size_1-of-12"></div>
+        
+        <div class="slds-col slds-size_2-of-12 phone-icon-first-number active display-none">
+            <img class="phone-icon" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-client-in-line.svg')}"/>     
+        	<br/>
+            <label class="online-number">em linha</label>
+        </div>
+        <div class="slds-col slds-size_2-of-12 phone-icon-first-number inactive">
+            <img  title="Tirar primeira ligação da espera" class="hover-active phone-icon hold image-alternate" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-cliente-block.svg')}"/>     
+            <br/>
+            <label class="hold-number">espera <br/><label class="call-hold-count-first-number minutes text-center">00</label>:<label class="call-hold-count-first-number seconds text-center">00</label></label>            
+
+        </div>
+        
+        
+        <div class="slds-col slds-size_3-of-12 person-icon-first-number active display-none">
+            <img class="persons-icon" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-cliente-talk.svg')}"/>     
+        </div>
+        <div class="slds-col slds-size_3-of-12 person-icon-first-number inactive">
+            <img class="persons-icon" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-cliente-talk.svg')}"/>       
+        </div>
+
+		<div class="slds-grid consultation-connected slds-col slds-size_5-of-12">
+            <div class="slds-col slds-size_7-of-12 person-icon-second-number active">
+                <img class="persons-icon hover-active" onclick="finishCall();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-talking-line.svg')}"/>     
+            </div>
+            <div class="slds-col slds-size_7-of-12 person-icon-second-number inactive display-none">
+                <img class="persons-icon hover-active" onclick="finishCall();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-talking-line.svg')}"/>     
+            </div>
+            
+            <div class="slds-col slds-size_5-of-12 phone-icon-second-number active">
+                <img class="phone-icon" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-third-phone-in-line.svg')}"/>     
+                <br/><label>em linha</label>
+
+            </div>
+            <div class="slds-col slds-size_5-of-12 phone-icon-second-number inactive display-none">
+                <img title="Tirar segunda ligação da espera" class="hover-active phone-icon hold" onclick="requestHoldToFirstNumber();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conference-cliente-block.svg')}"/>     
+                <label class="hold-number">espera <label class="call-hold-count-second-number minutes text-center">00</label>:<label class="call-hold-count-second-number seconds text-center">00</label> </label>  
+
+            </div>
+        </div>      
+       
+        <!--
+        <div class="dialing-consultation slds-col slds-size_5-of-12 text-center">
+            <div class="slds-grid">
+                <div class="slds-col slds-size_7-of-12 person-icon-second-number active">
+                    <img title="Desligar segundo número" class="hover-active persons-icon" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conferencia-terceiro-ativo-desligar.svg')}"/>     
+                </div>
+                
+                <div class="slds-col slds-size_5-of-12 phone-icon-second-number calling-img text-left">
+                    <img title="Desligar segunda chamada" class="hover-active  phone-icon" onclick="finishCall();" src="{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/icons/conferencia-terceiro-desligar.svg')}"/>     
+                </div>       
+            </div>
+            <div class="slds-grid">
+                    <label class="online-number">Chamando terceiro</label>
+                </div>
+        </div>
+		-->
+        
+    </div>
+    
+	<div class="merge-calls slds-grid text-center">
+        <div class="slds-col slds-size_12-of-12">
+            <p class="texto-iniciar-conferencia">Clique no telefone para<br/>alternar o atendimento</p>
+        	<a class="cti-button-red btn-link-red" onclick="startMergeConference();" reRender="none">Iniciar conferência</a>
+        </div>
+    </div>
+    
+    <script>
+
+        var timerConferenceFirst = new easytimer.Timer();
+        var timerConferenceSecond = new easytimer.Timer();
+        var onlyDriverHoldHour;
+        var onlyDriverHoldMinutes;
+        var onlyDriverHoldSeconds;
+    
+        var currentHoldDate;
+        var currentHoldHour;
+        var currentHoldMinutes;
+        var currentHoldSeconds;
+    
+        var finalHoldHour;
+        var finalHoldMinutes;
+        var finalHoldSeconds;
+    
+        var timerHold;
+
+        function requestHoldToFirstNumber(){
+            startAlternateCall();
+            holdToFirstNumber = true;
+            holdToSecondNumber = false;
+        }
+        
+        function requestHoldToSecondNumber(){
+            startAlternateCall();
+            holdToSecondNumber = true;
+            holdToFirstNumber = false;
+        }
+        
+        
+        function startTimerCallHold(timeDriverHold){
+            console.log('timerDriverHold na conferencia = ' + timeDriverHold);
+            if(holdToFirstNumber == true){
+                activeHoldToFirstNumber(timeDriverHold);
+            } else {
+                activeHoldToSecondNumber(timeDriverHold);
+            }
+        }
+        
+        
+        function activeHoldToFirstNumber(timeDriverHold){
+    
+            console.log('activeHoldToFirstNumber = ' + timeDriverHold);
+            
+            $('.call-hold-count-first-number').empty();
+    
+            onlyDriverHoldHour = timeDriverHold.substring(11,13);
+            onlyDriverHoldMinutes = timeDriverHold.substring(14,16);
+            onlyDriverHoldSeconds = timeDriverHold.substring(17,19);
+    
+            currentHoldDate = new Date();
+            currentHoldHour = currentHoldDate.getHours();
+            currentHoldMinutes = currentHoldDate.getMinutes();
+            currentHoldSeconds = currentHoldDate.getSeconds();
+    
+            finalHoldHour = currentHoldHour - onlyDriverHoldHour ;
+            finalHoldMinutes = currentHoldMinutes - onlyDriverHoldMinutes;
+            finalHoldSeconds = currentHoldSeconds - onlyDriverHoldSeconds;
+    
+            timerHold = new easytimer.Timer();
+            //timerHold.reset();
+    
+            timerHold.start({startValues: {hours: finalHoldHour, minutes: finalHoldMinutes, seconds: finalHoldSeconds}});
+    		
+            console.log('HORARIO DENTRO FUNCTION ====> + ' + finalHoldHour + ':' + finalHoldMinutes + ':' + finalHoldSeconds);
+            
+            timerHold.addEventListener('secondsUpdated', function (e) {
+                if(timerHold.getTimeValues().minutes < 10){
+                    $('.call-hold-count-first-number.minutes').html('0'+timerHold.getTimeValues().minutes);
+                } else {
+                    $('.call-hold-count-first-number.minutes').html(timerHold.getTimeValues().minutes);
+                }
+    
+                if(timerHold.getTimeValues().seconds < 10){
+                    $('.call-hold-count-first-number.seconds').html('0'+timerHold.getTimeValues().seconds);
+                } else {
+                    $('.call-hold-count-first-number.seconds').html(timerHold.getTimeValues().seconds);
+                }
+    
+    
+            });
+            timerHold.addEventListener('started', function (e) {
+                $('#call-hold-count-first-number').html(timerHold.getTimeValues().toString());
+            });
+    
+            $('.phone-icon-first-number.inactive').removeClass('display-none');
+            $('.phone-icon-first-number.active').addClass('display-none');
+            $('.person-icon-first-number.inactive').removeClass('display-none');
+            $('.person-icon-first-number.active').addClass('display-none');
+            $('.person-icon-second-number.inactive').addClass('display-none');
+            $('.person-icon-second-number.active').removeClass('display-none');
+            $('.phone-icon-second-number.inactive').addClass('display-none');
+            $('.phone-icon-second-number.active').removeClass('display-none');
+        }
+    
+    
+        function activeHoldToSecondNumber(timeDriverHold){
+            
+            console.log('activeHoldToSecondNumber = ' + timeDriverHold);
+            
+            $('.call-hold-count-second-number').empty();
+            
+            onlyDriverHoldHour = timeDriverHold.substring(11,13);
+            onlyDriverHoldMinutes = timeDriverHold.substring(14,16);
+            onlyDriverHoldSeconds = timeDriverHold.substring(17,19);
+    
+            currentHoldDate = new Date();
+            currentHoldHour = currentHoldDate.getHours();
+            currentHoldMinutes = currentHoldDate.getMinutes();
+            currentHoldSeconds = currentHoldDate.getSeconds();
+    
+            finalHoldHour = currentHoldHour - onlyDriverHoldHour ;
+            finalHoldMinutes = currentHoldMinutes - onlyDriverHoldMinutes;
+            finalHoldSeconds = currentHoldSeconds - onlyDriverHoldSeconds;
+    
+            timerHold = new easytimer.Timer();
+    
+            timerHold.start({startValues: {hours: finalHoldHour, minutes: finalHoldMinutes, seconds: finalHoldSeconds}});
+
+            timerHold.addEventListener('secondsUpdated', function (e) {
+
+                if(timerHold.getTimeValues().minutes < 10){
+                    $('.call-hold-count-second-number.minutes').html('0'+timerHold.getTimeValues().minutes);
+                } else {
+                    $('.call-hold-count-second-number.minutes').html(timerHold.getTimeValues().minutes);
+                }
+    
+                if(timerHold.getTimeValues().seconds < 10){
+                    $('.call-hold-count-second-number.seconds').html('0'+timerHold.getTimeValues().seconds);
+                } else {
+                    $('.call-hold-count-second-number.seconds').html(timerHold.getTimeValues().seconds);
+                }
+    
+    
+            });
+            timerHold.addEventListener('started', function (e) {
+                $('#call-hold-count-second-number').html(timerHold.getTimeValues().toString());
+            });
+    
+    
+            $('.phone-icon-first-number.active').removeClass('display-none');
+            $('.phone-icon-first-number.inactive').addClass('display-none');
+            $('.person-icon-first-number.active').removeClass('display-none');
+            $('.person-icon-first-number.inactive').addClass('display-none');
+            $('.person-icon-second-number.active').addClass('display-none');
+            $('.person-icon-second-number.inactive').removeClass('display-none');
+            $('.phone-icon-second-number.active').addClass('display-none');
+            $('.phone-icon-second-number.inactive').removeClass('display-none');
+        }
+    
+    
+        function activateConsultationConnected(){
+            setTimeout(function(){
+                //$('.dialing-consultation').addClass('display-none');
+                //$('.consultation-connected').removeClass('display-none');
+                $('.phone-icon-first-number .image-alternate').attr('onclick','requestHoldToSecondNumber();');
+                //$('.conference-merge-image').attr('onclick','startMergeConference();');
+                console.log('activateConsultationConnected');
+            }, 3000);
+        }
+    
+    	function activateConsultationDialing(){
+        	$('.consultation-connected').addClass('display-none');
+            $('.dialing-consultation').removeClass('display-none');
+            $('.phone-icon-first-number .image-alternate').attr('onclick','');
+            $('.conference-merge-image').attr('onclick','');
+        }
+    
+    
+    </script>
+    
+    
+</apex:component>

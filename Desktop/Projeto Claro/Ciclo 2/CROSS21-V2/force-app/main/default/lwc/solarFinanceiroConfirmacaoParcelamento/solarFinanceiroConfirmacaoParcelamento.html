@@ -1,0 +1,87 @@
+<!--
+  @description       :
+  @author            : Joao Neves
+  @group             :
+  @last modified on  : 08-02-2021
+  @last modified by  : Diego Almeida
+  Modifications Log
+  Ver   Date         Author       Modification
+  1.0   22-01-2021   Joao Neves   Initial Version
+-->
+<template>
+	<template if:true={isLoading}>
+		<lightning-spinner alternative-text="Carregando" size="large"> </lightning-spinner>
+	</template>
+	<c-solar-modal size="x-small" header="Sucesso">
+		<div slot="content">
+			<div class="modal-message">
+				<p><lightning-icon icon-name="utility:success" variant="success"> </lightning-icon>Negociação efetivada</p>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Ok" title="Ok" onclick={closeTab} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+	<template if:false={isLoading}>
+		<div style="background-color: white">
+			<div class="custom-header">Confirmação</div>
+		</div>
+
+		<div>
+			<h3 class="subtitle">Confira abaixo a previsão de lançamento das parcelas</h3>
+			<div class="negotiation-amount">
+				<lightning-layout>
+					<lightning-layout-item size="2">
+						<dl>
+							<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">Valor da Negociação</dt>
+							<dd class="slds-item_detail slds-text-align_left">
+								<lightning-formatted-number value={originalAmount} format-style="currency" currency-code="BRL"> </lightning-formatted-number>
+							</dd>
+						</dl>
+					</lightning-layout-item>
+					<lightning-layout-item size="2"> </lightning-layout-item>
+					<lightning-layout-item size="2">
+						<dl>
+							<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-content">Parcelas</dt>
+							<dd class="slds-item_detail slds-text-align_left">{negotiationConditions}</dd>
+						</dl>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+		</div>
+		<div class="installment-container"></div>
+
+		<div class="datatable">
+			<h3 class="subtitle">Simulação de valor</h3>
+			<lightning-datatable key-field="id" columns={columns} data={tableData} hide-checkbox-column resize-column-disabled="true" sorted-direction="asc" sorted-by="installmentNumber"> </lightning-datatable>
+			<div class="discount-container">
+				<lightning-layout>
+					<lightning-layout-item size="2">
+						<p class="total-title">VALOR TOTAL</p>
+					</lightning-layout-item>
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="2">
+						<p class="total-value"><lightning-formatted-number value={negotiatedAmount} format-style="currency" currency-code="BRL"> </lightning-formatted-number></p>
+					</lightning-layout-item>
+				</lightning-layout>
+				<lightning-layout >
+					<lightning-layout-item size="8"></lightning-layout-item>
+					<lightning-layout-item size="4">
+						<p class="msg-total">*Os valores já contemplam juros e multa</p>
+					</lightning-layout-item>
+				</lightning-layout>
+			</div>
+			<div class="negotiation-details">
+				<lightning-layout-item size="12">
+					<lightning-textarea name="negotiationObservation" disabled={observationLocked} label="OBSERVAÇÃO DA NEGOCIAÇÃO" required="true" value={negotiationObservation} message-when-value-missing="Este campo é obrigatório" onchange={handleObservation}></lightning-textarea>
+				</lightning-layout-item>
+			</div>
+			<div class="navigation-buttons" if:false={negotiationSubmitted}>
+				<div style="display: flex; justify-content: space-between">
+					<lightning-button variant="brand-outline" label="Voltar" title="Voltar" onclick={handleBack}></lightning-button>
+					<lightning-button variant="brand" label="Negociar" title="Negociar" onclick={validateNegotiation}></lightning-button>
+				</div>
+			</div>
+		</div>
+	</template>
+</template>

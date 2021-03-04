@@ -1,0 +1,177 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 17-11-2020
+  @last modified by  : Caio Cesar
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   04-11-2020   Joao Neves   Initial Version
+  1.1   17-11-2020   Caio Cesar   Inclusao PDF
+-->
+<template>
+	<lightning-spinner if:true={isLoading} size="medium"></lightning-spinner>
+
+	<header>
+		<c-solar-fatura-header
+			header={fullData.header}
+			vencimento={fullData.dataVencimento}
+			valor={fullData.valor}
+			status={fullData.status}
+			forma-pagamento={fullData.formaPagamento}
+			modo-envio={fullData.modoRecebimento}
+		></c-solar-fatura-header>
+	</header>
+
+	<div style="margin-left: 10px; margin-right: 10px">
+		<lightning-accordion allow-multiple-sections-open="true">
+			<lightning-accordion-section if:true={fullData.hasTelevisao} name="Televisao" label={fullData.televisao}>
+				<lightning-datatable
+					key-field="idItem"
+					columns={columns}
+					data={fullData.lstTelevisao}
+					sorted-by={sortedBy}
+					sorted-direction={sortedDirection}
+					onsort={handleSortTelevisao}
+					onrowaction={handleRowAction}
+					hide-checkbox-column
+				>
+				</lightning-datatable>
+			</lightning-accordion-section>
+			<lightning-accordion-section if:true={fullData.hasInternet} name="Internet" label={fullData.internet}>
+				<lightning-datatable
+					key-field="idItem"
+					columns={columns}
+					data={fullData.lstInternet}
+					sorted-by={sortedBy}
+					sorted-direction={sortedDirection}
+					onsort={handleSortInternet}
+					onrowaction={handleRowAction}
+					hide-checkbox-column
+				>
+				</lightning-datatable>
+			</lightning-accordion-section>
+			<lightning-accordion-section if:true={fullData.hasTelefone} name="Telefone" label={fullData.telefone}>
+				<lightning-datatable
+					key-field="idItem"
+					columns={columnsDetails}
+					data={fullData.lstTelefone}
+					sorted-by={sortedBy}
+					sorted-direction={sortedDirection}
+					onsort={handleSortTelefone}
+					onrowaction={handleRowAction}
+					hide-checkbox-column
+				>
+				</lightning-datatable>
+			</lightning-accordion-section>
+			<lightning-accordion-section if:true={fullData.hasMovel} name="Movel" label={fullData.movel}>
+				<lightning-datatable
+					key-field="idItem"
+					columns={columns}
+					data={fullData.lstMovel}
+					sorted-by={sortedBy}
+					sorted-direction={sortedDirection}
+					onsort={handleSortMovel}
+					onrowaction={handleRowAction}
+					hide-checkbox-column
+				>
+				</lightning-datatable>
+			</lightning-accordion-section>
+			<lightning-accordion-section if:true={fullData.hasEventuais} name="Eventuais" label={fullData.eventuais}>
+				<lightning-datatable
+					key-field="idItem"
+					columns={columns}
+					data={fullData.lstItensEventuais}
+					sorted-by={sortedBy}
+					sorted-direction={sortedDirection}
+					onsort={handleSortEventuais}
+					onrowaction={handleRowAction}
+					hide-checkbox-column
+				>
+				</lightning-datatable>
+			</lightning-accordion-section>
+			<lightning-accordion-section if:true={fullData.hasOutros} name="Outros" label={fullData.outros}>
+				<lightning-datatable
+					key-field="idItem"
+					columns={columns}
+					data={fullData.lstOutros}
+					sorted-by={sortedBy}
+					sorted-direction={sortedDirection}
+					onsort={handleSortOutros}
+					onrowaction={handleRowAction}
+					hide-checkbox-column
+				>
+				</lightning-datatable>
+			</lightning-accordion-section>
+		</lightning-accordion>
+	</div>
+
+	<footer style="padding-top: 15px; margin-left: 10px; margin-right: 10px">
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex">
+				<lightning-button variant="brand-outline" label="Voltar" onclick={handleOpenFaturas} class="slds-m-left_x-small"></lightning-button>
+			</div>
+			<div style="width: 50%; justify-content: flex-end; display: flex">
+				<lightning-button variant="brand" label="Visualizar fatura visão cliente" onclick={handleViewPdf} class="slds-m-left_x-small"></lightning-button>
+			</div>
+		</div>
+	</footer>
+
+	<c-solar-modal show-close-button="true" size="small" header="Detalhes do Item">
+		<div slot="content">
+			<div class="slds-form slds-grid slds-wrap slds-gutters">
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Item de Extrato</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.descricao}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Parceiro</dt>
+						<dd class="slds-item_detail custom-content">{modalItem.parceiro}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Produto</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.descricaoProduto}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data de Lançamento</dt>
+						<dd class="slds-item_detail custom-content">{modalItem.dataLancamento}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Data de Vencimento</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.dataVencimento}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Data Início Proporcionalidade</dt>
+						<dd class="slds-item_detail custom-content">{modalItem.dataProporcionalidade}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Total de Parcelas</dt>
+						<dd class="slds-item_detail slds-text-align_left custom-padding custom-content">{modalItem.totalParcela}</dd>
+					</div>
+				</dl>
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<div>
+						<dt class="slds-item_label slds-text-color_weak">Número da Parcela</dt>
+						<dd class="slds-item_detail custom-content">{modalItem.numeroParcela}</dd>
+					</div>
+				</dl>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"></lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

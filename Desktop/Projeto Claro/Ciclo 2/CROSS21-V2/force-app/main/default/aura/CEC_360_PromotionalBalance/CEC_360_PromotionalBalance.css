@@ -1,0 +1,11 @@
+.THIS table.lista-saldo-promocional {border: solid 1px #dbdada;border-right: solid 1px #dbdada;}
+.THIS table.lista-saldo-promocional th {font-weight: normal;height: 42px;line-height: 43px;background: #F8F8F8;border-bottom: solid 1px #dbdada;}
+.THIS table.lista-saldo-promocional th:last-child {border-right: solid 1px #dbdada;}
+.THIS table.lista-saldo-promocional td {border-bottom: solid 1px #dbdada;height: 42px;white-space: initial;vertical-align: top;}
+.THIS table.lista-saldo-promocional th:first-child {padding-left: 10px;}
+.THIS table.lista-saldo-promocional td:first-child {padding-left: 10px;}
+.THIS table.lista-saldo-promocional td {padding-top:9px;}
+.THIS table.lista-saldo-promocional th:nth-child(1) {min-width:350px;}
+.THIS table.lista-saldo-promocional th:nth-child(2) {min-width:100px;}
+.THIS table.lista-saldo-promocional th:nth-child(3) {width:100%;}
+.THIS table.lista-saldo-promocional td {padding-right: 40px;}

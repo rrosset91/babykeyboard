@@ -1,0 +1,143 @@
+<!-- CEC_360_LGPDConsents Component 25/03/2020 -->
+<!-- Rennê Silva -->
+<aura:component controller="CEC_360_LGPDConsentsController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:attribute name="consents"       type="CEC_360_LGPDIntegrationObjects.Consent[]"      default="[]" />
+    <aura:attribute name="putConsents"    type="CEC_360_LGPDIntegrationObjects.PutConsents[]"  default="[]"/>
+    <aura:attribute name="onloadConsents" type="String"  default=""      />
+    <aura:attribute name="purposeId"   	  type="String"  default=""      />
+    <aura:attribute name="checked"        type="Boolean" default='false' />
+	<aura:attribute name="disabled"	      type="Boolean" default='false' />   
+    <aura:attribute name="isModalOpen"    type="Boolean" default='false' />
+    <aura:attribute name="wasChanged"     type="Boolean" default='false' />
+    <aura:attribute name="isProfileWithEditPermission" type="Boolean" default='false' />
+    
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--<aura:handler event="aura:locationChange" action="{!c.onTabFocused}"/>-->
+    <aura:handler event="lightning:tabClosed" action="{!c.onTabClosed}"/>
+    
+    <lightning:card> 
+        
+        <div class="c-container">
+            <lightning:layout multipleRows="true" verticalAlign="center">
+                                
+                <aura:if isTrue="{!not(empty(v.consents))}">
+                    <aura:if isTrue="{!v.isProfileWithEditPermission}">
+                        <lightning:layoutItem size="10" padding="around-small">
+                            <div class="fontStyle">Aplicar a mesma autorização a todos</div>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <div>
+                                <lightning:input type="toggle"
+                                                 name="toggleAll"
+                                                 aura:id="toggleAllButton"
+                                                 checked="{!v.checked}"
+                                                 disabled="{!v.disabled}"
+                                                 label=""
+                                                 messageToggleActive="Todos autorizados"
+                                                 messageToggleInactive=""
+                                                 onchange="{!c.getToggleAllButtonValue}" />
+                            </div>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <aura:iteration items="{!v.consents}" var="consent">
+                        <lightning:layoutItem size="10" padding="around-small">
+                            <p class="fontStyle">{!consent.name}</p>
+                            <p>{!consent.description}</p>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <div>
+                                <aura:if isTrue="{!v.isProfileWithEditPermission}">
+                                	<lightning:input type="toggle"
+                                                     name="toggleAll"
+                                                     aura:id="{!consent.id}"
+                                                     checked="{!consent.checked}"
+                                                     label=""
+                                                     messageToggleActive="Autorizado"
+                                                     messageToggleInactive="Não autorizado"
+                                                     onchange="{!c.verifyIfCheckToggleAllButton}" />
+                                    <aura:set attribute="else">
+                                        <lightning:input type="toggle"
+                                                         name="toggleAll"
+                                                         aura:id="{!consent.id}"
+                                                         checked="{!consent.checked}"
+                                                         disabled="true"
+                                                         label=""
+                                                         messageToggleActive="Autorizado"
+                                                         messageToggleInactive="Não autorizado"
+                                                         onchange="{!c.verifyIfCheckToggleAllButton}" />
+                                    </aura:set>
+                				</aura:if>
+                            </div>
+                        </lightning:layoutItem>
+                        
+                    </aura:iteration>
+                    
+                    <aura:if isTrue="{!v.isProfileWithEditPermission}">
+                        <lightning:layoutItem size="12" padding="around-small"></lightning:layoutItem>
+                        <lightning:layoutItem size="6" padding="around-small" class="formCancelButton">
+                            <!-- Brand-outline variant: Identifies the primary action in a group of buttons, but has a lighter look -->
+                            <lightning:button variant="brand-outline" label="Cancelar" title="Cancelar" onclick="{! c.handleCancelButton }" disabled="{!not(v.wasChanged)}" />
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="6" padding="around-small" class="formSaveButton">
+                            <!-- Brand variant: Identifies the primary action in a group of buttons -->
+                            <lightning:button variant="brand" label="Salvar" title="Salvar" onclick="{! c.handleSaveButton }" disabled="{!not(v.wasChanged)}" />
+                        </lightning:layoutItem>
+                    </aura:if> 
+                    
+                    <aura:set attribute="else">
+                        <lightning:layoutItem size="12" padding="around-small" class="slds-align_absolute-center">
+                            <p>
+                                Não foi possível carregar as informações.
+                            </p>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="12" padding="around-small" class="slds-align_absolute-center">
+                            <lightning:button variant="brand" label="Recarregar esta aba" title="Recarregar esta aba" onclick="{! c.handleReloadTab }" />
+                        </lightning:layoutItem>
+                    </aura:set>
+                </aura:if> 
+                
+            </lightning:layout>
+        </div>
+    </lightning:card>
+    
+    <!--MODAL TO ALERT AGENT THAT DATA CHANGES WILL BE LOST-->
+    <div>
+        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+        <aura:if isTrue="{!v.isModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">	
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">As alterações feitas na tela serão descartadas! </h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p><b>Tem certeza que deseja sair sem salvar as alterações realizadas?</b></p>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Não"
+                                          title="Não"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand"
+                                          label="Sim"
+                                          title="Sim"
+                                          onclick="{!c.submitDetails}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </div>
+    <!--END OF ALERT CODE--> 
+    
+</aura:component>

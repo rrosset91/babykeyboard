@@ -1,0 +1,246 @@
+<!-- CEC_360_Aggregators Component -->
+<!-- Autor: Danilo Fucuhara - Deloitte -->
+<!-- Criação: 08/2019 -->
+<!-- Descrição: Componente de agregadores -->
+<!-- Nome do projeto/ID: CEC FASE - Time: SQUAD 360 -->
+<!-- Alterações: Ajuste para novos campos do swagger (06/08/19) -->
+
+<aura:component
+  controller="CEC_360_AggregatorsController"
+  implements="flexipage:availableForRecordHome,force:hasRecordId"
+  access="global"
+>
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="showSpinner" type="Boolean" default="false" />
+  <aura:attribute name="startDate" type="String" />
+  <aura:attribute name="endDate" type="String" />
+  <aura:attribute name="statusOptions" type="List" default="[]" />
+
+  <aura:attribute name="data" type="Object" />
+  <aura:attribute name="recordId" type="String" />
+  <aura:attribute name="allData" type="List" />
+  <aura:attribute name="currentPageNumber" type="Integer" default="1" />
+  <aura:attribute name="pageSize" type="Integer" default="10" />
+  <aura:attribute name="totalPages" type="Integer" default="1" />
+  <aura:attribute name="pageList" type="List" />
+  <aura:attribute name="hasAggreggators" type="Boolean" default="false" />
+  <aura:attribute name="sortAscConfirm" type="Boolean" default="True" />
+  <aura:attribute name="sortAscCancel" type="Boolean" default="False" />
+  <aura:attribute name="sortAscExpiration" type="Boolean" default="True" />
+  <aura:attribute name="sortField" type="String" />
+
+  <lightning:overlayLibrary aura:id="overlayLib" />
+
+  <div class="slds-m-horizontal_small">
+    <div class="sessao">Agregadores</div>
+    <div class="slds-grid slds-gutters slds-m-vertical_small">
+      <div class="data-inicio">
+        <lightning:input
+          aura:id="startDate"
+          type="date"
+          value="{!v.startDate}"
+          max="{!v.maxDate}"
+          min="{!v.minDate}"
+          label="Data de início"
+          messageWhenBadInput="Data inválida."
+        />
+      </div>
+      <div class="data-fim">
+        <lightning:input
+          aura:id="endDate"
+          type="date"
+          value="{!v.endDate}"
+          max="{!v.maxDate}"
+          min="{!v.minDate}"
+          label="Data fim"
+          messageWhenBadInput="Data inválida ."
+        />
+      </div>
+      <div class="status">
+        <lightning:combobox
+          aura:id="cmbStatus"
+          label="Status"
+          options="{!v.statusOptions}"
+        />
+      </div>
+      <div class="buscar">
+        <div class="slds-p-top_large">
+          <lightning:button
+            label="Buscar"
+            onclick="{!c.getSubscriber}"
+            class="botao-busca"
+          ></lightning:button>
+        </div>
+      </div>
+    </div>
+
+    <aura:if isTrue="{!v.hasAggreggators}">
+      <div class="slds-m-bottom_medium">
+        <div class="slds-p-top_xx-small">
+          <lightning:layout multipleRows="true" horizontalAlign="center">
+            <lightning:layoutItem size="12">
+              <div class="slds-m-bottom_medium">
+                <table class="slds-table lista-agregadores">
+                  <thead>
+                    <tr>
+                      <th>Nome da Empresa</th>
+                      <th>Descrição do serviço</th>
+                      <th>Status</th>
+                      <th
+                        onclick="{!c.sortByDateConfirmationDate}"
+                        class="width-190"
+                        >Confirmação
+                        <span>
+                          <aura:if isTrue="{! v.sortAscConfirm}">
+                            <lightning:icon
+                              iconName="utility:arrowup"
+                              size="xx-small"
+                            />
+                            <aura:set attribute="else">
+                              <lightning:icon
+                                iconName="utility:arrowdown"
+                                size="xx-small"
+                              />
+                            </aura:set>
+                          </aura:if>
+                        </span>
+                      </th>
+                      <th
+                        onclick="{!c.sortByDateCancellation}"
+                        class="width-190"
+                        >Cancelamento
+                        <span>
+                          <aura:if isTrue="{! v.sortAscCancel}">
+                            <lightning:icon
+                              iconName="utility:arrowup"
+                              size="xx-small"
+                            />
+                            <aura:set attribute="else">
+                              <lightning:icon
+                                iconName="utility:arrowdown"
+                                size="xx-small"
+                              />
+                            </aura:set>
+                          </aura:if>
+                        </span>
+                      </th>
+                      <th
+                        onclick="{!c.sortByDateExpirationDate}"
+                        class="width-190"
+                        >Expiração
+                        <span>
+                          <aura:if isTrue="{! v.sortAscExpiration}">
+                            <lightning:icon
+                              iconName="utility:arrowup"
+                              size="xx-small"
+                            />
+                            <aura:set attribute="else">
+                              <lightning:icon
+                                iconName="utility:arrowdown"
+                                size="xx-small"
+                              />
+                            </aura:set>
+                          </aura:if>
+                        </span>
+                      </th>
+                      <!--<th>Tarifação</th>-->
+                    </tr>
+                  </thead>
+                  <aura:iteration items="{!v.data}" var="item">
+                    <tbody>
+                      <tr>
+                        <td>
+                          {!item.aggregatorName}
+                        </td>
+
+                        <td>{!item.serviceAggregatorName}</td>
+                        <td>{!item.status}</td>
+                        <td>{!item.confirmationDate}</td>
+                        <td>{!item.cancellationDate}</td>
+                        <td>{!item.expirationDate}</td>
+                        <!--<td>{!item.amount}</td>-->
+                      </tr>
+                    </tbody>
+                  </aura:iteration>
+                </table>
+              </div>
+            </lightning:layoutItem>
+          </lightning:layout>
+
+          <div style="text-align:center;">
+            <lightning:layoutItem padding="around-small" flexibility="auto">
+              <lightning:button
+                label=""
+                iconName="utility:left"
+                iconPosition="left"
+                onclick="{!c.onFirst}"
+                disabled="{! v.currentPageNumber == 1}"
+              />
+
+              <lightning:button
+                iconName="utility:chevronleft"
+                iconPosition="left"
+                onclick="{!c.onPrev}"
+                disabled="{! v.currentPageNumber == 1}"
+              />
+
+              <span class="slds-p-horizontal_x-small">
+                <a
+                  onclick="{!c.processMe}"
+                  name="1"
+                  class="{! (v.currentPageNumber == 1) ? 'selected' : ''}"
+                  >1</a
+                >
+              </span>
+
+              <aura:iteration items="{!v.pageList}" var="item">
+                <span class="slds-p-horizontal_x-small">
+                  <a
+                    onclick="{!c.processMe}"
+                    name="{!item}"
+                    class="{! (v.currentPageNumber == item) ? 'selected' : ''}"
+                    >{!item}</a
+                  >
+                </span>
+              </aura:iteration>
+
+              <span class="slds-p-horizontal_x-small">
+                <a
+                  onclick="{!c.processMe}"
+                  name="{!v.totalPages}"
+                  class="{! (v.currentPageNumber == v.totalPages) ? 'selected' : ''}"
+                  >{!v.totalPages}</a
+                >
+              </span>
+
+              <lightning:button
+                iconName="utility:chevronright"
+                iconPosition="right"
+                disabled="{! v.currentPageNumber == v.totalPages}"
+                onclick="{!c.onNext}"
+              />
+
+              <lightning:button
+                label=""
+                iconName="utility:right"
+                iconPosition="right"
+                disabled="{! v.currentPageNumber == v.totalPages}"
+                onclick="{!c.onLast}"
+              />
+            </lightning:layoutItem>
+          </div>
+        </div>
+      </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showSpinner}">
+      <div class="slds-text-align_center">
+        <div
+          style="position: relative; display: inline-block; width: 80px; height: 80px;"
+        >
+          <lightning:spinner alternativeText="Loading" size="medium" />
+        </div>
+      </div>
+    </aura:if>
+  </div>
+</aura:component>

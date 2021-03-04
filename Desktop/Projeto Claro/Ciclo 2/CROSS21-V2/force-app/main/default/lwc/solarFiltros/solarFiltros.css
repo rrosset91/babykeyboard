@@ -1,0 +1,25 @@
+.full-width {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+}
+
+.almost-full-width {
+	display: flex;
+	width: 90%;
+	justify-content: flex-end;
+}
+
+.search-style {
+	display: flex;
+	align-items: flex-end;
+	width: 100%;
+}
+
+.refresh-style {
+	display: flex;
+	width: 10%;
+	align-items: flex-end;
+	padding-left: 4px;
+	padding-right: 4px;
+}

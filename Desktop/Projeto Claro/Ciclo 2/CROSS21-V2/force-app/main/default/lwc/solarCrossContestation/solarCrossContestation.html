@@ -1,0 +1,30 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open="true" active-section-name="A">
+        <lightning-accordion-section label="Contestações" name="A">
+            <template if:true={hasData}>
+                <div class="slds-p-left_small">
+                    <lightning-datatable
+                            key-field="id"
+                            data={data}
+                            columns={columns}
+                            hide-checkbox-column = 'true'
+                            default-sort-direction={defaultSortDirection}
+                            sorted-direction={sortDirection}
+                            sorted-by={sortedBy}
+                            onsort={onHandleSort}
+                            class="custom-header"
+                            onrowaction={handleRowAction}
+                            >
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:false={hasData}>
+                <img src="/img/chatter/Desert.svg" class="slds-illustration__svg"/>
+                <p class="slds-text-heading_medium slds-align_absolute-center">Não foram encontradas contestações</p>
+            </template>
+        </lightning-accordion-section>
+    </lightning-accordion>
+    <template if:true={openModal}>
+        <c-solar-cross-contestation-modal onclose={closeModal} item={selectedRow}></c-solar-cross-contestation-modal>
+    </template>
+</template>

@@ -1,0 +1,12 @@
+<design:component label="Two Column and One Header Custom Record Page Template Sidebar to Right">
+    
+    <flexipage:template >
+        <!-- The default width for the "left" region is "MEDIUM". In tablets,
+        the width is "SMALL" -->
+        	<flexipage:region name="top" defaultWidth="Large" />
+            <flexipage:region name="left" defaultWidth="Medium">
+                <flexipage:formfactor type="Medium" width="Small" />
+            </flexipage:region>
+            <flexipage:region name="right" defaultWidth="Small" />        
+       </flexipage:template>
+</design:component>

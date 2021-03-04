@@ -1,0 +1,21 @@
+{
+    "data": {
+        "requests":[{
+            
+          "statusDescription": "EXECUTADA",
+          "status": "1",
+          "requestID": "368249067",
+          "operatorCode": "003",
+          "contractNumber": "386923328",
+          "closeUser": "OPS$OSWAP",
+          "cityId": "88412",
+          "requestTypeID": "1",
+          "requestTypeDescription": "ADESAO - INSTALACAO DE ASSINATURA",
+          "openUser": "T6805581",
+          "obs": "Teste",
+          "closeDate": "Sat May 02 00:00:00 BRT 2020",
+          "cancelReasonID": "123",
+          "cancelReasonDescription": "teste"
+        }]
+    }
+}

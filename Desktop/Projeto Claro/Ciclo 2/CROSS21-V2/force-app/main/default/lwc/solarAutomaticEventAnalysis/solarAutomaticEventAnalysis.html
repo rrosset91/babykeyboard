@@ -1,0 +1,37 @@
+<!--
+  @description       : 
+  @author            : Felipe Ducheiko
+  @group             : 
+  @last modified on  : 11-02-2021
+  @last modified by  : Felipe Ducheiko
+  Modifications Log 
+  Ver   Date         Author            Modification 
+  1.0   03-02-2021   Felipe Ducheiko   Initial Version
+-->
+<template>
+	<template if:true={isEmpty}>
+		<c-solar-exception-content show-empty="true" empty-message="Sem eventos para comparação"></c-solar-exception-content>
+	</template>
+	<template if:true={hasError}>
+		<c-solar-exception-content show-error="true" error-message="Erro ao consultar os eventos para comparação"></c-solar-exception-content>
+	</template>
+	<div class="loading-spinner-div" if:true={isLoading}>
+		<lightning-spinner alternative-text="Carregando" size="small"> </lightning-spinner>
+	</div>
+	<template if:true={show}>
+		<lightning-datatable hide-checkbox-column="true" key-field="requestTypeDescription" max-row-selection="1" onrowaction={handleRowAction} resize-column-disabled="true" data={allEvents} columns={columns}></lightning-datatable>
+	</template>
+	<c-solar-modal size="small" header="Detalhe de Evento">
+		<div slot="content">
+			<c-solar-modal-data-display modal-data={modalData} class-to-add="slds-size_1-of-2"> </c-solar-modal-data-display>
+		</div>
+
+		<div if:true={openDetailsDatatable} slot="content">
+			<lightning-datatable key-field="id" hide-checkbox-column="true" columns={columnsEventDetails} data={eventDetailsDataTable} resize-column-disabled="true"></lightning-datatable>
+		</div>
+
+		<div slot="footer">
+			<lightning-button variant="brand" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+		</div>
+	</c-solar-modal>
+</template>

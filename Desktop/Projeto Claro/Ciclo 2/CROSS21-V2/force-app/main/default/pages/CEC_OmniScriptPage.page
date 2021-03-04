@@ -1,0 +1,124 @@
+<apex:page title="Simulaçao" controller="CEC_SetAccountCustomerInteraction" action="{!initOmniscript}" standardStylesheets="false" showHeader="true" sidebar="true" docType="html-5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"></meta>
+<title>Claro - Comercial</title>
+<link rel="shortcut icon" type="image/x-icon" href='/resource/cec_pme_image/icones/favicon.ico'></link>
+<apex:stylesheet value="{!$Resource.OS_Stylesheet}"/>
+
+
+ <div class="vlocity via-slds" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ng-app="{!$CurrentPage.parameters.OSname}">
+
+        <vlocity_cmt:BusinessProcessComponent strOmniScriptType="{!$CurrentPage.parameters.strOmniScriptType}"
+            strOmniScriptSubType="{!$CurrentPage.parameters.strOmniScriptSubType}"
+            strOmniScriptLang="{!$CurrentPage.parameters.strOmniScriptLang}"
+            previewMode="{!$CurrentPage.parameters.previewEmbedded}"
+            verticalMode="{!$CurrentPage.parameters.verticalMode}"
+            strOmniScriptId="{!$CurrentPage.parameters.designerPreviewId}"
+            scriptLayout="lightning"
+            ContextId="{!CustomerInteractionId}"
+       />
+        <script type="text/javascript">
+
+            var modules = ['vlocity-business-process'];
+            var myModule = angular.module('{!$CurrentPage.parameters.OSname}', modules);
+        </script>
+
+        <script type="text/ng-template" id="bpTree.html">
+         <div class="slds-col slds-clearfix lucastest" ng-if="children && children.length>0" style="background-color: #e7e7e7;">
+
+             <auto-saveforlater-msg></auto-saveforlater-msg>
+             <vlc-slds-right-panel></vlc-slds-right-panel>
+             <div>
+             <div class="vlc-slds-bpTree-step-chart__container testValerio2">
+                 <bptree class="pme-content slds-clearfix"></bptree>
+                 <sidebar class="slds-col--padded slds-cleafix lucastest2"></sidebar>
+                 <ng-include ng-repeat="vlcPC in ::bpTree.propSetMap.persistentComponent"
+                        ng-if='bpTree.showPCNew[vlcPC.pcIndex] && ($index === 0 )'
+                        id='{{::vlcPC.id}}'
+                        src="::bpTree.dfHPSTmpl[vlcPC.pcIndex]"/>
+             </div>
+
+             </div>
+         </div>
+      </script>
+      <script type="text/ng-template" id="bpTreePreview">
+         <div id='debug-panel' class='panel panel-default'
+         ng-if="!isPreviewEmbedded">
+             <div class='panel-heading' ng-click='showDebugTabs = !showDebugTabs' style='padding:0;'>
+                 <h5 class='pull-left'>Troubleshooting </h5>
+                 <span class='pull-right' ng-class='{"icon-v-up-caret": showDebugTabs, "icon-v-down-caret": !showDebugTabs}'>
+                 </span>
+             </div>
+             <div class='row' style='background-color: #969696; margin: 0;'>
+                 <ul id='debug-tabs' ng-show='showDebugTabs'>
+                     <li ng-repeat="tab in tabs"  ng-class="{active: isActiveTab(tab.page)}" ng-click="onClickTab(tab, $event);">{{tab.title}}</li>
+                 </ul>
+             </div>
+             <div id="mainView" ng-class='{collapse: !showDebugTabs}'>
+                 <div class='panel-body' style='height: 200px; overflow: auto;' ng-include="currentTab"></div>
+             </div>
+         </div>
+
+         <div class="slds-col slds-clearfix" ng-if="children && children.length>0">
+             <sidebar class="slds-col--padded slds-cleafix"></sidebar>
+             <auto-saveforlater-msg></auto-saveforlater-msg>
+             <div class="vlc-slds-bpTree-step-chart__container testValerio">
+                 <!-- step chart for lightning this is the stepchar -->
+                 <bptree class="slds-clearfix"></bptree>
+                 <vlc-slds-right-panel></vlc-slds-right-panel>
+             </div>
+         </div>
+      </script>
+      <script type="text/ng-template" id="vlcSldsRightPanel.html">
+         <div class="pmeTest" ng-if="::!bpTree.propSetMap.hideStepChart">
+
+            <div vlc-slds-step-chart map="StepChart" ></div>
+
+            <!-- knowledge component will go here -->
+            <ng-include ng-repeat="vlcPC in ::bpTree.propSetMap.persistentComponent"
+                        ng-if='bpTree.showPCNew[vlcPC.pcIndex] && ($index === 1 )'
+                        id='{{::vlcPC.id}}'
+                        knowledge="true"
+                        src="::bpTree.dfHPSTmpl[vlcPC.pcIndex]"/>
+        </div>
+
+      </script>
+      <script type="text/javascript">
+            window.onload = function() {
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                 var panel = this.nextElementSibling.nextElementSibling;
+                    if (panel.style.display === "none") {
+                         panel.style.display = "block";
+
+                    } else {
+                        panel.style.display = "none";
+                    }
+                });
+            }
+
+    var acc = document.getElementsByClassName("accordion-subgroup");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active-subgroup");
+            var panel = this.nextElementSibling.nextElementSibling;
+            if (panel.style.display === "none") {
+                panel.style.display = "block";
+
+            } else {
+                panel.style.display = "none";
+            }
+
+        });
+    }
+}
+</script>
+
+    </div>
+<vlocity_cmt:VFActionFunction />
+</apex:page>

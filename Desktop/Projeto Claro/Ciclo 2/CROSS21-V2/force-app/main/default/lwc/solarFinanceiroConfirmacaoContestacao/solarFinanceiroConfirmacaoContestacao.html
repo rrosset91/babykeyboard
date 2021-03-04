@@ -1,0 +1,140 @@
+<!--
+  @description       :
+  @author            : Diego Almeida
+  @group             :
+  @last modified on  : 01-08-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log
+  Ver   Date         Author          Modification
+  1.0   05-11-2020   Diego Almeida   Initial Version
+  1.1   30-12-2020   Caio Cesar      Inserindo chamada para ContestationAdjustment
+-->
+<template>
+	<header>
+		<h3 class="header-text slds-text-title_bold">Confirme abaixo os itens corrigidos da fatura, e selecione a forma de crédito para o cliente.</h3>
+	</header>
+	<div style="padding-top: 25px">
+		<template if:true={hasError}>
+			<c-solar-exception-content show-error="true"></c-solar-exception-content>
+		</template>
+		<template if:false={hasError}>
+			<template if:true={hasData}>
+				<lightning-accordion allow-multiple-sections-open active-section-name={activeSections} class="accordion">
+					<lightning-accordion-section name="accordionChanged" label="ITENS CORRIGIDOS">
+						<div class="slds-p-around_medium lgc-bg">
+							<lightning-datatable key-field="id" data={data.lstChanged} hide-checkbox-column columns={data.columns} onsort={handleSortChanged}>
+							</lightning-datatable>
+						</div>
+					</lightning-accordion-section>
+					<lightning-accordion-section name="accordionNotChanged" label="ITENS NÃO CORRIGIDOS">
+						<div class="slds-p-around_medium lgc-bg">
+							<lightning-datatable key-field="id" data={data.lstNotChanged} hide-checkbox-column columns={data.columns} onsort={handleSortNotChanged}>
+							</lightning-datatable>
+						</div>
+					</lightning-accordion-section>
+				</lightning-accordion>
+				<div class="slds-p-around_medium lgc-bg">
+					<div class="slds-form slds-grid slds-wrap slds-gutters">
+						<dl class="slds-size_1-of-3 slds-p-around_x-small">
+							<div>
+								<dt class="slds-item_label slds-text-title_bold slds-text-align_left custom-padding">Valor Total da Fatura</dt>
+							</div>
+						</dl>
+						<dl class="slds-size_1-of-3 slds-p-around_x-small">
+							<div>
+								<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Valor Original</dt>
+								<dd class="slds-item_detail slds-text-title_bold slds-text-align_left custom-padding custom-content">{data.totalOriginalValue}</dd>
+							</div>
+						</dl>
+						<dl class="slds-size_1-of-3 slds-p-around_x-small">
+							<div>
+								<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">Valor Corrigido</dt>
+								<dd class="slds-item_detail slds-text-title_bold slds-text-align_left custom-padding custom-content">{data.totalCorrectedValue}</dd>
+							</div>
+						</dl>
+					</div>
+				</div>
+				<div class="slds-form slds-grid slds-wrap slds-gutters slds-border_top">
+					<dl class="slds-size_1-of-1 slds-p-around_x-small">
+						<div>
+							<lightning-radio-group
+								name="radioGroup"
+								label="Crédito para o Ciente"
+								options={options}
+								value={creditType}
+								onchange={getTypeCredit}
+								type="button"
+								required
+							>
+							</lightning-radio-group>
+						</div>
+					</dl>
+				</div>
+				<div if:true={StatusOpen}>
+					<div class="slds-p-around_medium lgc-bg">
+						<div class="slds-form slds-grid slds-wrap slds-gutters">
+							<c-solar-financeiro-segunda-via envio-segunda-via={envioSegundaVia} onsendtypemethod={handleSendMethod}></c-solar-financeiro-segunda-via>
+						</div>
+					</div>
+				</div>
+				<div class="slds-form slds-grid slds-wrap slds-gutters slds-p-around_x-small">
+					<c-solar-financeiro-contato-cliente base-attributes={baseAttributes}></c-solar-financeiro-contato-cliente>
+				</div>
+			</template>
+			<template if:false={hasData}>
+				<c-solar-exception-content show-empty="true"></c-solar-exception-content>
+			</template>
+		</template>
+	</div>
+
+	<!-- Modal-->
+	<c-solar-modal show-close-button="true" size="small" header={modalHeader}>
+		<div slot="content">
+			<div class="slds-form slds-grid slds-wrap slds-gutters">
+				<dl class="slds-size_1-of-2 slds-p-around_x-small">
+					<lightning-layout>
+						<lightning-layout-item padding="around-small">
+							<div>
+								<lightning-icon
+									icon-name={modalIcon}
+									alternative-text="Success!"
+									variant={modalVariantIcon}
+									title="success variant small"
+									size="small"
+								></lightning-icon>
+							</div>
+						</lightning-layout-item>
+						<lightning-layout-item>
+							<div>
+								<dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">{ModalText}</dt>
+							</div>
+						</lightning-layout-item>
+					</lightning-layout>
+				</dl>
+			</div>
+		</div>
+		<div slot="footer">
+			<lightning-layout horizontal-align="spread">
+				<lightning-layout-item>
+					<lightning-button variant="brand-outline" label="Fechar" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+				</lightning-layout-item>
+				<lightning-layout-item>
+					<lightning-button variant="brand" label="Fechar e ir Para Ficha Financeira" onclick={handleCloseModal} class="slds-m-left_x-small"> </lightning-button>
+				</lightning-layout-item>
+			</lightning-layout>
+		</div>
+	</c-solar-modal>
+
+	<footer>
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex">
+				<lightning-button variant="brand-outline" label="Voltar" class="slds-m-left_x-small" onclick={handleVoltar}></lightning-button>
+			</div>
+			<template if:false={hasError}>
+				<div style="width: 50%; justify-content: flex-end; display: flex">
+					<lightning-button variant="brand" label="Contestar" onclick={handleNextStep} class="slds-m-left_x-small" disabled={disabledNextStep}></lightning-button>
+				</div>
+			</template>
+		</div>
+	</footer>
+</template>

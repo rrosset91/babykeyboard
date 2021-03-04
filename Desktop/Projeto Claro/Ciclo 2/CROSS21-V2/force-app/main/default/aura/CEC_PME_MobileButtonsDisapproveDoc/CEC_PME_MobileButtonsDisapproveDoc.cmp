@@ -1,0 +1,53 @@
+<!-- CEC_PME_MobileButtonsDisapproveDoc.cmp -->
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="CEC_PME_MobileButtonsController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="CEC_PME_MobileButtonEvt" type="c:CEC_PME_MobileButtonEvt"/>
+    
+    <aura:attribute name="subStatus" type="String"/>
+    <aura:attribute name="complement" type="String"/>
+    <aura:attribute name="lstSubStatus" type="String[]"/>
+    <aura:attribute name="isQuickAction" type="Boolean" default="true" required="true"/>
+    
+    <lightning:card class="slds-p-around_medium">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-12">
+                <h1>
+                    <span class="slds-page-header__title slds-truncate">
+                        {!$Label.c.CEC_PME_MobileButtonsDisapproveDoc_1}
+                    </span>
+                </h1>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12">
+                <div class="slds-grid slds-wrap slds-grid_align-end">
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12">
+                        <div class="slds-m-around_xxx-small">
+                            <lightning:button variant="neutral" label="{!$Label.c.CEC_PME_MobileButtonsDisapproveDoc_2}" onclick="{! c.closeAction }" class="slds-button_stretch"/>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_5-of-12">
+                        <div class="slds-m-around_xxx-small">
+                            <lightning:button variant="brand" label="{!$Label.c.CEC_PME_MobileButtonsDisapproveDoc_3}" onclick="{! c.saveClick }" class="slds-button_stretch"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-1">
+                <lightning:select name="select" label="{!$Label.c.CEC_PME_MobileButtonsDisapproveDoc_4}" required="true" value="{v.subStatus}">
+                    <aura:iteration items="{!v.lstSubStatus}" var="optSubStatus">
+                        <option text="{!optSubStatus.text}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+            <div class="slds-col slds-size_1-of-1"> 
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="textarea-id-01">{!$Label.c.CEC_PME_MobileButtonsDisapproveDoc_5}</label>
+                    <div class="slds-form-element__control">
+                        <textarea id="textarea-id-01" class="slds-textarea" value="{!v.complement}"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,15 @@
+.THIS .disableSection {
+    background-color : #ecebea !important;
+    cursor :not-allowed !important;
+}
+
+.THIS .custom-checkbox {
+    display:-webkit-box;
+}
+
+.THIS .custom-combobox-suspension {
+    height : 20px;
+    margin-bottom : 0.25rem;
+    border-radius : .25rem;
+    border : 1px solid rgb(221, 219, 218);
+}

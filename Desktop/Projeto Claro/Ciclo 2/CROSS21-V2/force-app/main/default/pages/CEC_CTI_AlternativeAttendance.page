@@ -1,0 +1,220 @@
+<apex:page >
+    <html>
+        <style>
+
+                        
+            .general-content .in-attendance{
+                padding-top: 50px;
+                padding-bottom: 25px;
+            }
+
+            .general-content .in-attendance .attendance-text{
+                padding-top: 10px;
+            }
+
+            .general-content .in-attendance .attendance-text h2{
+                font-size: 20px;
+                font-weight: 100;
+                color: #ABABB0;
+            }
+            
+            .general-content .in-attendance .img-attendance{
+                padding-left: 45px;
+            }
+
+            .general-content .in-attendance .call-duration-text{
+                color: #ABABB0;
+            }
+
+        </style>
+        
+        <head>
+            
+            <meta charset="utf-8" />
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <title>Em atendimento</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+            
+
+            <!-- SLDS -->
+            <apex:stylesheet value="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/libs/LightningDesignSystem/assets/styles/salesforce-lightning-design-system.min.css')}"/>
+            
+            <!-- CUSTOM CSS -->
+            <apex:stylesheet value="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/css/general-css.css')}"/>
+
+            <!-- JQUERY -->
+            <apex:includeScript value="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/libs/jQuery/jquery-3.3.1.min.js')}"/>
+            <apex:includeScript value="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/libs/jQuery/jquery-ui.min.js')}"/>
+
+            <!-- DRIVER CTI -->
+            <!--<script type="text/javascript" src="https://cloudcc-prv-001.c2x.com.br/bettacti/Scripts/BettaDriver/BettaDriver.js"></script>-->
+            <apex:includeScript value="{!$Resource.OpenCTI_450}"/>
+            <apex:includeScript value="{!$Resource.BettaDriverJS}"/>
+            <apex:includeScript value="{!$Resource.JQuery}"/>
+            
+            <script type="text/javascript">
+                var api = getBettaDriverAPI();
+
+                api.onBettaDriverOpen = function(event){
+                    var strtype = event;
+                    console.log(strtype.type);
+                } 
+
+                api.onBettaDriverClose = function(event){
+                    var strtype = event;
+                    console.log(strtype.type);
+                    //$('#messages').append($('<li>').text(strtype.type));
+                } 
+                api.onBettaDriverError = function(event){
+                    var strtype = event;
+                    console.log(strtype.type);
+                    //$('#messages').append($('<li>').text(strtype.type));
+                } 
+                
+                api.onCallConnected = function(event){
+                    console.log("onCallConnected << ",event.type);
+                    $('.customer-awaiting .customer-number').append($('h1').text(event.ani));
+                    
+                    screenPop(event);
+                }      
+                
+                api.onCallDisconnected = function(event){
+                    var strtype = event;
+                    console.log("onCallDisconnected << ",strtype.type);
+                    //$('#messages').append($('<li>').text(strtype.type));
+                }   
+                var callback = function(response) {
+                    if (response.success) {
+                        console.log('API method call executed successfully! returnValue:', response.returnValue);
+                    } else { 
+                        console.error('Something went wrong! Errors:', response.errors);
+                    }
+                };
+
+                function screenPop(event) {
+                    
+                    if (event.cpf)
+                    {
+                        sforce.opencti.screenPop({type: sforce.opencti.SCREENPOP_TYPE.URL, params: {url:"/lightning/cmp/c__CEC_SearchAccountComponent?c__doc=" + event.cpf + "&c__tipo=CPF"}, callback: callback  });                 
+                    }
+                    else
+                    {
+                        sforce.opencti.screenPop({type: sforce.opencti.SCREENPOP_TYPE.URL, params: {url:"/lightning/cmp/c__CEC_SearchAccountComponent?c__doc=" + event.cpf + "&c__tipo=CPF"}, callback: callback  });                         
+                    }
+                }
+
+            </script>
+
+
+        </head>  
+        
+        <div class="header-page">
+
+            <div class="slds-grid slds-align-end attendance-status-and-bell">
+                <div class="slds-col slds-size_11-of-12 slds-form-element input-attendance-status">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            
+                            <select class="slds-select availability" id="select-01">
+                                <option>--</option>
+                            </select>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-12 text-center">
+                    <img class="img-bell" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-bell-off.svg')}"/>    
+                </div> 
+            </div>
+
+            <div class="slds-grid customer-awaiting">
+                <div class="slds-col slds-size_10-of-12 customer-number">
+                    <label class="slds-form-element__label" for="select-01">Telefonia habilitada</label><br/>
+                    <h1>  </h1>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-12 customer-arrow">
+                    <img src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-arrow-off.svg')}"/>  
+                </div>
+
+                <div class="slds-col slds-size_1-of-12 trash">
+                    <img src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/trash-off.svg')}"/>  
+                </div>             
+            </div>
+            
+            <div class="slds-grid customer-name">
+                    <div class="slds-col slds-size_12-of-12">
+                    <img src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/input-customer.svg')}"/>
+                    <h2>  </h2>
+                    </div>         
+            </div>
+
+
+        </div>
+        
+        <div class="general-content">
+            <div class="in-attendance">
+                <div class="slds-col slds-size_12-of-12 text-center">
+                    <img class="img-attendance" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-attendance.svg')}"/>  
+                </div>
+                <div class="text-center attendance-text">
+                    <div class="slds-col slds-size_12-of-12">
+                        <h2>
+                            Telefonia conectada
+
+                            
+                        </h2>
+                    </div>
+
+                </div>
+            </div>  
+        
+        </div>
+
+        <div class="footer-page">
+
+            <div class="call-primary-actions slds-grid">
+                <div class="slds-col slds-size_4-of-12 div-action text-center">
+                    <img title="Em espera" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-espera-off.svg')}"/>    
+                </div>
+    
+                <div class="slds-col slds-size_4-of-12 div-action finish-call text-center">
+                    <img title="Encerrar chamada" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/endcall-off.svg')}"/>
+                </div>
+    
+                <div class="slds-col slds-size_4-of-12 div-action text-center">
+                    <img title="Mudo" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-mute-off.svg')}"/>
+                </div>
+            </div>
+            
+            <div class="call-logs slds-grid">
+                <div class="slds-col slds-size_6-of-12 log-box scheduled text-center">
+                    <h2>Agendadas</h2>
+                </div>
+
+                <div class="slds-col slds-size_6-of-12 log-box text-center">
+                    <h2>Executadas</h2>
+                </div>
+            </div>
+
+            <div class="call-secondary-actions slds-grid">
+                <div class="slds-col slds-size_4-of-12 div-action text-center">
+                        <img title="Agendar retorno" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-calendar-off.svg')}"/>
+                </div>
+    
+                <div class="slds-col slds-size_4-of-12 div-action transfer-call text-center">
+                    <img title="Transferir" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-transfer-off.svg')}"/>
+                </div>
+    
+                <div class="slds-col slds-size_4-of-12 div-action text-center">
+                    <img title="Conferência" src="{!URLFOR($Resource.SoftphoneCTI, 'cec-cti-softphone/custom-assets/img/general/cti-group-off.svg')}"/>
+                </div>
+            </div>
+
+        </div>
+        
+    </html>
+
+</apex:page>

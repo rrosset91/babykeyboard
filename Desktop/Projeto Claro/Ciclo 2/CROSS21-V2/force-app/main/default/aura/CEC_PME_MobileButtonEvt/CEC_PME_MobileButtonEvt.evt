@@ -1,0 +1,4 @@
+<!-- CEC_PME_MobileButtonEvt -->
+<aura:event type="APPLICATION">
+    <aura:attribute name="orderStatus" type="String"/>
+</aura:event>

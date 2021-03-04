@@ -1,0 +1,42 @@
+<!--
+  @description       : 
+  @author            : Joao Neves
+  @group             : 
+  @last modified on  : 17-02-2021
+  @last modified by  : Roger Rosset
+  Modifications Log 
+  Ver   Date         Author       Modification
+  1.0   29-10-2020   Joao Neves   Initial Version
+ * 1.1 	 17-02-2021   Roger Rosset Acesso a tela de comparação de faturas
+
+-->
+<template>
+	<template if:false={detailsStep}>
+		<template if:false={compareScreen}>
+			<div style="background-color: white">
+				<div class="custom-header">Ficha Financeira</div>
+				<lightning-tabset>
+					<lightning-tab label="Cobranças">
+						<c-solar-res-faturas-abertas base-attributes={baseAttributes} onfetchdetails={fetchDetails} onfetchcompare={fetchCompare}></c-solar-res-faturas-abertas>
+					</lightning-tab>
+					<lightning-tab label="Lançamentos Futuros">
+						<c-solar-res-lancamentos-futuros base-attributes={baseAttributes}></c-solar-res-lancamentos-futuros>
+					</lightning-tab>
+					<lightning-tab label="Titulos Não Emitidos">
+						<c-solar-res-titulos-nao-emitidos base-attributes={baseAttributes}></c-solar-res-titulos-nao-emitidos>
+					</lightning-tab>
+					<lightning-tab label="Eventos">
+						<c-solar-res-eventos base-attributes={baseAttributes}></c-solar-res-eventos>
+					</lightning-tab>
+				</lightning-tabset>
+			</div>
+		</template>
+	</template>
+
+	<template if:true={detailsStep}>
+		<c-solar-res-detalhes-fatura base-attributes={baseAttributes} base-detail={baseDetail} onbackfaturas={openFaturas}></c-solar-res-detalhes-fatura>
+	</template>
+	<template if:true={compareScreen}>
+		<c-solar-financeiro-analytics comparison-data={comparisonData} onbackfaturas={openFaturas}></c-solar-financeiro-analytics>
+	</template>
+</template>

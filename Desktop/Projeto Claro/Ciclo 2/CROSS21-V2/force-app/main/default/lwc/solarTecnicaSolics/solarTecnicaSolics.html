@@ -1,0 +1,16 @@
+<template>
+    <template if:true={isEmpty}>
+		<c-solar-exception-content show-empty="true" empty-message="Não existem Solics para serem exibidas"></c-solar-exception-content>
+	</template>
+	<template if:true={hasError}>
+		<c-solar-exception-content show-error="true" error-message="Erro ao consultar Solics"></c-solar-exception-content>
+	</template>
+    <template if:true={showSolicsContent}>
+        <lightning-datatable
+                key-field="requestID"
+                columns={columns}
+                data={solics}
+                hide-checkbox-column="true">
+        </lightning-datatable>
+    </template>
+</template>

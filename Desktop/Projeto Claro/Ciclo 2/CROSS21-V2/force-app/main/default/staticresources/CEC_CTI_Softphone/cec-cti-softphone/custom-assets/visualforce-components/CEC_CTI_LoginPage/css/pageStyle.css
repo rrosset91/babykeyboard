@@ -1,0 +1,72 @@
+.general-content .login{
+    border: 1px solid #dbdada;
+    border-radius: 6px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.general-content .login .login-inputs{
+
+    background-color: #fafaf9;
+    padding-left: 7px;
+    background-position: 98% center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid #ABABAF;
+    border-radius: 0px;
+
+}
+
+.general-content input:focus{
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+
+
+.general-content .login .login-inputs.ramal{
+    background-image: url("{!URLFOR($Resource.CEC_CTI_Softphone, 'cec-cti-softphone/custom-assets/img/general/login-ramal.svg')}");
+    background-position: 95% center;
+}
+
+.general-content .login-header img{
+    padding-top: 30px;
+    padding-bottom: 15px;
+}
+
+.general-content .login-header h1{
+    text-transform: uppercase;
+    color: #DA291C;
+    font-size: 20px;
+}
+
+.general-content .login-form{
+    padding-top: 20px;
+}
+
+
+.general-content .login-form label{
+    color: #706E6B;
+    font-size: 13px;
+}
+
+.general-content .login-form input{
+    color: #000;
+}
+
+.error-messages .text-error{
+    padding-top: 10px;
+    color: #DA291C;
+}
+
+.button-sign{
+    padding-top: 20px;
+}
+
+.cti-button-grey{
+    margin-left: 0px !important;
+}

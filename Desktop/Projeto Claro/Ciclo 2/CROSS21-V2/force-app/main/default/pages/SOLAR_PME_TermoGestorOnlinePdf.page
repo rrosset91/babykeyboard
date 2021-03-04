@@ -1,0 +1,576 @@
+<!-- SOLAR_PME_TermoGestorOnlinePdf -->
+<apex:page showHeader="false" applyHtmlTag="false" renderAs="pdf" controller="SOLAR_PME_OnlySignaturePdfController" >
+    <head>
+        <style> 
+            @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans");
+             @page {
+                @top-center {
+                	content: element(header);
+                }
+                @bottom-left {
+                	content: element(rubricbl);
+                }
+            	@bottom-center {
+                	content: element(rubricbc);
+                }
+            	@bottom-right {
+                	content: element(rubricbr);
+                }
+            	margin-top: 3.5cm;
+            	margin-bottom: 2cm;
+            }
+            
+            @page signature-page {
+                @bottom-left {
+                	content: none;
+                }
+            	@bottom-center {
+                	content: none;
+                }
+            	@bottom-right {
+                	content: none;
+                }
+            	height: 61rem;
+            }
+            
+            .signature-page {
+            	page: signature-page;
+            }
+            
+            div.rubricbl {
+            	position: running(rubricbl);
+            }
+            div.rubricbc {
+            	position: running(rubricbc);
+            }
+            div.rubricbr {
+            	position: running(rubricbr);
+            }
+            
+            body {
+            	font-family: 'Ropa Sans', sans-serif !important;
+			}
+            
+            div.header {
+            	text-align: center;
+                padding: 5px;
+                position: running(header);
+                font: 14px bold;
+                text-transform: uppercase;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .header h3 {
+				display: inline-block;
+            	vertical-align: middle;
+            }
+            
+            .header img {
+            	display: inline-block;
+            	vertical-align: middle;
+            	margin-top: 5px;
+            }
+            
+            #main {
+            	font: 9px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            p {
+            	font: 12px;
+                padding: 1.5px;
+                margin: 2px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            h2 {
+                background-color: #d5d5d5;
+            	color: #303030;
+                font-size: 14px;
+                padding: 5px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .row {
+            	display: block;
+            }
+            
+            .colum {
+            	vertical-align: top;
+            	display: inline-block;
+            }
+            
+            .options-group {
+            	display: block;
+            	width: 100%;
+            	margin-bottom: 15px;
+            }
+            
+            .options-group .colum {
+            	vertical-align: middle;
+            	height: 21px;
+            }
+            
+            .w-100 {
+            	width: 100%;
+            }
+            
+            .w-95 {
+            	/* for whitespaces */
+            	width: 94%;
+            }
+            
+            .w-75 {
+            	width: 75%;
+            }
+            
+            .w-50 {
+            	width: 50%;
+            }
+            
+            .w-40 {
+            	width: 40%;
+            }
+            
+            .w-30 {
+            	width: 30%;
+            }
+            
+            .w-25 {
+            	width: 25%;
+            }
+            
+            .w-20 {
+            	width: 19%;
+            }
+            
+            .w-15 {
+            	width: 15%;
+            }
+            
+            .w-10 {
+            	width: 10%;
+            }
+            
+            .w-8 {
+            	width: 8%;
+            }
+            
+            .w-5 {
+            	width: 5%;
+            }
+            
+            .subtitle {
+            	font: 10px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .label {
+            	font: 12px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .value {
+            	font-size: 11px;
+            }
+            
+            .logo {
+            	float: right;
+            	height: 45px;
+            }
+            
+            .square {
+            	text-align: center;
+                width: 20px;
+                height: 20px;
+                border: 2px solid;
+            }
+            
+            .square p {
+            	margin: -2px;
+            }
+            
+            .anchors {
+            	color: #ffffff;
+            	font: 2px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .ass-field {
+            	border-bottom: 2px solid;
+            	padding-top: 40px;
+            	padding-bottom: 5px;
+            	margin-bottom: 0px;
+            	vertical-align:bottom;
+            }
+            
+            .align-top-center {
+            	vertical-align: top;
+            	text-align: center;
+            	margin-top: 0px;
+            	padding-top: 0px;
+            }
+            
+            .center {
+            	text-align: center;
+            }
+            
+            .align-bottom {
+            	vertical-align:bottom;
+            }
+            
+            .m-t-35 {
+            	margin-top: 35px;
+            }
+            
+            .m-t-30 {
+            	margin-top: 30px;
+            }
+            
+            .m-t-4 {
+            	margin-top: 4px;
+            }
+            
+            .m-t-60 {
+            	margin-top: 60px;
+            }
+            
+            .m-t-120 {
+            	margin-top: 120px;
+            }
+            
+            .mp-r-0 {
+            	margin-right: 0px;
+            	padding-right: 0px;
+            }
+            
+            .float-right {
+            	float: right;
+            }
+            
+            .p-t-50 {
+            	padding-top: 50px;
+            }
+            
+            hr.new1 {
+                border-top: 2px solid black;
+                margin-top: 10px;
+            	margin-bottom: 10px;
+            }
+            
+        </style>
+    </head>
+    <div class="header m-t-35">
+        <hr class="new1" />
+        <div class="row">
+            <div class="colum w-75">
+                <h3>TERMO DE ADESÃO AO MÓDULO GESTOR ONLINE 3.0</h3>
+            </div>
+            <div class="colum w-15">
+                <img src="/file-asset/ClaroLogopng" alt="Claro Logo" class="logo" />
+            </div>
+        </div>
+        <hr class="new1" />
+    </div>
+    <div class="rubricbl">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#01
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#02
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#03
+            </div>
+        </div>
+    </div>
+    <div class="rubricbc">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#04
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#05
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#06
+            </div>
+        </div>
+    </div>
+    <div class="rubricbr">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#07
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#08
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#09
+            </div>
+        </div>
+    </div>
+    
+    <div id="pj">	
+        <div class="row">
+            <div class="colum w-15">
+                <p class="label">
+                    Razão Social
+                </p>
+            </div>
+            <div class="colum w-40">
+                <p class="value">
+                    {!signiturePdfModel.company.name}
+                </p>
+            </div>
+             <div class="colum w-10">
+                <p class="label">
+                    CNPJ
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="value">
+                    {!signiturePdfModel.company.documentNumber}
+                </p>
+            </div>            	
+        </div> 
+        <br />
+        <div class="row">
+            <p>
+                O serviço Gestor Online permite ao Cliente Pessoa Jurídica efetuar a gestão e controle das linhas da empresa, através do link: <a>https://cIaro-gestoronIine.cIaro.com.br/evpn4g/</a>, que consta no site Claro empresas. O Gestor online poderá ser contratado para os celulares habilitados nos Planos Sob Medida em Reais, Sob Medida Empresa, Plano Pronto, Total Share e Claro Life.
+            </p>
+            <br />
+            <p>
+                Condições Comerciais:
+            </p>
+            <br />
+            <p>
+                Pelo presente instrumento particular de um lado CLARO e de outro o ASSINANTE, qualificado no Termo de Contratação Pessoa Jurídica, têm, entre si, certo e contratado o quanto segue:
+            </p>
+            <p>
+                1. O presente Termo de Adesão estipula as condições relativas ao Módulo “Gestor Online 3.0” comercializado pela CLARO, de forma vinculada e exclusiva aos Planos Pós-Pagos Corporativo, Sob Medida em Reais, Sob Medida Empresa, Plano Pronto e Total Share, aos quais é parte integrante, conforme opção manifestada pelo ASSINANTE no Termo de Contratação Pessoa Jurídica.
+            </p>
+            <p>
+                2. O ASSINANTE tendo exercido seu direito de opção de uma ou algumas das funcionalidades a seguir descritas, para controle de uso de seus celulares, através deste Termo de Adesão, fica sujeito às características e condições descritas nos termos dos subitens 2.1 a 2.4 da presente cláusula;
+            </p>
+            <p>
+                2.1 Controle por Horário/Calendário: permite restringir a originação de ligações de cada linha, baseada em dia e/ou horário.
+            </p>
+            <p>
+                2.2 Controle por Destino: permite restringir a originação de ligações de cada celular, para determinados destinos e, concomitantemente, restringir o consumo a um total de minutos por linha.
+            </p>
+            <p>
+                2.3 Controle por Limite de Consumo em Minutos: permite definir o limite de minutos liberados para uso de seus funcionários. A limitação pode ser: acumulada ou por tipo de ligação, atribuída a um funcionário, compartilhada pelo Centro de Custo ou Departamento.
+            </p>
+            <p>
+                2.3.1 No Gestor Online 3.0 o Adm. pode cancelar as chamadas em curso, ou seja, caso o limite de minutos definido pela empresa seja atingindo durante uma ligação, o Gestor permite que esta seja terminada através da opção de Bloqueio Imediato, onde o bloqueio é realizado no botão "Interromper a Ligação ao atingir o limite".
+            </p>
+            <p>
+                2.4 O Gestor Online controla e/ou bloqueia o tráfego de dados dentro da rede GSM/3G/4G/4.5G da Claro.
+            </p>
+            <p>
+                3. As chamadas originadas a cobrar e para números 0800 não são controladas pelo Gestor Online, por serem chamadas sem custo associado.
+            </p>
+            <p>
+                3.1 As chamadas originadas para o número do Administrador do Centro de Custo e para o Administrador do Departamento estão sempre liberadas, porém serão cobradas normalmente de acordo com as tarifas do plano contratado. Se o campo do número do Administrador do Centro de Custo ou do Departamento não for preenchido, esta funcionalidade não estará habilitada. O número cadastrado poderá ser um fixo ou celular.
+            </p>
+            <p>
+                4. O ASSINANTE reconhece que a pessoa nomeada no Termo de Adesão atuará como adm. dos serviços adquiridos perante a CLARO, com os seguintes poderes:
+            </p>
+            <p>
+                a) contratar e/ou alterar serviços, e/ou usuários elegíveis, por intermédio do Atendimento Claro PJ.
+            </p>
+            <p>
+                b) promover o gerenciamento de uso dos celulares corporativos através do Serviço Gestor Online.
+            </p>
+            <p>
+                4.1 Para consecução do disposto na cláusula 4 acima, o ASSINANTE receberá, pelo adm. por ele nomeado, uma senha pessoal e intransferível, para sua utilização exclusiva relativamente ao controle de uso pelo qual tenha optado com a qual o referido adm. terá acesso às configurações das funcionalidades e ao cadastramento dos usuários que terão acesso ao Serviço Gestor Online 3.0.
+            </p>
+            <p>
+                4.1.1 O uso e guarda da senha indicada na cláusula 4.1 acima é de total e exclusiva responsabilidade do ASSINANTE, na pessoa do gestor por ele indicado, não cabendo à CLARO qualquer responsabilidade por quaisquer danos causados a terceiros pelo uso indevido da senha e das funcionalidades. 
+            </p>
+           <p>
+               4.1.2 O ASSINANTE deverá comunicar, mediante envio de correspondência ou por e-mail, o desligamento ou substituição do adm. nomeado, providenciando, incontinente, o bloqueio de todo e qualquer acesso a que o mesmo tenha por força deste instrumento, indicando ainda o novo gestor.
+            </p>
+            <p>
+                4.1.3 Ao utilizar o Gestor Online 3.0 possibilita a aplicação de uso do CSP21.
+            </p>
+            <p>
+                4.1.4 O acesso ao portal só será possível através do e-mail do adm. da conta.
+            </p>
+            <p>
+                5. O serviço Gestor Online 3.0 é válido em roaming nacional em todo o país para chamadas de voz e SMS MO. O serviço não controla o uso de Dados GPRS/EDGE fora da rede Claro.
+            </p>
+        </div>
+    </div>
+    
+    <div class="signature-page">
+        <div class="row">
+            <p>
+                6. Na funcionalidade “Discagem abreviada”, existem as seguintes restrições quanto à definição dos ramais associados a cada linha:
+            </p>
+            <p>
+                6.1 Ramais de 4 a 6 dígitos não podem ser iniciados por 0, 1 e 9, além dos números especiais utilizados pela Claro. O presente Termo vigerá pelo mesmo prazo e observará as mesmas condições do Termo de Contratação Pessoa Jurídica para a prestação do Serviço Móvel Pessoal, implicando a rescisão dos mesmos no cancelamento automático do serviço Gestor Online 3.0.
+            </p>
+            <p>
+                7. Fica estipulado, entretanto que o ASSINANTE poderá, a qualquer tempo, cancelar o presente Termo, total ou parcialmente de forma isolada.
+            </p>
+            <p>
+                8. Permanecem válidas e em pleno vigor todas as disposições do Termo de Contratação Pessoa Jurídica a que tenha optado o ASSINANTE, que não sejam conflitantes com os dispostos no presente instrumento.
+            </p>
+            <p>
+                9. Para o plano Total Share/Claro Total a franquia de dados é compartilhada entre todas as linhas e com excedente. Por isso caso o cliente venha contratar o Gestor Online 3.0 todas as linhas que compartilham a franquia obrigatoriamente tem que adquirir o Gestor. As configurações de limites e bloqueio de excedente de dados por linha devem ser feitas através do "Gestor Online 3.0.", essa configuração é de responsabilidade do Cliente cadastrado como "Administrador da Conta" usando como login de acesso o e-mail cadastrado no sistema Claro.
+            </p>
+            <p>
+                10. Funcionamento do controle de calendário: o bloqueio de calendário é executado no início da conexão do assinante e é valido para todas as conexões: Voz, SMS e dados, por exemplo: se um assinante possui um perfil com calendário que permite executar conexões (funções) entre 09hrs às 18hrs e iniciar uma chamada de voz às 19h59, esta conexão irá se estender até o término da chamada. Na próxima tentativa de chamada de voz, a conexão será bloqueada, dada que o início será dentro do horário de bloqueio de calendário. Da mesma forma se a conexão de dados for estabelecida antes do horário de bloqueio do calendário, esta conexão será mantida até o término da sessão. Neste período poderá haver cobranças tarifarias conforme plano contratado.
+            </p>
+            <p>
+                11. Caso haja suspensão dos serviços contratados por cobrança (falta de pagamento), acarretará na rescisão do contrato e se for negociada e houver retomada dos serviços o Gestor Online 3.0 deverá ser totalmente reconfigurado.
+            </p>
+        </div>
+        <div class="row">
+            <div class="colum w-20">
+                <p class="label">
+                    Gestor Nomeado
+                </p>
+            </div>
+            <div class="colum w-70">
+                <p class="value">
+                    {!signiturePdfModel.apointedManager.name}
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-20">
+                <p class="label">
+                    Telefone para Contato
+                </p>
+            </div>
+            <div class="colum w-70">
+                <p class="value">
+                    {!signiturePdfModel.apointedManager.phone}
+                </p>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="colum w-40">
+                <div class="ass-field align-bottom">
+                    <p class="anchors" >
+                        LOCALIZATION#1
+                    </p>
+                </div>
+            </div>
+            <div class="colum w-5 center align-bottom">
+                <p class="label">
+                    ,
+                </p>
+            </div>
+            <div class="colum w-40 mp-r-0">
+                <div class="ass-field">
+                    <p class="anchors">
+                        DATE#1
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-40">
+                <p class="label align-top-center">
+                    Local 
+                </p>
+            </div>
+            <div class="colum w-5">
+                <p class="label align-top-center">
+                    
+                </p>
+            </div>
+            <div class="colum w-40">
+                <p class="label align-top-center">
+                    Data
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <apex:repeat value="{!signiturePdfModel.listAdministrators}" var="administrator">
+                <div class="colum w-40 m-t-4">
+                    <div class="row">
+                        <div class="colum w-20">
+                            <p class="label ">
+                                Nome
+                            </p>
+                        </div>
+                        <div class="colum w-75">
+                            <p class="value">
+                                {!administrator.name}
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="label">
+                                Cargo
+                            </p>
+                        </div>
+                        <div class="colum w-75">
+                            <p class="value">
+                                {!administrator.responsibility}
+                            </p>
+                        </div>
+                        <div class="colum w-20">
+                            <p class="label">
+                                CPF
+                            </p>
+                        </div>
+                        <div class="colum w-75">
+                            <p class="value">
+                                {!administrator.documentNumber}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </apex:repeat>
+            
+        </div>
+        <apex:repeat value="{!signiturePdfModel.listAdministrators}" var="administrator">
+            <div class="row">
+                <div class="colum w-40">
+                    <div class="ass-field">
+                        <p class="anchors">
+                            {!administrator.anchor}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-40">
+                    <p class="label align-top-center">
+                        Representante Legal da Empresa
+                    </p>
+                </div>
+            </div>
+        </apex:repeat>
+        
+        <apex:repeat value="{!signiturePdfModel.listDonors}" var="donor">
+            <div class="row">
+                <div class="colum w-40">
+                    <div class="ass-field">
+                        <p class="anchors">
+                            {!donor.anchor}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="colum w-40">
+                    <p class="label align-top-center">
+                        Assinatura do Doador
+                    </p>
+                </div>
+            </div>
+        </apex:repeat>
+    </div>
+    
+    
+    
+</apex:page>

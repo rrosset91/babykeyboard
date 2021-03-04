@@ -1,0 +1,57 @@
+<aura:component controller="CEC_360_AggregatorsController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="dataAggregator" type="Object"/>
+    <aura:attribute name="requestDescription" type="String"/>
+    <aura:attribute name="expirationDate" type="String"/>
+    <aura:attribute name="confirmationDate" type="String"/>
+    <aura:attribute name="cancellationDate" type="String"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    
+    <div class ="slds-float_right">
+        <div class ="slds-is-absolute" style="margin-top: -50px; margin-left: -5px;">
+            <lightning:buttonIcon iconName="utility:close" variant="bare-inverse" size="large" onclick="{!c.handleClose}" />
+        </div>
+    </div>
+    
+    <div class="slds-p-horizontal_small">
+        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate slds-text-align_left">Detalhes do Agregador</h2>
+    </div>
+    
+    <div class="slds-p-horizontal--small slds-size--1-of-3" style="border-bottom:1px solid #D9DBDD; padding-bottom: 10px; width: 100%;"></div>
+    
+    <div class="slds-p-horizontal_small slds-p-bottom_small">
+        <div class="slds-grid slds-gutters slds-m-vertical_small">
+            <div class="slds-col slds-size_2-of-4">
+                <div class="slds-form-element slds-form-element_readonly">
+                    <span class="slds-form-element__label">Descrição</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{!v.requestDescription}</div>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-form-element_readonly slds-p-top_xx-small">
+                    <span class="slds-form-element__label">Cancelamento</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{!v.cancellationDate}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_2-of-4">
+                <div class="slds-form-element slds-form-element_readonly">
+                    <span class="slds-form-element__label">Confirmação</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{!v.confirmationDate}</div>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-form-element_readonly slds-p-top_xx-small">
+                    <span class="slds-form-element__label">Expiração</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{!v.expirationDate}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

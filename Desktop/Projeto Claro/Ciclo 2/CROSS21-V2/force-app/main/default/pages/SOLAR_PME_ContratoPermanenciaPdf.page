@@ -1,0 +1,483 @@
+<!-- SOLAR_PME_ContratoPermanenciaPdf -->
+<apex:page showHeader="false" applyHtmlTag="false" renderAs="pdf" controller="SOLAR_PME_OnlySignaturePdfController" >
+    <head>
+        <style> 
+            @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans");
+             @page {
+                @top-center {
+                	content: element(header);
+                }
+                @bottom-left {
+                	content: element(rubricbl);
+                }
+            	@bottom-center {
+                	content: element(rubricbc);
+                }
+            	@bottom-right {
+                	content: element(rubricbr);
+                }
+            	margin-top: 2.5cm;
+            	margin-bottom: 2cm;
+            }
+            
+            @page signature-page {
+                @bottom-left {
+                	content: none;
+                }
+            	@bottom-center {
+                	content: none;
+                }
+            	@bottom-right {
+                	content: none;
+                }
+            	height: 61rem;
+            }
+            
+            .signature-page {
+            	page: signature-page;
+            }
+            
+            div.rubricbl {
+            	position: running(rubricbl);
+            }
+            div.rubricbc {
+            	position: running(rubricbc);
+            }
+            div.rubricbr {
+            	position: running(rubricbr);
+            }
+            
+            body {
+            	font-family: 'Ropa Sans', sans-serif !important;
+			}
+            
+            div.header {
+            	text-align: center;
+                padding: 5px;
+                position: running(header);
+                font: 14px bold;
+                text-transform: uppercase;
+            	font-family: 'Ropa Sans', sans-serif;
+            	margin-top: 40px;
+            }
+            
+            .header h3 {
+				display: inline-block;
+            	vertical-align: middle;
+            }
+            
+            .header img {
+            	display: inline-block;
+            	vertical-align: middle;
+            	margin-top: 5px;
+            }
+            
+            #main {
+            	font: 9px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            p {
+            	font: 14px;
+                padding: 1px;
+                margin: 1px;
+            	font-family: 'Ropa Sans', sans-serif;
+                text-align: justify;
+                text-justify: inter-word;
+            }
+            
+            h2 {
+                background-color: #d5d5d5;
+            	color: #303030;
+                font-size: 14px;
+                padding: 5px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .row {
+            	display: block;
+            }
+            
+            .colum {
+            	vertical-align: top;
+            	display: inline-block;
+            }
+            
+            .options-group {
+            	display: block;
+            	width: 100%;
+            	margin-bottom: 15px;
+            }
+            
+            .options-group .colum {
+            	vertical-align: middle;
+            	height: 21px;
+            }
+            
+            .w-100 {
+            	width: 100%;
+            }
+            
+            .w-95 {
+            	/* for whitespaces */
+            	width: 94%;
+            }
+            
+            .w-85 {
+            	width: 85%;
+            }
+            
+            .w-50 {
+            	width: 49%;
+            }
+            
+            .w-40 {
+            	width: 40%;
+            }
+            
+            .w-30 {
+            	width: 30%;
+            }
+            
+            .w-25 {
+            	width: 25%;
+            }
+            
+            .w-20 {
+            	width: 19%;
+            }
+            
+            .w-15 {
+            	width: 15%;
+            }
+            
+            .w-10 {
+            	width: 10%;
+            }
+            
+            .w-8 {
+            	width: 8%;
+            }
+            
+            .w-5 {
+            	width: 5%;
+            }
+            
+            .subtitle {
+            	font: 10px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .label {
+            	font: 12px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .value {
+            	font-size: 11px;
+            }
+            
+            .logo {
+            	float: right;
+            	height: 35px;
+            }
+            
+            .square {
+            	text-align: center;
+                width: 20px;
+                height: 20px;
+                border: 2px solid;
+            }
+            
+            .square p {
+            	margin: -2px;
+            }
+            
+            .anchors {
+            	color: #ffffff;
+            	font: 2px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .ass-field {
+            	border-bottom: 2px solid;
+            	padding-top: 30px;
+            	padding-bottom: 5px;
+            	margin-bottom: 0px;
+            	vertical-align:bottom;
+            }
+            
+            .border-left {
+            	border-left: 2px solid;
+            	padding-left: 5px;
+            }
+            
+            .align-top-center {
+            	vertical-align: top;
+            	text-align: center;
+            	margin-top: 0px;
+            	padding-top: 0px;
+            }
+            
+            .center {
+            	text-align: center;
+            }
+            
+            .align-bottom {
+            	vertical-align:bottom;
+            }
+            
+            .m-t-30 {
+            	margin-top: 30px;
+            }
+            
+            .m-t-60 {
+            	margin-top: 60px;
+            }
+            
+            .m-t-120 {
+            	margin-top: 120px;
+            }
+            
+            .mp-r-0 {
+            	margin-right: 0px;
+            	padding-right: 0px;
+            }
+            
+            .float-right {
+            	float: right;
+            }
+            
+            .p-t-50 {
+            	padding-top: 50px;
+            }
+            
+            hr.new1 {
+                border-top: 2px solid black;
+                margin-top: 20px;
+            }
+            
+        </style>
+    </head>
+    <div class="header">
+        <h3>CONTRATO DE PERMANÊNCIA - PEQUENAS E MÉDIAS EMPRESAS</h3>
+    </div>
+    <div class="rubricbl">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#01
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#02
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#03
+            </div>
+        </div>
+    </div>
+    <div class="rubricbc">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#04
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#05
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#06
+            </div>
+        </div>
+    </div>
+    <div class="rubricbr">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#07
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#08
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#09
+            </div>
+        </div>
+    </div>
+    
+        
+        <div class="row">
+            <div class="colum w-50">
+                <p>
+                    <b>1.</b> Considerando a contratação do serviço realizada pelo <b>ASSINANTE</b>, assim identificada no Termo de Contratação Pessoa Jurídica (“TCPJ”), parte integrante deste instrumento e do Contrato de Prestação do Serviço Móvel Pessoal (“SMP”), a <b>CLARO</b> concede, neste ato o(s) benefício(s) comercial(is) descritos no anexo, podendo ser desconto para aquisição de estação(ões) móvel(is), e/ou placa PCMCIA ou Modem (“Aparelhos”) conforme assinalado ‘no TCPJ, e/ou preços promocionais mais vantajosos.
+                </p>
+                <p>
+                    <b>1.1.</b> Em razão da concessão do(s) benefício(s) comercial(is) acima mencionado(s) e em contrapartida, o <b>ASSINANTE</b> compromete-se a permanecer vinculado ao Plano de Serviço optado no TCPJ, pelo prazo de 24 (vinte e quatro) meses (“Prazo de Permanência”), contados da data de ativação de cada linha contratada, conforme regulamentação da Anatel.
+                </p>
+                <p>
+                    <b>1.2.</b> Por força do presente Termo de Condições Comerciais para Concessão de Benefícios – PME, o <b>ASSINANTE</b> declara que optou pelo Prazo de Permanência referido em 1.1 acima após tomar conhecimento dos demais Prazos de Permanência ofertados pela <b>CLARO</b>.
+                </p>
+                <p>
+                    <b>1.3.</b> Considerando que os valores apresentados no TCPJ correspondem a valores promocionais, abaixo dos valores homologados na Anatel, a <b>CLARO</b> se reserva o direito de alterá-los, a qualquer momento, em decorrência de autorização do Poder Concedente e/ou em caso de alteração das promoções vigentes na <b>CLARO</b>.
+                </p>
+                <p>
+                    <b>2.</b> O <b>ASSINANTE</b> tem plena ciência de que lhe é facultada a aquisição dos Aparelhos sem a obrigação de aderir às condições deste Termo, mas sem a concessão do desconto promocional descrito no TCPJ.
+                </p>
+                <p>
+                    <b>3.</b> A redução do valor total mensal contratado pelo <b>ASSINANTE</b> ou a rescisão da presente contratação antes do decurso do Prazo de Permanência ensejarão as seguintes penalidades:
+                </p>
+                <p>
+                    <b>3.1.</b> Na hipótese de redução do valor total mensal referente ao plano contratado ou a redução do valor total mensal dos módulos opcionais compartilhados, o <b>ASSINANTE</b> poderá ficar sujeito ao pagamento de multa equivalente a 50% (cinquenta por cento) do valor reduzido, multiplicado pelo número de acessos contratados, multiplicado, ainda, pelo número de meses restantes para o final do Prazo de Permanência. 
+                </p>
+            </div>
+            <div class="colum w-50 border-left">
+                <p>
+                    <b>3.2.</b> Na hipótese de cancelamento de módulos de serviços opcionais individuais, o <b>ASSINANTE</b> poderá ficar sujeito ao pagamento de multa equivalente ao resultado da multiplicação do valor de 50% (cinquenta por cento) do valor reduzido, multiplicado pelo número de meses restantes para o final do Prazo de Permanência.
+                </p>
+                <p>
+                    <b>3.3.</b> Na hipótese de rescisão da presente contratação, antes do decurso do Prazo de Permanência, o <b>ASSINANTE</b> poderá ficar sujeito ao pagamento de multa, por cada acesso cancelado, no valor correspondente ao resultado da multiplicação do número de meses restantes para o final do Prazo de Permanência pelo valor de R$ 50,00 (cinquenta reais).
+                </p>
+                <p>
+                    <b>3.4.</b> A <b>CLARO</b> poderá emitir notificação de débito para a cobrança da(s) multa(s) rescisória(s) decorrente do cancelamento ou alteração das condições contratadas, conforme a Cláusula 3.1, 3.2 e 3.3 do presente Contrato, no prazo de 90 (noventa) dias, após o qual o direito à cobrança da multa rescisória restará extinto.
+                </p>
+                <p>
+                    <b>3.5.</b> Na hipótese de recebimento da notificação de débito referente à multa rescisória, nos termos da cláusula 3.1, 3.2 e/ou 3.3, o <b>ASSINANTE</b> poderá, no prazo de 90 (noventa) dias contados a partir da ciência da notificação, apresentar oposição à referida cobrança a fim de justificar a rescisão ou o descumprimento das condições contratuais.
+                </p>
+                <p>
+                    <b>3.6.</b> A cobrança da multa rescisória prevista nos itens 3.1, 3.2 e/ou 3.3 ficará suspensa até a conclusão, pela <b>CLARO</b>, da análise apresentada pelo <b>ASSINANTE</b>. Concluída a análise, o <b>ASSINANTE</b> será notificado acerca da anulação ou ratificação da cobrança pela <b>CLARO</b>.
+                </p>
+                <p>
+                    <b>4.</b> Qualquer acréscimo a toda e qualquer contratação já existente, onde tenha obtido descontos ou promoções, acarretará o aumento do valor total mensal contratado, sendo que o cancelamento parcial ou total da contratação implicará a incidência da multa estipulada no item 3 e seus subitens acima.
+                </p>
+                <p>
+                    <b>5.</b> A inclusão de novas linhas e/ou módulos poderá ser solicitada pelo <b>ASSINANTE</b>, não tendo a <b>CLARO</b>, contudo, obrigação de aceitá-la, sem a devida avaliação prévia, o que fica desde já autorizado pelo <b>ASSINANTE</b>. 
+                </p>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-50">
+                <p>
+                    <b>6.</b> Caso o <b>ASSINANTE</b>, antes do decurso do Prazo de Permanência estabelecido neste Termo, solicite a alteração de seu Plano de Serviço e/ou Módulos e/ou Pacotes de Serviços para outro, as seguintes condições deverão ser observadas:
+                </p>
+                <p>
+                    <b>6.1.</b> Caso a alteração não ocasione uma diminuição do valor mensal inicialmente contratado, o <b>ASSINANTE</b> permanecerá obrigado a cumprir os meses remanescentes do prazo de permanência estabelecido neste Termo; e
+                </p>
+                <p>
+                    <b>6.2.</b> Caso a alteração solicitada ocasione uma diminuição do valor mensal inicialmente contratado, o <b>ASSINANTE</b> deverá pagar à <b>CLARO</b> a quantia indicada no item 3.1 acima.
+                </p>
+                <p>
+                    <b>6.3</b> Na hipótese de contratação do Plano Telemetria, o <b>ASSINANTE</b> está ciente que após consumo total da franquia do plano contratado, conforme constante do Anexo I ao Termo de Contratação Pessoa Jurídica M2M Individual, seu uso será bloqueado, inexistindo a opção de compra de pacote adicional.
+                </p>
+                <p>
+                    <b>7.</b> Na hipótese de o <b>ASSINANTE</b> não utilizar adequadamente o serviço de telecomunicações ora contratado, conforme preceitos contidos na regulamentação pertinente, tais como, mas não se limitando, ao uso das linhas contratadas no Plano Sob Medida ou Planos Prontos, exceto Plano Pronto Linha Econômica, Total Share em sistema PABX ou o desenvolvimento de atividades de telecomunicações sem a necessária autorização expedida pela Anatel, autoriza a <b>CLARO</b>, de forma imediata e independente de notificação ao <b>ASSINANTE</b>, a tomar as seguintes providências:
+                </p>
+                <p>
+                    <b>a)</b>Apresentar denúncia à Anatel, para as providências cabíveis;
+                </p>
+                <p>
+                    <b>b)</b>Tornar sem efeito os descontos, promoções e vantagens concedidos quando da contratação da Plano Corporativo, passando a aplicar os preços e condições estabelecidos em seu Plano Alternativo de Serviço; ou, ainda;
+                </p>
+                <p>
+                    <b>c)</b>Rescindir o Contrato SMP e os demais contratos relacionados à prestação do SMP ao ASSINANTE, devendo o <b>ASSINANTE</b>, nessa hipótese, efetuar os pagamentos devidos pela utilização do serviço, inclusive, eventual multa prevista no item 3 acima.
+                </p>
+            </div>
+            <div class="colum w-50 border-left">
+               <p>
+                   <b>7.1.</b> O <b>ASSINANTE</b> declara-se ciente de que o desenvolvimento de atividades de telecomunicaçõessem a necessária e obrigatória autorização expedida pela Anatel constitui crime previsto no art. 183, da Lei nº 9.472/97.
+                </p>
+                <p>
+                    <b>8.</b> O <b>ASSINANTE</b> indica, autoriza e concorda que a Pessoa Física constante do TCPJ, no campo “administrador da conta”, na qualidade de representante legal do <b>ASSINANTE</b>, poderá solicitar a adição de novos acessos, franquias em reais/minutos e serviços adicionais (Módulos e Pacotes de Serviços) em nome do <b>ASSINANTE</b>, por meio da Central de Atendimento, mediante a confirmação da senha de atendimento a ser fornecida pela <b>CLARO</b>, sendo certo que de acordo com a natureza da solicitação a <b>CLARO</b> poderá requisitar, ainda, a confirmação de dados cadastrais do <b>ASSINANTE</b> e/ou Pessoa Física indicada no referido termo ou, ainda, poderá solicitar o cancelamento total ou parcial deste instrumento, observadas as condições aqui dispostas, através de e-mail (endereço eletrônico) mencionado no TCPJ, no campo de responsáveis pelo Contrato.
+                </p>
+                <p>
+                    <b>8.1.</b> O <b>ASSINANTE</b> concorda, desde já, que as solicitações dispostas no item 8 acima estão condicionadas à confirmação de recebimento das mesmas pela <b>CLARO</b>, e que, em qualquer hipótese, permanecem vigentes as disposições constantes neste instrumento, seus anexos e no Contrato SMP, inclusive no que se refere ao Prazo de Permanência que, para a(s) nova(s) linha(s), franquia(s) em reais/minutos e/ou serviços adicionais (Módulos e Pacotes de Serviços) adquiridos no decorrer da vigência do contrato, passará a ser contado a partir da data desta nova aquisição.
+                </p>
+                <p>
+                    <b>9.</b> O <b>ASSINANTE</b> declara que obteve todas as informações necessárias sobre os planos e os serviços adicionais (Módulos e Pacotes de Serviços) contratados através de(i) Proposta Comercial e/ou Folheteria entregues, (ii) pelo site da <b>CLARO</b> (www.claro.com.br) e (iii) por meio do acesso a uma área restrita no site da <b>CLARO</b>, informando seu login (número de sua linha) e senha (a ser cadastrada no primeiro acesso). Sendo hipótese de Portabilidade Numérica, o <b>ASSINANTE</b> declara que tomou conhecimento e concordou com todas as condições relativas à Portabilidade.
+                </p>
+            </div>
+        </div>
+    <div class="row signature-page">
+            <div class="colum w-50">
+                <p>
+                    <b>10.</b> Se o <b>ASSINANTE</b>, durante o prazo de vigência estabelecido neste Termo, solicitar suspensão temporária do seu contrato de SMP, o Prazo de Permanência também ficará suspenso e só voltará a vigorar quando o contrato de SMP for reativado. O <b>ASSINANTE</b> adimplente poderá solicitar suspensão do SMP uma vez a cada período de 12 (doze) meses, pelo prazo mínimo de 30 (trinta) dias e máximo de 120 (cento e vinte) dias, conforme regulamentação da Anatel.
+                </p>
+                <p>
+                    <b>11.</b> Em se tratando de fornecimento de Aparelhos(s), em regime de comodato, o <b>ASSINANTE</b> se obriga a usá-los adequadamente, na forma dos art. 579 e seguintes do Código Civil, bem como mantê-lo(s) a salvo de perda, furto, roubo ou dano por má utilização, obrigando-se, ainda, a devolvê-lo(s) à <b>CLARO</b>, ao final do prazo de vigência assinalado no TCPJ, ou em caso de rescisão contratual, qualquer que seja o motivo, em perfeito estado de uso e conservação, excetuando os desgastes naturais de tempo e uso.
+                </p>
+                <p>
+                    <b>11.1</b> Na hipótese de não devolução do(s) aparelho(s) pelo <b>ASSINANTE</b>, por qualquer motivo, incluindo, mas não se limitando às hipóteses de roubo, furto ou extravio, no prazo máximo de 15 (quinze) dias úteis a contar do término do prazo de vigência assinalado no TCPJ ou de sua rescisão, o <b>ASSINANTE</b> se obriga ao pagamento do valor de mercado do(s) referido(s) Aparelho(s) por meio da fatura da <b>CLARO</b>, ou por meio de outra forma estabelecida pela <b>CLARO</b> à época.
+                </p>
+                <p>
+                    <b>11.2</b> No caso de devolução do(s) Aparelho(s) sem apresentação da(s) respectiva(s) Nota(s) Fiscal(is) de Devolução, o <b>ASSINANTE</b>, em sendo contribuinte do ICMS, incorrerá no pagamento de multa equivalente a R$ 200,00 (duzentos reais) para cada Aparelho <b>CLARO</b> devolvido sem Nota Fiscal de Devolução.
+                </p>
+                <p>
+                    <b>12.</b> Ao optar pelo uso do serviço de Roaming Internacional, o <b>ASSINANTE</b> deverá estar ciente de que será tarifado fora da franquia contratada e que os valores promocionais ofertados poderão sofrer alterações devido à variação cambial e aos acordos de parceria com as operadoras internacionais. Os <b>ASSINANTES</b> de rastreamento, telemetria e Planos de Banda Larga que estiverem em áreas limítrofes do Brasil com outros países, bem como no exterior, estando com o serviço de Roaming Internacional desbloqueado, podem ser tarifados por esse serviço. Para maiores informações sobre as tarifas em Roaming Internacional (valores cobrados e forma de tarifação) o <b>ASSINANTE</b> deverá contatar o serviço de atendimento, discando *468 diretamente do celular
+                </p>
+            </div>
+            <div class="colum w-50 border-left">
+                <p>
+                    <b>CLARO</b> ou 1052 de qualquer telefone em território nacional. O atendimento será gratuito e disponível 24 horas.
+                </p>
+                <p>
+                   <b>13.</b> Os <b>ASSINANTES</b> que utilizarem os serviços de telemetria, rastreamento ou Planos de Banda Larga fora da área de cobertura da <b>CLARO</b> serão tarifados em Roaming Nacional GSM/GPRS. Para maiores informações sobre as tarifas de dados em Roaming Nacional, o <b>ASSINANTE</b> deverá contatar a <b>CLARO</b>, discando 1052 de qualquer telefone. O atendimento é gratuito e disponível 24 horas.
+                </p>
+                <p>
+                    <b>14.</b>	O ASSINANTE poderá, a qualquer tempo, entrar em contato com o Serviço de Atendimento ao Cliente – SAC da CLARO, através do telefone 1052 (ligação gratuita) ou através do site www.claro.com.br, para realizar solicitação de serviço ou reclamação.
+                </p>
+                <p>
+                    <b>15.</b>	O <b>ASSINANTE</b> reconhece e, desde logo, concorda que a <b>CLARO</b> retém o direito de ceder o crédito descrito neste Termo, independente de qualquer notificação prévia.
+                </p>
+                <p>
+                    <b>16.</b>	O presente instrumento é celebrado em caráter irrevogável e irretratável, obrigando as partes, seus sócios, sucessores e herdeiros ao cumprimento de suas estipulações.
+                </p>
+                <p>
+                    <b>17.</b>	Fica eleito o Foro do domicilio do <b>ASSINANTE</b> para dirimir quaisquer controvérsias e/ou litígios oriundos deste Termo, renunciando as partes a quaisquer outros por mais privilegiados que sejam.
+                </p>
+                
+                <div class="ass-field align-bottom">
+                    <p class="anchors" >
+                        LOCALIZATION#1
+                    </p>
+                </div>
+                <p class="label align-top-center">
+                    Local 
+                </p>
+                <div class="ass-field">
+                    <p class="anchors">
+                        DATE#1
+                    </p>
+                </div>
+                <p class="label align-top-center">
+                    Data
+                </p>
+                <apex:repeat value="{!signiturePdfModel.listAdministrators}" var="administrator">
+                    <div class="ass-field">
+                        <p class="anchors">
+                            {!administrator.anchor}
+                        </p>
+                    </div>
+                    <p class="label align-top-center">
+                        Representante Legal da Empresa
+                    </p>
+                </apex:repeat>
+                <apex:repeat value="{!signiturePdfModel.listDonors}" var="donor">
+                    <div class="ass-field">
+                        <p class="anchors">
+                            {!donor.anchor}
+                        </p>
+                    </div>
+                    <p class="label align-top-center">
+                        Assinatura do Doador
+                    </p>
+                </apex:repeat>
+            </div>
+        </div>
+    
+    
+    
+    
+</apex:page>

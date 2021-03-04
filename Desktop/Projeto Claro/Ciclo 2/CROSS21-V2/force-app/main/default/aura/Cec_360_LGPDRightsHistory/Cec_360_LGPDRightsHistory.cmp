@@ -1,0 +1,172 @@
+<aura:component controller="CEC_360_LGPDRightsHistoryController"
+                description="Aba Privacidade Historico de diretos"
+                implements="flexiPage:availableForAllPageTypes,force:hasRecordId">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>  
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <!--aura attributes--> 
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="columnsExtract" type="List"/>
+    <aura:attribute name="historicData" type="Object"/>
+    <aura:attribute name="dataExtract" type="Object"/>
+    <aura:attribute name="sortBy" type="String"/>
+    <aura:attribute name="channel" type="Object" />
+    <aura:attribute name="details" type="Object" />
+    <aura:attribute name="sortDirection" type="String"/>
+    <aura:attribute name="filter" type="String" />
+    <aura:attribute name="filteredData" type="List" />
+    <aura:attribute name="isModalDetails" type="boolean" default="false"/>
+    <aura:attribute name="isModalExtract" type="boolean" default="false"/>
+    <aura:attribute name="Spinner" type="Boolean" default="false"/>
+    <aura:attribute name="noRecordFoundMsg" type="String" />
+
+    <!--Page header-->
+    	<div class="slds-page-header" role="banner">
+        <lightning:layout multipleRows="true" verticalAlign="center">
+            <lightning:layoutItem size="11">
+            	<lightning:input class="removeSpace" type="search" onchange="{!c.filter}" value="{!v.filter}" placeholder="Filtre os dados abaixo" aura:id="enter-search"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="1">
+            	<lightning:buttonIcon class='refreshButton' iconName="utility:refresh" alternativeText="Atualizar Dados" title="Atualizar Dados" onclick="{!c.handleReload}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+    
+    <!--loading spinner start... style=Brand Medium -->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+   
+    <!--Lightning data table markup-->
+    <lightning:datatable aura:id="HistoryTable"
+                         keyField="Id"
+                         hideCheckboxColumn="true"
+                         columns="{!v.columns}"
+                         data="{!v.filteredData}"
+                         sortedBy="{!v.sortBy}"
+                         sortedDirection="{!v.sortDirection}"
+                         onsort="{!c.handleSort}"
+                         onrowaction="{!c.viewRecord}" />
+       <aura:if isTrue="{!not(empty(v.noRecordFoundMsg))}">
+        <br/>
+        <p class='slds-align_absolute-center'>{!v.noRecordFoundMsg}</p>
+        <br/>
+    </aura:if>    
+    
+    
+    
+    
+            <aura:if isTrue="{!v.isModalDetails}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Detalhes da Solicitação </h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                     <!--loading spinner start... style=Brand Medium -->
+                        <aura:if isTrue="{!v.Spinner}">
+                            <div class="slds-is-relative">
+                                <div aura:id="spinnerId" class="slds-spinner_container">
+                                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                        <span class="slds-assistive-text">Loading</span>
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                         <div>
+                        <p><b> Canal: </b> 
+                         {!v.channel}</p>
+                         <div>
+                         <p><b> Observação: </b>
+                         {!v.details}</p>  
+                        </div>
+                        </div>
+
+                    
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    
+    
+                <aura:if isTrue="{!v.isModalExtract}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Extrato da Solicitação </h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                     <!--loading spinner start... style=Brand Medium -->
+                        <aura:if isTrue="{!v.Spinner}">
+                            <div class="slds-is-relative">
+                                <div aura:id="spinnerId" class="slds-spinner_container">
+                                    <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                        <span class="slds-assistive-text">Loading</span>
+                                        <div class="slds-spinner__dot-a"></div>
+                                        <div class="slds-spinner__dot-b"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <lightning:datatable aura:id="extractHistory"
+                                             keyField="Id"
+                                             hideCheckboxColumn="true"
+                                             columns="{!v.columnsExtract}"
+                                             data="{!v.dataExtract}" 
+                                             hideTableHeader="true" />
+
+                    
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    
+</aura:component>

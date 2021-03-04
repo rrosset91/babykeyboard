@@ -1,0 +1,103 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 01-13-2021
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+  Modifications Log 
+  Ver   Date         Author                               Modification
+  1.0   01-12-2021   ChangeMeIn@UserSettingsUnder.SFDoc   Initial Version
+-->
+<template>
+	<header>
+        <h1 class="headerTitle">Simulação</h1>
+		<h2 class="title-table">Desconto</h2> 
+	</header>
+
+	<main>
+		<section id="parcela" style="padding-top: 5px;">
+			<!--<template if:true={hasError}>
+				<c-solar-exception-content show-error="true"></c-solar-exception-content>
+			</template> -->
+			<!-- <template if:false={hasError}> -->
+			<!--	<template if:true={hasData}> -->
+            <ul class="parcelas">
+                    <li>
+                        <h2>Parcela 1</h2>
+
+                    </li>
+                    <li>
+                        <h2>Parcela 2</h2>
+                    </li>
+                    <li>
+                        <h2>Parcela 3</h2>
+                    </li>
+                    <li>
+                        <h2>Parcela 4</h2>
+                    </li>
+                    <li>
+                        <h2>Parcela 5</h2>
+                    </li>
+            </ul>
+
+			<!--	</template> -->
+			<!--	<template if:false={hasData}> 
+					    <c-solar-exception-content show-empty="true"></c-solar-exception-content>
+			        </template> -->
+			<!-- </template> --> 
+        </section>
+    </main>    
+
+	<footer>
+		<div style="margin-top: 25px; display: flex; width: 100%; justify-content: space-between">
+			<div style="width: 50%; justify-content: flex-start; display: flex">
+                <lightning-button label="Voltar" 
+                                  variant="destructive-text" 
+                                  class="slds-m-left_x-small" 
+                                  onclick={handleVoltar}> 
+                </lightning-button>
+			</div>
+			<template if:false={hasError}>
+				<div style="width: 50%; justify-content: flex-end; display: flex">
+                    <lightning-button label="Continuar"
+                                      variant="brand"
+                                      class="slds-m-left_x-small" 
+                                      onclick={handleConfirmation}
+                                      disabled={buttonContinuar}>
+                    </lightning-button>
+				</div>
+			</template>
+		</div>
+    </footer>
+    
+     <!-- Modal Sem Alçada -->
+        <c-solar-modal header="Atenção" data-id="modalSemAlcada" size="medium" show-close-button>
+            <div slot="content">
+                <div class="slds-form slds-grid slds-wrap slds-gutters">
+                    <dl class="slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-layout>
+                            <lightning-layout-item padding="around-small"> 
+                                    <lightning-icon icon-name="utility:warning" 
+                                                    alternative-text="Warning!"
+                                                    title="Atenção"
+                                                    size="small">
+                                    </lightning-icon>
+                            </lightning-layout-item>
+                            <lightning-layout-item>
+                                    <dt class="slds-item_label slds-text-color_weak slds-text-align_left custom-padding">{ModalText}</dt>
+                            </lightning-layout-item> 
+                        </lightning-layout>
+                    </dl>
+                 </div>
+            </div>
+            <div slot="footer">
+                <lightning-layout>
+                    <lightning-layout-item padding="around-small">
+                        <div class="modal-buttons">
+                            <lightning-button variant="brand" label="Fechar" onclick={handleCancelReason}></lightning-button>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </c-solar-modal> 
+</template>

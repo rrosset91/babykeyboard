@@ -1,0 +1,70 @@
+<template>
+    <section id ="modal-fade-in-open" role="dialog" class="slds-modal slds-fade-in-open ">
+        <div class="slds-modal__container">
+            <div style="float:right;">
+                <lightning-button-icon icon-name="utility:close" alternative-text="Close" title="Close" onclick={handleCloseModal} variant="bare-inverse" style="float:right;"></lightning-button-icon>
+            </div>
+            <header class="slds-modal__header">
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Contestação de fatura</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_large">
+                <lightning-accordion allow-multiple-sections-open>
+                    <template for:each={item.contestations} for:item="cont">
+                        <lightning-accordion-section key={cont.contestentationId} name="Item de contestação:" label={cont.contestentationId}>
+                            <lightning-layout>
+                                <lightning-layout-item size="5" class="slds-p-top_large slds-p-bottom_large slds-m-left_large">
+                                    <span class="slds-text-align_left">Valor a Contestar</span>
+                                    <div class="slds-text-heading_large slds-text-align_center slds-box" style="border:solid #DA291C;color:#DA291C;">
+                                        <strong><p><lightning-formatted-number value={cont.contestentationAmount} format-style="currency" currency-code="BRL"></lightning-formatted-number></p></strong>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="5" class="slds-p-top_large slds-p-bottom_large slds-m-left_large">
+                                    <span class="slds-text-align_left">Valor corrigido</span>
+                                    <div class="slds-text-heading_large  slds-text-align_center slds-box" style="border:solid #DA291C;color:#DA291C;">
+                                       <!--<p>{item.negotiationDate}</p>--> 
+                                       <strong><p><lightning-formatted-number value={cont.contestedAmount} format-style="currency" currency-code="BRL"></lightning-formatted-number></p></strong>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <hr>
+                            <div>
+                                <h2><strong>Detalhes</strong></h2><br><br>
+                            </div>
+                            <lightning-layout>
+                                <lightning-layout-item class="slds-text-align_left" size="12">
+                                    <span class="slds-text-title">Motivo</span><br>
+                                    <span>{cont.reason}</span>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <br>
+                            <lightning-layout>
+                                <lightning-layout-item class="slds-text-align_left" size="12">
+                                    <span class="slds-text-title">Anotações</span><br>
+                                    <span>{cont.notes}</span>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <br>
+                            <lightning-layout>
+                                <lightning-layout-item class="slds-text-align_left" size="4">
+                                    <span class="slds-text-title">Data</span><br>
+                                    <span><lightning-formatted-date-time value={cont.contestationDate} year="numeric" month="2-digit" day="2-digit"></lightning-formatted-date-time></span>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-text-align_left" size="4">
+                                    <span class="slds-text-title">Protocolo</span><br>
+                                    <span>{cont.protocol}</span>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-text-align_left" size="4">
+                                    <span class="slds-text-title">Status</span><br>
+                                    <span>{cont.contestationStatus}</span>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </template>
+                </lightning-accordion>
+            </div>
+            <footer class="slds-modal__footer">
+            </footer>
+        </div>
+    </section>
+    <div id="modal-backdrop" class="slds-backdrop slds-backdrop_open"></div>
+</template>

@@ -1,0 +1,143 @@
+<aura:component controller="Solar_Cross_SelectJourneyController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" >
+    <aura:attribute name="canais" type="Solar_Cross_SelectJourneyController.metadataSolarJourney[]" default="[]"/>
+    <aura:attribute name="valueSelected" type="String" default=""/>
+    <aura:attribute name="oldValueSelected" type="String" default=""/>
+    <aura:attribute name="CanaisCriticos" type="Solar_Cross_SelectJourneyController.metadataSolarJourney[]" default="[]"/>
+    <aura:attribute name="openModal" type="Boolean" default="false"/>
+    <aura:attribute name="openModalCanaisCriticos" type="Boolean" default="false"/>
+    <aura:attribute name="openModalError" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isLoading" type="Boolean" default="false" />
+    <aura:attribute name="caseFields" type="Object"/>
+    <aura:attribute name="customerAction" type="String" default="Ação do cliente"/>
+    <aura:attribute name="usedSystem" type="String" default="Sistema Utilizado"/>
+    <aura:attribute name="selfResult" type="String" default="Resultado do autoatendimento"/>
+    <aura:attribute name="showUraDetails" type="Boolean" default="false" />
+    <aura:attribute name="headerTitle" type="Aura.Component[]">
+        <h1>
+            <b>Jornada de cliente</b>
+        </h1>
+    </aura:attribute>
+    <aura:handler name="init" value="{!this}" action="{! c.loadOptions }"/>
+
+    <lightning:card iconName="standard:product_item_transaction" title='{!v.headerTitle}'>
+
+        <aura:if isTrue="{!v.showUraDetails}">
+            <div class="slds-m-horizontal_small slds-m-bottom_x-large">
+                <div class="slds-text-heading_small slds-text-title_bold slds-m-top_small">Experiência na URA</div>
+                <div class="slds-grid slds-wrap slds-m-top_small">
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="slds-text-title">{!v.customerAction}</div>                
+                    </div>
+                    <div class="slds-col slds-size_1-of-1">
+                        {!$Label.c.UraCustomerAction}
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-text-title slds-m-top_small">{!v.usedSystem}</div>     
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-text-title slds-m-top_small">{!v.selfResult}</div>       
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        {!v.caseFields.lLastAccessedSystem} 
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        {!v.caseFields.lSystemResponse}
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+
+        <lightning:layout>
+        	<lightning:layoutItem size='12'>
+            	<div class="slds-m-horizontal_small">
+                    <lightning:combobox aura:id="selectItem" name="status" label='Selecionar outra jornada'
+                        placeholder="--- Selecione uma nova jornada ---"
+                        value=""
+                        onchange="{!c.handleChange}"
+                        options="{!v.canais}"/>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>           
+        <aura:set attribute="footer">
+            <div class="slds-grid slds-grid_align-end">
+                <div class="slds-col">
+                    <Lightning:Button label='Confirmar' variant='Brand' onclick="{!c.openModal}"/>
+                </div>
+            </div>
+        </aura:set> 
+    </lightning:card>
+    <!--open modal confirm-->
+    <aura:if isTrue="{!v.openModal}">
+        <div class="slds-modal slds-fade-in-open">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="medium" />
+                <aura:set attribute="else">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header" style="width: 50%;margin-left:25%;">
+                            <h2 class="title slds-text-heading--medium">Seleção de Jornada</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium" style="width: 50%;margin-left:25%;">
+                            Tem certeza que deseja sair da jornada atual?
+                        </div>
+                        <div class="slds-modal__footer" style="width: 50%;margin-left:25%;;">
+                            <lightning:button variant="neutral" label="Cancelar" onclick="{!c.closeModal}"/>
+                            <lightning:button variant="brand" label="Confirmar" onclick="{!c.changeRec}"/>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!--Open Modal Canais críticos-->
+    <aura:if isTrue="{!v.openModalCanaisCriticos}">
+        <div class="slds-modal slds-fade-in-open">
+            <aura:if isTrue="{!v.isLoading}">
+                <lightning:spinner alternativeText="Carregando..." size="medium" />
+                <aura:set attribute="else">
+                    <div class="slds-modal__container" style="margin:auto;">
+                        <div class="slds-modal__header" style="width: 70%;margin-left:15%;">
+                            <lightning:buttonIcon iconName="utility:close" alternativeText="Close"  class="closeButton" title="Close" onclick="{!c.closeModalCanais}" variant="border-filled"></lightning:buttonIcon>
+                            <h2 class="title slds-text-heading--medium">Seleção de Jornada</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--small" style="width: 70%;margin-left:15%;height:35%">
+                            <div class='slds-size_1-of-2' style="margin:auto">
+                                <span>
+                                    <lightning:combobox aura:id="selectItem" name="status" label='Selecionar outra jornada'
+                                        placeholder=""
+                                        value=""
+                                        onchange="{!c.handleChange}"
+                                        options="{!v.CanaisCriticos}"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="slds-modal__footer" style="width: 70%;margin-left:15%;">
+                            <lightning:button label="Cancelar" onclick="{!c.closeModalCanais}"/>
+                            <Lightning:Button label='Confirmar' onclick="{!c.changeRec}" variant="Brand"/>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.openModalError}">
+        <div class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header" style="width: 50%;margin-left:25%;">
+                    <h2 class="title slds-text-heading--medium">Erro</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium" style="width: 50%;margin-left:25%;">
+                    A jornada atual é a a mesma jornada escolhida
+                </div>
+                <div class="slds-modal__footer" style="width: 50%;margin-left:25%;">
+                    <lightning:button variant="neutral" iconName="utility:close" label="Fechar" onclick="{!c.closeModalError}"/>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

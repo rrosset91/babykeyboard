@@ -1,0 +1,64 @@
+.THIS .formCancelButton{
+    text-align: right;
+}
+
+.THIS .formCancelButton button{
+    width: 105px;
+}
+
+.THIS .formSaveButton{
+    text-align: left;
+}
+
+.THIS .formSaveButton button{
+    width: 110px;
+}
+
+.THIS .fontLabel{
+    font-size: 15px;
+	font-weight: bold;    
+}
+
+.THIS .slds-form-element__label{
+    font-size: 15px;
+	font-weight: bold;
+    margin-left: 0px!important;
+}
+    
+.THIS .slds-visual-picker input:checked~label .slds-visual-picker__text {
+    border: 1px solid #ee1515;
+    box-shadow: inset 0 0 0 1px #ee1515;
+}
+
+.THIS .slds-visual-picker input:checked~label .slds-visual-picker__text:after {
+    border-right-color: #ee1515;
+    border-top-color: #ee1515;
+}
+
+.THIS .slds-visual-picker input:not(:disabled)~label:hover .slds-visual-picker__figure {
+    border: 1px solid #ee1515;
+    box-shadow: inset 0 0 0 1px #ee1515;
+}
+
+.THIS .slds-text-title {
+    font-size: 10px;
+}
+
+.THIS .slds-visual-picker__body {
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+.THIS .slds-visual-picker+.slds-visual-picker {
+    margin-left: 0;
+}
+
+.THIS .slds-visual-picker.slds-visual-picker {
+    margin-right: 1rem;
+}
+
+.THIS .slds-visual-picker input {
+	position:relative;   
+}

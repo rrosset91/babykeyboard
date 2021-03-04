@@ -1,0 +1,206 @@
+<!--
+* Autor: [Letícia Freitas] + [Deloitte]
+* Data: [28/05/2019]
+* Descrição: [Nome do projeto/ID: CEC FASE 1 ] + [Time: SQUAD 360 - Sprint 6] +
+* [Descrição da funcionalidade da classe: Componente para a busca de protocolos residenciais.] -->
+
+<aura:component controller = "CEC_360_ProtocolsResidentialController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="contractList" type="Account" />
+    <aura:attribute name="recordId" type="String" /> 
+    <aura:attribute name="protocolsList" type="Object"/>
+    <aura:attribute name="protocolsDetails" type="Object"/>
+    <aura:attribute name="startDate" type="Date"/>
+    <aura:attribute name="endDate" type="Date"/>
+    <aura:attribute name="protocolNumber" type="string"/>
+    <aura:attribute name="isDate" type="boolean" default="true"/>
+    <aura:attribute name="isNumber" type="boolean" default="false"/>
+    <aura:attribute name="disabledButton" type="boolean" default="true"/>
+    <aura:attribute name="showSpinner" type="boolean" default="false"/>
+    <aura:attribute name="contractNumber" type="string"/>
+    <aura:attribute name="options" 	type="List"/>
+    <aura:attribute name="showModalDetails" type="Boolean" default="false"/>
+    <aura:attribute name="selectedProtocol" type="String" />
+    <aura:attribute name="showSpinnerModal" type="Boolean" default="true"/>
+    <aura:attribute name="showProtocols" type="Boolean" default="false"/>
+    <aura:attribute name="documentType" type="Boolean" default="false"/>
+    
+    <div class="slds-text-heading_medium">Busca de protocolos:</div>
+    <div style="border-bottom: 1px solid #dddbda"></div>
+    <div class="slds-p-top_x-small">
+        <div class="slds-grid slds-gutters">
+            <div class ="slds-col slds-size_3-of-12">
+                <lightning:combobox disabled="{!v.documentType}" aura:id="cmbContract" value="{!v.contractNumber}" 
+                                    label="Contrato" onchange="{!c.onRadio}" placeholder="Selecione um contrato"
+                                    />
+            </div>
+            
+            <div class="slds-col slds-align_absolute-left slds-size_8-of-12">
+                <div class="slds-p-top_large">
+                    <div class="slds-form-element__control slds-list_horizontal">
+                        <span class="slds-radio">
+                            <input type="radio" aura:id="radioData" checked="true" 
+                                   id="dataRadio" name="tipoBusca" value="dataRadio" onclick="{!c.getOptionsData}" />
+                            <label class="slds-radio__label" for="dataRadio">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">Por data:</span>
+                            </label>
+                        </span>
+                         <span class="slds-radio">
+                            <input type="radio" aura:id="radioNumber"  id="number"
+                                   name="tipoBusca" value="number" onclick="{!c.getOptionsNumber}" />
+                            <label class="slds-radio__label" for="number">
+                                <span class="slds-radio_faux"></span>
+                                <span class="slds-form-element__label">Por número de protocolo:</span>
+                            </label>
+                        </span> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Modal Spinner start -->
+    <aura:if isTrue="{!v.showSpinner}">
+        <section role="dialog" aria-modal="true" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container" style="width: 25%;">
+                <header class="slds-modal__header slds-modal__header_empty" />
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-3">
+                            <div class="slds-clearfix">
+                                <div class="slds-float_right">
+                                    <div style="position: relative; display: inline-block; height: 80px;">
+                                        <lightning:spinner alternativeText="Loading" size="medium" variant="brand" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-3 slds-m-left_large">
+                            <div class="slds-clearfix">
+                                <div class="slds-float_left">
+                                    <div class="slds-align_absolute-center" style="height: 5rem;">
+                                        <div class="slds-text-heading_small">Carregando ...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isDate}" >
+        <div class="slds-p-top_x-small">
+            <div class="slds-text-heading_small">Busca por data:</div>
+            <div class="slds-grid slds-gutters">
+                
+                <div class="slds-col slds-size_3-of-12">
+                    <lightning:input aura:id="startDate" type="date" value="{!v.startDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                     label="Data de início"  
+                                     messageWhenBadInput="Data inválida." 
+                                     />
+                </div>
+                <div class = "slds-col slds-size_3-of-12">
+                    <lightning:input aura:id="endDate" type="date" value="{!v.endDate}" max="{!v.maxDate}" min="{!v.minDate}"
+                                     label="Data de fim" 
+                                     messageWhenBadInput="Data inválida." 
+                                     />
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                    <div class="slds-p-top_large">
+                        <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                          onclick="{!c.callProtocols}" disabled="{!v.disabledButton}">
+                        </lightning:button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.isNumber}">
+        <div class="slds-p-top_x-small">
+            <div class="slds-text-heading_small">Busca por número de protocolo:</div>
+            <div class="slds-grid slds-gutters">
+                
+                <div class = "slds-col slds-size_6-of-12">
+                    <lightning:input   aura:id="protocolNumber" class="tallTextArea" value="{!v.protocolNumber}" 
+                                     label="Número de protocolo:" maxlength="20" />
+                    
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                    <div class="slds-p-top_large">
+                        <lightning:button label="Buscar" iconName="utility:search" iconPosition="left"
+                                          onclick="{!c.callProtocols}"  disabled="{!v.disabledButton}">
+                        </lightning:button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showProtocols}">
+        <div class="slds-p-top_small">
+            <div class="slds-text-heading_small">Protocolos:</div>
+            <div class="slds-scrollable_y" style="height:5rem">
+                <aura:iteration items="{!v.protocolsList}" var="cont">
+                    <p><a data-end="{!cont.protocolNumber}" onclick="{!c.callDetails}">{!cont.protocolNumber}</a></p>
+                </aura:iteration>
+            </div>
+        </div>
+    </aura:if>
+    
+    <!-- Modal Detalhes do Protocol-->
+    <aura:if isTrue="{!v.showModalDetails}">
+        <div style="height: 240px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header slds-modal__header_empty">
+                        <button class="slds-button slds-button_icon slds-modal__close" title="Close">
+                            <lightning:icon iconName="utility:close" size="small" variant="inverse" onclick="{!c.closeModal}" />
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        
+                        <div class="slds-text-heading_small">Detalhes do Protocolo:</div>
+                        <div class="slds-p-top_small">
+                            <table class="slds-table slds-table_fixed-layout">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th>Classificação</th>
+                                        <th>Data de abertura</th>
+                                        <th>Data de fechamento</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    
+                                </thead>
+                                <tbody>
+                                    <aura:if isTrue="{!v.showSpinnerModal}">
+                                        <div style="position: center; display: inline-block; height: 80px;">
+                                            <lightning:spinner alternativeText="Loading" size="medium" variant="brand" />
+                                        </div>
+                                        
+                                        <aura:set attribute="else">
+                                            <aura:iteration items="{!v.protocolsDetails}" var="cont">
+                                                <tr>
+                                                    <td>{!cont.solicitationType}</td>
+                                                    <td>{!cont.solicitationDateOpening}</td>
+                                                    <td>{!cont.solicitationDateClosing}</td>
+                                                    <td>{!cont.solicitationStatus}</td>
+                                                </tr>   
+                                            </aura:iteration>
+                                        </aura:set>
+                                    </aura:if>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div> 
+    </aura:if>
+    
+    
+</aura:component>

@@ -1,0 +1,242 @@
+<apex:page applyBodyTag="false" renderAs="pdf">
+    <head>
+        <title>Page Title</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>Page Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <style type="text/css">
+            .header {
+            height: 1.3cm;
+            margin: 0!important;
+            padding: 0.1cm 0.2cm 0.2cm 0.7cm;
+
+            -webkit-print-color-adjust: exact;
+            }
+
+            .header img {
+            max-height: 1cm;
+            }
+            body {
+            margin:0;
+            padding:0;
+            line-height: 1.4em;
+            font: 12pt Georgia, "Times New Roman", Times, serif;
+            color: #333333;
+            }
+
+            @page {margin: 0cm; margin-top: 1.5in;
+            @top-center{content: element(header);}
+            @bottom-left{content: element(footer);}}
+            div.header {padding: 10px; position: running(header);}
+            div.footer {display: block;padding: 5px; position: running(footer);}
+            .pagenumber:before{content: counter(page);}
+            .pagecount:before {content: counter(pages);}
+            thead   {display: table-header-group;}
+            * {margin: 0;box-sizing: border-box;font-family: Arial Unicode MS;color:#333333;}
+            body{padding:0;font-size: 12px;}
+            .logo img {height: 40px;padding-top: 3px;}
+            .table-resumo td {line-height:20px;vertical-align: top;}
+            tr.dados td {line-height:30px;font-size: 14px;}
+            .linha-dados {border-bottom:solid 1px #ccc}
+            .border-total {border:solid 1px #ccc;padding: 10px;}
+            h2, h3 {line-height: 20px;font-weight: bold;color: #1f577b;}
+            h2 {font-size: 18px;}
+            h3 {font-size: 18px;}
+            .center {margin: 0 auto;}
+            .padding-right-15 {padding-right: 15px;}
+            .padding-left-15 {padding-left: 15px;}
+            .padding-top-15 {padding-top: 15px;}
+            .padding-top-10 {padding-top: 10px;}
+        </style>
+    </head>
+    <body style="margin: 10px">
+        <div class="card">
+            <table width="94%" class="center">
+                <thead>
+                    <div class="header" height="80px">
+                        <apex:image url="{!$Resource.CEC_OrderDetailsLogo}"/>
+                    </div>
+                    <tr>
+                        <td class="linha-dados"><h2 class="title-resume">Resumo do Pedido</h2></td>
+                    </tr>
+                    <tr>
+                        <td  height="60">
+                            <table width="100%" class="border-total">
+                                <tr>
+                                    <td><b>Data de cadastro:</b><span> 26/12/2019</span></td>
+                                    <td align="right"><b>Número do Protocolo:</b><span> 123456789098765</span>
+                                        <b>Cliente:</b><span> Nome do cliente</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <table width="100%" class="table-resumo">
+                            <tr>
+                                <td colspan="5"><h3>Dados do Cliente</h3></td>
+                            </tr>
+                            <tr>
+                                <td>Nome:</td>
+                                <td>Tipo de Documento:</td>
+                                <td>Número do Documento:</td>
+                                <td>RG:</td>
+                                <td>Orgão Expedidor:</td>
+                            </tr>
+                            <tr class="dados">
+                                <td>Lucas Barbosa</td>
+                                <td>CPF</td>
+                                <td>000.000.000-00</td>
+                                <td>00.000.000-0</td>
+                                <td>SSP</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td>Data de Nascimento*:</td>
+                                <td>Profissão:</td>
+                                <td>Escolaridade:</td>
+                                <td>Genêro:</td>
+                                <td>Estado Civil:</td>
+                            </tr>
+                            <tr class="dados">
+                                <td>00/00/0000</td>
+                                <td>Programador</td>
+                                <td>Escolaridade do Cliente</td>
+                                <td>Masculino</td>
+                                <td>Casado</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td>Nome da Mãe:</td>
+                                <td>Origem do cliente:</td>
+                                <td>Faixa salárial:</td>
+                                <td>Status:</td>
+                            </tr>
+                            <tr class="dados">
+                                <td>Nome da Mãe do Cliente</td>
+                                <td>Assinante da Concorrência - Telefônica</td>
+                                <td>De R$ 99.999,99 até R$ 999.999,99</td>
+                                <td>Status do cliente</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td>UF:</td>
+                                <td>Cidade:</td>
+                                <td>Cep:</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr class="dados">
+                                <td><span>SP</span></td>
+                                <td><span>São Paulo</span></td>
+                                <td><span>00000-000</span></td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><h3 class="padding-top-15">Dados de contato:</h3></td>
+                            </tr>
+                            <tr>
+                                <td>E-mail:</td>
+                                <td>Telefone fixo:</td>
+                                <td>Celular:</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr class="dados">
+                                <td><span>emaildocliente@gmail.com</span></td>
+                                <td><span>00 0000-0000</span></td>
+                                <td><span>00 00000-0000</span></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><h3 class="padding-top-15">Instalação</h3></td>
+                            </tr>
+                            <tr>
+                                <td>Estado:</td>
+                                <td>Cidade:</td>
+                                <td>CEP:</td>
+                                <td colspan="2">Endereço:</td>
+                            </tr>
+                            <tr class="dados">
+                                <td><span>MT</span></td>
+                                <td><span>Vila Bela da Santíssima Trindade</span></td>
+                                <td><span>00000-000</span></td>
+                                <td colspan="2"><span class="dados">Avenida Engenheiro Luis Gomes Cardim Sangirardi</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td>Número:</td>
+                                <td>Bairro:</td>
+                                <td>Número do HP:</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr class="dados">
+                                <td><span>999</span></td>
+                                <td><span>Vila Nova Conceição Paulista</span></td>
+                                <td><span>1234567489</span></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><h3 class="padding-top-15">Viabilidade técnica:</h3></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">Serviços:</td>
+                            </tr>
+                            <tr class="dados">
+                                <td colspan="5">Net- mensagem...</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><h3 class="padding-top-15">Portabilidade:</h3></td>
+                            </tr>
+                            <tr>
+                                <td>DDD:</td>
+                                <td>Número:</td>
+                                <td>Operadora:</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr class="dados">
+                                <td><span>99</span></td>
+                                <td><span>99999-9999</span></td>
+                                <td><span>Golden line Telecom</span></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="linha-dados"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">Obs.: A Viabilidade técnica deverá ser checada no momento da contratação</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</apex:page>

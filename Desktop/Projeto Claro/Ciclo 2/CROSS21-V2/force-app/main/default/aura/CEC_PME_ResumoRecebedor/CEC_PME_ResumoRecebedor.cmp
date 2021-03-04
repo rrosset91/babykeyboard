@@ -1,0 +1,49 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.recebedor}" action="{!c.onRecebedorChanged}"/>
+
+    <aura:attribute name="recebedor" type="Object" />
+    <aura:attribute name="recebedores" type="Object" />
+    <aura:attribute name="isFiltered" type="Boolean" default="false" />
+    <aura:attribute name="tipoEntrega" type="String" />
+    
+    <div class="bloco-lista table-lista">
+        <div class="col-tab-nome-completo">
+            <span class="title-table">Nome completo</span>
+        </div>
+        <div class="col-tab-cnpj">
+            <span class="title-table">RG</span>
+        </div>
+        <div class="col-tab-telefone">
+            <span class="title-table">Telefone</span>
+        </div>
+        <div class="col-tab-celular">
+            <span class="title-table">Celular</span>
+        </div>
+    </div>
+    <aura:iteration items="{!v.recebedores}" var="item">
+        <div class="bloco-lista table-dados border-b">
+            
+            <div class="bloco-recebedor">
+				<div><span class="legenda">Nome:</span> {!item.nomeCompleto}</div>
+                <div><span class="legenda">RG:</span> {!item.rg}</div>
+                <div><span class="legenda">Telefone:</span> {!item.telefone}</div>
+                <div><span class="legenda">Celular:</span> {!item.celular}</div>
+            </div>
+            
+            <div class="col-tab-nome-completo">
+                <span class="title-table-datos">{!item.nomeCompleto}</span>
+            </div>
+            <div class="col-tab-cnpj">
+                <span class="title-table-datos">
+				<ui:outputText value="{!item.rg}"></ui:outputText></span>
+            </div>
+            <div class="col-tab-telefone">
+                <span class="title-table-datos"><ui:outputText value="{!item.telefone}"></ui:outputText></span>
+            </div>
+            <div class="col-tab-celular">
+                <span class="title-table-datos"><ui:outputText value="{!item.celular}"></ui:outputText></span>
+            </div>
+        </div>
+    </aura:iteration>
+</aura:component>

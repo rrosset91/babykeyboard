@@ -1,0 +1,177 @@
+.general-content {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.general-content .attendance-scheduled {
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.new-schedule {
+    margin-top: 15px;
+}
+
+
+.slds-select.availability {
+    background-color: #fafaf9;
+    padding-left: 12px;
+    color: #DA291C;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-image: url(/resource/SoftphoneCTI/cec-cti-softphone/custom-assets/img/general/select-arrow-down.png);
+    /* background-size: 20% 70%; */
+    background-position: 100% center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.new-schedule .division-line {
+    margin: 10px 0px 10px 0px;
+}
+
+
+.new-schedule .span-hours {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.cti-button-blue {
+    padding: 5px 10px 5px 10px;
+    text-transform: uppercase;
+}
+
+.cti-button-grey {
+    background: #ABABAF;
+    color: #fff;
+    font-weight: 100;
+    padding: 5px 10px 5px 10px;
+    border: none;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.error-message #scheduling-error-message {
+    color: #DA291C;
+}
+
+.new-schedule .scheduling-inputs {
+    width: 98%;
+}
+
+.new-schedule .css-scrollbar {
+    height: 240px;
+}
+
+.new-schedule.conference .css-scrollbar {
+    height: 195px !important;
+}
+
+.scheduling-inputs .slds-input,
+.scheduling-inputs .slds-select {
+    background-color: #fafaf9;
+    color: #706E6B;
+    margin-bottom: 10px;
+}
+
+
+.scheduling-inputs label {
+    color: #706E6B;
+    font-size: 12px;
+}
+
+.scheduling-inputs .input-clock {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.scheduling-inputs .last-call .dynamic-label {
+    line-height: 31px;
+}
+
+.buttons-group {
+    padding-top: 14px;
+}
+
+.scheduling-inputs .customer-name-field {
+    width: 90%;
+    margin-right: 10px;
+}
+
+.scheduling-inputs .delete-name img {
+    padding-top: 2px;
+}
+
+.textarea-motivo {
+    padding-top: 8px;
+    line-height: 16px;
+}
+
+
+.new-schedule .error-message {
+    margin-top: -10px;
+}
+.apex-input-custom input{
+    width: 92%;
+    margin-right: 6px;
+    background-color: #fafaf9;
+    color: #706E6B;
+    border: 1px solid #dddbda;
+    border-radius: .25rem;
+    transition: border .1s linear, background-color .1s linear;
+    display: inline-block;
+    padding: 0 1rem 0 .75rem;
+    line-height: 1.875rem;
+    min-height: calc(1.875rem + (1px * 2));
+    margin-bottom: 10px;
+}
+
+.new-schedule .calendar-sheduling-input{
+    margin-right: 20px;
+}
+
+.input-phone-scheduling.phone-margin{
+    margin-right: 20px;
+}
+
+.input-phone-scheduling.phone-last-item{
+    width: 133px;
+}
+
+.cti-button-transparent{
+    background: transparent;
+    color: #DA291C;
+    font-weight: 100;
+    padding: 5px 10px 5px 10px;
+    border: none;
+    font-size: 14px;
+    border: 1px solid #DA291C;
+}
+
+.cti-button-red {
+    padding: 5px 10px 5px 10px;
+    font-weight: 400;
+}
+
+[value="Cancelar"] {
+    color: #707070;
+    font-weight: 400;
+    border: solid 1px #707070;
+}
+
+#agendamento-titleReasonScheduling input{
+    width: 87% !important;
+}
+
+.noselectBtn{
+    width: 31%;
+}
+
+.ui-timepicker-standard{
+    /*left: 203.375px !important;
+    height: 174px !important;
+    width: 169.563px !important;*/
+    left: 162.375px !important;
+    height: 215px !important;
+    width: 132.563px !important;
+}

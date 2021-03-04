@@ -1,0 +1,258 @@
+<!-- SOLAR_PME_SumarioIndividualPdf -->
+<apex:page showHeader="false" applyHtmlTag="false" renderAs="pdf" controller="SOLAR_PME_TcpjPdfController" >
+        <head>
+        <style> 
+            @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans");
+            @page {
+                @top-center {
+                	content: element(header);
+                }
+            }
+            
+            body {
+            	font-family: 'Ropa Sans', sans-serif !important;
+			}
+            
+            div.header {
+            	text-align: center;
+                padding: 5px;
+                position: running(header);
+                font: 14px bold;
+                text-transform: uppercase;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .header h3 {
+				display: inline-block;
+            	vertical-align: middle;
+            }
+            
+            .header img {
+            	display: inline-block;
+            	vertical-align: middle;
+            	margin-top: 5px;
+            }
+            
+            #main {
+            	font: 9px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            p {
+                padding: 1.5px;
+                margin: 1px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            h2 {
+                background-color: #d5d5d5;
+            	color: #303030;
+                font-size: 14px;
+                padding: 5px;
+            	font-family: 'Ropa Sans', sans-serif;
+           	   }
+            
+            .row {
+            	display: block;
+            }
+            
+            .colum {
+            	vertical-align: top;
+            	display: inline-block;
+            }
+            
+            .options-group {
+            	display: block;
+            	width: 100%;
+            	margin-bottom: 15px;
+            }
+            
+            .options-group .colum {
+            	vertical-align: middle;
+            	height: 21px;
+            }
+            
+            .w-100 {
+            	width: 100%;
+            }
+            
+            .w-95 {
+            	/* for whitespaces */
+            	width: 94%;
+            }
+            
+            .w-85 {
+            	width: 85%;
+            }
+            
+            .w-50 {
+            	width: 50%;
+            }
+            
+            .w-40 {
+            	width: 40%;
+            }
+            
+            .w-30 {
+            	width: 30%;
+            }
+            
+            .w-25 {
+            	width: 25%;
+            }
+            
+            .w-20 {
+            	width: 19%;
+            }
+            
+            .w-15 {
+            	width: 15%;
+            }
+            
+            .w-10 {
+            	width: 10%;
+            }
+            
+            .w-8 {
+            	width: 8%;
+            }
+            
+            .w-5 {
+            	width: 5%;
+            }
+            
+            .subtitle {
+            	font: 10px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .label {
+            	font: 8px bold;
+            	font-weight: bolder;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .value {
+            	font-size: 8px;
+            }
+            
+            .logo {
+            	float: right;
+            	height: 35px;
+            }
+            
+            .square {
+            	text-align: center;
+                width: 20px;
+                height: 20px;
+                border: 2px solid;
+            }
+            
+            .square p {
+            	margin: -2px;
+            }
+            
+            .anchors {
+            	color: #ffffff;
+            	font: 2px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .ass-field {
+            	height: 15px;
+            	border-bottom: 2px solid;
+            	margin-bottom: 0px;
+            }
+            
+            .align-top-center {
+            	vertical-align: top;
+            	text-align: center;
+            }
+            
+            .m-t-30 {
+            	margin-top: 30px;
+            }
+            
+            .m-t-60 {
+            	margin-top: 60px;
+            }
+            
+            .m-t-120 {
+            	margin-top: 120px;
+            }
+            
+            .mp-r-0 {
+            	margin-right: 0px;
+            	padding-right: 0px;
+            }
+            
+            .float-right {
+            	float: right;
+            }
+            
+        </style>
+    </head>
+    
+    <div class="header">
+        <h3>SUMÁRIO E TERMOS E CONDIÇÕES DE USO “PLANOS PÓS PAGO CLARO LIFE (PLANO Nº 190) E
+REGULAMENTO DA PROMOÇÃO CLARO TOTAL INDIVIDUAL COM OFERTA CONJUNTA “CLARO MIX LIFE”</h3>
+        <img src="/file-asset/logocectema?v=1&height=80&width=400" alt="Claro Logo" class="logo" />
+    </div>
+    
+    <div id="resale">
+        <h2>Dados da Revenda</h2>
+        <div class="row">
+            <div class="colum w-50">
+                <p class="label">
+                    Razão Social
+                </p>
+                <p class="value">
+                    {!owner.Resale__c}
+                </p>
+                <p class="label">
+                    Nome do Consultor
+                </p>
+                <p class="value">
+                    {!owner.Name}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    CNPJ
+                </p>
+                <p class="value">
+                    {!CNPJResale}
+                </p>
+                <p class="label">
+                    Código Vendedor
+                </p>
+                <p class="value">
+                    {!owner.ConsultantCode__c}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Código Revenda
+                </p>
+                <p class="value">
+                    {!owner.ResaleCode__c}
+                </p>
+                <p class="label">
+                    Canal de Venda
+                </p>
+                <p class="value">
+                    {!varOrder.Account.CommercialSegment__c}
+                </p>
+            </div>
+            <div class="colum w-15">
+                <p class="label">
+                    Segmento
+                </p>
+                <p class="value">
+                    {!$Label.CEC_PME_GGD_Segmento}
+                </p>
+            </div>
+        </div>
+    </div>
+</apex:page>

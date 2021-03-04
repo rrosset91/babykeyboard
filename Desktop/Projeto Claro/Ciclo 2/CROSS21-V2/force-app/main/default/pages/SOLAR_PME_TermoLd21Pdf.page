@@ -1,0 +1,440 @@
+<!-- SOLAR_PME_TermoLd21Pdf -->
+<apex:page showHeader="false" applyHtmlTag="false" renderAs="pdf" controller="SOLAR_PME_OnlySignaturePdfController" >
+    <head>
+        <style> 
+            @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans");
+            
+            @page {
+                @top-center {
+                    content: element(header);
+                }
+                margin-top: 3cm;
+                margin-bottom: 2cm;
+            }
+            
+            body {
+            	font-family: 'Ropa Sans', sans-serif !important;
+            }
+            
+            div.header {
+                text-align: center;
+                padding: 5px;
+                position: running(header);
+                font: 14px bold;
+                text-transform: uppercase;
+                font-family: 'Ropa Sans', sans-serif;
+                margin-top: 40px;
+            }
+            
+            .header h3 {
+                display: inline-block;
+                vertical-align: middle;
+            }
+            
+            .header img {
+                display: inline-block;
+                vertical-align: middle;
+                margin-top: 5px;
+            }
+            
+            #main {
+                font: 9px;
+                font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            p {
+                padding: 1.5px;
+                margin: 2px;
+                font-family: 'Ropa Sans', sans-serif;
+                font: 13px;
+            }
+            
+            h2 {
+                background-color: #d5d5d5;
+                color: #303030;
+                font-size: 14px;
+                padding: 5px;
+                font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .row {
+            	display: block;
+            }
+            
+            .colum {
+                vertical-align: top;
+                display: inline-block;
+            }
+            
+            .options-group {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .options-group .colum {
+                vertical-align: middle;
+                height: 21px;
+            }
+            
+            .w-100 {
+                width: 100%;
+            }
+            
+            .w-95 {
+            /* for whitespaces */
+            width: 94%;
+            }
+            
+            .w-75 {
+            width: 75%;
+            }
+            
+            .w-50 {
+            width: 50%;
+            }
+            
+            .w-40 {
+            width: 40%;
+            }
+            
+            .w-30 {
+            width: 30%;
+            }
+            
+            .w-25 {
+            width: 25%;
+            }
+            
+            .w-20 {
+            width: 19%;
+            }
+            
+            .w-15 {
+            width: 15%;
+            }
+            
+            .w-10 {
+            width: 10%;
+            }
+            
+            .w-8 {
+            width: 8%;
+            }
+            
+            .w-5 {
+            width: 5%;
+            }
+            
+            .subtitle {
+            font: 10px bold;
+            font-weight: bolder;
+            font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .label {
+            font: 12px bold;
+            font-weight: bolder;
+            font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .value {
+            font-size: 12px;
+            }
+            
+            .logo {
+            float: right;
+            height: 45px;
+            }
+            
+            .square {
+            text-align: center;
+            width: 20px;
+            height: 20px;
+            border: 2px solid;
+            }
+            
+            .square p {
+            margin: -2px;
+            }
+            
+            .anchors {
+            color: #ffffff;
+            font: 2px;
+            font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            .ass-field {
+            border-bottom: 2px solid;
+            padding-top: 40px;
+            padding-bottom: 5px;
+            margin-bottom: 0px;
+            vertical-align:bottom;
+            }
+            
+            .align-top-center {
+            vertical-align: top;
+            text-align: center;
+            margin-top: 0px;
+            padding-top: 0px;
+            }
+            
+            .center {
+            text-align: center;
+            }
+            
+            .align-bottom {
+            vertical-align:bottom;
+            }
+            
+            .m-t-30 {
+            margin-top: 30px;
+            }
+            
+            .m-t-4 {
+            margin-top: 4px;
+            }
+            
+            .m-t-60 {
+            margin-top: 60px;
+            }
+            
+            .m-t-120 {
+            margin-top: 120px;
+            }
+            
+            .mp-r-0 {
+            margin-right: 0px;
+            padding-right: 0px;
+            }
+            
+            .float-right {
+            float: right;
+            }
+            
+            .p-t-50 {
+            padding-top: 50px;
+            }
+            
+            hr.new1 {
+            border-top: 2px solid black;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            }
+            
+            .justify {
+            text-align: justify;
+            text-justify: inter-word;
+            }
+            
+        </style>
+    </head>
+    
+    <div class="header">
+        <hr class="new1" />
+        <div class="row">
+            <div class="colum w-75">
+                <h3>TERMO DE ADESÃO AO GESTOR DE LDN 21</h3>
+            </div>
+            <div class="colum w-15">
+                <img src="/file-asset/ClaroLogopng" alt="Claro Logo" class="logo" />
+            </div>
+        </div>
+        
+        <hr class="new1" />
+    </div>
+    
+    
+    <div id="pj">
+        <div class="row">
+            <div class="colum w-50">
+                <p class="label">
+                    À Empresa:
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-15">
+                <p class="label">
+                    Razão Social
+                </p>
+            </div>
+            <div class="colum w-30">
+                <p class="value">
+                    {!signiturePdfModel.company.name}
+                </p>
+            </div>
+            <div class="colum w-10">
+                <p class="label">
+                    CNPJ
+                </p>
+            </div>
+            <div class="colum w-20">
+                <p class="value">
+                    {!signiturePdfModel.company.documentNumber}
+                </p>
+            </div>            	
+        </div>
+        <br />
+        <div class="row">
+            <p>
+                Ref.: Opção pelo Código de Longa Distância “21” (EMBRATEL).
+            </p>
+            <p class="justify">
+                Valendo-nos do direito de escolha do CSP na realização de chamadas de Longa Distância, previsto no artigo 85 do Regulamento do Serviço Móvel Pessoal, e ciente que nas linhas que possuem o módulo adicional do Gestor Online toda gestão das linhas, inclusive esse direcionamento deverá ser feita através do próprio Gestor Online e são de responsabilidade do administrador da ferramenta, e ainda que em caso de utilização de outro CSP estará sujeita a cobrança de excedente na conta, segundo as tarifas da prestadora utilizada. Venho por meio desse termo autorizar o direcionamento das ligações de Longa Distância Nacional ao Código de Seleção de Prestadora de número 21 (Embratel) dos telefones celulares CLARO de titularidade de nossa empresa, abaixo relacionados:
+            </p>
+            <br/>
+            <p>
+                [X]Todos os celulares
+            </p>
+            <br />
+            <p class="justify">
+                Informo que o original desta carta será mantido arquivado nesta empresa pelo prazo de cinco anos. Caso solicite, com aviso prévio de cinco dias úteis, uma via do documento original será entregue à CLARO.
+            </p>
+            <p>
+                Agradecemos desde já pelas providências.
+            </p>
+        </div>
+        <div class="row">
+            <div class="colum w-30">
+                <p class="label">
+                    Gestor Nomeado
+                </p>
+            </div>
+            <div class="colum w-70">
+                <p class="value">
+                    {!signiturePdfModel.apointedManager.name}
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-30">
+                <p class="label">
+                    Telefone para Contato
+                </p>
+            </div>
+            <div class="colum w-70">
+                <p class="value">
+                    {!signiturePdfModel.apointedManager.phone}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="row">
+        <div class="colum w-40">
+            <div class="ass-field align-bottom">
+                <p class="anchors" >
+                    LOCALIZATION#1
+                </p>
+            </div>
+        </div>
+        <div class="colum w-5 center align-bottom">
+            <p class="label">
+                ,
+            </p>
+        </div>
+        <div class="colum w-40 mp-r-0">
+            <div class="ass-field">
+                <p class="anchors">
+                    DATE#1
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="colum w-40">
+            <p class="label align-top-center">
+                Local 
+            </p>
+        </div>
+        <div class="colum w-5">
+            <p class="label align-top-center">
+                
+            </p>
+        </div>
+        <div class="colum w-40">
+            <p class="label align-top-center">
+                Data
+            </p>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <apex:repeat value="{!signiturePdfModel.listAdministrators}" var="administrator">
+            <div class="colum w-40 m-t-4">
+                <div class="row">
+                    <div class="colum w-20">
+                        <p class="label ">
+                            Nome
+                        </p>
+                    </div>
+                    <div class="colum w-75">
+                        <p class="value">
+                            {!administrator.name}
+                        </p>
+                    </div>
+                    <div class="colum w-20">
+                        <p class="label">
+                            Cargo
+                        </p>
+                    </div>
+                    <div class="colum w-75">
+                        <p class="value">
+                            {!administrator.responsibility}
+                        </p>
+                    </div>
+                    <div class="colum w-20">
+                        <p class="label">
+                            CPF
+                        </p>
+                    </div>
+                    <div class="colum w-75">
+                        <p class="value">
+                            {!administrator.documentNumber}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </apex:repeat>
+        
+    </div>
+    <apex:repeat value="{!signiturePdfModel.listAdministrators}" var="administrator">
+        <div class="row">
+            <div class="colum w-40">
+                <div class="ass-field">
+                    <p class="anchors">
+                        {!administrator.anchor}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-40">
+                <p class="label align-top-center">
+                    Representante Legal da Empresa
+                </p>
+            </div>
+        </div>
+    </apex:repeat>
+    
+    <apex:repeat value="{!signiturePdfModel.listDonors}" var="donor">
+        <div class="row">
+            <div class="colum w-40">
+                <div class="ass-field">
+                    <p class="anchors">
+                        {!donor.anchor}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="colum w-40">
+                <p class="label align-top-center">
+                    Assinatura do Doador
+                </p>
+            </div>
+        </div>
+    </apex:repeat>    
+</apex:page>

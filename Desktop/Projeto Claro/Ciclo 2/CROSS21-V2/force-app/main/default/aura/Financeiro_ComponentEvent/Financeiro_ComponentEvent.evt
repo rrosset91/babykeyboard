@@ -1,0 +1,6 @@
+<aura:event type="COMPONENT">
+
+	<aura:attribute name="message" type="String"/>
+	<aura:attribute name="payload" type="Object"/>
+	<aura:attribute name="billId" type="String"/>
+</aura:event>

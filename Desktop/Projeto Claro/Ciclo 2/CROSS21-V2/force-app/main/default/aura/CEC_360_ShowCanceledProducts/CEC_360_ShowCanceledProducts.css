@@ -1,0 +1,13 @@
+.THIS table.lista-produtos-cancelados {border: solid 1px #dbdada;line-height: 43px;}
+.THIS table.lista-produtos-cancelados th {font-weight: normal;text-transform: none;letter-spacing: initial;height: 43px;}
+.THIS table.lista-produtos-cancelados td {font-weight: normal;text-transform: none;letter-spacing: initial;height: 43px;}
+.THIS table.lista-produtos-cancelados td:last-child {width: 100%;}
+.THIS table.lista-produtos-cancelados th:last-child {width: 100%;}
+.THIS table.lista-produtos-cancelados td {width: fit-content;padding-right: 40px;}
+.THIS .vermelho {color:#da291c;font-weight:normal;}
+.THIS .slds-text-heading_medium {font-size: 14px;color: #434444;font-weight:normal;}
+
+.THIS table.lista-produtos-cancelados tr td {border-bottom: solid 1px #dbdada;line-height: 16px;vertical-align: top;padding: 10px 0px;padding-right: 40px;}
+.THIS table.lista-produtos-cancelados tr th {border-bottom: solid 1px #dbdada;padding-left:0px;padding-right: 40px;}
+.THIS table.lista-produtos-cancelados tr th:first-child {padding-left: 10px;padding-right: 40px;}
+.THIS table.lista-produtos-cancelados tr td:first-child {padding-left: 10px;padding-right: 40px;}

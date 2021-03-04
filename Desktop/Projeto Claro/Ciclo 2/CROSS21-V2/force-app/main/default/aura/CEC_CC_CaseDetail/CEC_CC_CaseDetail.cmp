@@ -1,0 +1,89 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId"
+                access="global" 
+                controller="CEC_CC_CaseDetailController">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="case" type="Case"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="dependentRecTypeMap" type="Map"/>
+    <aura:attribute name="canRequestRefusal" type="Boolean" default="false"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <div class="slds-box slds-theme_default">
+        
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-orders">
+                            <img src= "{!$Resource.cec_identidade + '/images-upload/icons/icon-detail-risk.png'}" style="background-color:#ffffff; height:40px"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body slds-p-top_xx-small">
+                        <span class="slds-truncate" style="font-size:13px">{!v.case.Subject}</span>
+                        <span class="slds-page-header__title slds-truncate" title="{v.record}" style="color:#000000; font-size:17px">{!v.record}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <button class="slds-button slds-button_brand" onclick="{!c.editCase}">Editar</button>
+                    </div>
+                    <!--
+                    Retirada do botão de solicitação de recusa    
+                    <aura:if isTrue="{!v.canRequestRefusal}">
+                        <div class="slds-page-header__control">
+                            <button class="slds-button slds-button_brand" onclick="{!c.openModal}">Solicitar Recusa</button>
+                        </div>
+                    </aura:if>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aura:id="Modalbox" class="slds-backdrop " >
+        <aura:if isTrue="{!v.Spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>    
+        <div class="modal__header_empty slds-modal__container">
+            <div role="dialog" class="slds-modal_large" >
+                <header class="slds-modal__header" style="width: 640px; height: 52px;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" value="{!v.recordId}" onclick="{!c.closeModal}">
+                        
+                        <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Solicitar Recusa</h2> 
+                    
+                </header>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" >              
+                <lightning:textarea name="RejectDescription" 
+                                    label="Solicitação de Recusa" 
+                                    placeholder="Descreva o motivo da recusa..."
+                                    value="{!v.case.RejectDescription__c}"  />               
+            </div>
+            
+            <footer class="slds-modal__footer">
+                <lightning:button class="slds-button slds-button--neutral" label="Cancelar" onclick="{!c.closeModal}"/>
+                <lightning:button label="Solicitar Recusa" 
+                                  class="slds-button slds-button_brand" 
+                                  variant="brand" 
+                                  onclick="{!c.requestReject}"/>  
+            </footer>
+        </div>
+    </div>
+    <!-- Modal -->
+</aura:component>

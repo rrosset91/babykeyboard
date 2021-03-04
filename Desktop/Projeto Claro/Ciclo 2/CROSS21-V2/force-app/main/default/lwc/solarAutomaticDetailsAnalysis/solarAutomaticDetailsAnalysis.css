@@ -1,0 +1,24 @@
+.loading-spinner-div {
+	position: relative;
+	justify-content: center;
+	text-align: center;
+	display: inline-block;
+	width: 100%;
+	height: 80px;
+}
+.header-text {
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.custom-padding-12 {
+	padding-left: 30%;
+}
+
+.custom-padding-13 {
+	padding-left: 25%;
+}
+
+.custom-content {
+	font-weight: 600;
+}

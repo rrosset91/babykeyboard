@@ -1,0 +1,107 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForRecordHome,force:hasRecordId" 
+                controller="CEC_CC_CaseProtocolController">
+    
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="case" type="Case"/>
+    <aura:attribute name="typeProtocol" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="listProtocol" type="List" default="['Teste Protocolo']"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+
+    <aura:attribute name="picklistValues" type="list" />
+    <aura:attribute name="objectType" type="String" default="Case" access="global"/> 
+    <aura:attribute name="selectedField" type="String" default="BusinessUnit__c" access="global"/>
+    
+    <!-- PAGE HEADER -->  
+    <div style="width: 100%;border-bottom: solid 1px #dddbda;line-height: 34px;display: block;margin-bottom: 10px;">
+        <span style="font-size:14px;color:#009de3;font-weight:bold;"><i class="icon icon-v-down-caret size-icon-2"></i>  GERAR PROTOCOLO:</span>
+    </div>
+    <div class="">
+        <aura:if isTrue="{!v.Spinner}">
+            <div aura:id="spinnerId" class="slds-spinner_container">
+                <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>        
+        <!-- / PAGE HEADER -->
+        <table>
+            <tr>
+                <td>   
+                    <aura:if isTrue="{!v.case.BusinessUnit__c}">                        
+                        <lightning:recordViewForm   recordId="{!v.case.Id}" objectApiName="Case" >
+                            <lightning:outputField aura:Id="BusinessUnit" fieldName="BusinessUnit__c" />
+                            <aura:if isTrue="{!v.typeProtocol == 'PS8'}">
+                                <span style="color:red">O protocolo será gerado automaticamente na conclusão do caso.</span>
+                            </aura:if>
+                        </lightning:recordViewForm>
+                        <aura:set attribute="else">
+                            <span style="color:red">A Unidade de negócio do caso precisa ser preenchida.</span>
+                        </aura:set>
+                    </aura:if>
+                </td>
+                <td>                    
+                    <div class="slds-form-element" style="float:left;displa:inline-block;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <aura:if isTrue="{!v.typeProtocol == 'NETSMS'}">
+                                        <div id="buttonProtocolSave" class="slds-form-element__control" style="margin-left:15px;display:inline-block;padding-top:23px;">
+                                            <lightning:button label="Gerar" 
+                                                              class="slds-button slds-button_brand" 
+                                                              variant="brand" 
+                                                              onclick="{!c.getAutomaticProtocol}"/>   
+                                        </div>
+                                    </aura:if> 
+                                    <aura:if isTrue="{!v.typeProtocol == 'Manual'}">
+                                        <div id="buttonProtocol" class="slds-form-element__control" style="margin-left:15px;display:inline-block;padding-top:23px;">
+                                            <lightning:button label="Salvar" 
+                                                                class="slds-button slds-button_brand" 
+                                                                variant="brand" 
+                                                                onclick="{!c.setManualProtocol}"/>   
+                                        </div>
+                                        <div id="inputProtocol" class="slds-form-element__control"
+                                                style="margin-left:15px;width:250px;float:left;display:inline-block;">
+                                            <lightning:input aura:id="inputProtocol" label="Protocolo" name="expensename"
+                                                                value="{!v.case.LegacyProtocol__c}" />
+                                        </div>
+                                    </aura:if> 
+                                </td>
+                            </tr>
+                        </table>
+                    </div>                    
+                </td>
+            </tr>
+        </table>
+        <br/>
+        
+        <aura:if isTrue="{!v.listProtocol.length > 0}">
+            <div style="width: 100%;border-bottom: solid 1px #dddbda;line-height: 34px;display: block;margin-bottom: 10px;">
+                <span style="font-size:14px;color:#009de3;font-weight:bold;"><i class="icon icon-v-down-caret size-icon-2"></i> PROTOCOLOS RELACIONADOS:</span>
+            </div> 
+            <table class='slds-table'>
+                <tbody>
+                    <tr class="topico">          
+                        <td><span class="topico">PROTOCOLO</span></td>
+                        <td><span class="topico">SISTEMA</span></td>
+                        <td><span class="topico">DATA </span></td>
+                    </tr>                    
+                    <aura:iteration items="{!v.listProtocol}" var="lstBody">                        
+                        <tr>          
+                            <td><span class="dados">{!lstBody.protocolo}</span></td>
+                            <td><span class="dados">{!lstBody.sistema}</span></td> 
+                            <td><span class="dados" format="dd/MM/yyyy">
+                                	<ui:outputDateTime  value="{!lstBody.dataProtocol}"/> 
+                             </span></td>
+                        </tr> 
+                    </aura:iteration>                        
+                </tbody>
+            </table>            
+        </aura:if>
+    </div>     
+</aura:component>

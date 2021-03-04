@@ -1,0 +1,292 @@
+<aura:component >
+    <aura:attribute name="associacaoAparelhos" type="Object" />
+    <aura:attribute name="tipoEntrega" type="String" />
+    
+    <aura:iteration items="{!v.associacaoAparelhos.sessao}" var="sessao" indexVar="sessaoIndex">
+        <div class="bloco">
+            
+            <!-- NOVO -->
+            <aura:if isTrue="{!sessao.tipoNovo.itens.length > 0}" >
+                <button class="accordion border-b" id="{!'headerAparelhosNovo' + sessaoIndex}" onclick="{!c.toggleSecao}" >
+                    <span class="sub-title-light">
+                        <div class="associacao-tipo"><span class="bold">Novo</span></div>
+                        <div class="associacao-regional"><span class="legenda">Regional: </span>{!sessao.regional}</div>
+                        <div class="associacao-uf"><span class="legenda">UF: </span>{!sessao.uf}</div>
+                        <div class="associacao-ddd"><span class="legenda">DDD: </span>{!sessao.ddd}</div>
+                        <div class="associacao-franquia"><span class="legenda">Franquia: </span>{!sessao.franquia}</div>
+                        <div class="associacao-qtd-linha"><span class="legenda">Qtd Linha: </span>{!sessao.qtdLinha}</div>
+                        <div class="associacao-pendente"><span class="legenda">Pendente: </span>{!sessao.tipoTransferencia.pendente ? 'Sim' : 'Não'}</div>
+                        <div class="associacao-grupo"><span class="legenda">Grupo: </span>{!sessao.grupos}</div>
+                    </span>
+                </button>
+                <div class="bloco" id="{!'secaoAparelhosNovo' + sessaoIndex}" >
+                    <div class="bloco-lista-transfer-novo border bloco-novo-desktop">
+                        <div class="col-tab-plan">
+                            <span class="title-table">Modelo</span>
+                        </div>
+                        <aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                            <div class="col-tab-plan iccid-novo" id="transferencia-iccid">
+                                <span class="title-table">ICCID</span>
+                            </div>
+                            
+                            <div class="col-tab-plan imei-novo"  id="transferencia-imei">
+                                <span class="title-table">IMEI</span>
+                            </div>
+                        </aura:if>
+                        <div class="col-tab-plan cor-novo"  id="transferencia-cor">
+                            <span class="title-table">Cor</span>
+                        </div>
+                        <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                            <div class="col-tab-plan outracor-novo"  id="transferencia-outra-cor">
+                                <span class="title-table">Aceita outra cor</span>
+                            </div>
+                        </aura:if>
+                    </div>
+                    <aura:iteration items="{!sessao.tipoNovo.itens}" var="item">
+                        <div class="bloco-lista-transfer-device-novo border bloco-novo-desktop">
+                            <div class="col-tab-plan">
+                                <span class="title-table-device">{!item.modelo}</span>
+                            </div>
+                            <aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                                <div class="col-tab-plan-value transferencia-iccid-novo" id="transferencia-iccid">
+                                    <span class="title-table-device">{!item.iccid}</span>
+                                </div>
+                                <div class="col-tab-plan-value  transferencia-imei-novo" id="transferencia-imei">
+                                    <span class="title-table-device">{!item.imei}</span>
+                                </div>
+                            </aura:if>
+                            <div class="col-tab-plan-value cor-novo" id="transferencia-cor">
+                                <span class="title-table-device">{!item.cor}</span>
+                            </div>
+                            <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                                <div class="col-tab-plan-value outracor-novo" id="transferencia-outra-cor">
+                                    <span class="title-table-device">{!item.cores}</span>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </aura:iteration>
+<div class="bloco-1100-mobile-novo">
+                    <aura:iteration items="{!sessao.tipoNovo.itens}" var="item">
+                        <div class="bloco-lista-transfer-device-novo-mobile border">
+                            <div class="novo-dado-modelo"><span class="legenda">Modelo:</span> {!item.modelo}</div>
+                            <div class="novo-dado-cor"><span class="legenda">Cor:</span> {!item.cor}</div>
+                            <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                                <div class="novo-dado-outracor"><span class="legenda">Aceita outra cor:</span> {!item.cores}</div>
+                            </aura:if>
+							<aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                                <div class="novo-dado-iccid"><span class="legenda">ICCID:</span> {!item.iccid}</div>
+                                <div class="novo-dado-imei"><span class="legenda">IMEI:</span> {!item.imei}</div>
+                            </aura:if>
+                            
+                        	</div>
+                    </aura:iteration>
+                </div>
+
+                </div>
+                
+            </aura:if>
+            
+            <!-- Transferência -->
+            <!-- <aura:if isTrue="{!sessao.tipoTransferencia.doadores.length > 0}" > -->
+            <aura:if isTrue="{!sessao.tipoTransferencia}" >
+                <button class="accordion border-b" id="{!'headerAparelhosTransferencia' + sessaoIndex}" onclick="{!c.toggleSecao}" style="min-height:43px;" >
+                    <span class="sub-title-light" >
+                        <div class="associacao-tipo"><span class="bold">Transferência</span></div>
+                        <div class="associacao-regional"><span class="legenda">Regional: </span>{!sessao.regional}</div>
+                        <div class="associacao-uf"><span class="legenda">UF: </span>{!sessao.uf}</div>
+                        <div class="associacao-ddd"><span class="legenda">DDD: </span>{!sessao.ddd}</div>
+                        <div class="associacao-franquia"><span class="legenda">Franquia: </span>{!sessao.franquia}</div>
+                        <div class="associacao-qtd-linha"><span class="legenda">Qtd Linha: </span>{!sessao.qtdLinha}</div>
+                        <div class="associacao-pendente"><span class="legenda">Pendente: </span>{!sessao.tipoTransferencia.pendente ? 'Sim' : 'Não'}</div>
+                        <div class="associacao-grupo"><span class="legenda">Grupo: </span>{!sessao.grupos}</div>
+                    </span>
+                </button>
+                <div class="bloco" id="{!'secaoAparelhosTransferencia' + sessaoIndex}" >
+                    <aura:if isTrue="{!sessao.tipoTransferencia &amp;&amp; !sessao.tipoTransferencia.doadores}" >
+                        <div class="bloco-lista-transfer-doador border">
+                            <span class="sub-title-light">
+                                -
+                                <span class="regular">CPF: </span> -
+                                <span class="regular">Telefone: </span> -
+                                <span class="regular">E-mail: </span>
+                            </span>
+                        </div>
+                        <div class="bloco-lista-transfer border">
+                            <div class="col-tab-plan">
+                                <span class="title-table">Linha</span>
+                            </div>
+                            <div class="col-tab-plan-equipamento">
+                                <span class="title-table">Modelo</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Cor</span>
+                            </div>
+                            <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                                <div class="col-tab-plan">
+                                    <span class="title-table">Aceita outra cor</span>
+                                </div>
+                            </aura:if>
+                            <div class="col-tab-plan">
+                                <span class="title-table">ICCID</span>
+                            </div>
+                            <aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                                <div class="col-tab-plan">
+                                    <span class="title-table">IMEI</span>
+                                </div>
+                            </aura:if>
+                        </div>
+                    </aura:if>
+                    <aura:iteration items="{!sessao.tipoTransferencia.doadores}" var="doador">
+                        <div class="bloco-lista-transfer-doador border border-top-0">
+                            <span class="sub-title-light">
+                                <div>{!doador.nome}</div>
+                                <div><span class="legenda">CPF: </span> {!doador.cpf}</div>
+                                <div><span class="legenda">Telefone: </span> {!doador.telefone}</div>
+                                <div><span class="legenda">E-mail: </span> {!doador.email}</div>
+                            </span>
+                        </div>
+                        <div class="bloco-lista-transfer border bloco-transferencia-desktop">
+                            <div class="col-tab-plan">
+                                <span class="title-table">Linha</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Modelo</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Cor</span>
+                            </div>
+                            <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                                <div class="col-tab-plan">
+                                    <span class="title-table">Aceita outra cor</span>
+                                </div>
+                            </aura:if>
+                            <div class="col-tab-plan">
+                                <span class="title-table">ICCID</span>
+                            </div>
+                            <aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                                <div class="col-tab-plan">
+                                    <span class="title-table">IMEI</span>
+                                </div>
+                            </aura:if>
+                        </div>
+                        
+                        <aura:iteration items="{!doador.itens}" var="item">
+                            <div class="bloco-lista-transfer-device border bloco-transferencia-desktop">
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.linha}</span>
+                                </div>
+                                <div class="col-tab-plan">
+                                    <span class="title-table-device">{!item.modelo}</span>
+                                </div>
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.cor}</span>
+                                </div>
+                                <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                                    <div class="col-tab-plan-value">
+                                        <span class="title-table-device">{!item.cores}</span>
+                                    </div>
+                                </aura:if>
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.iccid}</span>
+                                </div>
+                                <aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                                    <div class="col-tab-plan-value">
+                                        <span class="title-table-device">{!item.imei}</span>
+                                    </div>
+                                </aura:if>
+                            </div>
+                            
+                        </aura:iteration>
+                        <div class="bloco-1100-mobile">
+                    <aura:iteration items="{!doador.itens}" var="item">
+                        <div class="bloco-device-transfer">
+                            <div class="transferencia-dado-modelo"><span class="legenda">Modelo: </span>{!item.modelo}</div>
+                            <div class="transferencia-dado-iccid"><span class="legenda">ICCID: </span>{!item.iccid}</div>
+                            <div class="transferencia-dado-cor"><span class="legenda">Cor: </span> {!item.cor}</div>
+                            <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                                <div class="transferencia-dado-outracor"><span class="legenda">Aceita outra cor:</span> {!item.cores}</div>
+                            </aura:if>
+                            <div class="transferencia-dado-linha"><span class="legenda">Linha: </span>{!item.linha}</div>                            
+                            <aura:if isTrue="{!v.tipoEntrega == 'Local'}" >
+                                <div class="transferencia-dado-imei"><span class="legenda">IMEI: </span>{!item.imei}</div>
+                            </aura:if>
+                        </div>
+                    </aura:iteration>
+                </div>
+                    </aura:iteration>
+                    
+                </div>
+                
+            </aura:if>
+            
+            <!-- Portabilidade -->
+            <!-- <aura:if isTrue="{!sessao.tipoPortabilidade.itens.length > 0}" > -->
+            <aura:if isTrue="{!sessao.tipoPortabilidade}" >
+                <aura:if isTrue="{!v.tipoEntrega != 'Local'}" >
+                    <button class="accordion border-b" id="{!'headerAparelhosPortabilidade' + sessaoIndex}" onclick="{!c.toggleSecao}" >
+                        <span class="sub-title-light">
+                            <div class="associacao-tipo"><span class="bold">Portabilidade</span></div>
+                            <div class="associacao-regional"><span class="legenda">Regional: </span>{!sessao.regional}</div>
+                            <div class="associacao-uf"><span class="legenda">UF: </span>{!sessao.uf}</div>
+                            <div class="associacao-ddd"><span class="legenda">DDD: </span>{!sessao.ddd}</div>
+                            <div class="associacao-franquia"><span class="legenda">Franquia: </span>{!sessao.franquia}</div>
+                            <div class="associacao-qtd-linha"><span class="legenda">Qtd Linha: </span>{!sessao.qtdLinha}</div>
+                            <div class="associacao-pendente"><span class="legenda">Pendente: </span>{!sessao.tipoTransferencia.pendente ? 'Sim' : 'Não'}</div>
+                            <div class="associacao-grupo"><span class="legenda">Grupo: </span>{!sessao.grupos}</div>
+                        </span>
+                    </button>
+                    <div class="bloco" id="{!'secaoAparelhosPortabilidade' + sessaoIndex}" >
+                        <div class="bloco-lista-transfer-portabilidade border bloco-portabilidade-desktop">
+                            <div class="col-tab-plan">
+                                <span class="title-table">Linha</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Modelo</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Cor</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Aceita outra cor</span>
+                            </div>
+                            <div class="col-tab-plan">
+                                <span class="title-table">Operadora</span>
+                            </div>
+                        </div>
+                        <aura:iteration items="{!sessao.tipoPortabilidade.itens}" var="item">
+                            <div class="bloco-lista-transfer-device-portabilidade border bloco-portabilidade-desktop">
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.linha}</span>
+                                </div>
+                                <div class="col-tab-plan">
+                                    <span class="title-table-device">{!item.modelo}</span>
+                                </div>
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.cor}</span>
+                                </div>
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.cores}</span>
+                                </div>
+                                <div class="col-tab-plan-value">
+                                    <span class="title-table-device">{!item.operadora}</span>
+                                </div>
+                            </div>
+                        </aura:iteration>
+                    <div class="bloco-1100-mobile-portabilidade">
+                        <aura:iteration items="{!sessao.tipoPortabilidade.itens}" var="item">
+                            <div class="bloco-lista-transfer-device-portabilidade-mobile border">
+                                <div class="portabilidade-dado-modelo"><span class="legenda">Modelo: </span>{!item.modelo}</div>
+                                <div class="portabilidade-dado-cor"><span class="legenda">Cor: </span>{!item.cor}</div>
+                                <div class="portabilidade-dado-outracor"><span class="legenda">Aceita outra cor:</span> {!item.cores}</div>
+                                <div class="portabilidade-dado-linha"><span class="legenda">Linha: </span>{!item.linha}</div>
+                                <div class="portabilidade-dado-operadora"><span class="legenda">Operadora: </span>{!item.operadora}</div>
+                            </div>
+                        </aura:iteration>
+                    </div>    
+                    </div>
+                    
+                </aura:if>
+            </aura:if>
+        </div>
+    </aura:iteration>
+</aura:component>

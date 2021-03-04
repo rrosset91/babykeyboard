@@ -1,0 +1,66 @@
+<template>
+
+    <div class="slds-m-horizontal_small">    
+        <div class="slds-grid slds-wrap slds-m-vertical_small">
+            <div class="slds-col slds-size_1-of-12 slds-p-top_xx-small">
+                <lightning-button-icon variant="bare" icon-name={accordionArrow} size="medium" value={mainAccordionOpen} onclick={mainAccordion}></lightning-button-icon>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning-icon icon-name={accordionicon} alternative-text={accordionlabel} title={accordionlabel} size="xx-small"></lightning-icon>
+            </div>
+            <div class="slds-col slds-size_9-of-12 slds-p-left_small slds-p-top_xx-small">
+                <div class="slds-text-heading_small">{accordionlabel}</div>
+            </div>
+            <div class="slds-col slds-size_1-of-12 slds-p-top_xx-small">
+                <div class="slds-clearfix">
+                    <div class="slds-float_right">
+                        <div class="dot">{count}</div>
+                    </div>
+                </div>
+            </div>
+        </div>      
+        <div if:true={mainAccordionOpen}>
+            <template for:each={records} for:item='item'>
+                <div key={item.Id}>
+                    <div class="slds-grid slds-wrap slds-m-vertical_small">
+                        <!-- <div class="slds-col slds-size_1-of-8">
+
+                            <div if:true={item.lShow}>
+                                <lightning-button-icon variant="bare" icon-name="utility:chevrondown" size="small" value={item} onclick={changeItemShow}></lightning-button-icon>
+                            </div>
+                            <div if:false={item.lShow}>
+                                <lightning-button-icon variant="bare" icon-name="utility:chevronright" size="small" value={item} onclick={changeItemShow}></lightning-button-icon>
+                            </div>
+
+                        </div> -->
+                        <div class="slds-col slds-size_1-of-12"></div>
+                        <div class="slds-col slds-size_4-of-12">
+                            <div class="slds-text-color_weak slds-text-title_bold">Motivo:</div>
+                        </div>
+                        <div class="slds-col slds-size_7-of-12">
+                            <div class="slds-text-color_weak slds-text-title_bold">Devolutiva:</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-12"></div>
+                        <div class="slds-col slds-size_4-of-12">
+                            <div title={item.lReason}>{item.lReason}</div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-12">
+                            <div title={item.lFeedbackToCustomer}>{item.lFeedbackToCustomerLimited}</div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+
+                            <!-- botão -->
+                            <div class="slds-clearfix">
+                                <div class="slds-float_right">
+                                    <lightning-button-icon size="x-small" icon-name="utility:preview" alternative-text="Detalhes" title="Detalhes" value={item} onclick={openModalDetail} variant="brand"></lightning-button-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="slds-border_bottom slds-m-horizontal_small"></div> -->
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

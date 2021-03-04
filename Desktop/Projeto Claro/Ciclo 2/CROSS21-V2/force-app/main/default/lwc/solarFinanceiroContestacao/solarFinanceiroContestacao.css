@@ -1,0 +1,157 @@
+.headerTitle
+{
+    padding-top: 0.75rem;
+} 
+
+.field-title
+{
+    font-weight: bold;
+    color: darkgray;
+}
+
+.custom-bg
+{
+    background-color:#F3F2F2;
+}
+
+.custom-header
+{
+    color: #DA281C;
+    font-weight: 400;
+    font-size: x-large;
+    font-weight: bold;
+    padding-top: 0.75rem;
+}
+
+.header-columnAdress
+{
+    white-space: normal;
+    word-wrap: break-word;
+    width: 250px;
+}
+
+.valueHeader
+{
+    font-weight: bold;
+}
+
+.title-table 
+{
+    font-size: 18px;
+    font-weight: bold;
+    padding: 25px 0;  
+}
+
+.espacamentoDeCampos
+{
+    margin-right: 6%;
+    text-align: center;
+    height: 73px;
+    padding-left: 20px;
+}
+
+.header-columnAdress
+{
+    white-space: normal;
+    word-wrap: break-word;
+    width: 250px;
+}
+
+template lightning-datatable
+{
+    text-decoration: none;
+    content: counter(row-number);
+    display: none;
+}
+
+.slds-button__icon 
+{
+    display: none;
+    fill: currentColor;
+}
+
+.slds-button_icon-bare 
+{
+    display: none;
+}
+
+.calculatorContestation 
+{
+    color: red;
+    text-align: center;
+}
+
+.table-align-center
+{
+    text-align: center;
+}
+
+section
+{
+    text-align: left;
+    padding: 30px 0;
+    font-size: 22px;
+}
+
+.backButton
+{
+    text-align: right;
+    font-size: 12px;
+}
+
+.nextButton
+{
+    font-size: 12px;
+    margin-left: 80%;
+}
+
+fieldset button
+{
+    display: inline;
+    position: absolute;
+}
+
+.Observacao
+{
+    font-size: 12px;
+}
+
+.textAreaN1
+{
+    padding-top: 5px;
+    border-bottom-style: solid;
+    border-width: 2px;
+    border-color:#DDDBDA ;
+    padding-bottom: 7px;
+}
+
+.css-box-obs
+{
+    padding-top: 5px;
+}
+
+.THIS .modal-buttons button 
+{
+	height: fit-content;
+	text-align: right;
+}
+
+.bodyModalMotivo
+{
+    height: 25vh;
+}
+
+.bodyModalCalculator
+{
+    height: 25vh;
+}
+
+.slds-notify-container, .slds-notify_container 
+{
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+    top: 211px;
+}

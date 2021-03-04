@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23.665" height="23.665" viewBox="0 0 23.665 23.665">
+  <g id="item-lista-chama" transform="translate(-245.5 -107)">
+    <g id="Elipse_164" data-name="Elipse 164" transform="translate(245.5 107)" fill="#DA291C" stroke="#dbdada" stroke-width="1">
+      <ellipse cx="11.832" cy="11.832" rx="11.832" ry="11.832" stroke="none"/>
+      <ellipse cx="11.832" cy="11.832" rx="11.332" ry="11.332" fill="none"/>
+    </g>
+    <path id="Caminho_73" data-name="Caminho 73" d="M2.328.113a.273.273,0,0,0-.294-.1A2.6,2.6,0,0,0,.042,3.06C.293,4.707,2.311,7.943,5.248,10.4a12.293,12.293,0,0,0,5.825,2.858.288.288,0,0,0,.064,0,2.406,2.406,0,0,0,2.236-2.114.27.27,0,0,0-.129-.269L10.075,8.94a.274.274,0,0,0-.246-.02l-1.8.732a.273.273,0,0,1-.259-.028,15.376,15.376,0,0,1-4.1-4.192.275.275,0,0,1,0-.274L4.6,3.5a.274.274,0,0,0-.018-.3Z" transform="translate(251.259 111.996)" fill="#fafbfa"/>
+  </g>
+</svg>

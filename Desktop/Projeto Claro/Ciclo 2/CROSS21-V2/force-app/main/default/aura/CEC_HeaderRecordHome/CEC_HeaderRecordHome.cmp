@@ -1,0 +1,332 @@
+<!-- CEC_HeaderRecordHome -->
+<aura:component controller="CEC_HeaderRecordHomeController" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="isOpen" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="isBackoffice" type="Boolean" default="false"/>
+    
+    <aura:registerEvent name="EvtPath" type="c:EvtPath"/>
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="resendMsgModal" type="String"/>
+    
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="simpleRecord" type="Object"/>
+    <aura:attribute name="recordError" type="String"/>
+    
+    <aura:attribute name="sObjectName" type="String"/>
+    <aura:attribute name="orderStatus" type="String"/>
+    <aura:attribute name="showSubStatus" type="Boolean" default="false"/>
+    
+    <aura:attribute name="isReSendEnvelope" type="boolean" default="false"/>
+    
+    <!-- AlterEmailModal -->
+    <aura:attribute name="contactsTableData" type="Object"/>
+    <aura:attribute name="contactsTableColumns" type="List" />
+    <aura:attribute name="contactsTableErrors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    
+    <aura:attribute name="showAlterEmailModal" type="Boolean" default="false" />
+    <aura:attribute name="isShowTerritoryAssociationModal" type="Boolean" default="false" />
+    <aura:attribute name="isAssociatedTerritory" type="Boolean" default="false" />
+    <aura:attribute name="emailIsValid" type="Boolean" default="true" />
+    <aura:attribute name="newEmail" type="String" />
+    <aura:attribute name="emailErrorMsg" type="String" />
+    <aura:attribute name="signatureContacts" type="AccountContactRelation[]" />
+    <aura:attribute name="selectedContact" type="AccountContactRelation" />
+    
+    <aura:attribute name="profileName" type="String"/>
+    <aura:attribute name="cpcRole" type="String"/>
+    
+    <aura:attribute name="lstSubStatus" type="String[]"/>
+    
+    <aura:attribute name="subStatus" type="String"/>
+    <aura:attribute name="complement" type="String"/>
+    
+    <aura:attribute name="processingModal" type="boolean" default="false"/>
+    
+    <aura:attribute name="realizandoInput" type="boolean" default="false"/>
+    
+    <!--Create Contract button -->
+    <aura:attribute name="disabled" type="boolean" default="false"/>
+    
+    <aura:attribute name="optionsTerritory" type="List" default="[]"/>
+    
+    <aura:attribute name="valueTerritory" type="String" default=""/>
+    
+	<aura:registerEvent name="CEC_PME_RefreshFiles" type="c:CEC_PME_RefreshFiles"/>    
+    
+    <aura:if isTrue="{!v.isOpen}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-modal__header_empty">
+                    <lightning:buttonIcon iconName="utility:close" class="slds-modal__close" onclick="{!c.closeFlowModal}"/>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning:flow aura:id="flow" onstatuschange="{!c.closeModalOnFinish}" />
+                </div>
+            </div>
+        </section>
+    </aura:if>
+    <aura:if isTrue="{!v.resendMsgModal.length>0}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    {!v.resendMsgModal}</div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeResendModal}">Fechar</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.resendOrder}">Reenviar</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <aura:if isTrue="{!v.message.length>0}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    {!v.message}</div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeModalMessage}">Fechar</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showSubStatus}">
+        
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Validação recusada</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="select-01">Sub-Status</label>
+                        <div class="slds-form-element__control">
+                            <div class="slds-select_container">
+                                <select class="slds-select" id="select-01" value="{!v.subStatus}">
+                                    <aura:iteration items="{!v.lstSubStatus}" var="optSubStatus">
+                                        <option label="{!optSubStatus.label}" value="{!optSubStatus.text}"/>
+                                    </aura:iteration>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label" for="textarea-id-01">Complemento</label>
+                        <div class="slds-form-element__control">
+                            <textarea id="textarea-id-01" class="slds-textarea" placeholder="Digite o complemento" value="{!v.complement}"></textarea>
+                        </div>
+                    </div>                
+                    
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick="{!c.closeSubStatus}">Ok</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isShowTerritoryAssociationModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Associação de território</h2>
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeTerritoryAssociationModal}" title="Close">
+                        <lightning:icon iconName="utility:close" alternativeText="Close"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:radioGroup name="radioGroup"
+                                          label="Territórios:"
+                                          options="{!v.optionsTerritory}"
+                                          value="{!v.valueTerritory}"
+                                          type="radio"/>
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeTerritoryAssociationModal}">Cancelar</button>
+                    <lightning:button disabled="{!v.isAssociatedTerritory}" label="Salvar" onclick="{!c.salveTerritory}" class="slds-button_neutral" />
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+    
+    <aura:if isTrue="{!v.showAlterEmailModal}">
+        
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Reenvio de pedido de assinatura</h2>
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.closeAlterEmailModal}" title="Close">
+                        <lightning:icon iconName="utility:close" alternativeText="Close"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+                    <div aura:id="updateEmailsBtn" style="width: 100%; text-align: center;">
+                        <button class="slds-button slds-button_outline-brand" onclick="{!c.showTable}">Alterar e-mails de envio</button>
+                    </div>
+                    
+                    <div aura:id="emailTable" class="slds-hide">
+                        <lightning:datatable
+                                             hideCheckboxColumn="true"
+                                             showRowNumberColumn="false"
+                                             columns="{! v.contactsTableColumns }"
+                                             data="{! v.contactsTableData }"
+                                             keyField="Id"
+                                             errors="{! v.contactsTableErrors }"
+                                             draftValues="{! v.draftValues }"
+                                             onsave="{! c.handleSaveTableEdit }"
+                                             />
+                    </div>             
+                    
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeAlterEmailModal}">Cancelar</button>
+                    <!--<button class="slds-button slds-button_brand" onclick="{!c.reSendEnvelope}">Enviar</button>-->
+                    <lightning:button disabled="{!v.isReSendEnvelope}" label="Enviar" onclick="{!c.reSendEnvelope}" />
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+    
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-orders">
+                            <lightning:icon iconName="standard:orders" size="medium"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span>Pedido</span>
+                                    <span class="slds-page-header__title slds-truncate" title="{!v.record.Account.Name}" style="color:#009ed3; border-bottom:#009ed3 1px dotted; cursor:pointer;" onclick="{!c.navigateToAccount}">{!v.record.Account.Name}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <ul class="slds-button-group-list">
+                            
+                            
+                            <aura:If isTrue="{!v.orderStatus != null}">
+                                <aura:If isTrue="{!and(v.orderStatus != 'Cancelado', v.orderStatus != 'Pedido Expirado')}">
+                                    <li>
+                                        <button class="slds-button slds-button_neutral" onclick="{!c.navigateToResume}">Resumo</button>
+                                    </li>
+                                    
+                                    <li>
+                                        <button  id="btnCancel" aura:id="btnCancel" class="slds-button slds-button_neutral" onclick="{!c.cancelOrder}">Cancelar</button>
+                                    </li>
+                                    
+                                    <aura:If isTrue="{!v.cpcRole != 'VENDEDOR' &amp;&amp; (v.orderStatus == 'Pré Analise da Documentação' || v.orderStatus == 'Pré Analise')}">
+                                        <li>
+                                            <button class="slds-button slds-button_neutral" onclick="{!c.approveDoc}">Aprovar</button>
+                                        </li>
+                                        <li>
+                                            <button class="slds-button slds-button_neutral" onclick="{!c.setSubStatus}">Devolver</button>
+                                        </li>
+                                    </aura:If> 
+                                    
+                                    <aura:If isTrue="{!v.cpcRole != 'BACKOFFICE'}">
+                                        <aura:If isTrue="{!v.orderStatus == 'Território Associado' || v.orderStatus == 'Documentação Devolvida' || v.orderStatus == 'Devolvido'}">
+                                            <li>
+                                                <button class="slds-button slds-button_neutral" onclick="{!c.validateBackoffice}">Validação Backoffice</button>
+                                            </li>
+                                        </aura:If>
+                                        
+                                        <aura:If isTrue="{!v.orderStatus == 'Contrato Criado'}">
+                                            <li>
+                                                <button id="btnAssinar" aura:id="btnAssinar" class="slds-button slds-button_neutral" onclick="{!c.sendToDocusign}">Assinar</button>
+                                            </li>
+                                        </aura:If>
+                                        
+                                        <aura:If isTrue="{!v.orderStatus == 'Aguardando Assinatura' &amp;&amp; v.record.DocuSignReenviarAssinatura__c == true}">
+                                            <li>
+                                                <button id="btnReenviar" class="slds-button slds-button_neutral" onclick="{!c.showAlterEmailModal}">Reenviar</button>
+                                            </li>
+                                        </aura:If>
+                                        
+                                        <aura:If isTrue="{!v.orderStatus == 'Contrato Assinado'}">
+                                            <li>
+                                                <button id="btnTerritoryAssociation" aura:id="btnTerritoryAssociation" class="slds-button slds-button_neutral" onclick="{!c.showTerritoryAssociation}">Associar território</button>
+                                            </li>
+                                        </aura:If>                           
+                                        
+                                        <aura:If isTrue="{!and(v.orderStatus == 'Documentação Aprovada', not(v.realizandoInput))}">
+                                            <li>
+                                                <button class="slds-button slds-button_neutral" onclick="{!c.JScloseOrder}">Submeter para Input</button>
+                                            </li>
+                                        </aura:If>
+                                        <aura:If isTrue="{!v.record.ManualInput__c}">
+                                            <li>
+                                                <button class="slds-button slds-button_neutral" onclick="{!c.JSStatusChange}">Alterar Status</button>
+                                            </li>
+                                        </aura:If>
+                                        <aura:if isTrue="{!v.orderStatus == 'Aguardando criação contrato'}">
+                                            <li>
+                                                <button class="slds-button slds-button_neutral" onclick="{!c.createContract}" disabled="{!v.disabled}">Criar Contrato</button>
+                                            </li>
+                                        </aura:if>
+                                    </aura:If> 
+                                    <aura:if isTrue="{!and(v.orderStatus == 'Rejeitado a Crédito', v.isBackoffice)}">
+                                        <li>
+                                            <button class="slds-button slds-button_neutral" onclick="{!c.showResendModel}" disabled="{!v.disabled}">Reenviar</button>
+                                        </li>
+                                    </aura:if>                                    
+                                </aura:If>
+                            </aura:If>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    
+    <aura:if isTrue="{!v.processingModal}">
+        
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Processando</h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="spinnerContainer">
+                        <lightning:spinner alternativeText="Loading" size="large" />
+                    </div>                
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+    
+</aura:component>

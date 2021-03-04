@@ -1,0 +1,689 @@
+<!--SOLAR_PME_AnexoContratoPermanenciaPdf -->
+<apex:page showHeader="false" applyHtmlTag="false" renderAs="pdf" controller="SOLAR_PME_TcpjPdfController" >
+    <head>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Ropa+Sans");
+            @page {
+                @top-center {
+                	content: element(header);
+                }
+                @bottom-left {
+                	content: element(rubricbl);
+                }
+            	@bottom-center {
+                	content: element(rubricbc);
+                }
+            	@bottom-right {
+                	content: element(rubricbr);
+                }
+            	margin-top: 1.8cm;
+            }
+            
+            @page signature-page {
+                @bottom-left {
+                	content: none;
+                }
+            	@bottom-center {
+                	content: none;
+                }
+            	@bottom-right {
+                	content: none;
+                }
+            	height: 61rem;
+            }
+            
+            .signature-page {
+            	page: signature-page;
+            }
+            
+            div.rubricbl {
+            	position: running(rubricbl);
+            }
+            div.rubricbc {
+            	position: running(rubricbc);
+            }
+            div.rubricbr {
+            	position: running(rubricbr);
+            }
+            
+            .anchors {
+            	color: #ffffff;
+            	font: 2px;
+            	font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            
+            .w-10 {  width: 0%; }
+            .w-50 {  width: 50%;}
+            
+            .row {
+            	display: block;
+            }
+            
+            .colum {
+            	vertical-align: top;
+            	display: inline-block;
+            }
+            
+            .w-30 {
+            	width: 30%;
+            }
+            
+            #table2 {
+            border: 2px solid black;
+            border-collapse: collapse;
+            font-size:11px;
+            font-family: 'Ropa Sans', sans-serif;                       
+            }
+            
+            #table2 td {
+            border: 2px solid black;
+            font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            #table2 th{
+            border: 1px solid black;
+            text-align:center;
+            background-color: #BDBDBD;
+            font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            div.header {
+            text-align: center;
+            font: 14px bold;
+            font-family: 'Ropa Sans', sans-serif;
+            }
+            
+            
+            .header h3 {
+            display: inline-block;
+            vertical-align: middle;
+            font: 18px;
+            }
+            
+            .header img {
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: 3px;
+            }       
+            
+            
+            .tdcenter{
+            text-align: Center;
+            }  
+            
+            td.tdleft{
+            padding: 3px;
+            }  
+            
+            .logo {
+            height: 40px;
+            margin-left: 5px;
+            }
+            
+            
+            hr.new1 {
+            border-top: 2px solid black;
+            margin-top: 20px;
+            }
+        </style>
+    </head>
+        
+    <div class="rubricbl">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#01
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#02
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#03
+            </div>
+        </div>
+    </div>
+    <div class="rubricbc">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#04
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#05
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#06
+            </div>
+        </div>
+    </div>
+    <div class="rubricbr">
+        <div class="row">
+            <div class="colum w-30 anchors">
+                RBSF#07
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#08
+            </div>
+            <div class="colum w-30 anchors">
+                RBSF#09
+            </div>
+        </div>
+    </div>
+    
+    <hr class="new1" />
+    <div class="header">
+        <h3>Anexo ao Contrato de Permanência - Benefício Comercial (PME)</h3>
+        <img src="/file-asset/ClaroLogopng?v=1&height=40&width=40" alt="Claro Logo" class="logo"  width="40" height="40"/>
+    </div>
+    <hr class="new1" />
+    <br />
+    <!-- Tabela externa-->
+    <table width="100%"  >
+        <!-- Cabeçalho-->
+        <thead>
+            <tr >
+                <th class="w-50"></th><!-- Coluna esquerda -->
+                <th ></th>    <!-- Coluna do meio -->
+                <th class="w-50"></th><!-- Coluna direita -->
+            </tr>
+        </thead>
+        <!-- Corpo da tabela-->  
+        <tbody>
+            <!-- Coluna da esquerda-->
+            <tr>
+                <td valign="top">
+                    <apex:outputPanel rendered="{! tipoPlano.internet = false}">
+                        <table width="100%" id="table2">
+                            <thead>
+                                <tr > 
+                                    <th colspan="3">Plano Total Share - (Plano Nº 72)</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td align="center" style="width:50%"><span style="font-weight:bold">Promoção</span></td>
+                                    <td colspan="2" align="center"><span style="font-weight:bold">Claro Total Compartilhado</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">---</td>
+                                    <td class="tdcenter" ><span style="font-weight:bold">Valor Base</span></td>
+                                    <td class="tdcenter"><span style="font-weight:bold">Valor Contratado</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Habilitação</td>
+                                    <td class="tdcenter">R$ 280,90</td>
+                                    <td class="tdcenter"> R$ 0,00</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">VC1 IR</td>
+                                    <td class="tdcenter">R$ 1,24</td>
+                                    <td class="tdcenter"> R$ 0,25</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">VC1 Fixo</td>
+                                    <td class="tdcenter">R$ 1,28</td>
+                                    <td class="tdcenter">R$ 0,25</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">VC1 Móvel</td>
+                                    <td class="tdcenter">R$ 1,36</td>
+                                    <td class="tdcenter">R$ 0,25</td>
+                                </tr>
+                                <tr >
+                                    <th >Plugins Claro Total Compartilhado</th>  
+                                    <th >Valor Base</th>
+                                    <th >Valor Contratado</th>
+                                </tr> 
+                                <tr>
+                                    <td class="tdleft">Plugin Celular</td>
+                                    <td class="tdcenter">R$ 149,75</td>
+                                    <td class="tdcenter">{!anxContPermModel.celular}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Plugin Smartphone</td>
+                                    <td class="tdcenter">R$ 187,25</td>
+                                    <td class="tdcenter">{!anxContPermModel.smartphone}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Plugin Tablet e Modem</td>
+                                    <td class="tdcenter">R$ 24,75</td>
+                                    <td class="tdcenter">{!anxContPermModel.tabletModem}</td>
+                                </tr>
+                                <tr >
+                                    <th >Planos Claro Total<br /> Compartilhado</th>  
+                                    <th  >Valor Base</th>
+                                    <th >Valor Contratado</th>
+                                </tr>  
+                                <tr>
+                                    <td class="tdleft">Claro Total 5GB</td>
+                                    <td class="tdcenter">R$ 450,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total5GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 10GB</td>
+                                    <td class="tdcenter">R$ 850,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total10GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 20GB</td>
+                                    <td class="tdcenter">R$ 1.600,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total20GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 30GB</td>
+                                    <td class="tdcenter">R$ 2.250,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total30GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 40GB</td>
+                                    <td class="tdcenter">R$ 2.280,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total40GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 50GB</td>
+                                    <td class="tdcenter">R$ 3.250,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total50GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 60GB</td>
+                                    <td class="tdcenter">R$ 3.675,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total60GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 70GB</td>
+                                    <td class="tdcenter">R$ 4.200,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total70GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 80GB</td>
+                                    <td class="tdcenter">R$ 4.700,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total80GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 90GB</td>
+                                    <td class="tdcenter">R$ 5.175,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total90GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 100GB</td>
+                                    <td class="tdcenter">R$ 5.625,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total100GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 150GB</td>
+                                    <td class="tdcenter">R$ 8.250,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total150GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 200GB</td>
+                                    <td class="tdcenter">R$ 10.750,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total200GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 300GB</td>
+                                    <td class="tdcenter">R$ 15.375,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total300GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 400GB</td>
+                                    <td class="tdcenter">R$ 19.500,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total400GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 500GB</td>
+                                    <td class="tdcenter">R$ 23.125,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total500GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 600GB</td>
+                                    <td class="tdcenter">R$ 26.250,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total600GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 700GB</td>
+                                    <td class="tdcenter">R$ 28.875,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total700GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 800GB</td>
+                                    <td class="tdcenter">R$ 31.000,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total800GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 900GB</td>
+                                    <td class="tdcenter">R$ 32.625,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total900GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 1TB</td>
+                                    <td class="tdcenter">R$ 33.750,00</td>
+                                    <td class="tdcenter">{!anxContPermModel.total1TB}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:outputPanel>
+                   <apex:outputPanel rendered="{! tipoPlano.internet = true}">
+ 					<table width="100%" id="table2">
+                            <thead>
+                                <tr > 
+                                    <th colspan="3">Dados: Claro Internet Corpo Nº073</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--tr>
+                                    <td align="center" style="width:50%"><span style="font-weight:bold">Promoção</span></td>
+                                    <td colspan="2" align="center"><span style="font-weight:bold">Claro Internet Corp</span></td>
+                                </tr-->
+                                <tr>
+                                    <td class="tdleft"><b>Claro Internet Corp</b></td>
+                                    <td class="tdcenter" ><span style="font-weight:bold">Valor Base</span></td>
+                                    <td class="tdcenter"><span style="font-weight:bold">Valor Contratado</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 3GB</td>
+                                    <td class="tdcenter">R$ 152,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet3GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 6GB</td>
+                                    <td class="tdcenter">R$ 206,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet6GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 7GB</td>
+                                    <td class="tdcenter">R$ 220,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet7GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 12GB</td>
+                                    <td class="tdcenter">R$ 296,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet12GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 20GB</td>
+                                    <td class="tdcenter">R$ 359,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet20GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 40GB</td>
+                                    <td class="tdcenter">R$ 404,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet40GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 45GB</td>
+                                    <td class="tdcenter">R$ 418,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet45GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 60GB</td>
+                                    <td class="tdcenter">R$ 440,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet60GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 100GB</td>
+                                    <td class="tdcenter">R$ 494,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet100GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 140GB</td>
+                                    <td class="tdcenter">R$ 629,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internet140GB}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:outputPanel>
+                </td>
+                <td></td>
+                <td valign="top">
+                    <!-- ----------------TABELA DA DIREITA TOPO---------------- -->     
+                    <apex:outputPanel rendered="{! tipoPlano.internet = false}">
+                        <table width="100%" id="table2" >
+                            <thead>
+                                <tr >
+                                    <th colspan="3">Plano Claro Life - (Plano Nº 190)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td align="center"><span style="font-weight:bold">Promoção</span></td>
+                                    <td colspan="2" align="center"><span style="font-weight:bold">Claro Total Individual</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Plano Claro Total Individual - Claro<br /> Life (Anatel nº 190)</td>
+                                    <td><span style="font-weight:bold">Valor Base</span></td>
+                                    <td><span style="font-weight:bold">Valor Contratado</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Habilitação</td>
+                                    <td class="tdcenter">R$ 280,00</td>
+                                    <td class="tdcenter">R$ 0,00</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">VC1 IR</td>
+                                    <td class="tdcenter">R$ 1,24</td>
+                                    <td class="tdcenter">R$ 0,25</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">VC1 Fixo</td>
+                                    <td class="tdcenter">R$ 1,28</td>
+                                    <td class="tdcenter">R$ 0,25</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">VC1 óvel</td>
+                                    <td class="tdcenter">R$ 1,36</td>
+                                    <td class="tdcenter">R$ 0,25</td>
+                                </tr>
+                                <tr>
+                                    <th >Planos Claro Total Individual</th>  
+                                    <th >Valor Base</th>
+                                    <th >Valor Contratado</th>
+                                </tr> 
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 500MB</td>
+                                    <td class="tdcenter">R$ 219,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual500MB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 1GB</td>
+                                    <td class="tdcenter">R$ 199,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual1GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 2GB</td>
+                                    <td class="tdcenter">R$ 249,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual2GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 3GB</td>
+                                    <td class="tdcenter">R$ 279,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual3GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 5GB</td>
+                                    <td class="tdcenter">R$ 329,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual5GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 7GB</td>
+                                    <td class="tdcenter">R$ 399,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual7GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 8GB</td>
+                                    <td class="tdcenter">R$ 429,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual8GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 9GB</td>
+                                    <td class="tdcenter">R$ 449,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual9GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 10GB</td>
+                                    <td class="tdcenter">R$ 499,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual10GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 15GB</td>
+                                    <td class="tdcenter">R$ 599,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual15GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 20GB</td>
+                                    <td class="tdcenter">R$ 649,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual20GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 30GB</td>
+                                    <td class="tdcenter">R$ 799,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual30GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 50GB</td>
+                                    <td class="tdcenter">R$ 1049,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual50GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total Individual 80GB</td>
+                                    <td class="tdcenter">R$ 1.349,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.totalIndividual80GB}</td>
+                                </tr>
+                            </tbody>
+                        </table> 
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{! tipoPlano.internet = true}">
+ 					<table width="100%" id="table2">
+                            <thead>
+                                <tr > 
+                                    <th colspan="3">Dados: Claro Internet Corpo Nº075</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--tr>
+                                    <td align="center" style="width:50%"><span style="font-weight:bold">Promoção</span></td>
+                                    <td colspan="2" align="center"><span style="font-weight:bold">Claro Internet Corp</span></td>
+                                </tr-->
+                                <tr>
+                                    <td class="tdleft"><b>Claro Internet Corp</b></td>
+                                    <td class="tdcenter" ><span style="font-weight:bold">Valor Base</span></td>
+                                    <td class="tdcenter"><span style="font-weight:bold">Valor Contratado</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 3GB</td>
+                                    <td class="tdcenter">R$ 152,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi3GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 6GB</td>
+                                    <td class="tdcenter">R$ 206,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi6GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 7GB</td>
+                                    <td class="tdcenter">R$ 220,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi7GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 12GB</td>
+                                    <td class="tdcenter">R$ 296,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi12GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 20GB</td>
+                                    <td class="tdcenter">R$ 359,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi20GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 40GB</td>
+                                    <td class="tdcenter">R$ 404,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi40GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 45GB</td>
+                                    <td class="tdcenter">R$ 418,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi45GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 60GB</td>
+                                    <td class="tdcenter">R$ 440,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi60GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 100GB</td>
+                                    <td class="tdcenter">R$ 494,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi100GB}</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdleft">Claro Total 140GB</td>
+                                    <td class="tdcenter">R$ 629,99</td>
+                                    <td class="tdcenter">{!anxContPermModel.internetwifi140GB}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:outputPanel>
+                    <br />             
+                    <br />             
+                    <!-- -------------------TABLE BAIXO DIREITA ------------------------  -->              
+                    <table width="100%" id="table2" >
+                        <thead>
+                            <tr>
+                                <th colspan="3">Contratação de Pacotes / Módulos Opcionais</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Módulos de Voz</th>  
+                                <th>Valor Base</th>
+                                <th>Valor Contratado</th>
+                            </tr>
+                            <tr>
+                                <td class="tdleft">{!anxContPermModel.onlineManager.type}</td>
+                                <td class="tdcenter">{!anxContPermModel.onlineManager.baseValue}</td>
+                                <td class="tdcenter">{!anxContPermModel.onlineManager.contractedValue}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br/>   
+    <br/>
+    <!-- ----------------- TABELA INFERIOR AJUSTADA ----------------- -->
+    <table width="100%" id="table2">
+        <thead>
+            <tr>
+                <th colspan="3" > Da Aquisição dos Equipamentos </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <table width="100%" id="table2" >
+        <thead>
+            <tr>
+                <th width="70%">Modelo do Equipamento</th>
+                <th>Valor Base</th>
+                <th>Valor Contratado</th>
+            </tr>
+        </thead>            
+        <tbody>
+            <apex:repeat value="{!listSimcards}" var="simcard">
+                <tr>
+                    <td>Simcard {!simcard.type}</td>
+                    <td>{!simcard.formattedBaseValue}</td>
+                    <td>{!simcard.formattedValue}</td>
+                </tr>
+            </apex:repeat>
+            <apex:repeat value="{!lineDetails}" var="linedetail">
+                <tr>
+                    <td>{!linedetail.device.modelName}</td>
+                    <td>{!linedetail.device.formattedBaseValue}</td>
+                    <td>{!linedetail.device.formattedValue}</td>
+                </tr>                      
+            </apex:repeat>
+        </tbody>             
+    </table>        
+</apex:page>

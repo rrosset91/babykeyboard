@@ -1,0 +1,150 @@
+<aura:component access="global" extends="c:Utils" controller="ContestarItemFuturoController">
+	<aura:attribute name="recordId" type="String" />
+	<aura:attribute name="operatorId" type="String" />
+	<aura:attribute name="contractId" type="String" />
+	<aura:attribute name="evPayload" type="Object" />
+	<aura:attribute name="selectedItem" type="String" />
+	<aura:attribute name="columns" type="List" />
+	<aura:attribute name="sortedBy" type="String" />
+	<aura:attribute name="sortedDirection" type="String" />
+	<aura:attribute name="defaultSortDirection" type="String" />
+	<aura:attribute name="disabledBack" type="Boolean" />
+	<aura:attribute name="disabledContest" type="Boolean" default="false" />
+	<aura:attribute name="isLoading" type="Boolean" />
+	<aura:attribute name="errors" type="Object" default="[]" />
+	<aura:attribute name="objectContext" type="Object" />
+	<aura:attribute name="reasonContext" type="Object" />
+	<aura:attribute name="departureObject" type="Object" />
+	<aura:attribute name="draftValues" type="Object[]" default="[]" />
+	<aura:attribute name="reasonValuesOriginal" type="Object[]" default="[]" />
+	<aura:attribute name="contestationObservation" type="String" />
+	<aura:attribute name="calcValues" type="List" default="[]" />
+	<aura:attribute name="calcSelected" type="String" />
+	<aura:attribute name="calculoTipoPorcentagem" type="Boolean" default="false" />
+	<aura:attribute name="calculoPorcentagem" type="integer" default="" />
+	<aura:attribute name="calculoTipoDias" type="Boolean" default="false" />
+	<aura:attribute name="calculoDias" type="integer" default="" />
+	<aura:attribute name="selectedReason" type="String" />
+	<aura:attribute name="reasonValues" type="List" default="[]" />
+	<aura:attribute name="isN2User" type="Boolean" default="false" />
+	<aura:attribute name="fullItem" type="Boolean" default="false" />
+	<aura:attribute name="contestedWithoutPermission" type="Boolean" default="false" />
+	<aura:attribute name="selectedReturn" type="String" />
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+	<aura:registerEvent name="Financeiro_ComponentEvent" type="c:Financeiro_ComponentEvent" />
+
+	<div>
+		<aura:if isTrue="{!v.isLoading}">
+			<lightning:spinner alternativeText="Carregando..." size="large" />
+		</aura:if>
+
+		<div aura:id="contestation">
+			<div aura:id="allItems">
+				<lightning:datatable
+					columns="{!v.columns}"
+					class="cols table"
+					data="{!v.selectedItem}"
+					keyField="id"
+					resizeColumnDisabled="true"
+					hideCheckboxColumn="true"
+					sortedBy="{!v.sortedBy}"
+					sortedDirection="{!v.sortedDirection}"
+					defaultSortDirection="{!v.defaultSortDirection}"
+					onsort="{!c.onSort}"
+					onsave="{!c.handleSaveEdition}"
+					errors="{!v.errors}"
+					draftValues="{!v.draftValues}"
+					onrowaction="{!c.handleRowAction}"
+				/>
+			</div>
+
+			<div class="divTextArea">
+				<lightning:textarea label="Observação" value="{!v.contestationObservation}" />
+			</div>
+		</div>
+
+		<aura:if isTrue="{!v.contestedWithoutPermission}">
+			<div style="width: 100%; padding-bottom: 5px">
+				<div style="display: inline-flex; justify-content: flex-start; width: 100%">
+					<div class="generate-bill button-options">
+						<h1>Selecione a opção de retorno desejado:</h1>
+						<lightning:button aura:id="returnSMS" class="credit-options" name="sms" label="SMS" onclick="{!c.saveReturnMethod}" />
+						<lightning:button aura:id="returnEmail" class="credit-options" name="email" label="E-mail" onclick="{!c.saveReturnMethod}" />
+						<lightning:button aura:id="returnWhatsApp" class="credit-options" name="whatsapp" label="Telefone" onclick="{!c.saveReturnMethod}" />
+					</div>
+				</div>
+			</div>
+		</aura:if>
+
+		<div aura:id="buttons-contestation" style="width: 100%">
+			<aura:if isTrue="{! and(v.isN2User, v.fullItem)}">
+				<div style="display: inline-flex; justify-content: start; width: 50%">
+					<lightning:button label="Visualizar ficha financeira" onclick="{!c.clickBack}" disabled="{!v.disabledBack}" />
+				</div>
+				<div style="display: inline-flex; justify-content: flex-end; width: 50%">
+					<lightning:button variant="brand" label="Negar contestação" onclick="{!c.denyContestation}" disabled="{!v.disabledContest}" />
+					<lightning:button variant="brand" label="Aprovar contestação" onclick="{!c.approveContestation}" disabled="{!v.disabledContest}" />
+				</div>
+				<aura:set attribute="else">
+					<div style="display: inline-flex; justify-content: space-between; width: 100%">
+						<lightning:button label="Voltar" onclick="{!c.clickBack}" disabled="{!v.disabledBack}" />
+						<lightning:button variant="brand" label="Contestar" onclick="{!c.clickContest}" disabled="{!v.disabledContest}" />
+					</div>
+				</aura:set>
+			</aura:if>
+		</div>
+
+		<c:UiModal aura:id="calcModal" title="Cálculo do Item" size="x-small" onClose="{!c.onCloseModal}">
+			<aura:set attribute="content">
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6">
+						<div class="custom-box">
+							<lightning:combobox placeholder="" label="Tipo de Cálculo" value="{!v.calcSelected}" options="{!v.calcValues}" onchange="{!c.handleRecalc}" />
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="around-small" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6" alignmentBump="right" />
+				</lightning:layout>
+
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="6" smallDeviceSize="6" mediumDeviceSize="6" largeDeviceSize="6">
+						<div class="modal-input">
+							<aura:if isTrue="{!v.calculoTipoPorcentagem}"> <ui:inputNumber label="Porcentagem" value="{!v.calculoPorcentagem}" updateOn="keyup" /> <br /> </aura:if>
+							<aura:if isTrue="{!v.calculoTipoDias}"> <ui:inputNumber label="Quantidade" value="{!v.calculoDias}" updateOn="keyup" /> <br /> </aura:if>
+						</div>
+					</lightning:layoutItem>
+					<lightning:layoutItem padding="around-small" size="2" smallDeviceSize="12" mediumDeviceSize="2" largeDeviceSize="2" alignmentBump="right" />
+				</lightning:layout>
+			</aura:set>
+			<aura:set attribute="footer">
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+						<div class="modal-buttons">
+							<lightning:button variant="brand" label="Confirmar" onclick="{!c.saveCalc}" />
+						</div>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+		</c:UiModal>
+
+		<c:UiModal aura:id="reasonModal" title="Motivo da contestação" size="x-small" onClose="{!c.onCloseReason}">
+			<aura:set attribute="content">
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+						<lightning:combobox placeholder="" label="Selecione o Motivo" value="{!v.selectedReason}" options="{!v.reasonValues}" />
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+			<aura:set attribute="footer">
+				<lightning:layout horizontalAlign="space" multipleRows="false">
+					<lightning:layoutItem padding="around-small" size="12" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="12">
+						<div class="modal-buttons">
+							<lightning:button variant="brand" label="Confirmar" onclick="{!c.handleSaveReason}" />
+						</div>
+					</lightning:layoutItem>
+				</lightning:layout>
+			</aura:set>
+		</c:UiModal>
+	</div>
+</aura:component>

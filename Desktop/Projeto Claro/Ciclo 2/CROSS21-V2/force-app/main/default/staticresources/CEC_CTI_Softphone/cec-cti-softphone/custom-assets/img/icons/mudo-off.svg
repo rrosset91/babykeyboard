@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="34" height="34" viewBox="0 0 34 34">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="34" height="34" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="mudo-off" clip-path="url(#clip-path)">
+    <g id="chamada-mudo">
+      <path id="Caminho_101" data-name="Caminho 101" d="M343.653,404.388a17,17,0,1,0,17,17A17,17,0,0,0,343.653,404.388Zm0,32.809a15.809,15.809,0,1,1,15.809-15.809A15.809,15.809,0,0,1,343.653,437.2Z" transform="translate(-326.653 -404.388)" fill="#ababaf"/>
+    </g>
+    <g id="Grupo_242" data-name="Grupo 242" transform="translate(-236 -393)">
+      <g id="Grupo_154" data-name="Grupo 154" transform="translate(200.735 380.273)">
+        <path id="Caminho_233" data-name="Caminho 233" d="M60.518,26.337a.748.748,0,0,0-.748.748v.082h-.005v2.167a7.5,7.5,0,1,1-15,0V27.167h0v-.082a.748.748,0,0,0-1.5,0v2.249a9,9,0,0,0,8.084,8.954v2.13h-3.18a1.02,1.02,0,0,0,0,2.039h8.193a1.02,1.02,0,0,0,0-2.039H53.2V38.286a9,9,0,0,0,8.068-8.952V27.085A.747.747,0,0,0,60.518,26.337Z" fill="#ababaf"/>
+        <g id="Grupo_153" data-name="Grupo 153">
+          <path id="Caminho_234" data-name="Caminho 234" d="M48.484,25.933V21.768a3.878,3.878,0,1,1,7.756,0V23.3l1.164-.4V21.768a5.042,5.042,0,0,0-10.084,0v4.56Z" fill="#ababaf"/>
+          <path id="Caminho_235" data-name="Caminho 235" d="M56.24,25.671v4.164a3.878,3.878,0,1,1-7.756,0V28.307l-1.164.4v1.133a5.042,5.042,0,0,0,10.084,0v-4.56Z" fill="#ababaf"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
