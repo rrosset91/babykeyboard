@@ -20,9 +20,13 @@ window.onclick = function (event) {
 	}
 };
 document.addEventListener("keypress", () => {
-	setTimeout(() => {
-		playSound();
-	}, 100);
+	playSound();
+	changeBackground();
+	addRandomDiv();
+});
+
+document.addEventListener("touchstart", () => {
+	playSound();
 	changeBackground();
 	addRandomDiv();
 });
